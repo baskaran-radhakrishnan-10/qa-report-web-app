@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+			classpath:org/springframework/beans/factory/xml/spring-beans-3.0.xsd 
+			http://www.springframework.org/schema/context 
+			classpath:org/springframework/beans/factory/xml/spring-context-3.0.xsd">
+
+
+	<bean id="hibernateConfiguration" class="com.equiniti.qa_report.persistance_api.hibernate.HibernateConfiguration">
+		<constructor-arg value="${hibernate.connection.driver_class}" />
+		<constructor-arg value="${hibernate.dialect}" />
+		<constructor-arg value="${javax.persistence.validation.mode}" />
+		<constructor-arg value="${hibernate.connection.url}" />
+		<constructor-arg value="${hibernate.show_sql}" />
+		<constructor-arg value="${hibernate.hbm2ddl.auto}" />
+		<constructor-arg value="${hibernate.cache.provider_class}" />
+		<constructor-arg value="${hibernate.current_session_context_class}" />
+		<constructor-arg value="${hibernate.connection.username}" />
+		<constructor-arg value="${hibernate.connection.password}" />
+		<constructor-arg value="${hibernate.jdbc.batch_size}" />
+		<constructor-arg value="properties/annotated-entities.properties" />
+		<constructor-arg value="properties/hql-queries.properties" />
+		<constructor-arg value="${hibernate.windows_authentication_required}" />
+	</bean>
+	
+	<bean id="auditInterceptor" class="com.equiniti.qa_report.persistance_api.audit.interceptor.AuditLogInterceptor" >
+		<property name="hibernateConfiguration" ref="hibernateConfiguration" />
+	</bean>
+
+	<bean id="abstractHibernateDAOAPI" 	class="com.equiniti.qa_report.persistance_api.hibernate.AbstractHibernateDao">
+		<property name="auditInterceptor" ref="auditInterceptor" />
+		<property name="sessionFactory" value="#{ hibernateConfiguration.sessionFactory}" />
+		<property name="hqlMap" value="#{ hibernateConfiguration.hqlMap}" />
+		<property name="batchSize" value="#{ hibernateConfiguration.batchSize}" />
+	</bean>
+	
+	<bean id="loginDAO" class="com.equiniti.qa_report.dao.api.impl.LoginDAOImpl">
+		<property name="abstractHibernateDAOAPI" ref="abstractHibernateDAOAPI" />
+	</bean>
+	
+	<bean id="roleResourceDAO" class="com.equiniti.qa_report.dao.api.impl.RoleResourcesDAOImpl">
+		<property name="abstractHibernateDAOAPI" ref="abstractHibernateDAOAPI" />
+	</bean>
+	
+	<bean id="testPlanDAO" class="com.equiniti.qa_report.dao.api.impl.TestPlanDAOImpl">
+		<property name="abstractHibernateDAOAPI" ref="abstractHibernateDAOAPI" />
+	</bean>
+	
+	<bean id="resourceDeatilsDAO" class="com.equiniti.qa_report.dao.api.impl.ResourceDeatilsDAOImpl">
+		<property name="abstractHibernateDAOAPI" ref="abstractHibernateDAOAPI" />
+	</bean>
+	
+	<bean id="projectDAO" class="com.equiniti.qa_report.dao.api.impl.ProjectDAOImpl">
+		<property name="abstractHibernateDAOAPI" ref="abstractHibernateDAOAPI" />
+	</bean>
+	
+	<bean id="itemDetailsDAO" class="com.equiniti.qa_report.dao.api.impl.ItemDetailsDAOImpl">
+		<property name="abstractHibernateDAOAPI" ref="abstractHibernateDAOAPI" />
+	</bean>
+	
+</beans>

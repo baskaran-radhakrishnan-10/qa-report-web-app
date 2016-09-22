@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<mapping map-id="TestPlanMapper" type="bi-directional">
+		<class-a>com.equiniti.qa_report.form.model.TestPlanModelAttribute</class-a>
+		<class-b>com.equiniti.qa_report.entity.BtpEntity</class-b>
+		<field>
+			<a>gKey</a>
+			<b>gKey</b>
+		</field>
+		<field>
+			<a>projectName</a>
+			<b>projectName</b>
+		</field>
+		<field>
+			<a>phase</a>
+			<b>phase</b>
+		</field>
+		<field>
+			<a>btpPlan</a>
+			<b>btpPlan</b>
+		</field>
+		<field>
+			<a>sPrint</a>
+			<b>sPrint</b>
+		</field>
+		<field>
+			<a>cycle</a>
+			<b>cycle</b>
+		</field>
+		<field>
+			<a>buildNo</a>
+			<b>buildNo</b>
+		</field>
+		<field>
+			<a>btpStatus</a>
+			<b>btpStatus</b>
+		</field>
+		<field>
+			<a>resource1</a>
+			<b>resource1</b>
+		</field>
+		<field>
+			<a>resource2</a>
+			<b>resource2</b>
+		</field>
+		<field>
+			<a>resource3</a>
+			<b>resource3</b>
+		</field>
+		<field>
+			<a>resource4</a>
+			<b>resource4</b>
+		</field>
+		
+		<field>
+			<a>resource5</a>
+			<b>resource5</b>
+		</field>
+		<field>
+			<a>resource6</a>
+			<b>resource6</b>
+		</field>
+		<field>
+			<a>btpStatus</a>
+			<b>btpStatus</b>
+		</field>
+		<field custom-converter="com.equiniti.qa_report.objectmapper.Jdk8CompatibilityConverter">
+			<a>startDate</a>
+			<b>startDate</b>
+		</field>
+		<field custom-converter="com.equiniti.qa_report.objectmapper.Jdk8CompatibilityConverter">
+			<a>endDate</a>
+			<b>endDate</b>
+		</field>
+		<field custom-converter="com.equiniti.qa_report.objectmapper.Jdk8CompatibilityConverter">
+			<a>revisedEndDate</a>
+			<b>revisedEndDate</b>
+		</field>
+		<field custom-converter="com.equiniti.qa_report.objectmapper.Jdk8CompatibilityConverter">
+			<a>updatesDate</a>
+			<b>updatesDate</b>
+		</field>
+		<field custom-converter="com.equiniti.qa_report.objectmapper.Jdk8CompatibilityConverter">
+			<a>createdDate</a>
+			<b>createdDate</b>
+		</field>
+		<field>
+			<a>btpRemarks</a>
+			<b>btpRemarks</b>
+		</field>
+		
+		<field>
+			<a>createdBy</a>
+			<b>createdBy</b>
+		</field>
+		<field>
+			<a>updatedBy</a>
+			<b>updatedBy</b>
+		</field>
+	</mapping>
+</mappings>

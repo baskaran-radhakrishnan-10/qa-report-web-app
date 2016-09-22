@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+xmlns:context="http://www.springframework.org/schema/context" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:org/springframework/beans/factory/xml/spring-beans-3.0.xsd 
+			http://www.springframework.org/schema/context classpath:org/springframework/beans/factory/xml/spring-context-3.0.xsd">
+			
+	<bean class="com.equiniti.qa_report.eventapi.eventhandling.eventmanager.EventManagerImpl" id="eventManager">
+		<property name="eventProcessorMap">
+			<map>
+				<entry key="doLoginEvent" value-ref="loginEventProcessor"/>
+				
+				<entry key="getTestPlanEvent" value-ref="testPlanEventProcessor"/>
+				<entry key="addTestPlanEvent" value-ref="testPlanEventProcessor"/>
+				<entry key="updateTestPlanEvent" value-ref="testPlanEventProcessor"/>
+				
+				<entry key="getResourceDeatilsEvent" value-ref="resourceDeatilsEventProcessor"/>
+				<entry key="addResourceDeatilsEvent" value-ref="resourceDeatilsEventProcessor"/>
+				<entry key="updateResourceDeatilsEvent" value-ref="resourceDeatilsEventProcessor"/>
+				
+				<entry key="getProjectEvent" value-ref="projectEventProcessor"/>
+				<entry key="addProjectEvent" value-ref="projectEventProcessor"/>
+				<entry key="updateProjectEvent" value-ref="projectEventProcessor"/>
+				
+				<entry key="getItemDetailsEvent" value-ref="itemDetailsEventProcessor"/>
+				<entry key="addItemDetailsEvent" value-ref="itemDetailsEventProcessor"/>
+				<entry key="updateItemDetailsEvent" value-ref="itemDetailsEventProcessor"/>
+				
+			</map>	
+		</property>
+	</bean>
+		
+	<bean class="com.equiniti.qa_report.eventapi.eventhandling.processor.BaseEventProcessor" id="loginEventProcessor">
+		<property name="handlersList">
+			<list>
+				<ref bean="loginEventHandler"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="com.equiniti.qa_report.event_handler.LoginEventHandler" id="loginEventHandler">
+		<property name="cryptoService" ref="cryptoService"/>
+		<property name="loginDAO" ref="loginDAO"/>
+	</bean>
+	
+	<bean class="com.equiniti.qa_report.eventapi.eventhandling.processor.BaseEventProcessor" id="testPlanEventProcessor">
+		<property name="handlersList">
+			<list>
+				<ref bean="testPlanEventHandler"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="com.equiniti.qa_report.event_handler.TestPlanEventHandler" id="testPlanEventHandler">
+		<property name="testPlanDAO" ref="testPlanDAO"/>
+	</bean>
+	
+	<bean class="com.equiniti.qa_report.eventapi.eventhandling.processor.BaseEventProcessor" id="resourceDeatilsEventProcessor">
+		<property name="handlersList">
+			<list>
+				<ref bean="resourceDeatilsEventHandler"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="com.equiniti.qa_report.event_handler.ResourceDeatilsEventHandler" id="resourceDeatilsEventHandler">
+		<property name="resourceDeatilsDAO" ref="resourceDeatilsDAO"/>
+	</bean>
+	
+	<bean class="com.equiniti.qa_report.eventapi.eventhandling.processor.BaseEventProcessor" id="projectEventProcessor">
+		<property name="handlersList">
+			<list>
+				<ref bean="projectEventHandler"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="com.equiniti.qa_report.event_handler.ProjectEventHandler" id="projectEventHandler">
+		<property name="projectDAO" ref="projectDAO"/>
+	</bean>
+	
+	<bean class="com.equiniti.qa_report.eventapi.eventhandling.processor.BaseEventProcessor" id="itemDetailsEventProcessor">
+		<property name="handlersList">
+			<list>
+				<ref bean="itemDetailsEventHandler"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="com.equiniti.qa_report.event_handler.ItemDeatilsEventHandler" id="itemDetailsEventHandler">
+		<property name="itemDetailsDAO" ref="itemDetailsDAO"/>
+	</bean>
+		
+</beans>			

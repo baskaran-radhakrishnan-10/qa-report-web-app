@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+    	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+			
+	<context:component-scan base-package="com.equiniti.qa_report.controller"/>
+    <context:component-scan base-package="com.equiniti.qa_report.dao.api.impl"/>
+    <context:component-scan base-package="com.equiniti.qa_report.service.api.impl"/>
+    
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>/WEB-INF/classes/properties/database.properties</value>
+				<value>/WEB-INF/classes/properties/security.properties</value>
+			</list>
+		</property>
+	</bean>		
+			
+			
+	<bean id="cryptoService" class="com.equiniti.qa_report.security.crypto.EncryptionDecryption">
+		<constructor-arg value="${application.pass-phrase}" />
+	</bean>
+	
+	<import resource="/dozzer-support/dozzer-spring-integration.xml"/>	
+	
+</beans>			

@@ -1,0 +1,185 @@
+#wrapper {
+	width: 100%;
+}
+
+#page-wrapper {
+	/*--padding: 0 15px;--*/
+	background-color: #fff;
+}
+
+@media ( min-width :768px) {
+	#page-wrapper {
+		position: inherit;
+		margin: 0 0 0 200px;
+		/*--padding: 0 30px;--*/
+		border-left: 1px solid #e7e7e7;
+	}
+}
+
+.navbar-top-links {
+	margin-right: 0;
+}
+
+.navbar-top-links li {
+	display: inline-block;
+}
+
+.navbar-top-links li:last-child {
+	margin-right: 15px;
+}
+
+.navbar-top-links li a {
+	padding: 15px;
+	min-height: 50px;
+}
+
+.navbar-top-links .dropdown-menu li {
+	display: block;
+}
+
+.navbar-top-links .dropdown-menu li:last-child {
+	margin-right: 0;
+}
+
+.navbar-top-links .dropdown-menu li a {
+	padding: 3px 20px;
+	min-height: 0;
+}
+
+.navbar-top-links .dropdown-menu li a div {
+	white-space: normal;
+}
+
+.navbar-top-links .dropdown-messages, .navbar-top-links .dropdown-tasks,
+	.navbar-top-links .dropdown-alerts {
+	width: 310px;
+	min-width: 0;
+}
+
+.navbar-top-links .dropdown-messages {
+	margin-left: 5px;
+}
+
+.navbar-top-links .dropdown-tasks {
+	margin-left: -59px;
+}
+
+.navbar-top-links .dropdown-alerts {
+	margin-left: -123px;
+}
+
+.navbar-top-links .dropdown-user {
+	right: 0;
+	left: auto;
+}
+
+.sidebar .sidebar-nav.navbar-collapse {
+	padding-right: 0;
+	padding-left: 0;
+}
+
+.sidebar .sidebar-search {
+	padding: 15px;
+}
+
+.sidebar .arrow {
+	float: right;
+}
+
+.sidebar .fa.arrow:before {
+	content: "\f104";
+}
+
+.sidebar .active>a>.fa.arrow:before {
+	content: "\f107";
+}
+
+.sidebar .nav-second-level li, .sidebar .nav-third-level li {
+	border-bottom: 0 !important;
+}
+
+.sidebar .nav-second-level li a {
+	padding-left: 37px;
+}
+
+.sidebar .nav-third-level li a {
+	padding-left: 52px;
+}
+
+@media ( min-width :768px) {
+	.sidebar {
+		z-index: 1;
+		position: absolute;
+		width: 250px;
+		margin-top: 0px;
+	}
+	.navbar-top-links .dropdown-messages, .navbar-top-links .dropdown-tasks,
+		.navbar-top-links .dropdown-alerts {
+		margin-left: auto;
+	}
+}
+
+/* side-menu color  27-APR-16 */
+.nav>li>a:focus, .nav>li>a:hover {
+	background-color: #337ab7 !important;
+	color: #fff;
+	font-weight: bold;
+}
+
+.sidebar ul li a {
+	color: #337ab7;
+	font-weight: bold;
+}
+
+.sidebar ul li a i {
+	color: #337ab7;
+}
+
+.sidebar ul li a:hover i, .sidebar ul li a:focus i {
+	color: #fff;
+}
+
+#style-2::-webkit-scrollbar-thumb {
+	background-color: #3E77AB;
+}
+
+label.col-md-2 {
+	padding-top: 8px;
+}
+
+.listView-table td, .listView-table tbody tr td, .listView-table tbody tr th,
+	.listView-table tfoot tr td, .listView-table tfoot tr th,
+	.listView-table thead tr td, .listView-table thead tr th {
+	color: #000 !important;
+	padding: 5px !important;
+}
+
+.glowing-border {
+	display: block;
+	width: 100%;
+	height: 34px;
+	border: 1px solid #dadada;
+	border-radius: 2px;
+}
+
+.glowing-border:focus {
+	display: block;
+	width: 100%;
+	height: 34px;
+	outline: none;
+	border-color: #9ecaed;
+	box-shadow: 0 0 10px #9ecaed;
+}
+
+.serialTable body {
+	counter-reset: Serial; /* Set the Serial counter to 0 */
+}
+
+.serialTable table {
+	border-collapse: separate;
+}
+
+.serialTable tr td:first-child:before {
+	counter-increment: Serial; /* Increment the Serial counter */
+	content: counter(Serial); /* Display the counter */
+}

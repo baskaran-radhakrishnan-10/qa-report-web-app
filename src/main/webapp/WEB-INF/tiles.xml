@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+  
+  <definition name="home.page.template" template="/WEB-INF/views/jsp/layouts/home_page_template.jsp">
+    <put-attribute name="title" value="" />
+    <put-attribute name="header_menu" type="template" value="/WEB-INF/views/jsp/layouts/header_menu.jsp" />
+    <put-attribute name="left_menu" type="template" value="/WEB-INF/views/jsp/layouts/left_menu.jsp" />
+    <put-attribute name="body_content" type="template" value="" />
+    <put-attribute name="footer_content" type="template" value="/WEB-INF/views/jsp/layouts/footer.jsp" />
+  </definition>
+  
+  <definition name="login.page.template" template="/WEB-INF/views/jsp/layouts/login_page_template.jsp">
+    <put-attribute name="title" value="" />
+    <put-attribute name="header" type="template" value="" />
+    <put-attribute name="body" type="template" value="" />
+    <put-attribute name="footer" type="template" value="" />
+  </definition>
+  
+  <definition name="loginpage" extends="login.page.template">
+	<put-attribute name="title" value="Login Page"></put-attribute>
+	<put-attribute name="body" value="/WEB-INF/views/jsp/pages/loginpage.jsp" />
+  </definition>
+  
+   <definition name="homepage" extends="home.page.template">
+	<put-attribute name="title" value="Home Page"></put-attribute>
+	<put-attribute name="body_content" value="/WEB-INF/views/jsp/pages/home.jsp" />
+  </definition>
+  
+   <definition name="test_plan_page" extends="home.page.template">
+	<put-attribute name="title" value="Home Page"></put-attribute>
+	<put-attribute name="body_content" value="/WEB-INF/views/jsp/pages/build_test_plan_page.jsp" />
+  </definition>
+  
+
+</tiles-definitions>
