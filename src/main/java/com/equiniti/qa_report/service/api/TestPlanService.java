@@ -15,7 +15,7 @@ public interface TestPlanService {
 	
 	public int addTestPlanEntry(TestPlanModelAttribute model) throws APIException;
 	
-	public void updateTestPlanEntry(Map<String, Object> paramMap) throws APIException;
+	public boolean updateTestPlanEntry(Map<String, Object> paramMap) throws APIException;
 
 	public List<BtpEntity> getTestPlanEntries() throws APIException;
 

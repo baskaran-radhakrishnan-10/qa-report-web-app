@@ -1,5 +1,6 @@
 package com.equiniti.qa_report.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import com.equiniti.qa_report.exception.api.exception.ControllerException;
 import com.equiniti.qa_report.exception.api.faultcode.CommonFaultCode;
 import com.equiniti.qa_report.form.model.TestPlanModelAttribute;
 import com.equiniti.qa_report.service.api.TestPlanService;
+import com.equiniti.qa_report.util.ApplicationConstants;
 
 @Component("testPlanController")
 public class TestPlanController {
@@ -39,15 +41,19 @@ public class TestPlanController {
 		}
 	}
 	
-	public Map<String,Object> editTestPlanEntry(Map<String,Object> input) throws ControllerException{
+	public Map<String,Object> editTestPlanEntry(Map<String,Object> paramMap) throws ControllerException{
+		Map<String,Object> returnObjMap=new HashMap<>();
 		try {
-			 testPlanService.updateTestPlanEntry(input);
+			Object returnObj=testPlanService.updateTestPlanEntry(paramMap);
+			if(null != returnObj){
+				returnObjMap.put(ApplicationConstants.STATUS, (Boolean) returnObj ? ApplicationConstants.SUCCESS : ApplicationConstants.ERROR);
+			}
 		} catch (APIException e) {
 			throw new ControllerException(e.getFaultCode(), e);
-		}catch(Exception e){
-			 throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		} catch(Exception e){
+			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}
-		return null;
+		return returnObjMap;
 	}
 
 }

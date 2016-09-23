@@ -1,8 +1,12 @@
 package com.equiniti.qa_report.event_handler;
 
+import java.util.Map;
+
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import com.equiniti.qa_report.dao.api.ItemDetailsDAO;
+import com.equiniti.qa_report.entity.ItemEntity;
 import com.equiniti.qa_report.event.item_details.AddItemDeatilsEvent;
 import com.equiniti.qa_report.event.item_details.GetItemDeatilsEvent;
 import com.equiniti.qa_report.event.item_details.UpdateItemDeatilsEvent;
@@ -15,6 +19,8 @@ import com.equiniti.qa_report.exception.api.faultcode.CommonFaultCode;
 public class ItemDeatilsEventHandler implements IEventHandler<IEvent> {
 
 	private static final Logger LOG=Logger.getLogger(ItemDeatilsEventHandler.class); 
+	
+	private ObjectMapper objMapper=new ObjectMapper();
 
 	private ItemDetailsDAO itemDetailsDAO;
 
@@ -43,24 +49,22 @@ public class ItemDeatilsEventHandler implements IEventHandler<IEvent> {
 
 	private void addResourceDetails(AddItemDeatilsEvent event) throws EventException {
 		try {
-			event.setRowId(itemDetailsDAO.addItemDetails(event.getEntity()));
+			event.setRowId(itemDetailsDAO.addItemDetails(populateEntityFromMapObject(event.getRequestParam())));
 		} catch (DaoException e) {
-			LOG.error("DaoException Occured", e);
 			throw new EventException(e.getFaultCode(), e);
 		} catch (Exception e) {
-			LOG.error("Unknown Exception Occured", e);
 			throw new EventException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}
 	}
 	
 	private void updateResourceDetails(UpdateItemDeatilsEvent event) throws EventException {
 		try {
-			itemDetailsDAO.updateItemDetails(event.getEntity());
+			itemDetailsDAO.updateItemDetails(populateEntityFromMapObject(event.getParamMap()));
 		} catch (DaoException e) {
-			LOG.error("DaoException Occured", e);
+			event.setUpdated(false);
 			throw new EventException(e.getFaultCode(), e);
 		} catch (Exception e) {
-			LOG.error("Unknown Exception Occured", e);
+			event.setUpdated(false);
 			throw new EventException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}
 	}
@@ -73,13 +77,15 @@ public class ItemDeatilsEventHandler implements IEventHandler<IEvent> {
 				event.setItemDescriptionList(itemDetailsDAO.getUniqueItemDescription());
 			}
 		} catch (DaoException e) {
-			LOG.error("DaoException Occured", e);
 			throw new EventException(e.getFaultCode(), e);
 		} catch (Exception e) {
-			LOG.error("Unknown Exception Occured", e);
 			throw new EventException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}
 	}
 	
+	private ItemEntity populateEntityFromMapObject(Map<String,Object> mapObject){
+		ItemEntity entity=objMapper.convertValue(mapObject, ItemEntity.class);
+		return entity;
+	}
 
 }

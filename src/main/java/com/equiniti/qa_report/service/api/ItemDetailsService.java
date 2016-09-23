@@ -14,6 +14,6 @@ public interface ItemDetailsService {
 
 	public int addItemDetails(Map<String, Object> inputParam) throws APIException;
 
-	public void updateItemDeatils(Map<String, Object> inputParam) throws APIException;
+	public boolean updateItemDeatils(Map<String, Object> inputParam) throws APIException;
 
 }

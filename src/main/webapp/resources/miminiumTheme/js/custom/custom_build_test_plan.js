@@ -18,6 +18,10 @@ var selectedResourcesArray=[];
 
 var resourceArraySelectHtml="";
 
+var itemDescArraySelectHtml="";
+
+var itemDetailsObject={};
+
 $(document).ready(function() {
 	
 	console.log("documet.ready build test plan");
@@ -98,7 +102,7 @@ function fetchItemDetailsByBtpNoSuccess(serverData){
 			var sNo=parseInt(index)+parseInt(1);
 			var html = "";
 			var itemDetailObj=itemDetailsList[index];
-			html += '<tr id="row_'+itemDetailObj['itemNo']+'">';
+			html += '<tr id="row_'+itemDetailObj['itemNo']+'" class="'+sNo+'">';
 			html += '<td id="sNo">'+sNo+'</td>';
 			html += '<td id="itemDesc"><input type="text" class="input-sm form-control" value="'+itemDetailObj['itemDescription']+'" disabled /></td>';
 			html += '<td id="itemCount"><input type="text" class="input-sm form-control" value="'+itemDetailObj['itemCount']+'" disabled /></td>';
@@ -106,27 +110,53 @@ function fetchItemDetailsByBtpNoSuccess(serverData){
 			html += '<td id="effortActual"><input type="text" class="input-sm form-control" value="'+itemDetailObj['actualEffort']+'" disabled /></td>';
 			html += '<td id="status"><input type="text" class="input-sm form-control" value="'+itemDetailObj['itemStatus']+'" disabled /></td>';
 			html += '<td id="remarks"><input type="text" class="input-sm form-control" value="'+itemDetailObj['itemRemarks']+'" disabled /></td>';
-			html += '<td style="text-align: -webkit-center;">';
-			html += '<a id="itemRowEditId" href="#" onclick="itemDeatilsEdit(this)"> <span	class="glyphicon glyphicon-edit"></span></a>'; 
+			html += '<td id="action" style="text-align: -webkit-center;">';
+			html += '<a  id="itemRowEditId" href="#" onclick="itemDeatilsEdit('+sNo+')"> <span	class="glyphicon glyphicon-edit"></span></a>'; 
 			html += '<span>&nbsp;</span>';
-			//html += '<a id="itemRowSaveId" style="display:none;" href="#"> <span class="glyphicon glyphicon-check"></span></a>';
+			html += '<a id="itemRowSaveId" style="display:none;" href="#" onclick="itemDeatilsSave('+sNo+')"> <span class="glyphicon glyphicon-check"></span></a>';
 			html += '<span>&nbsp;</span>';
-			html += '<a id="itemRowDeleteId" href="#" onclick="itemDeatilsDelete(this)"> <span class="glyphicon glyphicon-trash"></span></a>';
+			html += '<a id="itemRowDeleteId" href="#" onclick="itemDeatilsDelete('+sNo+')"> <span class="glyphicon glyphicon-trash"></span></a>';
 			html += '</td>';
 			html += '</tr>';
 			itemDetailsHtmlArray.push(html);
+			itemDetailsObject[sNo]=itemDetailObj;
 		}
 		$('#itemDeatilsParentDivId').find('table').find('tbody').html(itemDetailsHtmlArray);
 		$('#itemDeatilsParentDivId').show();
 	}
 }
 
-function itemDeatilsEdit(thisElement){
+function itemDeatilsEdit(rowId){
+	var rowEle=$('#itemDeatilsParentDivId').find('table').find('.'+rowId);
+	$(rowEle).find('input').prop('disabled',false);
+	var innerChildTagNmae=$(rowEle).find('#itemDesc')[0]['firstChild']['tagName'];
+	var currentValue=$(rowEle).find('#itemDesc')[0]['firstChild']['value'];
+	if('INPUT' == innerChildTagNmae){
+		$(rowEle).find('#itemDesc').html(itemDescArraySelectHtml);
+		$(rowEle).find('#itemDesc').find('select').val(currentValue);
+	}
+	$(rowEle).find('#action').find('#itemRowEditId').hide();
+	$(rowEle).find('#action').find('#itemRowDeleteId').hide();
+	$(rowEle).find('#action').find('#itemRowSaveId').show();
+}
+
+function itemDeatilsDelete(rowId){
 	
 }
 
-function itemDeatilsDelete(thisElement){
-	
+function itemDeatilsSave(rowId){
+	var currentItemDetailsObj=itemDetailsObject[rowId];
+	currentItemDetailsObj=JSON.stringify(currentItemDetailsObj);
+	ajaxHandler("POST", currentItemDetailsObj, "application/json", getApplicationRootPath()+"item_details/updateItemDetails", 'json', null, itemDeatilsSaveSuccess,true);
+	var rowEle=$('#itemDeatilsParentDivId').find('table').find('.'+rowId);
+	$(rowEle).find('#action').find('#itemRowEditId').show();
+	$(rowEle).find('#action').find('#itemRowDeleteId').show();
+	$(rowEle).find('#action').find('#itemRowSaveId').hide();
+	$(rowEle).find('input').prop('disabled',true);
+}
+
+function itemDeatilsSaveSuccess(serverData){
+	console.log(serverData);
 }
 
 function fetchItemDescriptionList(){
@@ -138,10 +168,13 @@ function fetchItemDescriptionList(){
 function fetchItemDescriptionListSuccess(serverData){
 	if('ERROR' != serverData['STATUS']){
 		var itemDescNameList=serverData['SERVER_DATA'];
+		itemDescArraySelectHtml += '<select id="itemDescriptionListId" name="itemDescriptionList" class="input-sm form-control">';
 		for(var index in itemDescNameList){
 			var itemDescNameObj=itemDescNameList[index];
 			itemDescriptionArray.push(itemDescNameObj['itemdescription']);
+			itemDescArraySelectHtml += '<option value="'+itemDescNameObj['itemdescription']+'">'+itemDescNameObj['itemdescription']+'</option>';
 		}
+		itemDescArraySelectHtml += '</select>';
 	}
 }
 
@@ -223,6 +256,8 @@ function editTestPlanRowInfo(gKey){
 	
 	console.log(buildTestPlanData[gKey]);
 	
+	$('#selectedRowKeyInput').val(gKey);
+	
 	var currentSelectedObject=buildTestPlanData[gKey];
 	
 	selectedResourcesArray = constructResourceArray(currentSelectedObject);
@@ -263,20 +298,46 @@ function editTestPlanRowInfo(gKey){
 
 function updateBtpModifiedChanges(){
 	var btpForm=$('#buildTestPlanDiv').find('form');
-	console.log(btpForm);
-	var btpUpdateObject={};
-	btpUpdateObject['projectname']=btpForm.find('#projectId').val();
+	var gKey=$('#selectedRowKeyInput').val();
+	var btpUpdateObject=buildTestPlanData[gKey];
+	btpUpdateObject['projectName']=btpForm.find('#projectId').val();
 	btpUpdateObject['phase']=btpForm.find('#phaseId').val();
-	btpUpdateObject['btpplan']=btpForm.find('#planId').val();
-	btpUpdateObject['btpstatus']=btpForm.find('#statusId').val();
+	btpUpdateObject['btpPlan']=btpForm.find('#planId').val();
+	btpUpdateObject['btpStatus']=btpForm.find('#statusId').val();
 	btpUpdateObject['cycle']=btpForm.find('#cycleId').val();
-	btpUpdateObject['sprint']=btpForm.find('#iteration_id').val();
-	btpUpdateObject['buildno']=btpForm.find('#buildNoId').val();
-	btpUpdateObject['btpremarks']=btpForm.find('#remarksId').val();
-	btpUpdateObject['startdate']=btpForm.find('#startDateId').val();
-	btpUpdateObject['enddate']=btpForm.find('#endDateId').val();
-	btpUpdateObject['revisedenddate']=btpForm.find('#revisedEndDateId').val();
-	console.log(btpUpdateObject);
+	btpUpdateObject['sPrint']=btpForm.find('#iteration_id').val();
+	btpUpdateObject['buildNo']=btpForm.find('#buildNoId').val();
+	btpUpdateObject['btpRemarks']=btpForm.find('#remarksId').val();
+	btpUpdateObject['startDate']=btpForm.find('#startDateId').val();
+	btpUpdateObject['endDate']=btpForm.find('#endDateId').val();
+	btpUpdateObject['revisedEndDate']=btpForm.find('#revisedEndDateId').val();
+	
+	var objectKeys=Object.keys(btpUpdateObject);
+	for(var index in objectKeys){
+		var keyStr=objectKeys[index];
+		if(keyStr.indexOf("resource") != -1){
+			btpUpdateObject[keyStr]=null;
+		}
+	}
+	
+	btpForm.find('#resourceMgmtTableId').find('tr').each(function( index, element ) {
+		if(null != element){
+			var value=$(element).find('#resourceNameTDId')[0]['lastChild']['value'];
+			btpUpdateObject['resource'+(index+1)]=value;
+		}
+	});
+	btpUpdateObject['createdDate']=getDateValue(btpUpdateObject['createdDate'],'yyyy-MM-dd',"-");
+	btpUpdateObject['updatesDate']=getDateValue(btpUpdateObject['updatesDate'],'yyyy-MM-dd',"-");
+	btpUpdateObject=JSON.stringify(btpUpdateObject);
+	ajaxHandler("POST", btpUpdateObject, "application/json", getApplicationRootPath()+"build_test_plan/updateData", 'json', null, updateBtpModifiedChangesSuccess,true);
+}
+
+function updateBtpModifiedChangesSuccess(serverData){
+	if('ERROR' != serverData['STATUS']){
+		window.location.href=getApplicationRootPath()+"build_test_plan/show";
+	}else {
+		alert('Update Operation Failed!!!');
+	}
 }
 
 function constructResourceArray(btpObject){
@@ -286,7 +347,7 @@ function constructResourceArray(btpObject){
 		var keyStr=objectKeys[index];
 		if(keyStr.indexOf("resource") != -1){
 			var value=btpObject[keyStr];
-			if(value.length > 0){
+			if(null != value && value.length > 0){
 				array.push(btpObject[keyStr]);
 			}
 		}
@@ -299,13 +360,13 @@ function constructResourceTable(resourceArray){
 	for(var index=0 ; index<resourceArray.length;index++ ){
 		html += '<tr id="resourcetr_'+(index+1)+'">';
 		if(index == 0){
-			html += '<td><label class="control-label">Resource'+(index+1)+':*</label></td>';
+			html += '<td id="resourceNameCaptionId"><label class="control-label">Resource'+(index+1)+':*</label></td>';
 			html += '<td id="resourceNameTDId" onclick="clickedResourceName(this)"><input id="resourceId" name="do_nbr" type="text" class="form-control form-control3" value="'+resourceArray[index]+'"></td>';
 			html += '<td style="text-align: -webkit-center;">';
 			html += '<a onclick="addTableRow(this)" href="#"><span data-href="#" class="fa fa-plus" data-toggle="tooltip" data-placement="auto top" title="" data-original-title="Add Fields"></span></a>';
 			html += '</td>';
 		}else{
-			html += '<td><label class="control-label">Resource'+(index+1)+':</label></td>';
+			html += '<td id="resourceNameCaptionId"><label class="control-label">Resource'+(index+1)+':</label></td>';
 			html += '<td id="resourceNameTDId" onclick="clickedResourceName(this)" ><input id="resourceId" name="do_nbr" type="text" class="form-control form-control3" value="'+resourceArray[index]+'"></td>';
 			html += '<td style="text-align: -webkit-center;">';
 			html += '<a onclick="deleteTableRow(this)" href="#"><span class="fa fa-remove" data-toggle="tooltip" data-placement="auto top" title="" data-original-title="Remove Resource"></span></a></td>';
@@ -313,6 +374,40 @@ function constructResourceTable(resourceArray){
 		html += '</tr>';
 	}
 	$('#resourceMgmtTableId').find('tbody').html(html);
+}
+
+function addTableRow(thisObject){
+	var html="";
+	var resourceTrArray=$('#resourceMgmtTableId').find('tbody').find('tr');
+	if(resourceTrArray.length <6){
+		html += '<tr id="resourcetr_'+(resourceTrArray.length+1)+'">';
+		html += '<td id="resourceNameCaptionId"><label class="control-label">Resource'+(resourceTrArray.length+1)+':*</label></td>';
+		html += '<td id="resourceNameTDId" onclick="clickedResourceName(this)"><input id="resourceId" name="do_nbr" type="text" class="form-control form-control3" value=""></td>';
+		html += '<td style="text-align: -webkit-center;">';
+		html += '<a onclick="deleteTableRow(this)" href="#"><span class="fa fa-remove" data-toggle="tooltip" data-placement="auto top" title="" data-original-title="Remove Resource"></span></a>';
+		html += '</td>';
+		html += '</tr>';
+		$('#resourceMgmtTableId').find('tbody').append(html);
+	}else{
+		alert("More than 6 resources not allowed per btp");
+	}
+}
+
+function deleteTableRow(thisObject){
+	var trElementId=$($(thisObject)[0]['parentNode'])[0]['parentNode']['id'];
+	var resourceTrArray=$('#resourceMgmtTableId').find('tbody').find('tr');
+	if(resourceTrArray.length > 1){
+		var numId=parseInt(trElementId.replace('resourcetr_',''));
+		var deletedRowId=numId;
+		$('#resourceMgmtTableId').find('#'+trElementId).remove();
+		while(numId <= 6){
+			numId++;
+			$('#resourceMgmtTableId').find('#resourcetr_'+numId).find('#resourceNameCaptionId').find('label').text('Resource'+(numId-1)+':');
+			$('#resourceMgmtTableId').find('#resourcetr_'+numId).attr('id','resourcetr_'+(numId-1));
+		}
+	}else{
+		alert("you can't delete primary resource for btp");
+	}
 }
 
 function clickedResourceName(thisElement){
@@ -328,13 +423,7 @@ function clickedResourceName(thisElement){
 	
 }
 
-function addTableRow(thisObject){
-	console.log(thisObject);
-}
 
-function deleteTableRow(thisObject){
-	console.log(thisObject);
-}
 
 function fillSelectDropDown(dropDownId,arrayData,selectedOption){
 	$('#'+dropDownId).html("");

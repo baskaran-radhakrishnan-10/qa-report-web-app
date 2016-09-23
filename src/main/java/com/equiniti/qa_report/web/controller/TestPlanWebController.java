@@ -24,7 +24,7 @@ public class TestPlanWebController {
 	@Autowired
 	private TestPlanController testPlanController;
 	
-	@RequestMapping(value = "/show", method = RequestMethod.GET)
+	@RequestMapping(value = "/show")
 	public String showBuildTestPlanPage(Model model){
 		/*try {
 			model.addAttribute("BTP_ENTRIES", testPlanController.listTestPlanEntries());
@@ -56,7 +56,11 @@ public class TestPlanWebController {
 	@ResponseBody
 	public Map<String,Object> editData(@RequestBody Map<String,Object> inputData){
 		Map<String,Object> returnObj=new HashMap<>();
-		
+		try {
+			returnObj=testPlanController.editTestPlanEntry(inputData);
+		} catch (ControllerException e) {
+			e.printStackTrace();
+		}
 		return returnObj;
 	}
 	

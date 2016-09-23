@@ -55,6 +55,11 @@ public class ItemDetailsWebController {
 	@ResponseBody
 	public Map<String,Object> updateItemDeatils(@RequestBody Map<String,Object> inputParam){
 		Map<String,Object> returnObj=new HashMap<>();
+		try {
+			returnObj=itemDetailsController.updateItemDeatils(inputParam);
+		} catch (ControllerException e) {
+			e.printStackTrace();
+		}
 		return returnObj;
 	}
 

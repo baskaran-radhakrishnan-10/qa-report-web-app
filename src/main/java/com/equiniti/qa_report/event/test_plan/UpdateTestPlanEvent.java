@@ -14,6 +14,8 @@ public class UpdateTestPlanEvent extends BaseEvent {
 	private BtpEntity btpEntity;
 	
 	private Map<String,Object> paramMap;
+	
+	private boolean isUpdated=true;
 
     public UpdateTestPlanEvent() {
         super(EVENT_NAME);
@@ -33,6 +35,14 @@ public class UpdateTestPlanEvent extends BaseEvent {
 
 	public void setParamMap(Map<String, Object> paramMap) {
 		this.paramMap = paramMap;
+	}
+
+	public boolean isUpdated() {
+		return isUpdated;
+	}
+
+	public void setUpdated(boolean isUpdated) {
+		this.isUpdated = isUpdated;
 	}
 
 }

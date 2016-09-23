@@ -1,8 +1,14 @@
 package com.equiniti.qa_report.event_handler;
 
+import java.util.Calendar;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.joda.time.DateTime;
 
 import com.equiniti.qa_report.dao.api.TestPlanDAO;
+import com.equiniti.qa_report.entity.BtpEntity;
 import com.equiniti.qa_report.event.test_plan.AddTestPlanEvent;
 import com.equiniti.qa_report.event.test_plan.GetTestPlanEvent;
 import com.equiniti.qa_report.event.test_plan.UpdateTestPlanEvent;
@@ -15,6 +21,8 @@ import com.equiniti.qa_report.exception.api.faultcode.CommonFaultCode;
 public class TestPlanEventHandler implements IEventHandler<IEvent> {
 
     private static final Logger LOG = Logger.getLogger(TestPlanEventHandler.class.getName());
+    
+    private ObjectMapper objMapper=new ObjectMapper();
     
     private TestPlanDAO testPlanDAO;
 
@@ -54,10 +62,12 @@ public class TestPlanEventHandler implements IEventHandler<IEvent> {
 
     private void updateTestPlan(UpdateTestPlanEvent event) throws EventException {
         try {
-        	testPlanDAO.updateBtpEntity(event.getBtpEntity());
+        	testPlanDAO.updateBtpEntity(populateEntityFromMap(event.getParamMap()));
         } catch (DaoException e) {
+        	event.setUpdated(false);
             throw new EventException(e.getFaultCode(), e);
         } catch (Exception e) {
+        	event.setUpdated(false);
             throw new EventException(CommonFaultCode.UNKNOWN_ERROR, e);
         }
     }
@@ -74,6 +84,12 @@ public class TestPlanEventHandler implements IEventHandler<IEvent> {
         } catch (Exception e) {
             throw new EventException(CommonFaultCode.UNKNOWN_ERROR, e);
         }
+    }
+    
+    private BtpEntity populateEntityFromMap(Map<String,Object> mapObject){
+    	BtpEntity entity=objMapper.convertValue(mapObject, BtpEntity.class);
+    	entity.setUpdatesDate(new DateTime(Calendar.getInstance().getTime().getTime()));
+    	return entity;
     }
     
 }

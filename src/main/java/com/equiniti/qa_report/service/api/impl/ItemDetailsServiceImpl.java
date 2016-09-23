@@ -53,7 +53,7 @@ public class ItemDetailsServiceImpl extends BaseAPIImpl implements ItemDetailsSe
 		AddItemDeatilsEvent event=null;
 		try{
 			event=getEvent(AddItemDeatilsEvent.class);
-			event.setEntity(populateItemEntityFromMap(inputParam));
+			event.setRequestParam(inputParam);
 			processEvent(event);
 		}catch(EventException e){
 			throw new APIException(e.getFaultCode(),e);
@@ -64,25 +64,18 @@ public class ItemDetailsServiceImpl extends BaseAPIImpl implements ItemDetailsSe
 	}
 
 	@Override
-	public void updateItemDeatils(Map<String, Object> inputParam) throws APIException {
+	public boolean updateItemDeatils(Map<String, Object> inputParam) throws APIException {
 		UpdateItemDeatilsEvent event=null;
 		try{
 			event=getEvent(UpdateItemDeatilsEvent.class);
-			event.setEntity(populateItemEntityFromMap(inputParam));
+			event.setParamMap(inputParam);
 			processEvent(event);
 		}catch(EventException e){
 			throw new APIException(e.getFaultCode(),e);
 		}catch(Exception e){
 			throw new APIException(CommonFaultCode.UNKNOWN_ERROR,e);
 		}
-	}
-	
-	private ItemEntity populateItemEntityFromMap(Map<String, Object> inputParam){
-		
-		ItemEntity entity=new ItemEntity();
-		
-		return entity;
-		
+		return event.isUpdated();
 	}
 
 }

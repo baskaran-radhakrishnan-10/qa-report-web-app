@@ -9,14 +9,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 @Entity
 @Table(name = "BtpTable")
-@Cache(usage=CacheConcurrencyStrategy.READ_ONLY, region="qa_report")
 public class BtpEntity implements Serializable{
 	
 	private static final long serialVersionUID = 6353634667945363641L;

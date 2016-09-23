@@ -71,7 +71,7 @@ public class TestPlanServiceImpl extends BaseAPIImpl implements TestPlanService{
 	}
 
 	@Override
-	public void updateTestPlanEntry(Map<String, Object> paramMap) throws APIException {
+	public boolean updateTestPlanEntry(Map<String, Object> paramMap) throws APIException {
 		UpdateTestPlanEvent event=getEvent(UpdateTestPlanEvent.class);
 		try{
 			event.setParamMap(paramMap);
@@ -81,5 +81,6 @@ public class TestPlanServiceImpl extends BaseAPIImpl implements TestPlanService{
 		} catch (Exception e) {
 			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}
+		return event.isUpdated();
 	} 
 }
