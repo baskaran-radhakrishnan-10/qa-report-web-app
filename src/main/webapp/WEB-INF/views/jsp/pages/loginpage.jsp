@@ -68,8 +68,8 @@
 <!--script-->
 
 </head>
-<body id="mimin" class="dashboard form-signin-wrapper" style=" background-color: #FFEB3B !important;">
-<!-- 	style="background: rgba(33, 150, 243, 0.1) !important;"> -->
+<body id="mimin" class="dashboard form-signin-wrapper" style=" background-color: #D3D3D3 !important;">
+style="background: rgba(33, 150, 243, 0.1) !important;"> -->
 	<div class="container">
 
 		<form:form modelAttribute="loginModelAttribute" id="loginForm"
