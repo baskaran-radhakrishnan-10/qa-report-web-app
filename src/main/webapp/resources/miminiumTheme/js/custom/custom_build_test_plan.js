@@ -32,13 +32,11 @@ $(document).ready(function() {
 		
 	});
 	
-	$('#itemRowEditId').on("click" ,function(event){
-		console.log("Item Row Edit Button Clicked");
+	$('#save_button').on("click" ,function(event){
+		event.preventDefault();
+		console.log("Save Button Clicked");
+		updateBtpModifiedChanges();
 	});
-	
-	$('#resourceNameTD').on("click" ,function(event){
-		console.log("on click resource name td");
-	})
 	
 	fetchTestPlanEntries();
 	
@@ -261,7 +259,24 @@ function editTestPlanRowInfo(gKey){
 	
 	fetchItemDetailsByBtpNo(gKey);
 	
-	constructItemDetailsTable();
+}
+
+function updateBtpModifiedChanges(){
+	var btpForm=$('#buildTestPlanDiv').find('form');
+	console.log(btpForm);
+	var btpUpdateObject={};
+	btpUpdateObject['projectname']=btpForm.find('#projectId').val();
+	btpUpdateObject['phase']=btpForm.find('#phaseId').val();
+	btpUpdateObject['btpplan']=btpForm.find('#planId').val();
+	btpUpdateObject['btpstatus']=btpForm.find('#statusId').val();
+	btpUpdateObject['cycle']=btpForm.find('#cycleId').val();
+	btpUpdateObject['sprint']=btpForm.find('#iteration_id').val();
+	btpUpdateObject['buildno']=btpForm.find('#buildNoId').val();
+	btpUpdateObject['btpremarks']=btpForm.find('#remarksId').val();
+	btpUpdateObject['startdate']=btpForm.find('#startDateId').val();
+	btpUpdateObject['enddate']=btpForm.find('#endDateId').val();
+	btpUpdateObject['revisedenddate']=btpForm.find('#revisedEndDateId').val();
+	console.log(btpUpdateObject);
 }
 
 function constructResourceArray(btpObject){

@@ -266,7 +266,7 @@
 				<!-- id="accordion" -->
 				<div class="form-group" style="margin-bottom: 10px;">
 					<div class="col-md-8" style="float: right; margin-right: 1em;">
-						<input id="cancel_button" type="reset" class="btn btn-default" value="Cancel" style="float: right;"> <span></span> <input id="save_button" type="submit" class="btn btn-primary" value="Save" style="float: right; margin-right: 1em;">
+						<input data-dismiss="modal" id="cancel_button" type="reset" class="btn btn-default" value="Cancel" style="float: right;"> <span></span> <input id="save_button" type="submit" class="btn btn-primary" value="Save" style="float: right; margin-right: 1em;">
 					</div>
 					<div class="clearfix"></div>
 				</div>
