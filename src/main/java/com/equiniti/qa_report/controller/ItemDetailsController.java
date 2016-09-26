@@ -53,8 +53,17 @@ public class ItemDetailsController {
 	}
 	
 	public Map<String,Object> addItemDetails(Map<String,Object> inputParam) throws ControllerException{
-		Map<String,Object> returnObj=new HashMap<>();
-		return returnObj;
+		Map<String,Object> returnObjMap=new HashMap<>();
+		try {
+			Object returnObj=itemDetailsService.addItemDetails(inputParam);
+			returnObjMap.put(ApplicationConstants.STATUS, (Integer)returnObj != null ? ApplicationConstants.SUCCESS : ApplicationConstants.ERROR);
+			returnObjMap.put(ApplicationConstants.SERVER_DATA, returnObj);
+		} catch (APIException e) {
+			throw new ControllerException(e.getFaultCode(), e);
+		} catch(Exception e){
+			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+		return returnObjMap;
 	}
 	
 	public Map<String,Object> updateItemDeatils(Map<String,Object> inputParam) throws ControllerException{

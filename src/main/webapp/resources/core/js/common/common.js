@@ -7,14 +7,15 @@ function ajaxHandler(requestType,data,contentType,url,dataType,errorCallback,suc
 		data : data,
 		dataType : dataType,
 		async : async,
-		success : function(data) {
-			console.log("SUCCESS: ", data);
-			if(typeof data != 'undefined' && null != data){
-				if(null != data['REDIRECT_TO_LOGIN_PAGE'] && data['REDIRECT_TO_LOGIN_PAGE']){
+		success : function(serverDate) {
+			console.log("SUCCESS E: ", serverDate);
+			console.log(data);
+			if(typeof serverDate != 'undefined' && null != serverDate){
+				if(null != serverDate['REDIRECT_TO_LOGIN_PAGE'] && serverDate['REDIRECT_TO_LOGIN_PAGE']){
 					logoutMethod();
 				}else {
 					if(null != successCallback){
-						successCallback(data);
+						successCallback(serverDate,data);
 					}
 				}
 			}

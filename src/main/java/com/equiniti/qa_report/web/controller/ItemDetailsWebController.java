@@ -48,6 +48,11 @@ public class ItemDetailsWebController {
 	@ResponseBody
 	public Map<String,Object> addItemDetails(@RequestBody Map<String,Object> inputParam){
 		Map<String,Object> returnObj=new HashMap<>();
+		try {
+			returnObj=itemDetailsController.addItemDetails(inputParam);
+		} catch (ControllerException e) {
+			e.printStackTrace();
+		}
 		return returnObj;
 	}
 	

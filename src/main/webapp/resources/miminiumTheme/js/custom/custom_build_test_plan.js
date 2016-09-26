@@ -29,8 +29,14 @@ $(document).ready(function() {
 	$('#buildTestPlanForm').hide();
 	
 	$('#addTestPlanDataId').on("click" ,function (event){
-		
+		console.log("btp add button clicked");
+		buildTestPlanModalData(null);
 	});
+	
+	/*$('#addItemDetailRowButton').on("click" ,function(event){
+		console.log("addItemDetailRowButton clicked!!!");
+		addItemDetailsRows();
+	})*/
 	
 	$('#exportTestPlanDataId').on("click" ,function (event){
 		
@@ -39,7 +45,7 @@ $(document).ready(function() {
 	$('#save_button').on("click" ,function(event){
 		event.preventDefault();
 		console.log("Save Button Clicked");
-		updateBtpModifiedChanges();
+		addOrUpdateBtp();
 	});
 	
 	fetchTestPlanEntries();
@@ -94,6 +100,28 @@ function fetchItemDetailsByBtpNo(btpNo){
 	ajaxHandler("POST", data, "application/json", getApplicationRootPath()+"item_details/getItemDetails", 'json', null, fetchItemDetailsByBtpNoSuccess,true);
 }
 
+function addItemDetailsRows(){
+	var tBody=$('#itemDeatilsParentDivId').find('table').find('tbody');
+	var totalRows=$(tBody).find('tr').length;
+	var nextRow=(totalRows+1);
+	var html = "";
+	html += '<tr id="row_'+nextRow+'" class="'+nextRow+'">';
+	html += '<td id="sNo">'+nextRow+'</td>';
+	html += '<td id="itemDesc">'+itemDescArraySelectHtml+'</td>';
+	html += '<td id="itemCount"><input type="text" class="input-sm form-control" value=""  /></td>';
+	html += '<td id="effortCost"><input type="text" class="input-sm form-control" value=""  /></td>';
+	html += '<td id="effortActual"><input type="text" class="input-sm form-control" value=""  /></td>';
+	html += '<td id="status"><input type="text" class="input-sm form-control" value=""  /></td>';
+	html += '<td id="remarks"><input type="text" class="input-sm form-control" value=""  /></td>';
+	html += '<td id="action" style="text-align: -webkit-center;">';
+	html += '<a  id="itemRowEditId" style="display:none;" href="#" onclick="itemDeatilsEdit('+nextRow+')"> <span class="glyphicon glyphicon-edit"></span></a>'; 
+	html += '<span>&nbsp;</span>';
+	html += '<a id="itemRowSaveId" href="#" onclick="itemDeatilsSave('+nextRow+')"> <span class="glyphicon glyphicon-check"></span></a>';
+	html += '</td>';
+	html += '</tr>';
+	$(tBody).append(html);
+}
+
 function fetchItemDetailsByBtpNoSuccess(serverData){
 	if('ERROR' != serverData['STATUS']){
 		var itemDetailsList=serverData['SERVER_DATA'];
@@ -114,8 +142,8 @@ function fetchItemDetailsByBtpNoSuccess(serverData){
 			html += '<a  id="itemRowEditId" href="#" onclick="itemDeatilsEdit('+sNo+')"> <span	class="glyphicon glyphicon-edit"></span></a>'; 
 			html += '<span>&nbsp;</span>';
 			html += '<a id="itemRowSaveId" style="display:none;" href="#" onclick="itemDeatilsSave('+sNo+')"> <span class="glyphicon glyphicon-check"></span></a>';
-			html += '<span>&nbsp;</span>';
-			html += '<a id="itemRowDeleteId" href="#" onclick="itemDeatilsDelete('+sNo+')"> <span class="glyphicon glyphicon-trash"></span></a>';
+			//html += '<span>&nbsp;</span>';
+			//html += '<a id="itemRowDeleteId" href="#" onclick="itemDeatilsDelete('+sNo+')"> <span class="glyphicon glyphicon-trash"></span></a>';
 			html += '</td>';
 			html += '</tr>';
 			itemDetailsHtmlArray.push(html);
@@ -145,18 +173,68 @@ function itemDeatilsDelete(rowId){
 }
 
 function itemDeatilsSave(rowId){
-	var currentItemDetailsObj=itemDetailsObject[rowId];
-	currentItemDetailsObj=JSON.stringify(currentItemDetailsObj);
-	ajaxHandler("POST", currentItemDetailsObj, "application/json", getApplicationRootPath()+"item_details/updateItemDetails", 'json', null, itemDeatilsSaveSuccess,true);
+	
+	var btpObject=null;
+	
+	var isUpdate=true;
+	
 	var rowEle=$('#itemDeatilsParentDivId').find('table').find('.'+rowId);
+	
+	var gKey = $('#selectedRowKeyInput').val();
+	
+	btpObject = null != gKey ? buildTestPlanData[gKey] : null;
+	
+	var currentItemDetailsObj=itemDetailsObject[rowId];
+	
+	if(null == currentItemDetailsObj){
+		isUpdate=false;
+		currentItemDetailsObj={};
+	}
+	
+	currentItemDetailsObj['btpNo']=btpObject;
+	
+	currentItemDetailsObj['btpNo']['createdDate']=getDateValue(currentItemDetailsObj['btpNo']['createdDate'],'yyyy-MM-dd',"-");
+	currentItemDetailsObj['btpNo']['endDate']=getDateValue(currentItemDetailsObj['btpNo']['endDate'],'yyyy-MM-dd',"-");
+	currentItemDetailsObj['btpNo']['revisedEndDate']=getDateValue(currentItemDetailsObj['btpNo']['revisedEndDate'],'yyyy-MM-dd',"-");
+	currentItemDetailsObj['btpNo']['startDate']=getDateValue(currentItemDetailsObj['btpNo']['startDate'],'yyyy-MM-dd',"-");
+	currentItemDetailsObj['btpNo']['updatesDate']=getDateValue(currentItemDetailsObj['btpNo']['updatesDate'],'yyyy-MM-dd',"-");
+	
+	currentItemDetailsObj['actualEffort']=$(rowEle).find('#effortActual').find('input').val();
+	currentItemDetailsObj['estimatedEffort']=$(rowEle).find('#effortCost').find('input').val();
+	currentItemDetailsObj['itemCount']=$(rowEle).find('#itemCount').find('input').val();
+	currentItemDetailsObj['itemDescription']=$(rowEle).find('#itemDesc').find('#itemDescriptionListId').val();
+	currentItemDetailsObj['itemStatus']=$(rowEle).find('#status').find('input').val();
+	currentItemDetailsObj['itemRemarks']=$(rowEle).find('#remarks').find('input').val();
+	
 	$(rowEle).find('#action').find('#itemRowEditId').show();
 	$(rowEle).find('#action').find('#itemRowDeleteId').show();
 	$(rowEle).find('#action').find('#itemRowSaveId').hide();
+	$(rowEle).find('#itemDesc').html("");
+	$(rowEle).find('#itemDesc').append('<input type="text" class="input-sm form-control" value="'+currentItemDetailsObj['itemDescription']+'" disabled />');
 	$(rowEle).find('input').prop('disabled',true);
+	
+	if(!isUpdate){
+		ajaxHandler("POST", JSON.stringify(currentItemDetailsObj), "application/json", getApplicationRootPath()+"item_details/addItemDetails", 'json', null, itemDeatilsSaveSuccess,true);
+	}else{
+		ajaxHandler("POST", JSON.stringify(currentItemDetailsObj), "application/json", getApplicationRootPath()+"item_details/updateItemDetails", 'json', null, itemDeatilsEditSuccess,true);
+	}
+	
 }
 
-function itemDeatilsSaveSuccess(serverData){
-	console.log(serverData);
+function itemDeatilsSaveSuccess(serverData,inputData){
+	if('ERROR' != serverData['STATUS']){
+		var gKey=serverData['SERVER_DATA'];
+		inputData['gKey']=gKey;
+		var size=(Object.keys(itemDetailsObject).length)+1;
+		itemDetailsObject[size]=inputData;
+		alert("Item Detail Row Added Successfully!!!")
+	}
+}
+
+function itemDeatilsEditSuccess(serverData){
+	if('ERROR' != serverData['STATUS']){
+		alert("Item Detail Row Updated Successfully!!!")
+	}
 }
 
 function fetchItemDescriptionList(){
@@ -211,7 +289,7 @@ function populateTestPlanEntries(entriesList){
 		html +=	'<td>'+startDate+'</td>' ;
 		html += '<td>'+endDate+'</td>' ;
 		html +=	'<td>'+revisedEndDate+'</td>' ;
-		html += '<td id="testPlanEditRowId" onclick="editTestPlanRowInfo('+gKey+')"><span><a href="#" class="glyphicon glyphicon-edit"></a></span><span>&nbsp;</span></td>' ;
+		html += '<td id="testPlanEditRowId" onclick="buildTestPlanModalData('+gKey+')"><span><a href="#" class="glyphicon glyphicon-edit"></a></span><span>&nbsp;</span></td>' ;
 		html += '</tr>' ;
 		htmlArray.push(html);
 		sNo++;
@@ -221,6 +299,9 @@ function populateTestPlanEntries(entriesList){
 
 function getDateValue(dateObj,format,delimeter){
 	var formatedDateStr="";
+	if($.type(dateObj) === "string"){
+		return dateObj;
+	}
 	if(null != dateObj){
 		var day=(dateObj['dayOfMonth'] > 9) ? (""+dateObj['dayOfMonth']) : ("0"+dateObj['dayOfMonth']);
 		var month=(dateObj['monthOfYear'] > 9) ? (""+dateObj['monthOfYear']) : ("0"+dateObj['monthOfYear']);
@@ -250,39 +331,37 @@ function fetchTestPlanEntries(){
 	ajaxHandler("POST", data, "application/json", getApplicationRootPath()+"build_test_plan/getData", 'json', null, fetchTestPlanEntriesSuccess,true);
 }
 
-function editTestPlanRowInfo(gKey){
+function buildTestPlanModalData(gKey){
 	
-	console.log("gKey :"+gKey);
+	var currentSelectedObject=null;
 	
-	console.log(buildTestPlanData[gKey]);
+	$('#selectedRowKeyInput').val(null != gKey ? gKey : "");
 	
-	$('#selectedRowKeyInput').val(gKey);
+	currentSelectedObject = null != gKey ? buildTestPlanData[gKey] : null;
 	
-	var currentSelectedObject=buildTestPlanData[gKey];
+	selectedResourcesArray = null != currentSelectedObject ? constructResourceArray(currentSelectedObject) : [];
 	
-	selectedResourcesArray = constructResourceArray(currentSelectedObject);
+	fillSelectDropDown('projectId',projectArray, null != currentSelectedObject ? currentSelectedObject['projectName'] : "");
 	
-	fillSelectDropDown('projectId',projectArray,currentSelectedObject['projectName']);
+	fillSelectDropDown('phaseId',phaseArray, null != currentSelectedObject ? currentSelectedObject['phase'] : "");
 	
-	fillSelectDropDown('phaseId',phaseArray,currentSelectedObject['phase']);
+	fillSelectDropDown('planId',planArray, null != currentSelectedObject ? currentSelectedObject['btpPlan'] : "");
 	
-	fillSelectDropDown('planId',planArray,currentSelectedObject['btpPlan']);
+	fillSelectDropDown('statusId',statusArray, null != currentSelectedObject ? currentSelectedObject['btpStatus'] : "");
 	
-	fillSelectDropDown('statusId',statusArray,currentSelectedObject['btpStatus']);
+	$('#cycleId').val( null != currentSelectedObject ? currentSelectedObject['cycle'] : "");
 	
-	$('#cycleId').val(currentSelectedObject['cycle']);
+	$('#iteration_id').val( null != currentSelectedObject ? currentSelectedObject['sPrint'] : "");
 	
-	$('#iteration_id').val(currentSelectedObject['sPrint']);
+	$('#buildNoId').val( null != currentSelectedObject ? currentSelectedObject['buildNo'] : "");
 	
-	$('#buildNoId').val(currentSelectedObject['buildNo']);
+	$('#remarksId').val( null != currentSelectedObject ? currentSelectedObject['btpRemarks'] : "");
 	
-	$('#remarksId').val(currentSelectedObject['btpRemarks']);
+	$('#startDateId').val( null != currentSelectedObject ? getDateValue(currentSelectedObject['startDate'],'yyyy-MM-dd',"-") : "");
 	
-	$('#startDateId').val(getDateValue(currentSelectedObject['startDate'],'yyyy-MM-dd',"-"));
+	$('#endDateId').val( null != currentSelectedObject ? getDateValue(currentSelectedObject['endDate'],'yyyy-MM-dd',"-") : "");
 	
-	$('#endDateId').val(getDateValue(currentSelectedObject['endDate'],'yyyy-MM-dd',"-"));
-	
-	$('#revisedEndDateId').val(getDateValue(currentSelectedObject['revisedEndDate'],'yyyy-MM-dd',"-"));
+	$('#revisedEndDateId').val( null != currentSelectedObject ? getDateValue(currentSelectedObject['revisedEndDate'],'yyyy-MM-dd',"-") : "");
 	
 	constructResourceTable(selectedResourcesArray);
 	
@@ -292,51 +371,82 @@ function editTestPlanRowInfo(gKey){
 	
 	$('#buildTestPlanDiv').find('#buildTestPlanForm').show();
 	
-	fetchItemDetailsByBtpNo(gKey);
+	if(null == gKey){
+		$('#itemDeatilsParentDivId').hide();
+	}else{
+		$('#itemDeatilsParentDivId').show();
+	}
+	
+	if(null != gKey){
+		fetchItemDetailsByBtpNo(gKey);
+	}
 	
 }
 
-function updateBtpModifiedChanges(){
-	var btpForm=$('#buildTestPlanDiv').find('form');
-	var gKey=$('#selectedRowKeyInput').val();
-	var btpUpdateObject=buildTestPlanData[gKey];
-	btpUpdateObject['projectName']=btpForm.find('#projectId').val();
-	btpUpdateObject['phase']=btpForm.find('#phaseId').val();
-	btpUpdateObject['btpPlan']=btpForm.find('#planId').val();
-	btpUpdateObject['btpStatus']=btpForm.find('#statusId').val();
-	btpUpdateObject['cycle']=btpForm.find('#cycleId').val();
-	btpUpdateObject['sPrint']=btpForm.find('#iteration_id').val();
-	btpUpdateObject['buildNo']=btpForm.find('#buildNoId').val();
-	btpUpdateObject['btpRemarks']=btpForm.find('#remarksId').val();
-	btpUpdateObject['startDate']=btpForm.find('#startDateId').val();
-	btpUpdateObject['endDate']=btpForm.find('#endDateId').val();
-	btpUpdateObject['revisedEndDate']=btpForm.find('#revisedEndDateId').val();
+function addOrUpdateBtp(){
 	
-	var objectKeys=Object.keys(btpUpdateObject);
+	var btpObject={};
+	
+	var btpForm=$('#buildTestPlanDiv').find('form');
+	
+	var gKey=$('#selectedRowKeyInput').val();
+	
+	btpObject=gKey == "" ? {} : buildTestPlanData[gKey] ;
+	btpObject['projectName']=btpForm.find('#projectId').val();
+	btpObject['phase']=btpForm.find('#phaseId').val();
+	btpObject['btpPlan']=btpForm.find('#planId').val();
+	btpObject['btpStatus']=btpForm.find('#statusId').val();
+	btpObject['cycle']=btpForm.find('#cycleId').val();
+	btpObject['sPrint']=btpForm.find('#iteration_id').val();
+	btpObject['buildNo']=btpForm.find('#buildNoId').val();
+	btpObject['btpRemarks']=btpForm.find('#remarksId').val();
+	btpObject['startDate']=btpForm.find('#startDateId').val();
+	btpObject['endDate']=btpForm.find('#endDateId').val();
+	btpObject['revisedEndDate']=btpForm.find('#revisedEndDateId').val();
+	
+	var objectKeys=Object.keys(btpObject);
 	for(var index in objectKeys){
 		var keyStr=objectKeys[index];
 		if(keyStr.indexOf("resource") != -1){
-			btpUpdateObject[keyStr]=null;
+			btpObject[keyStr]=null;
 		}
 	}
 	
 	btpForm.find('#resourceMgmtTableId').find('tr').each(function( index, element ) {
 		if(null != element){
 			var value=$(element).find('#resourceNameTDId')[0]['lastChild']['value'];
-			btpUpdateObject['resource'+(index+1)]=value;
+			btpObject['resource'+(index+1)]=value;
 		}
 	});
-	btpUpdateObject['createdDate']=getDateValue(btpUpdateObject['createdDate'],'yyyy-MM-dd',"-");
-	btpUpdateObject['updatesDate']=getDateValue(btpUpdateObject['updatesDate'],'yyyy-MM-dd',"-");
-	btpUpdateObject=JSON.stringify(btpUpdateObject);
-	ajaxHandler("POST", btpUpdateObject, "application/json", getApplicationRootPath()+"build_test_plan/updateData", 'json', null, updateBtpModifiedChangesSuccess,true);
+	
+	btpObject['createdDate']=getDateValue(btpObject['createdDate'],'yyyy-MM-dd',"-");
+	
+	btpObject['updatesDate']=getDateValue(btpObject['updatesDate'],'yyyy-MM-dd',"-");
+	
+	
+	if("" == gKey){
+		ajaxHandler("POST", JSON.stringify(btpObject), "application/json", getApplicationRootPath()+"build_test_plan/addData", 'json', null, addBtpChangesSuccess,true);
+	}else{
+		ajaxHandler("POST", JSON.stringify(btpObject), "application/json", getApplicationRootPath()+"build_test_plan/updateData", 'json', null, updateBtpModifiedChangesSuccess,true);
+	}
+	
 }
 
 function updateBtpModifiedChangesSuccess(serverData){
 	if('ERROR' != serverData['STATUS']){
+		alert('Update Successfully!!!');
 		window.location.href=getApplicationRootPath()+"build_test_plan/show";
 	}else {
 		alert('Update Operation Failed!!!');
+	}
+}
+
+function addBtpChangesSuccess(serverData){
+	if('ERROR' != serverData['STATUS']){
+		alert('Added Successfully!!!');
+		window.location.href=getApplicationRootPath()+"build_test_plan/show";
+	}else {
+		alert('Add Operation Failed!!!');
 	}
 }
 
@@ -357,22 +467,36 @@ function constructResourceArray(btpObject){
 
 function constructResourceTable(resourceArray){
 	var html="";
-	for(var index=0 ; index<resourceArray.length;index++ ){
-		html += '<tr id="resourcetr_'+(index+1)+'">';
-		if(index == 0){
-			html += '<td id="resourceNameCaptionId"><label class="control-label">Resource'+(index+1)+':*</label></td>';
-			html += '<td id="resourceNameTDId" onclick="clickedResourceName(this)"><input id="resourceId" name="do_nbr" type="text" class="form-control form-control3" value="'+resourceArray[index]+'"></td>';
-			html += '<td style="text-align: -webkit-center;">';
-			html += '<a onclick="addTableRow(this)" href="#"><span data-href="#" class="fa fa-plus" data-toggle="tooltip" data-placement="auto top" title="" data-original-title="Add Fields"></span></a>';
-			html += '</td>';
-		}else{
-			html += '<td id="resourceNameCaptionId"><label class="control-label">Resource'+(index+1)+':</label></td>';
-			html += '<td id="resourceNameTDId" onclick="clickedResourceName(this)" ><input id="resourceId" name="do_nbr" type="text" class="form-control form-control3" value="'+resourceArray[index]+'"></td>';
-			html += '<td style="text-align: -webkit-center;">';
-			html += '<a onclick="deleteTableRow(this)" href="#"><span class="fa fa-remove" data-toggle="tooltip" data-placement="auto top" title="" data-original-title="Remove Resource"></span></a></td>';
+	
+	if(null != resourceArray && resourceArray.length > 0){
+		for(var index=0 ; index<resourceArray.length;index++ ){
+			html += '<tr id="resourcetr_'+(index+1)+'">';
+			if(index == 0){
+				html += '<td id="resourceNameCaptionId"><label class="control-label">Resource'+(index+1)+':*</label></td>';
+				html += '<td id="resourceNameTDId" onclick="clickedResourceName(this)"><input id="resourceId" name="do_nbr" type="text" class="form-control form-control3" value="'+resourceArray[index]+'"></td>';
+				html += '<td style="text-align: -webkit-center;">';
+				html += '<a onclick="addTableRow(this)" href="#"><span data-href="#" class="fa fa-plus" data-toggle="tooltip" data-placement="auto top" title="" data-original-title="Add Fields"></span></a>';
+				html += '</td>';
+			}else{
+				html += '<td id="resourceNameCaptionId"><label class="control-label">Resource'+(index+1)+':</label></td>';
+				html += '<td id="resourceNameTDId" onclick="clickedResourceName(this)" ><input id="resourceId" name="do_nbr" type="text" class="form-control form-control3" value="'+resourceArray[index]+'"></td>';
+				html += '<td style="text-align: -webkit-center;">';
+				html += '<a onclick="deleteTableRow(this)" href="#"><span class="fa fa-remove" data-toggle="tooltip" data-placement="auto top" title="" data-original-title="Remove Resource"></span></a></td>';
+			}
+			html += '</tr>';
 		}
-		html += '</tr>';
 	}
+	else{
+		
+		html += '<tr id="resourcetr_1">';
+		html += '<td id="resourceNameCaptionId"><label class="control-label">Resource1:*</label></td>';
+		html += '<td id="resourceNameTDId" onclick="clickedResourceName(this)"><input id="resourceId" name="do_nbr" type="text" class="form-control form-control3" value=""></td>';
+		html += '<td style="text-align: -webkit-center;">';
+		html += '<a onclick="addTableRow(this)" href="#"><span data-href="#" class="fa fa-plus" data-toggle="tooltip" data-placement="auto top" title="" data-original-title="Add Fields"></span></a>';
+		html += '</td>';
+		
+	}
+	
 	$('#resourceMgmtTableId').find('tbody').html(html);
 }
 

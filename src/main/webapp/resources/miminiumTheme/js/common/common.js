@@ -7,14 +7,14 @@ function ajaxHandler(requestType,data,contentType,url,dataType,errorCallback,suc
 		data : data,
 		dataType : dataType,
 		async : async,
-		success : function(data) {
-			console.log("SUCCESS: ", data);
-			if(typeof data != 'undefined' && null != data){
-				if(null != data['REDIRECT_TO_LOGIN_PAGE'] && data['REDIRECT_TO_LOGIN_PAGE']){
+		success : function(serverData) {
+			console.log("SUCCESS : ", serverData);
+			if(typeof serverData != 'undefined' && null != serverData){
+				if(null != serverData['REDIRECT_TO_LOGIN_PAGE'] && serverData['REDIRECT_TO_LOGIN_PAGE']){
 					logoutMethod();
 				}else {
 					if(null != successCallback){
-						successCallback(data);
+						successCallback(serverData,JSON.parse(data));
 					}
 				}
 			}
@@ -29,6 +29,7 @@ function ajaxHandler(requestType,data,contentType,url,dataType,errorCallback,suc
 		}
 	});
 }
+
 	
 function getApplicationRootPath(){
 	var href=window.location.href;

@@ -29,12 +29,9 @@
 	<div class="panel-body">
 		<div class="col-md-12">
 			<h3 style="margin-top: 0px;">Build Test Plan
-			<a id="addTestPlanDataId" type="button" href="ser_det_page" class="btn  btn-3d btn-default pull-right" style="margin: 0px 5px;">Export</a>
-			<a id="exportTestPlanDataId" type="button" data-toggle="modal" data-target="#build_test_plan" href="ser_det_page" class="btn  btn-3d btn-success pull-right" style="margin: 0px 5px;">Add</a>
+				<a id="exportTestPlanDataId" type="button" class="btn  btn-3d btn-default pull-right" style="margin: 0px 5px;">Export</a>
+				<a id="addTestPlanDataId" type="button"  data-target="#build_test_plan" class="btn  btn-3d btn-success pull-right" style="margin: 0px 5px;">Add</a>
 			</h3>
-			<!-- <p style="margin-bottom: 0px;">
-				Home <span class="fa-angle-right fa"></span> Serial Numbers
-			</p> -->
 		</div>
 	</div>
 </div>
@@ -66,6 +63,8 @@
 </div>
 
 <input type="button" id="editBuildTestPlanTrigger" data-toggle="modal" data-target="#build_test_plan" style="display:none" />
+
+<input type="button" id="addBuildTestPlanTrigger" data-toggle="modal" data-target="#build_test_plan" style="display:none" />
 
 <form id="buildTestPlanForm" role="form" class="form-horizontal" action="#" method="post">
 	
@@ -198,7 +197,15 @@
 								<div class="form-group">
 									<div class="row">
 										<div class="table-responsive">
-											
+										
+												<!-- <div class="col-md-12 padding-0">
+													<div class="pull-left" style="float: right!important;margin: 3px;top: -2px;right: 2px;position: relative;">
+														<button type="button" id="addItemDetailRowButton" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="auto left" title="" data-original-title="Add Item Detail Row" >
+															<i class="fa fa-plus" aria-hidden="true"></i>
+														</button>
+													</div>
+												</div> -->
+												
 												<table id="itemMgmtTableId" class="table table-striped table-hover table-bordered table-condensed" cellspacing="0" width="100%">
 													<!--  class="table table-striped table-bordered listView-table" -->
 													<thead>
@@ -233,6 +240,14 @@
 													</tbody>
 
 												</table>
+												
+												<div class="col-md-12 padding-0">
+													<div class="pull-left">
+														<button type="button" id="addItemDetailRowButton"  onclick="addItemDetailsRows()" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="auto right" title="" data-original-title="Add Row">
+															<i class="fa fa-plus" aria-hidden="true"></i>
+														</button>
+													</div>
+												</div>
 											
 										</div>
 									</div>

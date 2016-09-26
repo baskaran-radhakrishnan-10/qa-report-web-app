@@ -49,7 +49,13 @@ public class TestPlanWebController {
 	@RequestMapping(value = "/addData", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> addData(@RequestBody Map<String,Object> inputData){
-		return null;
+		Map<String,Object> returnObj=new HashMap<>();
+		try {
+			returnObj=testPlanController.addTestPlanEntry(inputData);
+		} catch (ControllerException e) {
+			e.printStackTrace();
+		}
+		return returnObj;
 	}
 	
 	@RequestMapping(value = "/updateData", method = RequestMethod.POST)

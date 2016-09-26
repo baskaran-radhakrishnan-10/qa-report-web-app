@@ -11,14 +11,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 @Entity
 @Table(name = "ItemTable")
-@Cache(usage=CacheConcurrencyStrategy.READ_ONLY, region="qa_report")
 public class ItemEntity implements Serializable{
-	
 	
 	private static final long serialVersionUID = 6132396313576051532L;
 	
@@ -115,6 +110,14 @@ public class ItemEntity implements Serializable{
 
 	public void setBtpNo(BtpEntity btpNo) {
 		this.btpNo = btpNo;
+	}
+
+	public int getgKey() {
+		return gKey;
+	}
+
+	public void setgKey(int gKey) {
+		this.gKey = gKey;
 	}
 	
 }

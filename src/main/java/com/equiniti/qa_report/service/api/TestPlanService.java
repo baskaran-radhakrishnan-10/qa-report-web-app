@@ -13,7 +13,7 @@ public interface TestPlanService {
 	
 	public TestPlanModelAttribute getModelAttribute(Map<String,Object> paramMap) throws APIException;
 	
-	public int addTestPlanEntry(TestPlanModelAttribute model) throws APIException;
+	public int addTestPlanEntry(Map<String, Object> paramMap) throws APIException;
 	
 	public boolean updateTestPlanEntry(Map<String, Object> paramMap) throws APIException;
 

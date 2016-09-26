@@ -55,5 +55,21 @@ public class TestPlanController {
 		}
 		return returnObjMap;
 	}
+	
+	public Map<String,Object> addTestPlanEntry(Map<String,Object> paramMap) throws ControllerException{
+		Map<String,Object> returnObjMap=new HashMap<>();
+		try {
+			Object returnObj=testPlanService.addTestPlanEntry(paramMap);
+			if(null != returnObj){
+				returnObjMap.put(ApplicationConstants.STATUS, (Integer)returnObj != null ? ApplicationConstants.SUCCESS : ApplicationConstants.ERROR);
+				returnObjMap.put(ApplicationConstants.SERVER_DATA, (Integer)returnObj);
+			}
+		} catch (APIException e) {
+			throw new ControllerException(e.getFaultCode(), e);
+		} catch(Exception e){
+			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+		return returnObjMap;
+	}
 
 }

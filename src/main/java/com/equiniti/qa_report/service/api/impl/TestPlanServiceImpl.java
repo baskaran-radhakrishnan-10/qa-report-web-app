@@ -3,10 +3,15 @@ package com.equiniti.qa_report.service.api.impl;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.equiniti.qa_report.entity.BtpEntity;
+import com.equiniti.qa_report.entity.User;
+import com.equiniti.qa_report.event.test_plan.AddTestPlanEvent;
 import com.equiniti.qa_report.event.test_plan.GetTestPlanEvent;
 import com.equiniti.qa_report.event.test_plan.UpdateTestPlanEvent;
 import com.equiniti.qa_report.eventapi.eventhandling.generic.BaseAPIImpl;
@@ -22,6 +27,9 @@ import com.equiniti.qa_report.util.ApplicationConstants;
 public class TestPlanServiceImpl extends BaseAPIImpl implements TestPlanService{
 
 	private static final Logger LOG=Logger.getLogger(TestPlanServiceImpl.class);
+	
+	@Autowired
+	private HttpSession session;
 
 	private ObjectTranslatorAPI objectTranslatorAPI;
 
@@ -66,8 +74,19 @@ public class TestPlanServiceImpl extends BaseAPIImpl implements TestPlanService{
 	}
 
 	@Override
-	public int addTestPlanEntry(TestPlanModelAttribute model) throws APIException {
-		return 0;
+	public int addTestPlanEntry(Map<String, Object> paramMap) throws APIException {
+		AddTestPlanEvent event=getEvent(AddTestPlanEvent.class);
+		try{
+			paramMap.put("createdBy", ((User)session.getAttribute(ApplicationConstants.USER_OBJ)).getUserId());
+			paramMap.put("updatedBy", ((User)session.getAttribute(ApplicationConstants.USER_OBJ)).getUserId());
+			event.setParamMap(paramMap);
+			processEvent(event);
+		} catch (APIException e) {
+			throw new ControllerException(e.getFaultCode(), e);
+		} catch (Exception e) {
+			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+		return event.getAddedRow();
 	}
 
 	@Override

@@ -52,7 +52,7 @@ public class TestPlanEventHandler implements IEventHandler<IEvent> {
 
     private void addTestPlan(AddTestPlanEvent event) throws EventException {
         try {
-        	testPlanDAO.addBtpEntity(event.getBtpEntity());
+        	event.setAddedRow(testPlanDAO.addBtpEntity(populateEntityFromMap(event.getParamMap())));
         } catch (DaoException e) {
             throw new EventException(e.getFaultCode(), e);
         } catch (Exception e) {
@@ -89,6 +89,9 @@ public class TestPlanEventHandler implements IEventHandler<IEvent> {
     private BtpEntity populateEntityFromMap(Map<String,Object> mapObject){
     	BtpEntity entity=objMapper.convertValue(mapObject, BtpEntity.class);
     	entity.setUpdatesDate(new DateTime(Calendar.getInstance().getTime().getTime()));
+    	if(null == entity.getCreatedDate()){
+    		entity.setCreatedDate(new DateTime(Calendar.getInstance().getTime().getTime()));
+    	}
     	return entity;
     }
     
