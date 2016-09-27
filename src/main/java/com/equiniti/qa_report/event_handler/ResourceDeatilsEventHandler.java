@@ -1,8 +1,12 @@
 package com.equiniti.qa_report.event_handler;
 
+import java.util.Map;
+
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import com.equiniti.qa_report.dao.api.ResourceDeatilsDAO;
+import com.equiniti.qa_report.entity.ResourceEntity;
 import com.equiniti.qa_report.event.resource_details.AddResourceDeatilsEvent;
 import com.equiniti.qa_report.event.resource_details.GetResourceDeatilsEvent;
 import com.equiniti.qa_report.event.resource_details.UpdateResourceDeatilsEvent;
@@ -15,6 +19,8 @@ import com.equiniti.qa_report.exception.api.faultcode.CommonFaultCode;
 public class ResourceDeatilsEventHandler implements IEventHandler<IEvent> {
 
 	private static final Logger LOG=Logger.getLogger(ResourceDeatilsEventHandler.class); 
+	
+	private ObjectMapper objMapper=new ObjectMapper();
 
 	private ResourceDeatilsDAO resourceDeatilsDAO;
 
@@ -43,7 +49,7 @@ public class ResourceDeatilsEventHandler implements IEventHandler<IEvent> {
 
 	private void addResourceDetails(AddResourceDeatilsEvent event) throws EventException {
 		try {
-			event.setRowId(resourceDeatilsDAO.addResourceDetails(event.getEntity()));
+			event.setRowId(resourceDeatilsDAO.addResourceDetails(populateEntityFromMapObject(event.getRestrictionMap())));
 		} catch (DaoException e) {
 			LOG.error("DaoException Occured", e);
 			throw new EventException(e.getFaultCode(), e);
@@ -55,7 +61,7 @@ public class ResourceDeatilsEventHandler implements IEventHandler<IEvent> {
 	
 	private void updateResourceDetails(UpdateResourceDeatilsEvent event) throws EventException {
 		try {
-			resourceDeatilsDAO.updateResourceDetails(event.getEntity());
+			resourceDeatilsDAO.updateResourceDetails(populateEntityFromMapObject(event.getRestrictionMap()));
 		} catch (DaoException e) {
 			LOG.error("DaoException Occured", e);
 			throw new EventException(e.getFaultCode(), e);
@@ -81,5 +87,9 @@ public class ResourceDeatilsEventHandler implements IEventHandler<IEvent> {
 		}
 	}
 	
+	private ResourceEntity populateEntityFromMapObject(Map<String,Object> mapObject){
+		ResourceEntity entity=objMapper.convertValue(mapObject, ResourceEntity.class);
+		return entity;
+	}
 
 }

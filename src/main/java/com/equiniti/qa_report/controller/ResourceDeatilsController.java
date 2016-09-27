@@ -36,18 +36,50 @@ public class ResourceDeatilsController {
 	}
 	
 	public Map<String,Object> getResourceDetailsByItem(Map<String,Object> inputParam) throws ControllerException{
-		Map<String,Object> returnObj=new HashMap<>();
-		return returnObj;
+		Map<String,Object> returnObjMap=new HashMap<>();
+		try {
+			Object returnObj=resourceDeatilsService.getResourceDetails(inputParam);
+			returnObjMap.put(ApplicationConstants.STATUS, ApplicationConstants.ERROR);
+			if(null != returnObj){
+				returnObjMap.put(ApplicationConstants.STATUS, ApplicationConstants.SUCCESS);
+				returnObjMap.put(ApplicationConstants.SERVER_DATA, returnObj);
+			}
+		} catch (APIException e) {
+			throw new ControllerException(e.getFaultCode(), e);
+		} catch(Exception e){
+			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+		return returnObjMap;
 	}
 	
 	public Map<String,Object> addResourceDetails(Map<String,Object> inputParam) throws ControllerException{
-		Map<String,Object> returnObj=new HashMap<>();
-		return returnObj;
+		Map<String,Object> returnObjMap=new HashMap<>();
+		try {
+			Object returnObj=resourceDeatilsService.addResourceDetails(inputParam);
+			returnObjMap.put(ApplicationConstants.STATUS, ApplicationConstants.ERROR);
+			if(null != returnObj){
+				returnObjMap.put(ApplicationConstants.STATUS, ApplicationConstants.SUCCESS);
+				returnObjMap.put(ApplicationConstants.SERVER_DATA, returnObj);
+			}
+		} catch (APIException e) {
+			throw new ControllerException(e.getFaultCode(), e);
+		} catch(Exception e){
+			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+		return returnObjMap;
 	}
 	
 	public Map<String,Object> updateResourceDeatils(Map<String,Object> inputParam) throws ControllerException{
-		Map<String,Object> returnObj=new HashMap<>();
-		return returnObj;
+		Map<String,Object> returnObjMap=new HashMap<>();
+		try {
+			Object returnObj=resourceDeatilsService.updateResourceDeatils(inputParam);
+			returnObjMap.put(ApplicationConstants.STATUS, (Boolean)returnObj ? ApplicationConstants.SUCCESS : ApplicationConstants.ERROR);
+		} catch (APIException e) {
+			throw new ControllerException(e.getFaultCode(), e);
+		} catch(Exception e){
+			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+		return returnObjMap;
 	}
 
 }

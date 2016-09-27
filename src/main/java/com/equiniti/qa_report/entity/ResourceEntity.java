@@ -169,7 +169,13 @@ public class ResourceEntity implements Serializable{
 	public void setBlocked(int blocked) {
 		this.blocked = blocked;
 	}
-	
-	
+
+	public int getgKey() {
+		return gKey;
+	}
+
+	public void setgKey(int gKey) {
+		this.gKey = gKey;
+	}
 	
 }

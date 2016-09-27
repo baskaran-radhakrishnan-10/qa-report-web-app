@@ -1,6 +1,10 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/dt/jq-2.1.4,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.9,af-2.0.0,b-1.0.3,b-colvis-1.0.3,b-html5-1.0.3,b-print-1.0.3,se-1.0.1/datatables.min.css"/>
+ 
+<script type="text/javascript" src="https://cdn.datatables.net/r/dt/jq-2.1.4,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.9,af-2.0.0,b-1.0.3,b-colvis-1.0.3,b-html5-1.0.3,b-print-1.0.3,se-1.0.1/datatables.min.js"></script>
+
 <spring:url	value="/resources/miminiumTheme/js/common/common.js" var="commonJS" />
 
 <spring:url	value="/resources/miminiumTheme/js/custom/custom_build_test_plan.js" var="customBuilTestPlanJS" />
@@ -9,8 +13,7 @@
 
 <script src="${customBuilTestPlanJS}"></script>
 
-<!-- Modal -->
-<div class="modal fade" id="build_test_plan" tabindex="-1" role="dialog" aria-labelledby="buildTestPlanModal" aria-hidden="true" data-backdrop="static" data-keyboard="false" data-href="build_test_plan/show">	
+<div class="modal fade" id="build_test_plan" tabindex="-1" role="dialog" aria-labelledby="buildTestPlanModal" aria-hidden="true" data-backdrop="static" data-keyboard="false" data-href="">	
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content" style="width: 124%;margin: -5px -118px;border-radius: 0px;">
 			<div id="btp_modal_header_id" class="modal-header">
@@ -19,24 +22,19 @@
 				<div id="buildTestPlanDiv"></div>
 			</div>
 		</div>
-		<!-- /.modal-content -->
 	</div>
-	<!-- /.modal-dialog -->
 </div>
-<!-- /.modal -->
 
 <div class="panel box-shadow-none content-header">
 	<div class="panel-body">
 		<div class="col-md-12">
 			<h3 style="margin-top: 0px;">Build Test Plan
-				<a id="exportTestPlanDataId" type="button" class="btn  btn-3d btn-default pull-right" style="margin: 0px 5px;">Export</a>
+				<!-- <a id="exportTestPlanDataId" type="button" class="btn  btn-3d btn-default pull-right" style="margin: 0px 5px;">Export</a> -->
 				<a id="addTestPlanDataId" type="button"  data-target="#build_test_plan" class="btn  btn-3d btn-success pull-right" style="margin: 0px 5px;">Add</a>
 			</h3>
 		</div>
 	</div>
 </div>
-
-<div id="alertcustom"></div>
 
 <div class="col-md-12 top-20">
 	<div class="panel" style="padding: 15px; padding-bottom: 20px;">
@@ -65,6 +63,12 @@
 <input type="button" id="editBuildTestPlanTrigger" data-toggle="modal" data-target="#build_test_plan" style="display:none" />
 
 <input type="button" id="addBuildTestPlanTrigger" data-toggle="modal" data-target="#build_test_plan" style="display:none" />
+
+<input type="hidden" id="selectedBtpGKey" style="display:none" />
+
+<input type="hidden" id="selectedItemGKey" style="display:none" />
+
+<input type="hidden" id="selectedResourceGKey" style="display:none" />
 
 <form id="buildTestPlanForm" role="form" class="form-horizontal" action="#" method="post">
 	
@@ -187,6 +191,7 @@
 						</div>
 						<!-- class="panel-body" -->
 					</div>
+					
 					<div id="itemDeatilsParentDivId" style="display:none;">
 					<h5>
 						<a href="#" class="" aria-expanded="true"> Item Details </a>
@@ -274,10 +279,67 @@
 						</div>
 					</div>
 					</div>
-					<!-- <h5>
-						<a href="DO_plan_page"> Planning Details <span class="fa fa-external-link"></span>
-						</a>
-					</h5> -->
+					
+					<div id="resourceDeatilsParentDivId" style="display:none;">
+					<h5>
+						<a href="#" class="" aria-expanded="true">Resource Details</a>
+					</h5>
+					<div id="collapse2" class="panel-collapse collapse in" style="border-style: ridge; border-width: thin;" aria-expanded="true">
+						<div class="panel-body">
+							<div class="col-md-12">
+								<div class="form-group">
+									<div class="row">
+										<div class="table-responsive">
+										
+												<table id="resourceMgmtTableId" class="table table-striped table-hover table-bordered table-condensed" cellspacing="0" width="100%">
+														<thead>
+															<tr>
+																<th  style="width: 42px;">S.No</th>
+																<th  style="width: 175px;">Resource Name</th>
+																<th  style="width: 10px;">Item Count</th>
+																<th  style="width: 10px;">Actual Time</th>
+																<th  style="width: 10px;">Bugs Logged</th>
+																<th  style="width: 10px;">Pass</th>
+																<th  style="width: 10px;">Fail</th>
+																<th  style="width: 10px;">Clarification</th>
+																<th  style="width: 10px;">Unable to test</th>
+																<th  style="width: 10px;">Pending</th>
+																<th  style="width: 6px;">Blocked</th>
+																<th  style="width: 50px;"></th>
+															</tr>
+														</thead>
+														<tbody></tbody>
+													</table>
+													<div class="col-md-12 padding-0">
+														<div id="pull-left" style="float: left!important;">
+															<button type="button" id="addResourceDetRowButton" onclick="addResourceDetRows()" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="auto right" title="" data-original-title="Add Row">
+																<i class="fa fa-plus" aria-hidden="true"></i>
+															</button>
+														</div>
+														<div id="pull-right" style="float: right!important;">
+															<button type="button" id="backToItemDeatilsButton" onclick="backToItemDeatils()" class="btn btn-sm btn-danger" title="">
+																<i class="fa fa-reply-all" aria-hidden="true"></i>
+															</button>
+														</div>
+													</div>
+										</div>
+									</div>
+								</div>
+
+								<div id="plan" style="">
+									
+									<div class="col-md-12 padding-0">
+										
+									</div>
+
+								</div>
+								<!-- id="plan" -->
+							</div>
+							<!--  class="col-md-12" -->
+						</div>
+					</div>
+					</div>
+					
 
 				</div>
 				<!-- id="accordion" -->

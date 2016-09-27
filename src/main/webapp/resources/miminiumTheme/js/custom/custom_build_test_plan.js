@@ -33,11 +33,6 @@ $(document).ready(function() {
 		buildTestPlanModalData(null);
 	});
 	
-	/*$('#addItemDetailRowButton').on("click" ,function(event){
-		console.log("addItemDetailRowButton clicked!!!");
-		addItemDetailsRows();
-	})*/
-	
 	$('#exportTestPlanDataId').on("click" ,function (event){
 		
 	});
@@ -142,8 +137,8 @@ function fetchItemDetailsByBtpNoSuccess(serverData){
 			html += '<a  id="itemRowEditId" href="#" onclick="itemDeatilsEdit('+sNo+')"> <span	class="glyphicon glyphicon-edit"></span></a>'; 
 			html += '<span>&nbsp;</span>';
 			html += '<a id="itemRowSaveId" style="display:none;" href="#" onclick="itemDeatilsSave('+sNo+')"> <span class="glyphicon glyphicon-check"></span></a>';
-			//html += '<span>&nbsp;</span>';
-			//html += '<a id="itemRowDeleteId" href="#" onclick="itemDeatilsDelete('+sNo+')"> <span class="glyphicon glyphicon-trash"></span></a>';
+			html += '<span>&nbsp;</span>';
+			html += '<a id="itemRowDeleteId" href="#" onclick="showResourceDetails('+sNo+')"> <span class="glyphicon glyphicon-link"></span></a>';
 			html += '</td>';
 			html += '</tr>';
 			itemDetailsHtmlArray.push(html);
@@ -168,8 +163,74 @@ function itemDeatilsEdit(rowId){
 	$(rowEle).find('#action').find('#itemRowSaveId').show();
 }
 
-function itemDeatilsDelete(rowId){
+function showResourceDetails(rowId){
+	$('#itemDeatilsParentDivId').find('table').find('.'+rowId).addClass('selected');
+	var btpNo = $('#selectedRowKeyInput').val();
+	var currentItemDetailsObj=itemDetailsObject[rowId];
+	var itemNo=currentItemDetailsObj['itemNo'];
+	fetchResourceByBtpItemNo(btpNo,itemNo);
+}
+
+function fetchResourceByBtpItemNo(btpNo,itemNo){
+	var data={};
+	data['btpNo']=btpNo;
+	data['itemNo']=itemNo;
+	data=JSON.stringify(data);
+	ajaxHandler("POST", data, "application/json", getApplicationRootPath()+"resource_details/getResourceDetails", 'json', null, fetchResourceByBtpItemNoSuccess,true);
+}
+
+function fetchResourceByBtpItemNoSuccess(serverData,inputData){
+	if('ERROR' != serverData['STATUS']){
+		var resourceObjList=serverData['SERVER_DATA'];
+		console.log(inputData);
+		var rowEleArray=$('#itemDeatilsParentDivId').find('table').find('tbody').find('tr');
+		console.log($(rowEleArray));
+		rowEleArray.filter('.selected').show();
+		rowEleArray.not('.selected').hide();
+		$('#resourceDeatilsParentDivId').show();
+		var htmlArray=new Array();
+		for(var index in resourceObjList){
+			var html = "";
+			var resourceObj=resourceObjList[index];
+			console.log(resourceObj);
+			var sNo=parseInt(index)+parseInt(1);
+			html += '<tr id="row_'+resourceObj['itemNo']+'" class="'+sNo+'">';
+			html += '<td id="sNo">'+sNo+'</td>';
+			html += '<td id="resourceName"><input type="text" class="input-sm form-control" value="'+resourceObj['resourceName']+'" disabled /></td>';
+			html += '<td id="itemCount"><input type="text" class="input-sm form-control" value="'+resourceObj['itemCount']+'" disabled /></td>';
+			html += '<td id="actualTime"><input type="text" class="input-sm form-control" value="'+resourceObj['actTime']+'" disabled /></td>';
+			html += '<td id="bugsLogged"><input type="text" class="input-sm form-control" value="'+resourceObj['bugsLogged']+'" disabled /></td>';
+			html += '<td id="pass"><input type="text" class="input-sm form-control" value="'+resourceObj['pass']+'" disabled /></td>';
+			html += '<td id="fail"><input type="text" class="input-sm form-control" value="'+resourceObj['fail']+'" disabled /></td>';
+			html += '<td id="clarification"><input type="text" class="input-sm form-control" value="'+resourceObj['clarification']+'" disabled /></td>';
+			html += '<td id="unableToSet"><input type="text" class="input-sm form-control" value="'+resourceObj['unableToSet']+'" disabled /></td>';
+			html += '<td id="pending"><input type="text" class="input-sm form-control" value="'+resourceObj['pending']+'" disabled /></td>';
+			html += '<td id="blocked"><input type="text" class="input-sm form-control" value="'+resourceObj['blocked']+'" disabled /></td>';
+			html += '<td id="action" style="text-align: -webkit-center;">';
+			html += '<a  id="itemRowEditId" href="#" onclick="resourceDeatilsEdit('+sNo+')"> <span	class="glyphicon glyphicon-edit"></span></a>'; 
+			html += '<span>&nbsp;</span>';
+			html += '<a id="itemRowSaveId" style="display:none;" href="#" onclick="resourceDeatilsSave('+sNo+')"> <span class="glyphicon glyphicon-check"></span></a>';
+			html += '</td>';
+			html += '</tr>';
+			htmlArray.push(html);
+		}
+		$('#resourceDeatilsParentDivId').find('tbody').html(htmlArray);
+	}
+}
+
+function resourceDeatilsEdit(rowId){
 	
+}
+
+function resourceDeatilsSave(rowId){
+	
+}
+
+function backToItemDeatils(){
+	var rowEleArray=$('#itemDeatilsParentDivId').find('table').find('tbody').find('tr');
+	$(rowEleArray).removeClass('selected');
+	$(rowEleArray).show();
+	$('#resourceDeatilsParentDivId').hide();
 }
 
 function itemDeatilsSave(rowId){
@@ -260,8 +321,10 @@ function fetchTestPlanEntriesSuccess(serverData){
 	console.log(serverData);
 	$('#build_test_plan_table_id').find('#tbody_id').html(populateTestPlanEntries(serverData['BTP_ENTRIES']));
 	$('#build_test_plan_table_id').DataTable({
-		info : false,
-		"responsive" : true
+		"responsive" : true,
+		"processing": true,
+		 "dom": 'Bfrtpl',
+		 "buttons": ['excel','csv']
 	});
 }
 
@@ -424,11 +487,14 @@ function addOrUpdateBtp(){
 	btpObject['updatesDate']=getDateValue(btpObject['updatesDate'],'yyyy-MM-dd',"-");
 	
 	
+	
 	if("" == gKey){
-		ajaxHandler("POST", JSON.stringify(btpObject), "application/json", getApplicationRootPath()+"build_test_plan/addData", 'json', null, addBtpChangesSuccess,true);
+		//ajaxHandler("POST", JSON.stringify(btpObject), "application/json", getApplicationRootPath()+"build_test_plan/addData", 'json', null, addBtpChangesSuccess,true);
 	}else{
-		ajaxHandler("POST", JSON.stringify(btpObject), "application/json", getApplicationRootPath()+"build_test_plan/updateData", 'json', null, updateBtpModifiedChangesSuccess,true);
+		//ajaxHandler("POST", JSON.stringify(btpObject), "application/json", getApplicationRootPath()+"build_test_plan/updateData", 'json', null, updateBtpModifiedChangesSuccess,true);
 	}
+	
+	console.log("%%%%%% GKey :"+gKey);
 	
 }
 

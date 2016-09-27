@@ -34,7 +34,7 @@ public class ResourceDeatilsServiceImpl extends BaseAPIImpl implements ResourceD
 	}
 
 	@Override
-	public List<ResourceEntity> getResourceDetailsByItem(Map<String, Object> inputParam) throws APIException {
+	public List<ResourceEntity> getResourceDetails(Map<String, Object> inputParam) throws APIException {
 		GetResourceDeatilsEvent event=null;
 		try{
 			event=getEvent(GetResourceDeatilsEvent.class);
@@ -53,7 +53,7 @@ public class ResourceDeatilsServiceImpl extends BaseAPIImpl implements ResourceD
 		AddResourceDeatilsEvent event=null;
 		try{
 			event=getEvent(AddResourceDeatilsEvent.class);
-			event.setEntity(populateResourceEntityFromMap(inputParam));
+			event.setRestrictionMap(inputParam);
 			processEvent(event);
 		}catch(EventException e){
 			throw new APIException(e.getFaultCode(),e);
@@ -64,25 +64,18 @@ public class ResourceDeatilsServiceImpl extends BaseAPIImpl implements ResourceD
 	}
 
 	@Override
-	public void updateResourceDeatils(Map<String, Object> inputParam) throws APIException {
+	public boolean updateResourceDeatils(Map<String, Object> inputParam) throws APIException {
 		UpdateResourceDeatilsEvent event=null;
 		try{
 			event=getEvent(UpdateResourceDeatilsEvent.class);
-			event.setEntity(populateResourceEntityFromMap(inputParam));
+			event.setRestrictionMap(inputParam);
 			processEvent(event);
 		}catch(EventException e){
 			throw new APIException(e.getFaultCode(),e);
 		}catch(Exception e){
 			throw new APIException(CommonFaultCode.UNKNOWN_ERROR,e);
 		}
+		return event.isUpdated();
 	}
 	
-	private ResourceEntity populateResourceEntityFromMap(Map<String, Object> inputParam){
-		
-		ResourceEntity entity=new ResourceEntity();
-		
-		return entity;
-		
-	}
-
 }

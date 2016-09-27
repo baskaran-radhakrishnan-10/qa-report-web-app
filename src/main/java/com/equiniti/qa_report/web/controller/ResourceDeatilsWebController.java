@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,7 +22,7 @@ public class ResourceDeatilsWebController {
 	
 	@RequestMapping(value="/getUniqueResources", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> getUniqueResourceDetails(Map<String,Object> inputParam){
+	public Map<String,Object> getUniqueResourceDetails(@RequestBody Map<String,Object> inputParam){
 		Map<String,Object> returnObj=new HashMap<>();
 		try {
 			returnObj=resourceDeatilsController.getUniqueResourceDetails(inputParam);
@@ -33,22 +34,37 @@ public class ResourceDeatilsWebController {
 	
 	@RequestMapping(value="/getResourceDetails", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> getResourceDetailsByItem(Map<String,Object> inputParam){
+	public Map<String,Object> getResourceDetailsByItem(@RequestBody Map<String,Object> inputParam){
 		Map<String,Object> returnObj=new HashMap<>();
+		try {
+			returnObj=resourceDeatilsController.getResourceDetailsByItem(inputParam);
+		} catch (ControllerException e) {
+			e.printStackTrace();
+		}
 		return returnObj;
 	}
 	
 	@RequestMapping(value="/addResourceDetails", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> addResourceDetails(Map<String,Object> inputParam){
+	public Map<String,Object> addResourceDetails(@RequestBody Map<String,Object> inputParam){
 		Map<String,Object> returnObj=new HashMap<>();
+		try {
+			returnObj=resourceDeatilsController.addResourceDetails(inputParam);
+		} catch (ControllerException e) {
+			e.printStackTrace();
+		}
 		return returnObj;
 	}
 	
 	@RequestMapping(value="/updateResourceDetails", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> updateResourceDeatils(Map<String,Object> inputParam){
+	public Map<String,Object> updateResourceDeatils(@RequestBody Map<String,Object> inputParam){
 		Map<String,Object> returnObj=new HashMap<>();
+		try {
+			returnObj=resourceDeatilsController.updateResourceDeatils(inputParam);
+		} catch (ControllerException e) {
+			e.printStackTrace();
+		}
 		return returnObj;
 	}
 	
