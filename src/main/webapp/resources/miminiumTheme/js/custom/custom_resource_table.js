@@ -11,6 +11,6 @@ function fetchResourceByBtpItemNoSuccess(serverData){
 		var resourceObjList=serverData['SERVER_DATA'];
 		for(var index in resourceObjList){
 			var resourceObj=resourceObjList[index];
-		}
+		}k
 	}
 }

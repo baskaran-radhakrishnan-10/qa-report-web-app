@@ -32,7 +32,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter{
 			
 			String baseUrl = String.format("%s://%s:%d%s/",request.getScheme(),request.getServerName(), request.getServerPort(),request.getContextPath());
 			
-			request.setAttribute(ApplicationConstants.BASE_URL, baseUrl);
+			session.setAttribute(ApplicationConstants.BASE_URL, baseUrl);
 			
 		}
 

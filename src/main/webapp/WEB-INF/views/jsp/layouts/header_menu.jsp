@@ -15,7 +15,7 @@
 				<span class="top"></span> <span class="middle"></span> <span
 					class="bottom"></span>
 			</div>
-			<a href="home" class="navbar-brand"> <b>Logo</b>
+			<a href="${sessionScope.baseUrl}dashboard" class="navbar-brand"> <b>Logo</b>
 			</a>
 
 			<!-- 			<ul class="nav navbar-nav search-nav">
@@ -54,7 +54,7 @@
 								<li><a href="#" data-toggle="tooltip"
 									data-placement="auto bottom" title="Lock Profile"><span
 										class="fa fa-lock"></span></a></li>
-								<li><a href="logout" data-toggle="tooltip"
+								<li><a href="${sessionScope.baseUrl}logout" data-toggle="tooltip"
 									data-placement="auto bottom" title="Logout"><span
 										class="fa fa-power-off "></span></a></li>
 							</ul>
