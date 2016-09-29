@@ -41,5 +41,7 @@ public class ApplicationConstants {
 	public static final String ERROR="ERROR";
 
 	public static final String SERVER_DATA="SERVER_DATA";
+	
+	public static final String USER_DATA="USER_DATA";
 
 }

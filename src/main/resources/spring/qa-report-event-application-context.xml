@@ -26,6 +26,9 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:org/sp
 				<entry key="addItemDetailsEvent" value-ref="itemDetailsEventProcessor"/>
 				<entry key="updateItemDetailsEvent" value-ref="itemDetailsEventProcessor"/>
 				
+				<entry key="getUserDeatilsEvent" value-ref="userDeatilsEventProcessor"/>
+				<entry key="getRolesEvent" value-ref="rolesEventProcessor"/>
+				
 			</map>	
 		</property>
 	</bean>
@@ -90,5 +93,31 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:org/sp
 	<bean class="com.equiniti.qa_report.event_handler.ItemDeatilsEventHandler" id="itemDetailsEventHandler">
 		<property name="itemDetailsDAO" ref="itemDetailsDAO"/>
 	</bean>
+
+	
+	<bean class="com.equiniti.qa_report.eventapi.eventhandling.processor.BaseEventProcessor" id="userDeatilsEventProcessor">
+		<property name="handlersList">
+			<list>
+				<ref bean="userDeatilsEventHandler"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="com.equiniti.qa_report.event_handler.ManageUserDeatilsEventHandler" id="userDeatilsEventHandler">
+		<property name="manageUsersDAO" ref="manageUsersDAO"/>
+	</bean>
+	
+<!-- Roles Start -->
+			<bean class="com.equiniti.qa_report.eventapi.eventhandling.processor.BaseEventProcessor" id="rolesEventProcessor">
+			<property name="handlersList">
+				<list>
+					<ref bean="rolesEventHandler"/>
+				</list>
+			</property>
+			</bean>
 		
+			<bean class="com.equiniti.qa_report.event_handler.RolesEventHandler" id="rolesEventHandler">
+				<property name="rolesDAO" ref="rolesDAO"/>
+			</bean>	
+<!-- Roles End -->
 </beans>			

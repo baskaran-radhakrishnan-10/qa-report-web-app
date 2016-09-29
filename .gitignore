@@ -1,7 +1,1 @@
-.classpath
-.project
-.settings/
-target/
-logs/
 /target/
-dependency-reduced-pom.xml

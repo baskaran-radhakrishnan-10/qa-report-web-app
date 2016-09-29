@@ -99,13 +99,11 @@
                 50% 50% 
                 no-repeat;
 }
-
 /* When the body has the loading class, we turn
    the scrollbar off with overflow:hidden */
 body.loading {
     overflow: hidden;   
 }
-
 /* Anytime the body has the loading class, our
    modal element will be visible */
 body.loading .ajaxloader {
