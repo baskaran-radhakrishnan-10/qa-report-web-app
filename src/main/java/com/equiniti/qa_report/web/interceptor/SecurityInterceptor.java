@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.equiniti.qa_report.exception.api.exception.UIException;
 import com.equiniti.qa_report.form.model.LoginModelAttribute;
 import com.equiniti.qa_report.util.ApplicationConstants;
 
@@ -15,14 +16,18 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter{
 	
 	private static final Logger LOG= Logger.getLogger(SecurityInterceptor.class);
 	
+	private boolean ajax =false;
+	
+	private String uri=null;
+	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		
-		String uri = request.getRequestURI();
+		this.uri = request.getRequestURI();
 		
-		System.out.println("inside interceptor  and uri = "+uri);
+		System.out.println("inside interceptor  and uri = "+this.uri);
 
-		boolean ajax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
+		this.ajax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
 
 		System.out.println("ajax :"+ajax);
 
@@ -45,7 +50,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter{
 				return true;
 			}
 
-			if(-1 != uri.indexOf("/doLogin")){
+			if(-1 != this.uri.indexOf("/doLogin")){
 				if(request.getMethod().equalsIgnoreCase("GET")){
 					request.setAttribute("loginModelAttribute", new LoginModelAttribute());
 					response.sendRedirect(request.getContextPath()+"/login");
@@ -54,7 +59,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter{
 				return true;
 			}
 			
-			if ((-1 == uri.indexOf("/login") ) && uri.indexOf(".js") == -1 && uri.indexOf(".css") == -1 && uri.indexOf(".png") == -1 && uri.indexOf(".gif") == -1 && uri.indexOf(".jpg") == -1  && uri.indexOf(".ttf") == -1) {
+			if ((-1 == this.uri.indexOf("/login") ) && this.uri.indexOf(".js") == -1 && this.uri.indexOf(".css") == -1 && this.uri.indexOf(".png") == -1 && this.uri.indexOf(".gif") == -1 && this.uri.indexOf(".jpg") == -1  && this.uri.indexOf(".ttf") == -1) {
 				System.out.println("<<<< -- There is no session Available -- >>>>");
 				request.setAttribute("loginModelAttribute", new LoginModelAttribute());
 				response.sendRedirect(request.getContextPath()+"/login");
@@ -73,6 +78,11 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter{
 
 	@Override
 	public void afterCompletion(HttpServletRequest request,HttpServletResponse response, Object handler, Exception ex)throws Exception {
+		if(null != ex){
+			if(ex instanceof UIException){
+				System.out.println("Exception Message :"+ex.getMessage());
+			}
+		}
 		System.out.println("After Complettion :");
 	}
 

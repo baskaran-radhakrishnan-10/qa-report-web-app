@@ -1,3 +1,11 @@
+<spring:url	value="/resources/miminiumTheme/js/common/common.js" var="commonJS" />
+
+<spring:url	value="/resources/miminiumTheme/js/custom/custom_left_menu.js" var="leftMenuJS" />
+
+<script src="${commonJS}"></script>
+
+<script src="${leftMenuJS}"></script>
+
 <!-- start:Left Menu -->
 <div id="left-menu">
 
@@ -9,7 +17,7 @@
 			
 			<li id="dashboard_li"><a href="${sessionScope.baseUrl}dashboard"><span class="fa-tachometer fa"></span>Dashboard</a></li>
 			
-			<li id="operations_li" class="ripple"><a class="tree-toggle nav-header"> <span	class="fa-cogs fa"></span>Operations<span class="fa-angle-right fa right-arrow text-right"></span></a>
+			<%-- <li id="operations_li" class="ripple"><a class="tree-toggle nav-header"> <span	class="fa-cogs fa"></span>Operations<span class="fa-angle-right fa right-arrow text-right"></span></a>
 				<ul class="nav nav-list tree">
 					<li><a href="${sessionScope.baseUrl}add_user">Add New User</a></li>
 					<li><a href="${sessionScope.baseUrl}add_project">Add New Project</a></li>
@@ -39,14 +47,14 @@
 					<li><a href="${sessionScope.baseUrl}permission_search">Permission Details Search</a></li>
 					<li><a href="${sessionScope.baseUrl}leave_plan_search">Leave Plans Search</a></li>
 				</ul>
-			</li>	
+			</li>	 --%>
 				
 			<li id="build_test_plan_li"><a href="${sessionScope.baseUrl}build_test_plan/show"> <span class="fa-pencil-square-o fa"></span> Build Test Plan </a></li>
 			
-			<li id="daily_status_report_li"><a href="${sessionScope.baseUrl}daily_status_report"> <span class="fa-calendar fa"></span> Daily Status Report </a></li>
+			<%-- <li id="daily_status_report_li"><a href="${sessionScope.baseUrl}daily_status_report"> <span class="fa-calendar fa"></span> Daily Status Report </a></li>
 			
 			<li id="kt_plan_li"><a href="${sessionScope.baseUrl}kt_plan"> <span class="fa-bullhorn fa"></span> KT Plan </a></li>
-			
+			 --%>
 			<%-- <c:choose>
 
 				<c:when	test="${sessionScope.resourceMap.containsKey('dashboard_li')}">

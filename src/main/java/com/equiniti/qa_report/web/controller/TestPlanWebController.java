@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.equiniti.qa_report.controller.TestPlanController;
 import com.equiniti.qa_report.exception.api.exception.ControllerException;
+import com.equiniti.qa_report.exception.api.exception.UIException;
 
 @Controller
 @RequestMapping(value="/build_test_plan")
@@ -48,12 +49,12 @@ public class TestPlanWebController {
 	
 	@RequestMapping(value = "/addData", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> addData(@RequestBody Map<String,Object> inputData){
+	public Map<String,Object> addData(@RequestBody Map<String,Object> inputData) throws UIException{
 		Map<String,Object> returnObj=new HashMap<>();
 		try {
 			returnObj=testPlanController.addTestPlanEntry(inputData);
 		} catch (ControllerException e) {
-			e.printStackTrace();
+			throw new UIException(e.getFaultCode(), e);
 		}
 		return returnObj;
 	}

@@ -38,17 +38,17 @@
 					class="img-circle avatar" alt="user name" data-toggle="dropdown"
 					aria-haspopup="true" aria-expanded="true" />
 					<ul class="dropdown-menu user-dropdown">
-						<li><a href="user_det_page"><span class="fa fa-user"></span>
+						<!-- <li><a href="user_det_page"><span class="fa fa-user"></span>
 								My Profile</a></li>
-						<!-- 						<li><a href="data_import_page"><span class="fa fa-import"></span> Data Import</a></li>								 -->
+												<li><a href="data_import_page"><span class="fa fa-import"></span> Data Import</a></li>								
 						<li><a href="DO_list_page"><span class="fa fa-file-text"></span>
 								My Work Orders</a></li>
 						<li><a href="user_det_page"><span class="fa fa-user-plus"></span>
 								Add User</a></li>
-						<li role="separator" class="divider"></li>
+						<li role="separator" class="divider"></li> -->
 						<li class="more">
 							<ul>
-								<li><a href="user_list_page" data-toggle="tooltip"
+								<li><a href="#" data-toggle="tooltip"
 									data-placement="auto bottom" title="Manage Users"><span
 										class="fa fa-cogs"></span></a></li>
 								<li><a href="#" data-toggle="tooltip"

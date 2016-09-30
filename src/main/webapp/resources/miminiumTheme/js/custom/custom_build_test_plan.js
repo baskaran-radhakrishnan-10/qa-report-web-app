@@ -1,331 +1,41 @@
-var defaultSearchEntryCount=10;
+var btpFormErrorMessages={};
+btpFormErrorMessages['projectId']="Please select any prject from the list";
+btpFormErrorMessages['phaseId']="Please select any phase from the list";
+btpFormErrorMessages['planId']="Please select any plan from the list";
+btpFormErrorMessages['statusId']="Please select any status from the list";
+btpFormErrorMessages['cycleId']="Cycle field should not be empty";
+btpFormErrorMessages['iteration_id']="Iteration||sPrint field should not be empty";
+btpFormErrorMessages['buildNoId']="Build No field should not be empty";
+btpFormErrorMessages['startDateId']="Start Date field should not be empty";
+btpFormErrorMessages['endDateId']="End Date field should not be empty";
+btpFormErrorMessages['resource1Id']="Please select any resource from the list";
 
-var buildTestPlanData={};
-
-var phaseArray=['FAT','SAT','LIVE','RLS','DEMO','INTERNAL','EXTERNAL'];
-
-var planArray=['Automation Plan','Build Test Plan','Test Design Plan'];
-
-var statusArray=['Completed','Deferred','In Progress','Planned','Abandoned'];
-
-var itemDescriptionArray=[];
-
-var resourcesArray=[];
-
-var projectArray=[];
-
-var selectedResourcesArray=[];
-
-var resourceArraySelectHtml="";
-
-var itemDescArraySelectHtml="";
-
-var itemDetailsObject={};
-
-$(document).ready(function() {
-	
-	console.log("documet.ready build test plan");
-	
-	$('#buildTestPlanForm').hide();
-	
-	$('#addTestPlanDataId').on("click" ,function (event){
-		console.log("btp add button clicked");
-		buildTestPlanModalData(null);
-	});
-	
-	$('#exportTestPlanDataId').on("click" ,function (event){
-		
-	});
-	
-	$('#save_button').on("click" ,function(event){
-		event.preventDefault();
-		console.log("Save Button Clicked");
-		addOrUpdateBtp();
-	});
-	
-	fetchTestPlanEntries();
-	
-	fetchResourceNames();
-	
-	fetchProjectNames();
-	
-	fetchItemDescriptionList();
-
-});
-
-function fetchResourceNames(){
+function fetchTestPlanEntries(){
+	var entryCount=parseInt($('#build_test_plan_table_id_wrapper').find('select').val());
 	var data={};
+	data['maxEntries']=entryCount;
 	data=JSON.stringify(data);
-	ajaxHandler("POST", data, "application/json", getApplicationRootPath()+"resource_details/getUniqueResources", 'json', null, fetchResourceNamesSuccess,true);
-}
-
-function fetchResourceNamesSuccess(serverData){
-	if('ERROR' != serverData['STATUS']){
-		var resourceNameObjList=serverData['SERVER_DATA'];
-		resourceArraySelectHtml += '<select id="resourceNameListId" name="resourceNameList" class="input-sm form-control">';
-		for(var index in resourceNameObjList){
-			var resourceNameObj=resourceNameObjList[index];
-			resourcesArray.push(resourceNameObj['resourcename']);
-			resourceArraySelectHtml += '<option value="'+resourceNameObj['resourcename']+'">'+resourceNameObj['resourcename']+'</option>';
-		}
-		resourceArraySelectHtml += '</select>';
-	}
-}
-
-function fetchProjectNames(){
-	var data={};
-	data=JSON.stringify(data);
-	ajaxHandler("POST", data, "application/json", getApplicationRootPath()+"project/getUniqueProjectList", 'json', null, fetchProjectNamesSuccess,true);
-}
-
-function fetchProjectNamesSuccess(serverData){
-	if('ERROR' != serverData['STATUS']){
-		var projectNameObjList=serverData['SERVER_DATA'];
-		for(var index in projectNameObjList){
-			var projectNameObj=projectNameObjList[index];
-			projectArray.push(projectNameObj['projectname']);
-		}
-	}
-}
-
-function fetchItemDetailsByBtpNo(btpNo){
-	var data={};
-	data['btpno']=btpNo;
-	data=JSON.stringify(data);
-	ajaxHandler("POST", data, "application/json", getApplicationRootPath()+"item_details/getItemDetails", 'json', null, fetchItemDetailsByBtpNoSuccess,true);
-}
-
-function addItemDetailsRows(){
-	var tBody=$('#itemDeatilsParentDivId').find('table').find('tbody');
-	var totalRows=$(tBody).find('tr').length;
-	var nextRow=(totalRows+1);
-	var html = "";
-	html += '<tr id="row_'+nextRow+'" class="'+nextRow+'">';
-	html += '<td id="sNo">'+nextRow+'</td>';
-	html += '<td id="itemDesc">'+itemDescArraySelectHtml+'</td>';
-	html += '<td id="itemCount"><input type="text" class="input-sm form-control" value=""  /></td>';
-	html += '<td id="effortCost"><input type="text" class="input-sm form-control" value=""  /></td>';
-	html += '<td id="effortActual"><input type="text" class="input-sm form-control" value=""  /></td>';
-	html += '<td id="status"><input type="text" class="input-sm form-control" value=""  /></td>';
-	html += '<td id="remarks"><input type="text" class="input-sm form-control" value=""  /></td>';
-	html += '<td id="action" style="text-align: -webkit-center;">';
-	html += '<a  id="itemRowEditId" style="display:none;" href="#" onclick="itemDeatilsEdit('+nextRow+')"> <span class="glyphicon glyphicon-edit"></span></a>'; 
-	html += '<span>&nbsp;</span>';
-	html += '<a id="itemRowSaveId" href="#" onclick="itemDeatilsSave('+nextRow+')"> <span class="glyphicon glyphicon-check"></span></a>';
-	html += '</td>';
-	html += '</tr>';
-	$(tBody).append(html);
-}
-
-function fetchItemDetailsByBtpNoSuccess(serverData){
-	if('ERROR' != serverData['STATUS']){
-		var itemDetailsList=serverData['SERVER_DATA'];
-		var itemDetailsHtmlArray=new Array();
-		for(var index in itemDetailsList){
-			var sNo=parseInt(index)+parseInt(1);
-			var html = "";
-			var itemDetailObj=itemDetailsList[index];
-			html += '<tr id="row_'+itemDetailObj['itemNo']+'" class="'+sNo+'">';
-			html += '<td id="sNo">'+sNo+'</td>';
-			html += '<td id="itemDesc"><input type="text" class="input-sm form-control" value="'+itemDetailObj['itemDescription']+'" disabled /></td>';
-			html += '<td id="itemCount"><input type="text" class="input-sm form-control" value="'+itemDetailObj['itemCount']+'" disabled /></td>';
-			html += '<td id="effortCost"><input type="text" class="input-sm form-control" value="'+itemDetailObj['estimatedEffort']+'" disabled /></td>';
-			html += '<td id="effortActual"><input type="text" class="input-sm form-control" value="'+itemDetailObj['actualEffort']+'" disabled /></td>';
-			html += '<td id="status"><input type="text" class="input-sm form-control" value="'+itemDetailObj['itemStatus']+'" disabled /></td>';
-			html += '<td id="remarks"><input type="text" class="input-sm form-control" value="'+itemDetailObj['itemRemarks']+'" disabled /></td>';
-			html += '<td id="action" style="text-align: -webkit-center;">';
-			html += '<a  id="itemRowEditId" href="#" onclick="itemDeatilsEdit('+sNo+')"> <span	class="glyphicon glyphicon-edit"></span></a>'; 
-			html += '<span>&nbsp;</span>';
-			html += '<a id="itemRowSaveId" style="display:none;" href="#" onclick="itemDeatilsSave('+sNo+')"> <span class="glyphicon glyphicon-check"></span></a>';
-			html += '<span>&nbsp;</span>';
-			html += '<a id="itemRowDeleteId" href="#" onclick="showResourceDetails('+sNo+')"> <span class="glyphicon glyphicon-link"></span></a>';
-			html += '</td>';
-			html += '</tr>';
-			itemDetailsHtmlArray.push(html);
-			itemDetailsObject[sNo]=itemDetailObj;
-		}
-		$('#itemDeatilsParentDivId').find('table').find('tbody').html(itemDetailsHtmlArray);
-		$('#itemDeatilsParentDivId').show();
-	}
-}
-
-function itemDeatilsEdit(rowId){
-	var rowEle=$('#itemDeatilsParentDivId').find('table').find('.'+rowId);
-	$(rowEle).find('input').prop('disabled',false);
-	var innerChildTagNmae=$(rowEle).find('#itemDesc')[0]['firstChild']['tagName'];
-	var currentValue=$(rowEle).find('#itemDesc')[0]['firstChild']['value'];
-	if('INPUT' == innerChildTagNmae){
-		$(rowEle).find('#itemDesc').html(itemDescArraySelectHtml);
-		$(rowEle).find('#itemDesc').find('select').val(currentValue);
-	}
-	$(rowEle).find('#action').find('#itemRowEditId').hide();
-	$(rowEle).find('#action').find('#itemRowDeleteId').hide();
-	$(rowEle).find('#action').find('#itemRowSaveId').show();
-}
-
-function showResourceDetails(rowId){
-	$('#itemDeatilsParentDivId').find('table').find('.'+rowId).addClass('selected');
-	var btpNo = $('#selectedRowKeyInput').val();
-	var currentItemDetailsObj=itemDetailsObject[rowId];
-	var itemNo=currentItemDetailsObj['itemNo'];
-	fetchResourceByBtpItemNo(btpNo,itemNo);
-}
-
-function fetchResourceByBtpItemNo(btpNo,itemNo){
-	var data={};
-	data['btpNo']=btpNo;
-	data['itemNo']=itemNo;
-	data=JSON.stringify(data);
-	ajaxHandler("POST", data, "application/json", getApplicationRootPath()+"resource_details/getResourceDetails", 'json', null, fetchResourceByBtpItemNoSuccess,true);
-}
-
-function fetchResourceByBtpItemNoSuccess(serverData,inputData){
-	if('ERROR' != serverData['STATUS']){
-		var resourceObjList=serverData['SERVER_DATA'];
-		console.log(inputData);
-		var rowEleArray=$('#itemDeatilsParentDivId').find('table').find('tbody').find('tr');
-		console.log($(rowEleArray));
-		rowEleArray.filter('.selected').show();
-		rowEleArray.not('.selected').hide();
-		$('#resourceDeatilsParentDivId').show();
-		var htmlArray=new Array();
-		for(var index in resourceObjList){
-			var html = "";
-			var resourceObj=resourceObjList[index];
-			console.log(resourceObj);
-			var sNo=parseInt(index)+parseInt(1);
-			html += '<tr id="row_'+resourceObj['itemNo']+'" class="'+sNo+'">';
-			html += '<td id="sNo">'+sNo+'</td>';
-			html += '<td id="resourceName"><input type="text" class="input-sm form-control" value="'+resourceObj['resourceName']+'" disabled /></td>';
-			html += '<td id="itemCount"><input type="text" class="input-sm form-control" value="'+resourceObj['itemCount']+'" disabled /></td>';
-			html += '<td id="actualTime"><input type="text" class="input-sm form-control" value="'+resourceObj['actTime']+'" disabled /></td>';
-			html += '<td id="bugsLogged"><input type="text" class="input-sm form-control" value="'+resourceObj['bugsLogged']+'" disabled /></td>';
-			html += '<td id="pass"><input type="text" class="input-sm form-control" value="'+resourceObj['pass']+'" disabled /></td>';
-			html += '<td id="fail"><input type="text" class="input-sm form-control" value="'+resourceObj['fail']+'" disabled /></td>';
-			html += '<td id="clarification"><input type="text" class="input-sm form-control" value="'+resourceObj['clarification']+'" disabled /></td>';
-			html += '<td id="unableToSet"><input type="text" class="input-sm form-control" value="'+resourceObj['unableToSet']+'" disabled /></td>';
-			html += '<td id="pending"><input type="text" class="input-sm form-control" value="'+resourceObj['pending']+'" disabled /></td>';
-			html += '<td id="blocked"><input type="text" class="input-sm form-control" value="'+resourceObj['blocked']+'" disabled /></td>';
-			html += '<td id="action" style="text-align: -webkit-center;">';
-			html += '<a  id="resourceRowEditId" href="#" onclick="resourceDeatilsEdit('+sNo+')"> <span	class="glyphicon glyphicon-edit"></span></a>'; 
-			html += '<span>&nbsp;</span>';
-			html += '<a id="resourceRowSaveId" style="display:none;" href="#" onclick="resourceDeatilsSave('+sNo+')"> <span class="glyphicon glyphicon-check"></span></a>';
-			html += '</td>';
-			html += '</tr>';
-			htmlArray.push(html);
-		}
-		$('#resourceDeatilsParentDivId').find('tbody').html(htmlArray);
-	}
-}
-
-function resourceDeatilsEdit(rowId){
-	
-}
-
-function resourceDeatilsSave(rowId){
-	
-}
-
-function backToItemDeatils(){
-	var rowEleArray=$('#itemDeatilsParentDivId').find('table').find('tbody').find('tr');
-	$(rowEleArray).removeClass('selected');
-	$(rowEleArray).show();
-	$('#resourceDeatilsParentDivId').hide();
-}
-
-function itemDeatilsSave(rowId){
-	
-	var btpObject=null;
-	
-	var isUpdate=true;
-	
-	var rowEle=$('#itemDeatilsParentDivId').find('table').find('.'+rowId);
-	
-	var gKey = $('#selectedRowKeyInput').val();
-	
-	btpObject = null != gKey ? buildTestPlanData[gKey] : null;
-	
-	var currentItemDetailsObj=itemDetailsObject[rowId];
-	
-	if(null == currentItemDetailsObj){
-		isUpdate=false;
-		currentItemDetailsObj={};
-	}
-	
-	currentItemDetailsObj['btpNo']=btpObject;
-	
-	currentItemDetailsObj['btpNo']['createdDate']=getDateValue(currentItemDetailsObj['btpNo']['createdDate'],'yyyy-MM-dd',"-");
-	currentItemDetailsObj['btpNo']['endDate']=getDateValue(currentItemDetailsObj['btpNo']['endDate'],'yyyy-MM-dd',"-");
-	currentItemDetailsObj['btpNo']['revisedEndDate']=getDateValue(currentItemDetailsObj['btpNo']['revisedEndDate'],'yyyy-MM-dd',"-");
-	currentItemDetailsObj['btpNo']['startDate']=getDateValue(currentItemDetailsObj['btpNo']['startDate'],'yyyy-MM-dd',"-");
-	currentItemDetailsObj['btpNo']['updatesDate']=getDateValue(currentItemDetailsObj['btpNo']['updatesDate'],'yyyy-MM-dd',"-");
-	
-	currentItemDetailsObj['actualEffort']=$(rowEle).find('#effortActual').find('input').val();
-	currentItemDetailsObj['estimatedEffort']=$(rowEle).find('#effortCost').find('input').val();
-	currentItemDetailsObj['itemCount']=$(rowEle).find('#itemCount').find('input').val();
-	currentItemDetailsObj['itemDescription']=$(rowEle).find('#itemDesc').find('#itemDescriptionListId').val();
-	currentItemDetailsObj['itemStatus']=$(rowEle).find('#status').find('input').val();
-	currentItemDetailsObj['itemRemarks']=$(rowEle).find('#remarks').find('input').val();
-	
-	$(rowEle).find('#action').find('#itemRowEditId').show();
-	$(rowEle).find('#action').find('#itemRowDeleteId').show();
-	$(rowEle).find('#action').find('#itemRowSaveId').hide();
-	$(rowEle).find('#itemDesc').html("");
-	$(rowEle).find('#itemDesc').append('<input type="text" class="input-sm form-control" value="'+currentItemDetailsObj['itemDescription']+'" disabled />');
-	$(rowEle).find('input').prop('disabled',true);
-	
-	if(!isUpdate){
-		ajaxHandler("POST", JSON.stringify(currentItemDetailsObj), "application/json", getApplicationRootPath()+"item_details/addItemDetails", 'json', null, itemDeatilsSaveSuccess,true);
-	}else{
-		ajaxHandler("POST", JSON.stringify(currentItemDetailsObj), "application/json", getApplicationRootPath()+"item_details/updateItemDetails", 'json', null, itemDeatilsEditSuccess,true);
-	}
-	
-}
-
-function itemDeatilsSaveSuccess(serverData,inputData){
-	if('ERROR' != serverData['STATUS']){
-		var gKey=serverData['SERVER_DATA'];
-		inputData['gKey']=gKey;
-		var size=(Object.keys(itemDetailsObject).length)+1;
-		itemDetailsObject[size]=inputData;
-		alert("Item Detail Row Added Successfully!!!")
-	}
-}
-
-function itemDeatilsEditSuccess(serverData){
-	if('ERROR' != serverData['STATUS']){
-		alert("Item Detail Row Updated Successfully!!!")
-	}
-}
-
-function fetchItemDescriptionList(){
-	var data={};
-	data=JSON.stringify(data);
-	ajaxHandler("POST", data, "application/json", getApplicationRootPath()+"item_details/getUniqueItemDesc", 'json', null, fetchItemDescriptionListSuccess,true);
-}
-
-function fetchItemDescriptionListSuccess(serverData){
-	if('ERROR' != serverData['STATUS']){
-		var itemDescNameList=serverData['SERVER_DATA'];
-		itemDescArraySelectHtml += '<select id="itemDescriptionListId" name="itemDescriptionList" class="input-sm form-control">';
-		for(var index in itemDescNameList){
-			var itemDescNameObj=itemDescNameList[index];
-			itemDescriptionArray.push(itemDescNameObj['itemdescription']);
-			itemDescArraySelectHtml += '<option value="'+itemDescNameObj['itemdescription']+'">'+itemDescNameObj['itemdescription']+'</option>';
-		}
-		itemDescArraySelectHtml += '</select>';
-	}
+	console.log(data);
+	ajaxHandler("POST", data, "application/json", getApplicationRootPath()+"build_test_plan/getData", 'json', null, fetchTestPlanEntriesSuccess,true);
 }
 
 function fetchTestPlanEntriesSuccess(serverData){
 	console.log(serverData);
 	$('#build_test_plan_table_id').find('#tbody_id').html(populateTestPlanEntries(serverData['BTP_ENTRIES']));
 	$('#build_test_plan_table_id').DataTable({
-		"responsive" : true,
+		"responsive" : false,
 		"processing": true,
 		 "dom": 'Bfrtpl',
 		 "buttons": ['excel','csv']
 	});
+	if(null != sessionStorageObj){
+		var notifyObj=sessionStorageObj.getItem("NOTIFICATION");
+		if(null != notifyObj){
+			notif(notifyObj);
+			sessionStorageObj.removeItem("NOTIFICATION");
+		}
+	}
+	hideLoader();
 }
 
 function populateTestPlanEntries(entriesList){
@@ -360,41 +70,9 @@ function populateTestPlanEntries(entriesList){
 	return htmlArray;
 }
 
-function getDateValue(dateObj,format,delimeter){
-	var formatedDateStr="";
-	if($.type(dateObj) === "string"){
-		return dateObj;
-	}
-	if(null != dateObj){
-		var day=(dateObj['dayOfMonth'] > 9) ? (""+dateObj['dayOfMonth']) : ("0"+dateObj['dayOfMonth']);
-		var month=(dateObj['monthOfYear'] > 9) ? (""+dateObj['monthOfYear']) : ("0"+dateObj['monthOfYear']);
-		if("dd/MM/yyyy" == format){
-			if("/" == delimeter){
-				formatedDateStr=day+"/"+ month+"/"+ dateObj['year'];
-			}else if("-" == delimeter){
-				formatedDateStr=day+"-"+ month+"-"+ dateObj['year'];
-			}
-		}else if("yyyy-MM-dd" == format){
-			if("/" == delimeter){
-				formatedDateStr=dateObj['year']+"/"+month+"/"+day;
-			}else if("-" == delimeter){
-				formatedDateStr=dateObj['year']+"-"+month+"-"+day;
-			}
-		}
-	}
-	return formatedDateStr;
-}
-
-function fetchTestPlanEntries(){
-	var entryCount=parseInt($('#build_test_plan_table_id_wrapper').find('select').val());
-	var data={};
-	data['maxEntries']=entryCount;
-	data=JSON.stringify(data);
-	console.log(data);
-	ajaxHandler("POST", data, "application/json", getApplicationRootPath()+"build_test_plan/getData", 'json', null, fetchTestPlanEntriesSuccess,true);
-}
-
 function buildTestPlanModalData(gKey){
+	
+	$('#buildTestPlanForm :input').removeClass('error');
 	
 	var currentSelectedObject=null;
 	
@@ -446,7 +124,35 @@ function buildTestPlanModalData(gKey){
 	
 }
 
+function validateBeforeSave(){
+	var errorMsgArray=[];
+	$("#buildTestPlanForm :input").each(function(){
+		if($(this).hasClass('imp')){
+			var input = $(this);
+			console.log($(input));
+			console.log($(input).attr('id'));
+			var id=$(input).attr('id');
+			var value=$(input).val();
+			
+			if(null == value || value.length == 0){
+				errorMsgArray.push(btpFormErrorMessages[id]);
+				$(input).addClass('error');
+			}
+		}
+	});
+	
+	if(errorMsgArray.length > 0){
+		var notifyObj={msg: '<b>Please Fix Butil Test Plan Form Validation Errors</b>',type: "error",position: "center",autohide: false};
+		notif(notifyObj);
+		return false;
+	}
+}
+
 function addOrUpdateBtp(){
+	
+	if(!validateBeforeSave()){
+		return false;
+	}
 	
 	var btpObject={};
 	
@@ -487,20 +193,57 @@ function addOrUpdateBtp(){
 	btpObject['updatesDate']=getDateValue(btpObject['updatesDate'],'yyyy-MM-dd',"-");
 	
 	
-	
 	if("" == gKey){
-		//ajaxHandler("POST", JSON.stringify(btpObject), "application/json", getApplicationRootPath()+"build_test_plan/addData", 'json', null, addBtpChangesSuccess,true);
+		ajaxHandler("POST", JSON.stringify(btpObject), "application/json", getApplicationRootPath()+"build_test_plan/addData", 'json', addBtpChangesError, addBtpChangesSuccess,true);
 	}else{
-		//ajaxHandler("POST", JSON.stringify(btpObject), "application/json", getApplicationRootPath()+"build_test_plan/updateData", 'json', null, updateBtpModifiedChangesSuccess,true);
+		ajaxHandler("POST", JSON.stringify(btpObject), "application/json", getApplicationRootPath()+"build_test_plan/updateData", 'json', null, updateBtpModifiedChangesSuccess,true);
 	}
 	
 	console.log("%%%%%% GKey :"+gKey);
 	
 }
 
+function constructResourceTable(resourceArray){
+	var html="";
+	
+	if(null != resourceArray && resourceArray.length > 0){
+		for(var index=0 ; index<resourceArray.length;index++ ){
+			html += '<tr id="resourcetr_'+(index+1)+'">';
+			if(index == 0){
+				html += '<td id="resourceNameCaptionId"><label class="control-label">Resource'+(index+1)+':*</label></td>';
+				html += '<td id="resourceNameTDId" onclick="clickedResourceName(this)" ><input id="resource1Id" name="do_nbr" type="text" class="form-control form-control3 imp" value="'+resourceArray[index]+'"></td>';
+				html += '<td style="text-align: -webkit-center;">';
+				html += '<a onclick="addTableRow(this)" href="#"><span data-href="#" class="fa fa-plus" data-toggle="tooltip" data-placement="auto left" title="" data-original-title="Add Resource"></span></a>';
+				html += '</td>';
+			}else{
+				html += '<td id="resourceNameCaptionId"><label class="control-label">Resource'+(index+1)+':</label></td>';
+				html += '<td id="resourceNameTDId" onclick="clickedResourceName(this)" ><input id="resourceId" name="do_nbr" type="text" class="form-control form-control3" value="'+resourceArray[index]+'"></td>';
+				html += '<td style="text-align: -webkit-center;">';
+				html += '<a onclick="deleteTableRow(this)" href="#"><span class="fa fa-remove" data-toggle="tooltip" data-placement="auto top" title="" data-original-title="Remove Resource"></span></a></td>';
+			}
+			html += '</tr>';
+		}
+	}
+	else{
+		
+		html += '<tr id="resourcetr_1">';
+		html += '<td id="resourceNameCaptionId"><label class="control-label">Resource1:*</label></td>';
+		html += '<td id="resourceNameTDId" onclick="clickedResourceName(this)"><input id="resource1Id" name="do_nbr" type="text" class="form-control form-control3 imp" value=""></td>';
+		html += '<td style="text-align: -webkit-center;">';
+		html += '<a onclick="addTableRow(this)" href="#"><span data-href="#" class="fa fa-plus" data-toggle="tooltip" data-placement="auto left" title="" data-original-title="Add Fields"></span></a>';
+		html += '</td>';
+		
+	}
+	
+	$('#resourceMgmtTableId').find('tbody').html(html);
+}
+
 function updateBtpModifiedChangesSuccess(serverData){
 	if('ERROR' != serverData['STATUS']){
-		alert('Update Successfully!!!');
+		var notifyObj={msg: "<b>Success:</b> BTP Details Updated Successfully !!!",type: "success",position: "center",autohide: false};
+		if(null != sessionStorageObj){
+			sessionStorageObj.setItem("NOTIFICATION",notifyObj);
+		}
 		window.location.href=getApplicationRootPath()+"build_test_plan/show";
 	}else {
 		alert('Update Operation Failed!!!');
@@ -509,11 +252,20 @@ function updateBtpModifiedChangesSuccess(serverData){
 
 function addBtpChangesSuccess(serverData){
 	if('ERROR' != serverData['STATUS']){
-		alert('Added Successfully!!!');
+		var notifyObj={msg: "<b>Success:</b> BTP Details Added Successfully !!!",type: "success",position: "center",autohide: false};
+		if(null != sessionStorageObj){
+			sessionStorageObj.setItem("NOTIFICATION",notifyObj);
+		}
 		window.location.href=getApplicationRootPath()+"build_test_plan/show";
 	}else {
 		alert('Add Operation Failed!!!');
 	}
+}
+
+function addBtpChangesError(errorData){
+	console.log(errorData);
+	var notifyObj={msg: '<b>'+errorData['status']+'</b> '+errorData['statusText'],type: "error",position: "center",autohide: false};
+	notif(notifyObj);
 }
 
 function constructResourceArray(btpObject){
@@ -531,55 +283,20 @@ function constructResourceArray(btpObject){
 	return array;
 }
 
-function constructResourceTable(resourceArray){
-	var html="";
-	
-	if(null != resourceArray && resourceArray.length > 0){
-		for(var index=0 ; index<resourceArray.length;index++ ){
-			html += '<tr id="resourcetr_'+(index+1)+'">';
-			if(index == 0){
-				html += '<td id="resourceNameCaptionId"><label class="control-label">Resource'+(index+1)+':*</label></td>';
-				html += '<td id="resourceNameTDId" onclick="clickedResourceName(this)"><input id="resourceId" name="do_nbr" type="text" class="form-control form-control3" value="'+resourceArray[index]+'"></td>';
-				html += '<td style="text-align: -webkit-center;">';
-				html += '<a onclick="addTableRow(this)" href="#"><span data-href="#" class="fa fa-plus" data-toggle="tooltip" data-placement="auto top" title="" data-original-title="Add Fields"></span></a>';
-				html += '</td>';
-			}else{
-				html += '<td id="resourceNameCaptionId"><label class="control-label">Resource'+(index+1)+':</label></td>';
-				html += '<td id="resourceNameTDId" onclick="clickedResourceName(this)" ><input id="resourceId" name="do_nbr" type="text" class="form-control form-control3" value="'+resourceArray[index]+'"></td>';
-				html += '<td style="text-align: -webkit-center;">';
-				html += '<a onclick="deleteTableRow(this)" href="#"><span class="fa fa-remove" data-toggle="tooltip" data-placement="auto top" title="" data-original-title="Remove Resource"></span></a></td>';
-			}
-			html += '</tr>';
-		}
-	}
-	else{
-		
-		html += '<tr id="resourcetr_1">';
-		html += '<td id="resourceNameCaptionId"><label class="control-label">Resource1:*</label></td>';
-		html += '<td id="resourceNameTDId" onclick="clickedResourceName(this)"><input id="resourceId" name="do_nbr" type="text" class="form-control form-control3" value=""></td>';
-		html += '<td style="text-align: -webkit-center;">';
-		html += '<a onclick="addTableRow(this)" href="#"><span data-href="#" class="fa fa-plus" data-toggle="tooltip" data-placement="auto top" title="" data-original-title="Add Fields"></span></a>';
-		html += '</td>';
-		
-	}
-	
-	$('#resourceMgmtTableId').find('tbody').html(html);
-}
-
 function addTableRow(thisObject){
 	var html="";
 	var resourceTrArray=$('#resourceMgmtTableId').find('tbody').find('tr');
-	if(resourceTrArray.length <6){
+	if(resourceTrArray.length <10){
 		html += '<tr id="resourcetr_'+(resourceTrArray.length+1)+'">';
 		html += '<td id="resourceNameCaptionId"><label class="control-label">Resource'+(resourceTrArray.length+1)+':*</label></td>';
 		html += '<td id="resourceNameTDId" onclick="clickedResourceName(this)"><input id="resourceId" name="do_nbr" type="text" class="form-control form-control3" value=""></td>';
 		html += '<td style="text-align: -webkit-center;">';
-		html += '<a onclick="deleteTableRow(this)" href="#"><span class="fa fa-remove" data-toggle="tooltip" data-placement="auto top" title="" data-original-title="Remove Resource"></span></a>';
+		html += '<a onclick="deleteTableRow(this)" href="#"><span class="fa fa-remove" data-toggle="tooltip" data-placement="auto right" title="" data-original-title="Remove Resource"></span></a>';
 		html += '</td>';
 		html += '</tr>';
 		$('#resourceMgmtTableId').find('tbody').append(html);
 	}else{
-		alert("More than 6 resources not allowed per btp");
+		alert("More than 10 resources not allowed per btp");
 	}
 }
 
@@ -590,7 +307,7 @@ function deleteTableRow(thisObject){
 		var numId=parseInt(trElementId.replace('resourcetr_',''));
 		var deletedRowId=numId;
 		$('#resourceMgmtTableId').find('#'+trElementId).remove();
-		while(numId <= 6){
+		while(numId <= 10){
 			numId++;
 			$('#resourceMgmtTableId').find('#resourcetr_'+numId).find('#resourceNameCaptionId').find('label').text('Resource'+(numId-1)+':');
 			$('#resourceMgmtTableId').find('#resourcetr_'+numId).attr('id','resourcetr_'+(numId-1));
@@ -613,12 +330,3 @@ function clickedResourceName(thisElement){
 	
 }
 
-
-
-function fillSelectDropDown(dropDownId,arrayData,selectedOption){
-	$('#'+dropDownId).html("");
-	$.each(arrayData, function(key, value) {   
-	     $('#'+dropDownId).append($("<option></option>").attr("value",value).text(value)); 
-	});
-	$('#'+dropDownId).val(selectedOption);
-}

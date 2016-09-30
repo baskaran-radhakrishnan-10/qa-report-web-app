@@ -11,12 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 @Entity
 @Table(name = "ResourceTable")
-@Cache(usage=CacheConcurrencyStrategy.READ_ONLY, region="qa_report")
 public class ResourceEntity implements Serializable{
 	
 	private static final long serialVersionUID = 6132396313576051532L;

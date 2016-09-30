@@ -1,3 +1,44 @@
+function SessionStorage(){}
+
+var sessionStorageObj=null;
+
+SessionStorage.prototype.setItem=function(key,value){
+	sessionStorage.setItem(key,JSON.stringify(value));
+}
+
+SessionStorage.prototype.getItem=function(key){
+	if(null != sessionStorage.getItem(key)){
+		return JSON.parse(sessionStorage.getItem(key));
+	}
+	return null;
+}
+
+SessionStorage.prototype.removeItem=function(key,value){
+	sessionStorage.removeItem(key);
+}
+
+var sessionStorageObj=null;
+
+$(document).ready(function() {
+	console.log("common js document ready");
+	if (storageAvailable('sessionStorage')) {
+		sessionStorageObj=new SessionStorage();
+	}
+});
+
+function storageAvailable(type) {
+	try {
+		var storage = window[type],
+			x = '__storage_test__';
+		storage.setItem(x, x);
+		storage.removeItem(x);
+		return true;
+	}
+	catch(e) {
+		return false;
+	}
+}
+
 function ajaxHandler(requestType,data,contentType,url,dataType,errorCallback,successCallback,async){
 	console.log("url :"+url);
 	$.ajax({
@@ -35,7 +76,6 @@ function getApplicationRootPath(){
 	var href=window.location.href;
 	var rootPathArray=href.split("/");
 	var rootPath = "";
-	console.log(rootPathArray.length);
 	if(rootPathArray.length > 5){
 		for(var index in rootPathArray){
 			if(index < 4){
@@ -45,7 +85,6 @@ function getApplicationRootPath(){
 	}else{
 		rootPath=href.substring(0,href.lastIndexOf("/")+1);
 	}
-	console.log(rootPath);
 	return rootPath;
 }
 

@@ -7,8 +7,6 @@
 
 <!-- start: Css -->
 <spring:url value="/resources/miminiumTheme/css/bootstrap.min.css" var="boostrapCss" />
-
-<!-- plugins -->
 <spring:url	value="/resources/miminiumTheme/css/plugins/font-awesome.min.css"	var="FontAwesomeCss" />
 <spring:url	value="/resources/miminiumTheme/css/plugins/simple-line-icons.css"	var="SimpleLineIconCss" />
 <spring:url value="/resources/miminiumTheme/css/plugins/animate.min.css"	var="AnimateMinCss" />
@@ -19,10 +17,9 @@
 <spring:url	value="/resources/miminiumTheme/css/plugins/ionrangeslider/ion.rangeSlider.css"	var="ionRangerCss" />
 <spring:url	value="/resources/miminiumTheme/css/plugins/ionrangeslider/ion.rangeSlider.skinFlat.css"	var="ionRangerSkinCss" />
 <spring:url	value="/resources/miminiumTheme/css/plugins/datatables.bootstrap.min.css"	var="dataTableCss" />
-
 <spring:url value="/resources/miminiumTheme/css/style.css"	var="StyleCss" />
-<!-- For Validation -->
 <spring:url value="/resources/miminiumTheme/css/validation.css"	var="validationCss" />
+<spring:url	value="/resources/miminiumTheme/css/plugins/notify/notifIt.css"	var="notifyCss" />
 <!-- end: Css -->
 
 <spring:url value="/resources/miminiumTheme/img/logomi.png"	var="LogoMiImg" />
@@ -56,8 +53,7 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta name="author" content="" />
 <meta name="company" content="" />
@@ -79,6 +75,7 @@
 <link href="${validationCss}" rel="stylesheet" type="text/css">
 <link href="${StyleCss}" rel="stylesheet" type="text/css">
 <link href="${LogoMiImg}" rel="stylesheet" type="image/x-icon">
+<link href="${notifyCss}" rel="stylesheet" type="text/css">
 
 <!-- <style>
 /* Start by setting display:none to make this hidden.

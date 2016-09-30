@@ -7,11 +7,27 @@
 
 <spring:url	value="/resources/miminiumTheme/js/common/common.js" var="commonJS" />
 
+<spring:url	value="/resources/miminiumTheme/js/custom/custom_build_test_plan_module.js" var="customBuilTestPlanModuleJS" />
+
 <spring:url	value="/resources/miminiumTheme/js/custom/custom_build_test_plan.js" var="customBuilTestPlanJS" />
+
+<spring:url	value="/resources/miminiumTheme/js/custom/custom_item_details.js" var="customItemDetailsJS" />
+
+<spring:url	value="/resources/miminiumTheme/js/custom/custom_resource_table.js" var="customResourceDetailsJS" />
+
+<spring:url	value="/resources/miminiumTheme/js/plugins/notify/notifIt.js"	var="notifyJs" />
 
 <script src="${commonJS}"></script>
 
+<script src="${notifyJs}"></script>
+
+<script src="${customBuilTestPlanModuleJS}"></script>
+
 <script src="${customBuilTestPlanJS}"></script>
+
+<script src="${customItemDetailsJS}"></script>
+
+<script src="${customResourceDetailsJS}"></script>
 
 <div class="modal fade" id="build_test_plan" tabindex="-1" role="dialog" aria-labelledby="buildTestPlanModal" aria-hidden="true" data-backdrop="static" data-keyboard="false" data-href="">	
 	<div class="modal-dialog modal-lg">
@@ -30,16 +46,18 @@
 		<div class="col-md-12">
 			<h3 style="margin-top: 0px;">Build Test Plan
 				<!-- <a id="exportTestPlanDataId" type="button" class="btn  btn-3d btn-default pull-right" style="margin: 0px 5px;">Export</a> -->
-				<a id="addTestPlanDataId" type="button"  data-target="#build_test_plan" class="btn  btn-3d btn-success pull-right" style="margin: 0px 5px;">Add</a>
+				<a id="addTestPlanDataId" type="button"  data-target="#build_test_plan" class="btn  btn-3d btn-success pull-right" style="margin: 0px 5px;" data-toggle="tooltip" data-placement="auto left" title="" data-original-title="Add new BTP details">Add</a>
 			</h3>
 		</div>
 	</div>
 </div>
 
-<div class="col-md-12 top-20">
+<div id="loader_div" style="width: 149px;height: 149px; left: 54%;position: fixed; z-index: 1000;top: 42%;
+    background: rgba( 255, 255, 255, .8 ) url('../resources/miminiumTheme/img/gears.gif') 50% 50% no-repeat;display:none;"></div>
+
+<div class="col-md-12 top-20" id="btpMainDiv" style="display:none;">
 	<div class="panel" style="padding: 15px; padding-bottom: 20px;">
 		<div class="table-responsive">
-			
 			<table class="table table-striped table-hover table-bordered listView-table" id="build_test_plan_table_id">
 				<thead id="thead_id">
 					<tr>
@@ -54,7 +72,8 @@
 						<th></th>
 					</tr>
 				</thead>
-				<tbody id="tbody_id"></tbody>
+				<tbody id="tbody_id">
+				</tbody>
 			</table>
 		</div>
 	</div>
@@ -66,11 +85,11 @@
 
 <input type="hidden" id="selectedBtpGKey" style="display:none" />
 
-<input type="hidden" id="selectedItemGKey" style="display:none" />
+<input type="hidden" id="selectedItemNo" style="display:none" />
 
 <input type="hidden" id="selectedResourceGKey" style="display:none" />
 
-<form id="buildTestPlanForm" role="form" class="form-horizontal" action="#" method="post">
+<form id="buildTestPlanForm" name="buildTestPlanForm" role="form" class="form-horizontal" action="#" method="post" style="display:none;">
 	
 	<div id="alertcustom"></div>
 	
@@ -87,54 +106,54 @@
 						<div class="panel-body">
 							<div class="col-md-12 padding-0">
 								<div class="col-md-8 padding-0">
-									<div class="form-group">
+									<div class="form-group" id="important">
 										<div class="row">
 											<div class="col-md-12">
 												<label class="col-sm-2 control-label">Project:*</label>
 												<div class="col-sm-3">
-													<select id="projectId" name="project" class="input-sm form-control"></select>
+													<select id="projectId" name="project" class="input-sm form-control imp"></select>
 												</div>
 												<label class="col-sm-2 control-label">Phase:*</label>
 												<div class="col-sm-3">
-													<select id="phaseId" name="phase" class="input-sm form-control"></select>
+													<select id="phaseId" name="phase" class="input-sm form-control imp"></select>
 												</div>
 											</div>
 										</div>
 									</div>
-									<div class="form-group">
+									<div class="form-group" id="important">
 										<div class="row">
 											<div class="col-md-12">
 												<label class="col-sm-2 control-label">Plan:*</label>
 												<div class="col-sm-3">
-													<select id="planId" name="plan" class="input-sm form-control"></select>
+													<select id="planId" name="plan" class="input-sm form-control imp"></select>
 												</div>
 												<label class="col-sm-2 control-label">Status:*</label>
 												<div class="col-sm-3">
-													<select id="statusId" name="status" class="input-sm form-control"></select>
+													<select id="statusId" name="status" class="input-sm form-control imp"></select>
 												</div>
 											</div>
 										</div>
 									</div>
-									<div class="form-group">
+									<div class="form-group" id="important">
 										<div class="row">
 											<div class="col-md-12">
 												<label class="col-sm-2 control-label">Cycle:*</label>
 												<div class="col-sm-3">
-													<input id="cycleId" name="cycle" type="text" class="input-sm form-control" value="">
+													<input id="cycleId" name="cycle" type="text" class="input-sm form-control imp" value="">
 												</div>
 												<label class="col-sm-2 control-label">Sprint/Iteration:*</label>
 												<div class="col-sm-3">
-													<input id="iteration_id" name="iteration" type="text" class="input-sm form-control" value="">
+													<input id="iteration_id" name="iteration" type="text" class="input-sm form-control imp" value="">
 												</div>
 											</div>
 										</div>
 									</div>
-									<div class="form-group">
+									<div class="form-group" id="important">
 										<div class="row">
 											<div class="col-md-12">
 												<label class="col-sm-2 control-label">Build No:*</label>
 												<div class="col-sm-3">
-													<input id="buildNoId" name="buildNo" type="text" class="input-sm form-control" value="">
+													<input id="buildNoId" name="buildNo" type="text" class="input-sm form-control imp" value="">
 												</div>
 												<label class="col-sm-2 control-label">Remarks:</label>
 												<div class="col-sm-3">
@@ -143,16 +162,16 @@
 											</div>
 										</div>
 									</div>
-									<div class="form-group">
+									<div class="form-group" id="important">
 										<div class="row">
 											<div class="col-md-12">
 												<label class="col-sm-2 control-label">Start Date:*</label>
 												<div class="col-sm-3">
-													<input id="startDateId" name="startDate" type="date" class="input-sm form-control" value="2016-09-21">
+													<input id="startDateId" name="startDate" type="date" class="input-sm form-control imp" value="2016-09-21">
 												</div>
 												<label class="col-sm-2 control-label">End Date:*</label>
 												<div class="col-sm-3">
-													<input id="endDateId" name="endDate" type="date" class="input-sm form-control" value="2016-09-21">
+													<input id="endDateId" name="endDate" type="date" class="input-sm form-control imp" value="2016-09-21">
 												</div>
 											</div>
 										</div>
@@ -160,7 +179,7 @@
 									<div class="form-group">
 										<div class="row">
 											<div class="col-md-12">
-												<label class="col-sm-2 control-label">Revised End Date:*</label>
+												<label class="col-sm-2 control-label">Revised End Date:</label>
 												<div class="col-sm-3">
 													<input id="revisedEndDateId" name="revisedEndDate" type="date" class="input-sm form-control" value="2016-09-21">
 												</div>
@@ -170,20 +189,18 @@
 								</div>
 								<!-- class="col-md-8" -->
 								
-								<div class="col-md-4 padding-0">
-								
+								<div class="col-md-4 padding-0"     style="overflow-y: auto;height: 237px;">
 									<div class="table-responsive" >
 										<table id="resourceMgmtTableId" class="table table-condensed" cellspacing="0" width="100%">
 											<tbody>
 												<tr id="resourcetr_1">
 													<td><label class="control-label">Resource1:*</label></td>
-													<td id="resourceNameTD"><input id="resourceId" name="do_nbr" type="text" class="form-control form-control3" value="DO001"></td>
-													<td style="text-align: -webkit-center;"><a href="#"><span data-href="#" class="fa fa-plus" data-toggle="tooltip" data-placement="auto top" title="" data-original-title="Add Fields"></span></a> <span>&nbsp;</span><a href="#"><span class="fa fa-remove" data-toggle="tooltip" data-placement="auto top" title="" data-original-title="Remove Field"></span></a></td>
+													<td id="resourceNameTD"><input id="resource1Id" name="do_nbr" type="text" class="form-control form-control3 imp" value="DO001"></td>
+													<td style="text-align: -webkit-center;"><a href="#"><span data-href="#" class="fa fa-plus" data-toggle="tooltip" data-placement="auto left" title="" data-original-title="Add Fields"></span></a> <span>&nbsp;</span><a href="#"><span class="fa fa-remove" data-toggle="tooltip" data-placement="auto top" title="" data-original-title="Remove Field"></span></a></td>
 												</tr>
 											</tbody>
 										</table>
 									</div>
-									
 								</div>
 								<!-- class="col-md-4" -->
 							</div>
@@ -248,7 +265,7 @@
 												
 												<div class="col-md-12 padding-0">
 													<div class="pull-left">
-														<button type="button" id="addItemDetailRowButton"  onclick="addItemDetailsRows()" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="auto right" title="" data-original-title="Add Row">
+														<button type="button" id="addItemDetailRowButton"  onclick="addItemDetailsRows()" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="auto right" title="" data-original-title="Add item details row">
 															<i class="fa fa-plus" aria-hidden="true"></i>
 														</button>
 													</div>
@@ -312,12 +329,12 @@
 													</table>
 													<div class="col-md-12 padding-0">
 														<div id="pull-left" style="float: left!important;">
-															<button type="button" id="addResourceDetRowButton" onclick="addResourceDetRows()" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="auto right" title="" data-original-title="Add Row">
+															<button type="button" id="addResourceDetRowButton" onclick="addResourceDetRows()" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="auto right" title="" data-original-title="Add new resource detail">
 																<i class="fa fa-plus" aria-hidden="true"></i>
 															</button>
 														</div>
 														<div id="pull-right" style="float: right!important;">
-															<button type="button" id="backToItemDeatilsButton" onclick="backToItemDeatils()" class="btn btn-sm btn-danger" title="">
+															<button type="button" id="backToItemDeatilsButton" onclick="backToItemDeatils()" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="auto left" title="" data-original-title="Back to item details">
 																<i class="fa fa-reply-all" aria-hidden="true"></i>
 															</button>
 														</div>
@@ -344,8 +361,10 @@
 				</div>
 				<!-- id="accordion" -->
 				<div class="form-group" style="margin-bottom: 10px;">
-					<div class="col-md-8" style="float: right; margin-right: 1em;">
-						<input data-dismiss="modal" id="cancel_button" type="reset" class="btn btn-default" value="Cancel" style="float: right;"> <span></span> <input id="save_button" type="submit" class="btn btn-primary" value="Save" style="float: right; margin-right: 1em;">
+					<div class="col-md-8" style="float: right;margin-right: 1.2em;margin-top: 1em;" >
+						<input data-dismiss="modal" id="cancel_button" type="reset" class="btn btn-default" value="Cancel" style="float: right;"> 
+						<span></span> 
+						<input id="save_button" onclick="addOrUpdateBtp()" class="btn btn-primary" value="Save" style="float: right; margin-right: 1em;">
 					</div>
 					<div class="clearfix"></div>
 				</div>
