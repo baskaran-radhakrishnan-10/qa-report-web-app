@@ -61,4 +61,12 @@
 		<property name="abstractHibernateDAOAPI" ref="abstractHibernateDAOAPI" />
 	</bean>
 	
+	<bean id="manageUsersDAO" class="com.equiniti.qa_report.dao.api.impl.ManageUsersDAOImpl">
+		<property name="abstractHibernateDAOAPI" ref="abstractHibernateDAOAPI" />
+	</bean>
+	
+	<bean id="rolesDAO" class="com.equiniti.qa_report.dao.api.impl.RolesDAOImpl">
+		<property name="abstractHibernateDAOAPI" ref="abstractHibernateDAOAPI" />
+	</bean>
+	
 </beans>

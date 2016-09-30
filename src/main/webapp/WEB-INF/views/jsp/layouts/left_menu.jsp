@@ -32,9 +32,9 @@
 			
 			<li id="rbac_li" class="ripple"><a class="tree-toggle nav-header"><span class="fa-user-secret fa"></span> Users &amp; Roles <span class="fa-angle-right fa right-arrow text-right"></span></a>
 				<ul class="nav nav-list tree">
-					<li><a href="${sessionScope.baseUrl}manage_users">Manage Users</a></li>
-					<li><a href="${sessionScope.baseUrl}manage_roles">Manage Roles</a></li>
-					<li><a href="${sessionScope.baseUrl}manage_resources">Manage Resources</a></li>
+					<li><a href="${sessionScope.baseUrl}rbac/showUser">Manage Users</a></li>
+					<li><a href="${sessionScope.baseUrl}rbac/showRoles">Manage Roles</a></li>
+					<li><a href="${sessionScope.baseUrl}rbac/showResources">Manage Resources</a></li>
 				</ul>
 			</li>
 				

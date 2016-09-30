@@ -24,4 +24,8 @@
 	
 	<bean class="com.equiniti.qa_report.service.api.impl.ItemDetailsServiceImpl" id="itemDetailsService" parent="baseAPI"/>
 	
+	<bean class="com.equiniti.qa_report.service.api.impl.ManageUsersServiceImpl" id="manageUsersService" parent="baseAPI"/>
+	
+	<bean class="com.equiniti.qa_report.service.api.impl.RolesServiceImpl" id="rolesService" parent="baseAPI"/>
+	
 </beans>

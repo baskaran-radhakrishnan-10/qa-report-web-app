@@ -1,28 +1,36 @@
-package com.equiniti.qa_report.event.resource_details;
+package com.equiniti.qa_report.event.roles;
 
 import java.util.List;
 import java.util.Map;
 
-import com.equiniti.qa_report.entity.ResourceEntity;
+import com.equiniti.qa_report.entity.ProjectEntity;
 import com.equiniti.qa_report.eventapi.eventhandling.generic.BaseEvent;
 
-public class GetResourceDeatilsEvent extends BaseEvent {
+public class GetRolesEvent extends BaseEvent {
 
 	private static final long serialVersionUID = -2571076832951245757L;
 
-	private static final String EVENT_NAME = "getResourceDeatilsEvent";
+	private static final String EVENT_NAME = "getRolesEvent";
 	
 	private boolean isListAll;
 	
-	private Map<String, Object> restrictionMap;
+	private Map<String,Object> restrictionMap;
 	
-	private List<ResourceEntity> resourceEntityList;
+	private List<ProjectEntity> projectEntityList;
 	
-	private List<String> resourceNameList;
+	private List<String> rolesList;
 	
+	public List<String> getRolesList() {
+		return rolesList;
+	}
+
+	public void setRolesList(List<String> rolesList) {
+		this.rolesList = rolesList;
+	}
+
 	private boolean isUniqueListRequired;
 	
-    public GetResourceDeatilsEvent() {
+    public GetRolesEvent() {
         super(EVENT_NAME);
     }
 
@@ -42,14 +50,6 @@ public class GetResourceDeatilsEvent extends BaseEvent {
 		this.restrictionMap = restrictionMap;
 	}
 
-	public List<ResourceEntity> getResourceEntityList() {
-		return resourceEntityList;
-	}
-
-	public void setResourceEntityList(List<ResourceEntity> resourceEntityList) {
-		this.resourceEntityList = resourceEntityList;
-	}
-
 	public boolean isUniqueListRequired() {
 		return isUniqueListRequired;
 	}
@@ -58,12 +58,13 @@ public class GetResourceDeatilsEvent extends BaseEvent {
 		this.isUniqueListRequired = isUniqueListRequired;
 	}
 
-	public List<String> getResourceNameList() {
-		return resourceNameList;
+	public List<ProjectEntity> getProjectEntityList() {
+		return projectEntityList;
 	}
 
-	public void setResourceNameList(List<String> resourceNameList) {
-		this.resourceNameList = resourceNameList;
+	public void setProjectEntityList(List<ProjectEntity> projectEntityList) {
+		this.projectEntityList = projectEntityList;
 	}
+
     
 }
