@@ -29,6 +29,10 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:org/sp
 				<entry key="getUserDeatilsEvent" value-ref="userDeatilsEventProcessor"/>
 				<entry key="getRolesEvent" value-ref="rolesEventProcessor"/>
 				
+				<entry key="buildBTPMonthlyReportEvent" value-ref="reportSearchEventProcessor"/>
+				<entry key="buildBTPSummaryReportEvent" value-ref="reportSearchEventProcessor"/>
+				<entry key="buildBTPWeeklyReportEvent" value-ref="reportSearchEventProcessor"/>
+				
 			</map>	
 		</property>
 	</bean>
@@ -120,4 +124,17 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:org/sp
 				<property name="rolesDAO" ref="rolesDAO"/>
 			</bean>	
 <!-- Roles End -->
+
+	<bean class="com.equiniti.qa_report.eventapi.eventhandling.processor.BaseEventProcessor" id="reportSearchEventProcessor">
+		<property name="handlersList">
+			<list>
+				<ref bean="reportSearchEventHandler"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="com.equiniti.qa_report.event_handler.ReportSearchEventHandler" id="reportSearchEventHandler">
+		<property name="reportSearchDAO" ref="reportSearchDAO"/>
+	</bean>
+
 </beans>			

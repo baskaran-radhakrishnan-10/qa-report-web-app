@@ -1,5 +1,6 @@
 package com.equiniti.qa_report.service.api.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +21,7 @@ import com.equiniti.qa_report.exception.api.exception.ControllerException;
 import com.equiniti.qa_report.exception.api.faultcode.CommonFaultCode;
 import com.equiniti.qa_report.form.model.TestPlanModelAttribute;
 import com.equiniti.qa_report.objectmapper.ObjectTranslatorAPI;
+import com.equiniti.qa_report.service.api.ReportSearchService;
 import com.equiniti.qa_report.service.api.TestPlanService;
 import com.equiniti.qa_report.util.ApplicationConstants;
 
@@ -32,6 +34,9 @@ public class TestPlanServiceImpl extends BaseAPIImpl implements TestPlanService{
 	private HttpSession session;
 
 	private ObjectTranslatorAPI objectTranslatorAPI;
+	
+	@Autowired
+	private ReportSearchService reportSearchService;
 
 	public void setObjectTranslatorAPI(ObjectTranslatorAPI objectTranslatorAPI) {
 		this.objectTranslatorAPI = objectTranslatorAPI;
@@ -59,6 +64,20 @@ public class TestPlanServiceImpl extends BaseAPIImpl implements TestPlanService{
 		GetTestPlanEvent event = getEvent(GetTestPlanEvent.class);
 		try {
 			event.setListAll(true);
+			processEvent(event);
+		} catch (APIException e) {
+			throw new ControllerException(e.getFaultCode(), e);
+		} catch (Exception e) {
+			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+		return event.getBtpEntityList();
+	}
+	
+	@Override
+	public List<BtpEntity> getTestPlanEntries(Map<String,Object> restrictionMap) throws APIException {
+		GetTestPlanEvent event = getEvent(GetTestPlanEvent.class);
+		try {
+			event.setRestrictionMap(restrictionMap);
 			processEvent(event);
 		} catch (APIException e) {
 			throw new ControllerException(e.getFaultCode(), e);
@@ -101,5 +120,22 @@ public class TestPlanServiceImpl extends BaseAPIImpl implements TestPlanService{
 			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}
 		return event.isUpdated();
-	} 
+	}
+	
+	public List<BtpEntity> filterBTP(Map<String,Object> paramMap) throws APIException {
+		LOG.debug("START filterBTP(Map<String,Object> paramMap) METHOD");
+		List<BtpEntity> entityList=getTestPlanEntries(paramMap);
+		if(null != entityList && !entityList.isEmpty()){
+			StringBuffer buffer=new StringBuffer();
+			int lastIndex = (entityList.size() - 1) ;
+			for(BtpEntity entity : entityList){
+				buffer.append(entity.getgKey()).append(entityList.indexOf(entity) == lastIndex ? "" : ",");
+			}
+			paramMap.put("BTP_NO_LIST", buffer.toString());
+			reportSearchService.buildBTPSummaryReport(paramMap);
+		}
+		LOG.debug("END filterBTP(Map<String,Object> paramMap) METHOD");
+		return entityList;
+	}
+	
 }

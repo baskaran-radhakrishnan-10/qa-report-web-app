@@ -1,5 +1,7 @@
 var defaultSearchEntryCount=10;
 
+var btpServerData=null;
+
 var buildTestPlanData={};
 
 var phaseArray=['FAT','SAT','LIVE','RLS','DEMO','INTERNAL','EXTERNAL'];
@@ -20,9 +22,15 @@ var resourceArraySelectHtml="";
 
 var itemDescArraySelectHtml="";
 
+var statusArraySelectHtml="";
+
 var itemDetailsObject={};
 
 var resourceDeatilsObject={};
+
+var btpDataTableRef = null;
+
+var isFilterConstructed=false;
 
 $(document).ready(function() {
 	
@@ -52,14 +60,50 @@ $(document).ready(function() {
 					}
 				}
 			}
+			console.log(" isResourceNameExsist :"+isResourceNameExsist);
 			if(isResourceNameExsist){
 				$(this).addClass('error');
 				var notifyObj={msg: '<b> Resource : '+currentValue+' </b> is already selected ',type: "error",position: "center"};
 				notif(notifyObj);
 			}else{
-				$(this).addClass('error');
+				$(this).removeClass('error');
 			}
 		}
+	});
+	
+	$('#apply_filter').on('click',function(){
+		var isEmpty = true;
+		$('#applyFilter :input').each(function(){
+			var value = $(this).val();
+			if(null != value && value.length > 0){
+				isEmpty=false;
+			}
+		});
+		if(isEmpty){
+			var notifyObj={msg: '<b> Please choose filter you want to apply !!! </b>',type: "warning",position: "center"};
+			notif(notifyObj);
+			return false;
+		}
+		var filterObject = {};
+		$('#applyFilter :input').each(function(){
+			var name=$(this).prop('name');
+			var value=$(this).val();
+			if(name.length > 0 && null != value && value.length > 0){
+				filterObject[name]=$(this).val();
+			}
+		});
+		console.log(filterObject);
+		filterBTPData(filterObject);
+	});
+	
+	$('#clear_filter').on('click',function(){
+		var filterObject = {};
+		$('#applyFilter :input').each(function(){
+			if("button" != $(this).prop('type')){
+				$(this).val(null);
+			}
+		})
+		filterBTPData(filterObject);
 	});
 	
 	$('#buildTestPlanForm :input').on('blur', function() {
@@ -77,6 +121,8 @@ $(document).ready(function() {
 				$(this).addClass('error');
 			}
 		}
+		
+		console.log("$(this).hasClass('error') :" +$(this).hasClass('error'));
 		
 		if(!$(this).hasClass('error')){
 			if("startDateId" == id){
@@ -151,6 +197,8 @@ $(document).ready(function() {
 	
 	fetchItemDescriptionList();
 	
+	fillStatusArrayHtml(statusArray);
+	
 });
 
 function fetchProjectNames(){
@@ -199,15 +247,27 @@ function fillSelectDropDown(dropDownId,arrayData,selectedOption){
 	$.each(arrayData, function(key, value) {   
 	     $('#'+dropDownId).append($("<option></option>").attr("value",value).text(value)); 
 	});
+	console.log($('#'+dropDownId));
 	$('#'+dropDownId).val(selectedOption);
 }
 
 function showLoader(){
 	$('#btpMainDiv').hide();
+	$('#applyFilter').hide();
 	$('#loader_div').show();
 }
 
 function hideLoader(){
 	$('#btpMainDiv').show();
+	$('#applyFilter').show();
 	$('#loader_div').hide();
+}
+
+function fillStatusArrayHtml(statusNameList){
+	statusArraySelectHtml += '<select id="statusListId" name="statusList" class="input-sm form-control">';
+	for(var index in statusNameList){
+		var statusName=statusNameList[index];
+		statusArraySelectHtml += '<option value="'+statusName+'">'+statusName+'</option>';
+	}
+	statusArraySelectHtml += '</select>';
 }

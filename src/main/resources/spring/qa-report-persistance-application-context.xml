@@ -69,4 +69,8 @@
 		<property name="abstractHibernateDAOAPI" ref="abstractHibernateDAOAPI" />
 	</bean>
 	
+	<bean id="reportSearchDAO" class="com.equiniti.qa_report.dao.api.impl.ReportSearchDAOImpl">
+		<property name="abstractHibernateDAOAPI" ref="abstractHibernateDAOAPI" />
+	</bean>
+	
 </beans>

@@ -64,14 +64,26 @@ function fetchItemDetailsByBtpNoSuccess(serverData){
 
 function itemDeatilsEdit(rowId){
 	var rowEle=$('#itemDeatilsParentDivId').find('table').find('.'+rowId);
+	//check if resource details for particular item is selected
 	if(!$(rowEle).hasClass('selected')){
+		
 		$(rowEle).find('input').prop('disabled',false);
+		$(rowEle).find('#effortActual').find('input').prop('disabled',true);
+		
 		var innerChildTagNmae=$(rowEle).find('#itemDesc')[0]['firstChild']['tagName'];
 		var currentValue=$(rowEle).find('#itemDesc')[0]['firstChild']['value'];
 		if('INPUT' == innerChildTagNmae){
 			$(rowEle).find('#itemDesc').html(itemDescArraySelectHtml);
 			$(rowEle).find('#itemDesc').find('select').val(currentValue);
 		}
+		
+		innerChildTagNmae=$(rowEle).find('#status')[0]['firstChild']['tagName'];
+		currentValue=$(rowEle).find('#status')[0]['firstChild']['value'];
+		if('INPUT' == innerChildTagNmae){
+			$(rowEle).find('#status').html(statusArraySelectHtml);
+			$(rowEle).find('#status').find('select').val(currentValue);
+		}
+		
 		$(rowEle).find('#action').find('#itemRowEditId').hide();
 		$(rowEle).find('#action').find('#itemRowDeleteId').hide();
 		$(rowEle).find('#action').find('#itemRowSaveId').show();
@@ -110,8 +122,8 @@ function itemDeatilsSave(rowId){
 	currentItemDetailsObj['actualEffort']=$(rowEle).find('#effortActual').find('input').val();
 	currentItemDetailsObj['estimatedEffort']=$(rowEle).find('#effortCost').find('input').val();
 	currentItemDetailsObj['itemCount']=$(rowEle).find('#itemCount').find('input').val();
-	currentItemDetailsObj['itemDescription']=$(rowEle).find('#itemDesc').find('#itemDescriptionListId').val();
-	currentItemDetailsObj['itemStatus']=$(rowEle).find('#status').find('input').val();
+	currentItemDetailsObj['itemDescription']=$(rowEle).find('#itemDesc :input').val();
+	currentItemDetailsObj['itemStatus']=$(rowEle).find('#status :input').val();
 	currentItemDetailsObj['itemRemarks']=$(rowEle).find('#remarks').find('input').val();
 	
 	$(rowEle).find('#action').find('#itemRowEditId').show();
@@ -119,6 +131,8 @@ function itemDeatilsSave(rowId){
 	$(rowEle).find('#action').find('#itemRowSaveId').hide();
 	$(rowEle).find('#itemDesc').html("");
 	$(rowEle).find('#itemDesc').append('<input type="text" class="input-sm form-control" value="'+currentItemDetailsObj['itemDescription']+'" disabled />');
+	$(rowEle).find('#status').html("");
+	$(rowEle).find('#status').append('<input type="text" class="input-sm form-control" value="'+currentItemDetailsObj['itemStatus']+'" disabled />');
 	$(rowEle).find('input').prop('disabled',true);
 	
 	if(!isUpdate){

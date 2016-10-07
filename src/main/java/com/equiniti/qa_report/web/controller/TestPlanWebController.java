@@ -37,12 +37,12 @@ public class TestPlanWebController {
 	
 	@RequestMapping(value = "/getData", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> getData(@RequestBody Map<String,Object> inputData){
+	public Map<String,Object> getData(@RequestBody Map<String,Object> inputData) throws UIException{
 		Map<String,Object> returnObj=new HashMap<>();
 		try {
 			returnObj.put("BTP_ENTRIES", testPlanController.getTestPlanEntries());
 		} catch (ControllerException e) {
-			e.printStackTrace();
+			throw new UIException(e.getFaultCode(), e);
 		}
 		return returnObj;
 	}
@@ -61,20 +61,26 @@ public class TestPlanWebController {
 	
 	@RequestMapping(value = "/updateData", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> editData(@RequestBody Map<String,Object> inputData){
+	public Map<String,Object> editData(@RequestBody Map<String,Object> inputData) throws UIException{
 		Map<String,Object> returnObj=new HashMap<>();
 		try {
 			returnObj=testPlanController.editTestPlanEntry(inputData);
 		} catch (ControllerException e) {
-			e.printStackTrace();
+			throw new UIException(e.getFaultCode(), e);
 		}
 		return returnObj;
 	}
 	
-	@RequestMapping(value = "/searchData", method = RequestMethod.POST)
+	@RequestMapping(value = "/filterData", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> searchData(@RequestBody Map<String,Object> inputData){
-		return null;
+	public Map<String,Object> filterData(@RequestBody Map<String,Object> inputData) throws UIException{
+		Map<String,Object> returnObj=new HashMap<>();
+		try {
+			returnObj.put("BTP_ENTRIES", testPlanController.getTestPlanEntries(inputData));
+		} catch (ControllerException e) {
+			throw new UIException(e.getFaultCode(), e);
+		}
+		return returnObj;
 	}
 
 }

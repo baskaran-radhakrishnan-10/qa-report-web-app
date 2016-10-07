@@ -74,10 +74,10 @@ public class TestPlanEventHandler implements IEventHandler<IEvent> {
 
     private void getTestPlan(GetTestPlanEvent event) throws EventException {
         try {
-            if (event.isListAll()) {
+            if (event.isListAll() || (null != event.getRestrictionMap())) {
                 event.setBtpEntityList(testPlanDAO.getBtpEntityList(event.getRestrictionMap()));
             } else if (null != event.getRestrictionMap()) {
-                event.setBtpEntity(testPlanDAO.getBtpEntity(event.getRestrictionMap()));
+                event.setBtpEntityList(testPlanDAO.getBtpEntityList(event.getRestrictionMap()));
             } 
         } catch (DaoException e) {
             throw new EventException(e.getFaultCode(), e);

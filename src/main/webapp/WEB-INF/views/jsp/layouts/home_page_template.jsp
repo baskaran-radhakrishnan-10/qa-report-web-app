@@ -29,6 +29,7 @@
 <spring:url value="/resources/miminiumTheme/js/jquery.min.js"	var="jqueryJs" />
 <spring:url value="/resources/miminiumTheme/js/jquery.ui.min.js"	var="jqueryUIJs" />
 <spring:url value="/resources/miminiumTheme/js/bootstrap.min.js"	var="bootstrapJs" />
+<spring:url value="/resources/miminiumTheme/js/underscore.js"	var="underscoreJs" />
 <!-- plugins -->
 <spring:url value="/resources/miminiumTheme/js/plugins/moment.min.js"	var="momentJs" />
 <spring:url	value="/resources/miminiumTheme/js/plugins/jquery.nicescroll.js"	var="niceScrollJs" />
@@ -46,6 +47,8 @@
 <spring:url value="/resources/miminiumTheme/js/main.js" var="mainJs" />
 <spring:url	value="/resources/miminiumTheme/js/plugins/select2.full.min.js"	var="select2js" />
 <spring:url value="/resources/miminiumTheme/js/custom/general_custom.js"	var="generalCustomJS" />
+<spring:url	value="/resources/miminiumTheme/js/common/common.js" var="commonJS" />
+<spring:url	value="/resources/miminiumTheme/js/custom/custom_left_menu.js" var="leftMenuJS" />
 
 <!DOCTYPE html>
 <html lang="en" class="no-js">
@@ -111,6 +114,7 @@ body.loading .ajaxloader {
 <!-- start: Javascript -->
 <script src="${jqueryJs}"></script>
 <script src="${jqueryUIJs}"></script>
+<script src="${underscoreJs}"></script>
 <script src="${momentJs}"></script>
 <!-- plugins -->
 <script src="${dataTableJs}"></script>
@@ -122,7 +126,8 @@ body.loading .ajaxloader {
 <script src="${maskJS}"></script>
 <script src="${select2js}"></script>
 <script src="${generalCustomJS}"></script>
-
+<script src="${commonJS}"></script>
+<script src="${leftMenuJS}"></script>
 </head>
 
 <body id="mimin" class="dashboard">

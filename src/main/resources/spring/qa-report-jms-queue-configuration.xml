@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context 
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://activemq.apache.org/schema/core 
+       http://activemq.apache.org/schema/core/activemq-core.xsd">
+        
+	<bean id="reportQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<property name="physicalName" value="REPORT" />
+	</bean> 
+	
+	<bean id="reportQueueListener" class="com.equiniti.qa_report.queue.listener.ReportQueueListener" />
+
+	<bean id="reportQueueContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="activeMQConnectionFactory" />
+		<property name="destination" ref="reportQueue" />
+		<property name="messageListener" ref="reportQueueListener" />
+		<property name="concurrentConsumers" value="1" />
+	</bean>
+	
+</beans>

@@ -131,3 +131,8 @@ function isValidEmail(email) {
 	var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9])+$/;
 	return regex.test(email);
 }
+
+function getFormatedDateByTime(dateObj,hour,min,sec,millisec){
+	dateObj.setHours(hour,min,sec,millisec);
+	return dateObj;
+}

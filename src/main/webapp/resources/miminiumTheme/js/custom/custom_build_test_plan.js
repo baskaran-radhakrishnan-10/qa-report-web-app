@@ -15,19 +15,27 @@ function fetchTestPlanEntries(){
 	var data={};
 	data['maxEntries']=entryCount;
 	data=JSON.stringify(data);
-	console.log(data);
 	ajaxHandler("POST", data, "application/json", getApplicationRootPath()+"build_test_plan/getData", 'json', null, fetchTestPlanEntriesSuccess,true);
 }
 
 function fetchTestPlanEntriesSuccess(serverData){
-	console.log(serverData);
+	if(null == btpServerData){
+		btpServerData=serverData;
+	}
+	$('#build_test_plan_table_id').find('#tbody_id').empty();
 	$('#build_test_plan_table_id').find('#tbody_id').html(populateTestPlanEntries(serverData['BTP_ENTRIES']));
-	$('#build_test_plan_table_id').DataTable({
+	btpDataTableRef = $('#build_test_plan_table_id').DataTable({
 		"responsive" : false,
 		"processing": true,
 		 "dom": 'Bfrtpl',
 		 "buttons": ['excel','csv']
 	});
+	if(!isFilterConstructed){
+		fillSelectDropDown('filter_projectId',projectArray, "");
+		fillSelectDropDown('filter_statusId',statusArray, "");
+		fillSelectDropDown('filter_planId',planArray, "");
+		isFilterConstructed=true;
+	}
 	if(null != sessionStorageObj){
 		var notifyObj=sessionStorageObj.getItem("NOTIFICATION");
 		if(null != notifyObj){
@@ -35,7 +43,9 @@ function fetchTestPlanEntriesSuccess(serverData){
 			sessionStorageObj.removeItem("NOTIFICATION");
 		}
 	}
-	hideLoader();
+	setTimeout(function(){
+		hideLoader();
+	}, 1000);
 }
 
 function populateTestPlanEntries(entriesList){
@@ -129,8 +139,8 @@ function validateBeforeSave(){
 	$("#buildTestPlanForm :input").each(function(){
 		if($(this).hasClass('imp')){
 			var input = $(this);
-			console.log($(input));
-			console.log($(input).attr('id'));
+			//console.log($(input));
+			//console.log($(input).attr('id'));
 			var id=$(input).attr('id');
 			var value=$(input).val();
 			
@@ -140,12 +150,13 @@ function validateBeforeSave(){
 			}
 		}
 	});
-	
+	console.log(errorMsgArray);
 	if(errorMsgArray.length > 0){
 		var notifyObj={msg: '<b>Please Fix Butil Test Plan Form Validation Errors</b>',type: "error",position: "center",autohide: false};
 		notif(notifyObj);
 		return false;
 	}
+	return true;
 }
 
 function addOrUpdateBtp(){
@@ -328,5 +339,54 @@ function clickedResourceName(thisElement){
 		$(thisElement).find('select').val(selectedResourcesArray[resourceNameIndex-1]);
 	}
 	
+}
+
+function filterBTPData(filterObj){
+	var filteredBtpDataList = [];
+	var filteredBtpDataObject={};
+	var btpDataList = btpServerData['BTP_ENTRIES'];
+	var filterKeys=Object.keys(filterObj);
+	var isStartDate=_.contains(filterKeys, 'startDate');
+	var filterStartDate = isStartDate ? getFormatedDateByTime(new Date(filterObj['startDate']),0,0,0,0) : null ;
+	var isEndDate=_.contains(filterKeys, 'endDate');
+	var filterEndDate   = isEndDate ?  getFormatedDateByTime(new Date(filterObj['endDate']),23,59,59,999) : null;
+	for(var i=0;i<btpDataList.length;i++){
+		var canFilter = true;
+		var btpObject=btpDataList[i];
+		var startDate=new Date(getDateValue(btpObject['startDate'],'yyyy-MM-dd',"-"));
+		var endDate=new Date(getDateValue(btpObject['endDate'],'yyyy-MM-dd',"-"));
+		if(isStartDate && isEndDate){
+			if(!(startDate >= filterStartDate) || !(endDate <= filterEndDate)){
+				canFilter = false ;
+			}
+		}else if(isStartDate){
+			if(!(startDate >= filterStartDate)){
+				canFilter = false ;
+			}
+		}else if(isEndDate){
+			if(!(endDate <= filterEndDate)){
+				canFilter = false ;
+			}
+		}
+		if(canFilter){
+			for(var index in filterKeys){
+				var filterKey = filterKeys[index];
+				var filterValue = filterObj[filterKey];
+				if(filterKey.indexOf('startDate') == -1 && filterKey.indexOf('endDate') == -1){
+					var btpValue = btpObject[filterKey];
+					if(btpValue != filterValue){
+						canFilter = false;
+						break;
+					}
+				}
+			}
+		}
+		if(canFilter){
+			filteredBtpDataList.push(btpObject);
+		}
+	}
+	filteredBtpDataObject['BTP_ENTRIES']=filteredBtpDataList;
+	btpDataTableRef.destroy();
+	fetchTestPlanEntriesSuccess(filteredBtpDataObject);
 }
 

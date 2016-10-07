@@ -1,4 +1,4 @@
-package com.equiniti.qa_report.controller;
+ package com.equiniti.qa_report.controller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -41,6 +41,16 @@ public class TestPlanController {
 		}
 	}
 	
+	public List<BtpEntity> getTestPlanEntries(Map<String,Object> paramMap) throws ControllerException{
+		try {
+			return testPlanService.getTestPlanEntries(paramMap);
+		} catch (APIException e) {
+			throw new ControllerException(e.getFaultCode(), e);
+		}catch(Exception e){
+			 throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+	}
+	
 	public Map<String,Object> editTestPlanEntry(Map<String,Object> paramMap) throws ControllerException{
 		Map<String,Object> returnObjMap=new HashMap<>();
 		try {
@@ -71,5 +81,22 @@ public class TestPlanController {
 		}
 		return returnObjMap;
 	}
+	
+	public Map<String,Object> filterBTP(Map<String,Object> paramMap) throws ControllerException{
+		Map<String,Object> returnObjMap=new HashMap<>();
+		try {
+			Object returnObj=testPlanService.addTestPlanEntry(paramMap);
+			if(null != returnObj){
+				returnObjMap.put(ApplicationConstants.STATUS, (Integer)returnObj != null ? ApplicationConstants.SUCCESS : ApplicationConstants.ERROR);
+				returnObjMap.put(ApplicationConstants.SERVER_DATA, (Integer)returnObj);
+			}
+		} catch (APIException e) {
+			throw new ControllerException(e.getFaultCode(), e);
+		} catch(Exception e){
+			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+		return returnObjMap;
+	}
+	
 
 }

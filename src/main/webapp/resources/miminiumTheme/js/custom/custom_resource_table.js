@@ -81,12 +81,13 @@ function fetchResourceByBtpItemNoSuccess(serverData,inputData){
 function resourceDeatilsEdit(rowId){
 	var rowEle=$('#resourceDeatilsParentDivId').find('table tbody').find('.'+rowId);
 	$(rowEle).find('input').prop('disabled',false);
-	var innerChildTagNmae=$(rowEle).find('#resourceName')[0]['firstChild']['tagName'];
+	$(rowEle).find('#resourceName').find('input').prop('disabled',true);
+	/*var innerChildTagNmae=$(rowEle).find('#resourceName')[0]['firstChild']['tagName'];
 	var currentValue=$(rowEle).find('#resourceName')[0]['firstChild']['value'];
 	if('INPUT' == innerChildTagNmae){
 		$(rowEle).find('#resourceName').html(resourceArraySelectHtml);
 		$(rowEle).find('#resourceName').find('select').val(currentValue);
-	}
+	}*/
 	$(rowEle).find('#action').find('#resourceRowEditId').hide();
 	$(rowEle).find('#action').find('#resourceRowSaveId').show();
 	//$(rowEle).find('#action').find('#resourceRowDeleteId').hide();
@@ -159,7 +160,7 @@ function resourceDeatilsSave(rowId){
 	currentResourceDetObj['actTime']=$(rowEle).find('#actualTime').find('input').val();
 	currentResourceDetObj['blocked']=$(rowEle).find('#blocked').find('input').val();
 	currentResourceDetObj['bugsLogged']=$(rowEle).find('#bugsLogged').find('input').val();
-	currentResourceDetObj['resourceName']=$(rowEle).find('#resourceName').find('#resourceNameListId').val();
+	currentResourceDetObj['resourceName']=$(rowEle).find('#resourceName :input').val();
 	currentResourceDetObj['clarification']=$(rowEle).find('#clarification').find('input').val();
 	currentResourceDetObj['fail']=$(rowEle).find('#fail').find('input').val();
 	

@@ -27,6 +27,8 @@
             /WEB-INF/classes/spring/qa-report-persistance-application-context.xml
             /WEB-INF/classes/spring/qa-report-service-application-context.xml
             /WEB-INF/classes/spring/qa-report-event-application-context.xml
+            /WEB-INF/classes/spring/activemq-configuration.xml
+            /WEB-INF/classes/spring/qa-report-jms-queue-configuration.xml
         </param-value>
 	</context-param>
 	

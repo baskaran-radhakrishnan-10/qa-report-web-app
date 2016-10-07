@@ -5,8 +5,6 @@
  
 <script type="text/javascript" src="https://cdn.datatables.net/r/dt/jq-2.1.4,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.9,af-2.0.0,b-1.0.3,b-colvis-1.0.3,b-html5-1.0.3,b-print-1.0.3,se-1.0.1/datatables.min.js"></script>
 
-<spring:url	value="/resources/miminiumTheme/js/common/common.js" var="commonJS" />
-
 <spring:url	value="/resources/miminiumTheme/js/custom/custom_build_test_plan_module.js" var="customBuilTestPlanModuleJS" />
 
 <spring:url	value="/resources/miminiumTheme/js/custom/custom_build_test_plan.js" var="customBuilTestPlanJS" />
@@ -16,8 +14,6 @@
 <spring:url	value="/resources/miminiumTheme/js/custom/custom_resource_table.js" var="customResourceDetailsJS" />
 
 <spring:url	value="/resources/miminiumTheme/js/plugins/notify/notifIt.js"	var="notifyJs" />
-
-<script src="${commonJS}"></script>
 
 <script src="${notifyJs}"></script>
 
@@ -54,6 +50,40 @@
 
 <div id="loader_div" style="width: 149px;height: 149px; left: 54%;position: fixed; z-index: 1000;top: 42%;
     background: rgba( 255, 255, 255, .8 ) url('../resources/miminiumTheme/img/gears.gif') 50% 50% no-repeat;display:none;"></div>
+
+<div class="col-md-12 top-20" id="applyFilter" style="display:none;">
+	<div class="panel" style="padding: 50px 0px;padding-bottom: 73px;margin: 13px 0px;">
+		<label class="col-sm-2 control-label" style="margin: -42px -23px;padding-top: 7px;padding-left: 40px;text-align: left;">Project</label>
+		<div class="col-md-2 top-20" style="margin-top: -12px;">
+			<select id="filter_projectId" name="projectName" class="input-sm form-control imp"></select>
+		</div>
+		<label class="col-sm-2 control-label" style="margin: -42px -23px;padding-top: 7px;padding-left: 40px;text-align: left;">Plan</label>
+		<div class="col-md-2 top-20" style="margin-top: -12px;">
+			<select id="filter_planId" name="btpPlan" class="input-sm form-control imp"></select>
+		</div>
+		<label class="col-sm-2 control-label" style="margin: -42px -23px;padding-top: 7px;padding-left: 40px;text-align: left;">Build No</label>
+		<div class="col-md-2 top-20" style="margin-top: -12px;">
+			<input id="filter_buildNoId" name="buildNo" type="text" class="input-sm form-control imp" value="">
+		</div>
+		<label class="col-sm-2 control-label" style="margin: -42px -23px;padding-top: 7px;padding-left: 40px;text-align: left;">Status</label>
+		<div class="col-md-2 top-20" style="margin-top: -12px;">
+			<select id="filter_statusId" name="btpStatus" class="input-sm form-control imp"></select>
+		</div>
+		<label class="col-sm-2 control-label" style="margin: -42px -23px;padding-top: 7px;padding-left: 40px;text-align: left;">Start Date</label>
+		<div class="col-md-2 top-20" style="margin-top: -12px;">
+			<input id="filter_startDateId" name="startDate" type="date" class="input-sm form-control imp">
+		</div>
+		<label class="col-sm-2 control-label" style="margin: -42px -23px;padding-top: 7px;padding-left: 40px;text-align: left;">End Date</label>
+		<div class="col-md-2 top-20" style="margin-top: -12px;">
+			<input id="filter_endDateId" name="endDate" type="date" class="input-sm form-control imp">
+		</div>
+		<div class="col-md-3 top-20" style="margin-top: 11px;margin-left: 0px;">
+			<input id="apply_filter" type="button" class="btn btn-success" value="Filter" style="margin-right: 13px;"> 
+  			<input id="clear_filter" type="button" class="btn btn-default" value="Clear" style="">
+		</div>
+	</div>
+</div>    
+
 
 <div class="col-md-12 top-20" id="btpMainDiv" style="display:none;">
 	<div class="panel" style="padding: 15px; padding-bottom: 20px;">
@@ -167,11 +197,11 @@
 											<div class="col-md-12">
 												<label class="col-sm-2 control-label">Start Date:*</label>
 												<div class="col-sm-3">
-													<input id="startDateId" name="startDate" type="date" class="input-sm form-control imp" value="2016-09-21">
+													<input id="startDateId" name="startDate" type="date" class="input-sm form-control imp">
 												</div>
 												<label class="col-sm-2 control-label">End Date:*</label>
 												<div class="col-sm-3">
-													<input id="endDateId" name="endDate" type="date" class="input-sm form-control imp" value="2016-09-21">
+													<input id="endDateId" name="endDate" type="date" class="input-sm form-control imp">
 												</div>
 											</div>
 										</div>
@@ -181,7 +211,7 @@
 											<div class="col-md-12">
 												<label class="col-sm-2 control-label">Revised End Date:</label>
 												<div class="col-sm-3">
-													<input id="revisedEndDateId" name="revisedEndDate" type="date" class="input-sm form-control" value="2016-09-21">
+													<input id="revisedEndDateId" name="revisedEndDate" type="date" class="input-sm form-control">
 												</div>
 											</div>
 										</div>
@@ -364,7 +394,7 @@
 					<div class="col-md-8" style="float: right;margin-right: 1.2em;margin-top: 1em;" >
 						<input data-dismiss="modal" id="cancel_button" type="reset" class="btn btn-default" value="Cancel" style="float: right;"> 
 						<span></span> 
-						<input id="save_button" onclick="addOrUpdateBtp()" class="btn btn-primary" value="Save" style="float: right; margin-right: 1em;">
+						<input id="save_button" onclick="addOrUpdateBtp()" type="reset" class="btn btn-primary" value="Save" style="float: right; margin-right: 1em;">
 					</div>
 					<div class="clearfix"></div>
 				</div>

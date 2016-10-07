@@ -1,11 +1,3 @@
-<spring:url	value="/resources/miminiumTheme/js/common/common.js" var="commonJS" />
-
-<spring:url	value="/resources/miminiumTheme/js/custom/custom_left_menu.js" var="leftMenuJS" />
-
-<script src="${commonJS}"></script>
-
-<script src="${leftMenuJS}"></script>
-
 <!-- start:Left Menu -->
 <div id="left-menu">
 
@@ -38,18 +30,20 @@
 				</ul>
 			</li>
 				
+				 --%>
+				
+			<li id="build_test_plan_li"><a href="${sessionScope.baseUrl}build_test_plan/show"> <span class="fa-pencil-square-o fa"></span> Build Test Plan </a></li>
+			
 			<li id="report_search_li" class="ripple"><a class="tree-toggle nav-header"> <span	class="fa-search fa"></span> Report Search <span class="fa-angle-right fa right-arrow text-right"></span></a>
-				<ul class="nav nav-list tree">
-					<li><a href="${sessionScope.baseUrl}btp_serach">BTP Search</a></li>
-					<li><a href="${sessionScope.baseUrl}dsr_search">DSR Search</a></li>
+				<ul class="nav nav-list tree" style="display:none;">
+					<li><a href="${sessionScope.baseUrl}report_search/btp_serach">BTP Search</a></li>
+					<%-- <li><a href="${sessionScope.baseUrl}dsr_search">DSR Search</a></li>
 					<li><a href="${sessionScope.baseUrl}user_search">User Search</a></li>
 					<li><a href="${sessionScope.baseUrl}leave_search">Leave Details Search</a></li>
 					<li><a href="${sessionScope.baseUrl}permission_search">Permission Details Search</a></li>
-					<li><a href="${sessionScope.baseUrl}leave_plan_search">Leave Plans Search</a></li>
+					<li><a href="${sessionScope.baseUrl}leave_plan_search">Leave Plans Search</a></li> --%>
 				</ul>
-			</li>	 --%>
-				
-			<li id="build_test_plan_li"><a href="${sessionScope.baseUrl}build_test_plan/show"> <span class="fa-pencil-square-o fa"></span> Build Test Plan </a></li>
+			</li>
 			
 			<%-- <li id="daily_status_report_li"><a href="${sessionScope.baseUrl}daily_status_report"> <span class="fa-calendar fa"></span> Daily Status Report </a></li>
 			
