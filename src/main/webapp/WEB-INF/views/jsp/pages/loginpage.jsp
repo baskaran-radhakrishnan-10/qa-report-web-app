@@ -17,6 +17,7 @@
 <!-- end: Css -->
 
 <spring:url value="/resources/miminiumTheme/img/logomi.png" var="LogoMiImg" />
+<spring:url value="/resources/miminiumTheme/img/equiniti-logo.png" var="equinitiLogo" />
 
 <!--  Javascript -->
 <spring:url value="/resources/miminiumTheme/js/jquery.min.js" var="jqueryJs" />
@@ -77,9 +78,10 @@
 			<div class="panel periodic-login">
 				<!-- 				<span class="atomic-number">28</span> -->
 				<div class="panel-body text-center">
-					<h1 class="atomic-symbol" style="font-size: 8em !important;">Logo</h1>
+					<img src="${equinitiLogo}" alt="Equiniti Logo">
+				<!-- 	<h1 class="atomic-symbol" style="font-size: 8em !important;">Logo</h1> -->
 					<p class="atomic-mass"style="margin-top: 1em;">QA REPORT</p>
-					<p class="element-name">Web App</p>
+					<!-- <p class="element-name">Web App</p> -->
 					<div class="form-group form-animate-text" style="margin-top: 40px !important;">
 						<form:input path="userId" id="userIdField" type="text"	class="form-text" required="true" autocomplete="off" />
 						<form:errors path="userId" />
