@@ -1,14 +1,12 @@
 var userDetailsData={};
 var rolesArray=[];
 var rolesSelectHtml="";
-var itemDetailsObject={};
-var rolesNameObj="";
-var roleListObject={};
-var rowEle="";
 
 $(document).ready(function() {	
+	console.log("documet.ready Users Roles Details");
 	$('#addUserDetailsForm').hide();
 	$('#addUserDetailsId').on("click" ,function (event){
+		console.log("Add User button clicked");
 		userDetailsModalData(null);
 	});
 	getUserDetails();
@@ -18,11 +16,15 @@ $(document).ready(function() {
 function getUserDetails(){
 	var data={};
 	data=JSON.stringify(data);
+//	ajaxHandler("POST", data, "application/json", getApplicationRootPath()+"manage_users/getUserDetails");
 	ajaxHandler("POST", data, "application/json", getApplicationRootPath()+"rbac/getUserDetails", 'json', null, fetchUserDetailsSuccess,true);
+	//alert('getUserDetails');
 }
 
 function fetchUserDetailsSuccess(serverData){
-	$('#show-user-details-id').find('#tbody_id').html(populateUserDetails(serverData['SERVER_DATA']));
+	//alert('fetchUserDetailsSuccess');
+	console.log(serverData);
+	$('#show-user-details-id').find('#tbody_id').html(populateUserDetails(serverData['USER_DATA']));
 	$('#show-user-details-id').DataTable({
 		info : false,
 		"responsive" : true
@@ -31,12 +33,13 @@ function fetchUserDetailsSuccess(serverData){
 
 
 function populateUserDetails(entriesList){
+	//alert('populateUserDetails');
 	var sNo = 1;
 	var htmlArray=new Array();
 	for(var i=0;i<entriesList.length;i++){		
 		var userObject = entriesList[i];
 		var rolesObject= userObject['roleId'];
-		var roleDesc=rolesObject['roleDesc'];		
+		var roleDesc=rolesObject['roleDesc']		
 		var html ="";
 		var userDetailsModelAttribute=entriesList[i];
 		var gKey=userDetailsModelAttribute['gKey'];
@@ -53,7 +56,7 @@ function populateUserDetails(entriesList){
 		else{
 			active="No";
 		}
-		var createdOn=getDateValue(userDetailsModelAttribute['createdOn'],'dd/MM/yyyy',"-")	
+		var createdOn=getDateValue(userDetailsModelAttribute['createdOn'],'dd/MM/yyyy',"/")	
 		userDetailsData[gKey]=userDetailsModelAttribute;
 		html += '<tr id="'+gKey+'">' ;
 		html += '<td>'+sNo+'</td>' ;
@@ -63,7 +66,7 @@ function populateUserDetails(entriesList){
 		html += '<td>'+roleDesc+'</td>' ;
 		html +=	'<td>'+active+'</td>' ;
 		html += '<td>'+createdOn+'</td>' ;
-		html += '<td id="userDetailsEditRowId" onclick="userDetailsEdit('+gKey+')"><span><a href="#" class="glyphicon glyphicon-edit"></a></span><span>&nbsp;</span><a id="userDetailsSaveRowId" style="display:none;" href="#"> <span class="glyphicon glyphicon-check"></span></a></td>' ;
+		html += '<td id="userDetailsEditRowId" onclick="userDetailsModalData('+gKey+')"><span><a href="#" class="glyphicon glyphicon-edit"></a></span><span>&nbsp;</span></td>' ;
 		html += '</tr>' ;
 		htmlArray.push(html);
 		sNo++;
@@ -102,12 +105,20 @@ function userDetailsModalData(gKey){
 	
 	currentSelectedObject = null != gKey ? userDetailsData[gKey] : null;
 	
+	console.log(currentSelectedObject);
+	
+	console.log("---currentSelectedObject---"+currentSelectedObject);
+	
+	console.log("Begin--inside userDetailsModalData---");
+	
 	fillSelectDropDown('roleDescId',rolesArray, null != currentSelectedObject ? currentSelectedObject['role_name'] : "");
 	
 	$("#addUserDetailsTrigger").trigger( "click" );
 	$('#addUserDetailsDiv').html($('#addUserDetailsForm'));
 	
 	$('#addUserDetailsDiv').find('#addUserDetailsForm').show();
+	
+	console.log("End--inside userDetailsModalData---");
 }
 
 function addUserRows(){
@@ -115,25 +126,34 @@ function addUserRows(){
 	var totalRows=$(tBody).find('tr').length;
 	var nextRow=(totalRows+1);
 	var html = "";
-	var createdOnDate = $.datepicker.formatDate('dd-mm-yy', new Date());
 	html += '<tr id="row_'+nextRow+'" class="'+nextRow+'">';
 	html += '<td id="sNo">'+nextRow+'</td>';
 	html += '<td id="userNameId"><input type="text" class="input-sm form-control" value=""  /></td>';
+	html += '<td id="emailId"><input type="text" class="input-sm form-control" value=""  /></td>';
 	html += '<td id="userId"><input type="text" class="input-sm form-control" value=""  /></td>';
-	html += '<td id="emailId"><input type="text" class="input-sm form-control" value=""  /></td>';	
 	html += '<td id="roleId">'+rolesSelectHtml+'</td>';
-	html += '<td id="activeId"><select id="activeUserId"> <option value=true>Yes</option> <option value=false>No</option> </select></td>';
-	html += '<td id="createdOnId"><input type="text" class="input-sm form-control" value="'+createdOnDate+'" readonly="readonly"/></td>';
+	html += '<td id="activeId"><input type="checkbox" checked data-toggle="toggle" /></td>';
+	html += '<td id="createdOnId"><input type="text" class="input-sm form-control" value=""  /></td>';
 	html += '<td id="action" style="text-align: -webkit-center;">';
-	html += '<a  id="userDetailsEditRowId" style="display:none;" href="#" onclick="userDetailsEdit('+nextRow+')"> <span class="glyphicon glyphicon-edit"></span></a>';
+	html += '<a  id="userDetailsRowEditId" style="display:none;" href="#" onclick="userDetailsEdit('+nextRow+')"> <span class="glyphicon glyphicon-edit"></span></a>'; 
 	html += '<span>&nbsp;</span>';
-	html += '<a id="userDetailsSaveRowId" href="#" onclick="userDeatilsSave('+nextRow+')"> <span class="glyphicon glyphicon-check"></span></a>';
+	html += '<a id="userDetailsRowSaveId" href="#" onclick="userDeatilsSave('+nextRow+')"> <span class="glyphicon glyphicon-check"></span></a>';
 	html += '</td>';
 	html += '</tr>';
 	$(tBody).append(html);
 }
 
-
+function userDeatilsSave(rowId){
+	var rowEle=$('#show-user-details-id').find('tbody').find('#row_'+rowId);
+	
+	var userObject={};
+	userObject['userFullName']=$(rowEle).find('#userNameId').find('input').val();
+	userObject['emailId']=$(rowEle).find('#emailId').find('input').val();
+	userObject['userId']=$(rowEle).find('#userId').find('input').val();
+	userObject['roleId']=$(rowEle).find('#roleId').find('#rolesListId').val();
+	userObject['active']=$(rowEle).find('#activeId').find('input').val();
+	
+}
 
 function fillSelectDropDown(dropDownId,arrayData,selectedOption){
 	$('#'+dropDownId).html("");
@@ -156,93 +176,10 @@ function fetchRolesNamesSuccess(serverData){
 		var rolesNameObjList=serverData['SERVER_DATA'];
 		rolesSelectHtml += '<select id="rolesListId" class="input-sm form-control">'
 		for(var index in rolesNameObjList){
-			var roleName=rolesNameObjList[index]['roleDesc'];
-			roleListObject[roleName]=rolesNameObjList[index];
-			rolesNameObj=rolesNameObjList[index];
-			rolesArray.push(rolesNameObj['roleDesc']);
-			rolesSelectHtml += '<option value="'+rolesNameObj['roleDesc']+'">'+rolesNameObj['roleDesc']+'</option>';
+			var rolesNameObj=rolesNameObjList[index];
+			rolesArray.push(rolesNameObj['role_name']);
+			rolesSelectHtml += '<option value="'+rolesNameObj['role_name']+'">'+rolesNameObj['role_name']+'</option>';
 		}
 		rolesSelectHtml += '</select>'
-	}
-}
-
-function userDetailsEdit(rowId){
-	var rowEle=$('#show-user-details-id').find('table').find('.'+rowId);
-	$(rowEle).find('input').prop('disabled',false);
-	$(rowEle).find('#action').find('#userDetailsEditRowId').hide();
-	$(rowEle).find('#action').find('#userDetailsSaveRowId').show();
-}
-
-function userDeatilsSave(rowId){
-	rowEle=$('#show-user-details-id').find('tbody').find('#row_'+rowId);
-	var uName=$(rowEle).find('#userNameId').find('input').val();
-	var uId=$(rowEle).find('#userId').find('input').val();
-	var eId=$(rowEle).find('#emailId').find('input').val();
-	var isAdd=false;
-	var userObject={};
-	if (null ==uName || ""== uName){
-		var notifyObj={msg: '<b>Warning : </b> Please Enter Name !!!',type: "warning",position: "center" ,autohide: false};
-		notif(notifyObj);
-	}else if (null ==uId || ""== uId){
-		var notifyObj={msg: '<b>Warning : </b> Please Enter User ID !!!',type: "warning",position: "center" ,autohide: false};
-		notif(notifyObj);
-	}else if (uId.length<=2){
-		var notifyObj={msg: '<b>Warning : </b> User ID should be minimum 3 letters !!!',type: "warning",position: "center" ,autohide: false};
-		notif(notifyObj);
-	}
-	else if (null ==eId || ""== eId){
-		var notifyObj={msg: '<b>Warning : </b> Please Enter Email ID !!!',type: "warning",position: "center" ,autohide: false};
-		notif(notifyObj);
-		
-	}else if (null !=eId && ""!= eId){
-		if(!isEmail(eId)){
-			var notifyObj={msg: '<b>Warning : </b> You have entered an invalid email address !!!',type: "warning",position: "center" ,autohide: false};
-			notif(notifyObj);
-		}
-		else{
-			isAdd=true;
-		}
-	}
-	userObject['userFullName']=$(rowEle).find('#userNameId').find('input').val();
-	userObject['userId']=$(rowEle).find('#userId').find('input').val();
-	userObject['emailId']=$(rowEle).find('#emailId').find('input').val();
-	userObject['roleId']=roleListObject[$(rowEle).find('#roleId').find('#rolesListId').val()];		
-	userObject['active']=$(rowEle).find('#activeUserId').val();	
-	userObject['createdOn']=$.datepicker.formatDate('yy-mm-dd', new Date());
-	userObject['roleId']['createdOn']=getDateValue(['roleId']['createdOn'],'yyyy-MM-dd',"-");
-	userObject['roleId']['modifiedOn']=getDateValue(['roleId']['modifiedOn'],'yyyy-MM-dd',"-");
-	
-	/*	
-	if(null == userObject['userId'] || "" == userObject['userId']){
-		alert("Please enter user ID");
-		isAdd=false;
-	}
-	if(!isAdd){
-		console.log("--- update  user---");
-		ajaxHandler("POST", JSON.stringify(userObject), "application/json", getApplicationRootPath()+"rbac/updateUserDetails", 'json', null, userDeatilsEditSuccess,true);
-	
-	}else*/ 
-	if(isAdd){
-		ajaxHandler("POST", JSON.stringify(userObject), "application/json", getApplicationRootPath()+"rbac/addUserDetails", 'json', null,userDeatilsSaveSuccess,true);
-	}
-}
-function isEmail(email) {
-	
-	if (/^\w+([\.-]?\ w+)*@\w+([\.-]?\ w+)*(\.\w{2,3})+$/.test(email))
-	{
-	return (true)
-	}
-	return (false)
-	}
-
-function userDeatilsSaveSuccess(serverData){
-	if('ERROR' != serverData['STATUS']){	
-		$(rowEle).find('#action').find('#userDetailsEditRowId').show();
-		$(rowEle).find('#action').find('#userDetailsSaveRowId').hide();
-		$(rowEle).find('input').prop('disabled',true);
-		$(rowEle).find('#roleId').find('#rolesListId').prop("disabled", true);
-		$(rowEle).find('#activeUserId').prop("disabled", true);
-		var notifyObj={msg: '<b>Success : </b> User added Successfully !!!',type: "success",position: "center" ,autohide: false};
-		notif(notifyObj);
 	}
 }

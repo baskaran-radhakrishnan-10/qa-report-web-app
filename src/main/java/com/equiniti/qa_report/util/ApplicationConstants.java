@@ -43,7 +43,5 @@ public class ApplicationConstants {
 	public static final String SERVER_DATA="SERVER_DATA";
 	
 	public static final String USER_DATA="USER_DATA";
-	
-	public static final String DEFAULT_LOGIN_PASSWORD="root123";
 
 }

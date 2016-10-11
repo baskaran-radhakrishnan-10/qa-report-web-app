@@ -3,7 +3,7 @@ package com.equiniti.qa_report.event.roles;
 import java.util.List;
 import java.util.Map;
 
-import com.equiniti.qa_report.entity.Roles;
+import com.equiniti.qa_report.entity.ProjectEntity;
 import com.equiniti.qa_report.eventapi.eventhandling.generic.BaseEvent;
 
 public class GetRolesEvent extends BaseEvent {
@@ -16,9 +16,9 @@ public class GetRolesEvent extends BaseEvent {
 	
 	private Map<String,Object> restrictionMap;
 	
-	private List<String> rolesList;
+	private List<ProjectEntity> projectEntityList;
 	
-	private List<Roles> entityList;
+	private List<String> rolesList;
 	
 	public List<String> getRolesList() {
 		return rolesList;
@@ -58,12 +58,13 @@ public class GetRolesEvent extends BaseEvent {
 		this.isUniqueListRequired = isUniqueListRequired;
 	}
 
-	public List<Roles> getEntityList() {
-		return entityList;
+	public List<ProjectEntity> getProjectEntityList() {
+		return projectEntityList;
 	}
 
-	public void setEntityList(List<Roles> entityList) {
-		this.entityList = entityList;
+	public void setProjectEntityList(List<ProjectEntity> projectEntityList) {
+		this.projectEntityList = projectEntityList;
 	}
+
     
 }

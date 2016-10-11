@@ -14,23 +14,6 @@ public class GetUserDeatilsEvent extends BaseEvent  {
 	
 	private Map<String, Object> restrictionMap;
 	
-	private List<String> uniqueUserList;
-
-	private List<User> userDetailsList;	
-
-	private User entity;
-	
-	
-	public List<String> getUniqueUserList() {
-		return uniqueUserList;
-	}
-
-	public void setUniqueUserList(List<String> uniqueUserList) {
-		this.uniqueUserList = uniqueUserList;
-	}
-
-	
-	
 	public Map<String, Object> getRestrictionMap() {
 		return restrictionMap;
 	}
@@ -41,6 +24,9 @@ public class GetUserDeatilsEvent extends BaseEvent  {
 	}
 
 
+	private List<User> userDetailsList;	
+
+	private User entity;
 	
     public User getEntity() {
 		return entity;

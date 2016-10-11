@@ -2,8 +2,8 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<spring:url value="/resources/miminiumTheme/img/avatar.jpg" var="avatarImg" />
-	<spring:url value="/resources/miminiumTheme/img/equiniti-logo.png" var="equinitiLogo" />
+<spring:url value="/resources/miminiumTheme/img/avatar.jpg"
+	var="avatarImg" />
 	
 <link href="${avatarImg}" rel="icon" type="image/x-icon">
 
@@ -15,7 +15,7 @@
 				<span class="top"></span> <span class="middle"></span> <span
 					class="bottom"></span>
 			</div>
-			<a href="${sessionScope.baseUrl}dashboard" class="navbar-brand"> <%-- <img src="${equinitiLogo}" alt="Equiniti Logo"/> --%>
+			<a href="${sessionScope.baseUrl}dashboard" class="navbar-brand"> <b>Logo</b>
 			</a>
 
 			<!-- 			<ul class="nav navbar-nav search-nav">

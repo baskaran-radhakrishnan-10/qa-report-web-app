@@ -26,10 +26,8 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:org/sp
 				<entry key="addItemDetailsEvent" value-ref="itemDetailsEventProcessor"/>
 				<entry key="updateItemDetailsEvent" value-ref="itemDetailsEventProcessor"/>
 				
-				<entry key="getUserDeatilsEvent" value-ref="rbacEventProcessor"/>
-				<entry key="addUserDeatilsEvent" value-ref="rbacEventProcessor"/>
-				<entry key="resetPasswordEvent" value-ref="rbacEventProcessor"/>
-				<entry key="getRolesEvent" value-ref="rbacRolesEventProcessor"/>
+				<entry key="getUserDeatilsEvent" value-ref="userDeatilsEventProcessor"/>
+				<entry key="getRolesEvent" value-ref="rolesEventProcessor"/>
 				
 				<entry key="buildBTPMonthlyReportEvent" value-ref="reportSearchEventProcessor"/>
 				<entry key="buildBTPSummaryReportEvent" value-ref="reportSearchEventProcessor"/>
@@ -101,30 +99,29 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:org/sp
 	</bean>
 
 	
-	<bean class="com.equiniti.qa_report.eventapi.eventhandling.processor.BaseEventProcessor" id="rbacEventProcessor">
+	<bean class="com.equiniti.qa_report.eventapi.eventhandling.processor.BaseEventProcessor" id="userDeatilsEventProcessor">
 		<property name="handlersList">
 			<list>
-				<ref bean="rbacEventHandler"/>
+				<ref bean="userDeatilsEventHandler"/>
 			</list>
 		</property>
 	</bean>
 
-	<bean class="com.equiniti.qa_report.event_handler.RBACEventHandler" id="rbacEventHandler">
-		<property name="cryptoService" ref="cryptoService"/>
-		<property name="rbacDAO" ref="rbacDAO"/>
+	<bean class="com.equiniti.qa_report.event_handler.ManageUserDeatilsEventHandler" id="userDeatilsEventHandler">
+		<property name="manageUsersDAO" ref="manageUsersDAO"/>
 	</bean>
 	
 <!-- Roles Start -->
-	<bean class="com.equiniti.qa_report.eventapi.eventhandling.processor.BaseEventProcessor" id="rbacRolesEventProcessor">
+			<bean class="com.equiniti.qa_report.eventapi.eventhandling.processor.BaseEventProcessor" id="rolesEventProcessor">
 			<property name="handlersList">
 				<list>
-				<ref bean="rbacRolesEventHandler"/>
+					<ref bean="rolesEventHandler"/>
 				</list>
 			</property>
 			</bean>
 		
-	<bean class="com.equiniti.qa_report.event_handler.RBACEventHandler" id="rbacRolesEventHandler">
-		<property name="rbacRolesDAO" ref="rbacRolesDAO"/>
+			<bean class="com.equiniti.qa_report.event_handler.RolesEventHandler" id="rolesEventHandler">
+				<property name="rolesDAO" ref="rolesDAO"/>
 			</bean>	
 <!-- Roles End -->
 

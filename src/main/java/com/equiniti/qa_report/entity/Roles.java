@@ -34,7 +34,7 @@ public class Roles extends GeneralEntity{
 		this.roleDesc=roleDesc;
 	}
 	
-/*	@Transient
+	@Transient
 	public Long getALogId() {
 		return null;
 	}
@@ -42,6 +42,6 @@ public class Roles extends GeneralEntity{
 	@Transient
 	public String getLogDeatil() {
 		return null;
-	}*/
+	}
 
 }
