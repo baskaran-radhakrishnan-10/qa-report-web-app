@@ -76,7 +76,7 @@ public class TestPlanWebController {
 	public Map<String,Object> filterData(@RequestBody Map<String,Object> inputData) throws UIException{
 		Map<String,Object> returnObj=new HashMap<>();
 		try {
-			returnObj.put("BTP_ENTRIES", testPlanController.getTestPlanEntries(inputData));
+			returnObj = testPlanController.getTestPlanEntries(inputData);
 		} catch (ControllerException e) {
 			throw new UIException(e.getFaultCode(), e);
 		}

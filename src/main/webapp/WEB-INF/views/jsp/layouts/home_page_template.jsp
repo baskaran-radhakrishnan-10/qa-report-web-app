@@ -48,6 +48,7 @@
 <spring:url	value="/resources/miminiumTheme/js/plugins/select2.full.min.js"	var="select2js" />
 <spring:url value="/resources/miminiumTheme/js/custom/general_custom.js"	var="generalCustomJS" />
 <spring:url	value="/resources/miminiumTheme/js/common/common.js" var="commonJS" />
+<spring:url	value="/resources/miminiumTheme/js/plugins/notify/notifIt.js"	var="notifyJs" />
 <spring:url	value="/resources/miminiumTheme/js/custom/custom_left_menu.js" var="leftMenuJS" />
 
 <!DOCTYPE html>
@@ -127,6 +128,7 @@ body.loading .ajaxloader {
 <script src="${select2js}"></script>
 <script src="${generalCustomJS}"></script>
 <script src="${commonJS}"></script>
+<script src="${notifyJs}"></script>
 <script src="${leftMenuJS}"></script>
 </head>
 

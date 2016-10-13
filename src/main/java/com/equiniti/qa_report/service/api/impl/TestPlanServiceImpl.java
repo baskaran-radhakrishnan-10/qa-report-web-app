@@ -77,8 +77,12 @@ public class TestPlanServiceImpl extends BaseAPIImpl implements TestPlanService{
 	public List<BtpEntity> getTestPlanEntries(Map<String,Object> restrictionMap) throws APIException {
 		GetTestPlanEvent event = getEvent(GetTestPlanEvent.class);
 		try {
+			
 			event.setRestrictionMap(restrictionMap);
 			processEvent(event);
+			
+			filterBTP(event.getBtpEntityList());
+			
 		} catch (APIException e) {
 			throw new ControllerException(e.getFaultCode(), e);
 		} catch (Exception e) {
@@ -122,10 +126,10 @@ public class TestPlanServiceImpl extends BaseAPIImpl implements TestPlanService{
 		return event.isUpdated();
 	}
 	
-	public List<BtpEntity> filterBTP(Map<String,Object> paramMap) throws APIException {
+	private List<BtpEntity> filterBTP(List<BtpEntity> entityList) throws APIException {
 		LOG.debug("START filterBTP(Map<String,Object> paramMap) METHOD");
-		List<BtpEntity> entityList=getTestPlanEntries(paramMap);
 		if(null != entityList && !entityList.isEmpty()){
+			Map<String,Object> paramMap=new HashMap<>();
 			StringBuffer buffer=new StringBuffer();
 			int lastIndex = (entityList.size() - 1) ;
 			for(BtpEntity entity : entityList){

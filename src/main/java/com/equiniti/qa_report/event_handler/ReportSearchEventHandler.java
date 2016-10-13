@@ -1,6 +1,10 @@
 package com.equiniti.qa_report.event_handler;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.jms.JMSException;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +19,18 @@ import com.equiniti.qa_report.exception.api.exception.DaoException;
 import com.equiniti.qa_report.exception.api.exception.EventException;
 import com.equiniti.qa_report.exception.api.faultcode.CommonFaultCode;
 import com.equiniti.qa_report.queue.connector.ReportQueueConnector;
+import com.equiniti.qa_report.util.ApplicationConstants;
 
 public class ReportSearchEventHandler implements IEventHandler<IEvent> {
 
 	private static final Logger LOG  = Logger.getLogger(ReportSearchEventHandler.class);
 
 	@Autowired
+	private HttpSession session;
+	
+	@Autowired
 	private ReportQueueConnector reportQueueConnector;
-
+	
 	private ReportSearchDAO reportSearchDAO;
 
 	public void setReportSearchDAO(ReportSearchDAO reportSearchDAO) {
@@ -52,7 +60,11 @@ public class ReportSearchEventHandler implements IEventHandler<IEvent> {
 
 	public void buildBTPSummaryByFilter(BuildBTPSummaryReportEvent event) throws EventException{
 		try {
-			reportQueueConnector.produce(reportSearchDAO.getBtpSummaryReportData(event.getParamMap()));
+			Map<String,Object> exportObject=new HashMap<>();
+			exportObject.put("REPORT_DATA", reportSearchDAO.getBtpSummaryReportData(event.getParamMap()));
+			exportObject.put("REPORT_TYPE", "BTP_SUMMARY_REPORT");
+			exportObject.put("USER_ID", session.getAttribute(ApplicationConstants.USER_ID).toString());
+			reportQueueConnector.produce(exportObject);
 		}catch (DaoException e) {
 			throw new EventException(e.getFaultCode(), e);
 		}catch (Exception e) {

@@ -217,40 +217,6 @@ function fetchProjectNamesSuccess(serverData){
 	}
 }
 
-function getDateValue(dateObj,format,delimeter){
-	var formatedDateStr="";
-	if($.type(dateObj) === "string"){
-		return dateObj;
-	}
-	if(null != dateObj){
-		var day=(dateObj['dayOfMonth'] > 9) ? (""+dateObj['dayOfMonth']) : ("0"+dateObj['dayOfMonth']);
-		var month=(dateObj['monthOfYear'] > 9) ? (""+dateObj['monthOfYear']) : ("0"+dateObj['monthOfYear']);
-		if("dd/MM/yyyy" == format){
-			if("/" == delimeter){
-				formatedDateStr=day+"/"+ month+"/"+ dateObj['year'];
-			}else if("-" == delimeter){
-				formatedDateStr=day+"-"+ month+"-"+ dateObj['year'];
-			}
-		}else if("yyyy-MM-dd" == format){
-			if("/" == delimeter){
-				formatedDateStr=dateObj['year']+"/"+month+"/"+day;
-			}else if("-" == delimeter){
-				formatedDateStr=dateObj['year']+"-"+month+"-"+day;
-			}
-		}
-	}
-	return formatedDateStr;
-}
-
-function fillSelectDropDown(dropDownId,arrayData,selectedOption){
-	$('#'+dropDownId).html("");
-	$.each(arrayData, function(key, value) {   
-	     $('#'+dropDownId).append($("<option></option>").attr("value",value).text(value)); 
-	});
-	console.log($('#'+dropDownId));
-	$('#'+dropDownId).val(selectedOption);
-}
-
 function showLoader(){
 	$('#btpMainDiv').hide();
 	$('#applyFilter').hide();

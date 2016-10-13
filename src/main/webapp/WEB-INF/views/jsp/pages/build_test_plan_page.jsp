@@ -13,10 +13,6 @@
 
 <spring:url	value="/resources/miminiumTheme/js/custom/custom_resource_table.js" var="customResourceDetailsJS" />
 
-<spring:url	value="/resources/miminiumTheme/js/plugins/notify/notifIt.js"	var="notifyJs" />
-
-<script src="${notifyJs}"></script>
-
 <script src="${customBuilTestPlanModuleJS}"></script>
 
 <script src="${customBuilTestPlanJS}"></script>
@@ -44,6 +40,9 @@
 				<!-- <a id="exportTestPlanDataId" type="button" class="btn  btn-3d btn-default pull-right" style="margin: 0px 5px;">Export</a> -->
 				<a id="addTestPlanDataId" type="button"  data-target="#build_test_plan" class="btn  btn-3d btn-success pull-right" style="margin: 0px 5px;" data-toggle="tooltip" data-placement="auto left" title="" data-original-title="Add new BTP details">Add</a>
 			</h3>
+			<p style="margin-bottom: 0px;">
+				Home <span class="fa-angle-right fa"></span> Build Test Plan
+			</p>
 		</div>
 	</div>
 </div>

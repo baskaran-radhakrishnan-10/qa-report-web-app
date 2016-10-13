@@ -36,7 +36,7 @@
 			
 			<li id="report_search_li" class="ripple"><a class="tree-toggle nav-header"> <span	class="fa-search fa"></span> Report Search <span class="fa-angle-right fa right-arrow text-right"></span></a>
 				<ul class="nav nav-list tree" style="display:none;">
-					<li><a href="${sessionScope.baseUrl}report_search/btp_serach">BTP Search</a></li>
+					<li><a href="${sessionScope.baseUrl}report_search/btp_report_search">BTP Report Search</a></li>
 					<%-- <li><a href="${sessionScope.baseUrl}dsr_search">DSR Search</a></li>
 					<li><a href="${sessionScope.baseUrl}user_search">User Search</a></li>
 					<li><a href="${sessionScope.baseUrl}leave_search">Leave Details Search</a></li>

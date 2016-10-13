@@ -41,14 +41,21 @@ public class TestPlanController {
 		}
 	}
 	
-	public List<BtpEntity> getTestPlanEntries(Map<String,Object> paramMap) throws ControllerException{
+	public Map<String,Object> getTestPlanEntries(Map<String,Object> paramMap) throws ControllerException{
+		Map<String,Object> returnObjMap=new HashMap<>();
 		try {
-			return testPlanService.getTestPlanEntries(paramMap);
+			Object returnObj=testPlanService.getTestPlanEntries(paramMap);
+			returnObjMap.put(ApplicationConstants.STATUS, ApplicationConstants.ERROR);
+			if(null != returnObj){
+				returnObjMap.put(ApplicationConstants.STATUS, ApplicationConstants.SUCCESS);
+				returnObjMap.put(ApplicationConstants.SERVER_DATA, returnObj);
+			}
 		} catch (APIException e) {
 			throw new ControllerException(e.getFaultCode(), e);
-		}catch(Exception e){
-			 throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		} catch(Exception e){
+			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}
+		return returnObjMap;
 	}
 	
 	public Map<String,Object> editTestPlanEntry(Map<String,Object> paramMap) throws ControllerException{

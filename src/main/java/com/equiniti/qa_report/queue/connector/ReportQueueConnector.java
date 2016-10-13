@@ -1,6 +1,5 @@
 package com.equiniti.qa_report.queue.connector;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.jms.JMSException;
@@ -23,13 +22,21 @@ public class ReportQueueConnector {
 	@Autowired
 	Queue reportQueue;
 
-	public void produce(List<Map<String,Object>> inputObj) {
+	public void produce(Map<String,Object> exportObject) {
 		jmsTemplate.send(reportQueue,new MessageCreator() {
+			
 			public Message createMessage(Session session) throws JMSException {
+				
 				ObjectMessage objectMessage=session.createObjectMessage();
-				objectMessage.setObjectProperty("OBJ", inputObj);
+				
+				objectMessage.setObjectProperty("REPORT_DATA", exportObject.get("REPORT_DATA"));
+				objectMessage.setObjectProperty("REPORT_TYPE", exportObject.get("REPORT_TYPE"));
+				objectMessage.setObjectProperty("USER_ID", exportObject.get("USER_ID"));
+				
 				return objectMessage;
+				
 			}
+			
 		});
 	}
 }

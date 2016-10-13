@@ -1,5 +1,7 @@
 package com.equiniti.qa_report.util;
 
+import java.io.File;
+
 public class ApplicationConstants {
 
 	public static final String IS_LOGGED_IN="IS_LOGGED_IN";
@@ -15,6 +17,8 @@ public class ApplicationConstants {
 	public static final String REDIRECT_HOME_PAGE="redirect:/home";
 
 	public static final String USER_OBJ="USER_OBJ";
+	
+	public static final String USER_ID="USER_ID";
 
 	public static final String RESOURCE_MAP="resourceMap";
 
@@ -43,5 +47,7 @@ public class ApplicationConstants {
 	public static final String SERVER_DATA="SERVER_DATA";
 	
 	public static final String USER_DATA="USER_DATA";
+	
+	public static final String APP_CONFIG_FOLDER_PATH = System.getProperty("jboss.home.dir")+File.separator+"appconfig";
 
 }
