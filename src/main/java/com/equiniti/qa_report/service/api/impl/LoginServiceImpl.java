@@ -103,6 +103,8 @@ public class LoginServiceImpl extends BaseAPIImpl implements LoginService{
 			
 			session.setAttribute(ApplicationConstants.IS_LOGGED_IN, true);
 			
+			session.setAttribute(ApplicationConstants.USER_ID, user.getUserId());
+			
 			LOG.debug("END doLogin Method");
 			
 		}catch (EventException e) {

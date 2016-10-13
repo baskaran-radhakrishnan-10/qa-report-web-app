@@ -2,8 +2,8 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<spring:url value="/resources/miminiumTheme/img/avatar.jpg"
-	var="avatarImg" />
+<spring:url value="/resources/miminiumTheme/img/avatar.jpg" var="avatarImg" />
+	<spring:url value="/resources/miminiumTheme/img/equiniti-logo.png" var="equinitiLogo" />
 	
 <link href="${avatarImg}" rel="icon" type="image/x-icon">
 
@@ -15,7 +15,7 @@
 				<span class="top"></span> <span class="middle"></span> <span
 					class="bottom"></span>
 			</div>
-			<a href="${sessionScope.baseUrl}dashboard" class="navbar-brand"> <b>Logo</b>
+			<a href="${sessionScope.baseUrl}dashboard" class="navbar-brand"> <%-- <img src="${equinitiLogo}" alt="Equiniti Logo"/> --%>
 			</a>
 
 			<!-- 			<ul class="nav navbar-nav search-nav">
@@ -33,19 +33,19 @@
 			</ul> -->
 
 			<ul class="nav navbar-nav navbar-right user-nav">
-				<li class="user-name"><span>Admin</span></li>
+				<li class="user-name"><span><%=session.getAttribute("USER_ID")%></span></li>
 				<li class="dropdown avatar-dropdown"><img src="${avatarImg}"
 					class="img-circle avatar" alt="user name" data-toggle="dropdown"
 					aria-haspopup="true" aria-expanded="true" />
-					<ul class="dropdown-menu user-dropdown">
-						<!-- <li><a href="user_det_page"><span class="fa fa-user"></span>
+			<%-- 		<ul class="dropdown-menu user-dropdown">
+					 <li><a href="user_det_page"><span class="fa fa-user"></span>
 								My Profile</a></li>
 												<li><a href="data_import_page"><span class="fa fa-import"></span> Data Import</a></li>								
 						<li><a href="DO_list_page"><span class="fa fa-file-text"></span>
 								My Work Orders</a></li>
 						<li><a href="user_det_page"><span class="fa fa-user-plus"></span>
 								Add User</a></li>
-						<li role="separator" class="divider"></li> -->
+						<li role="separator" class="divider"></li> 
 						<li class="more">
 							<ul>
 								<li><a href="#" data-toggle="tooltip"
@@ -59,7 +59,11 @@
 										class="fa fa-power-off "></span></a></li>
 							</ul>
 						</li>
-					</ul></li>
+					</ul> --%>
+					<li><a href="${sessionScope.baseUrl}logout" data-toggle="tooltip"
+									data-placement="auto bottom" title="Logout"><span
+										class="fa fa-power-off "></span></a>
+						</li>
 				<!-- 				<li><a href="#" class="opener-right-menu"><span
 						class="fa fa-coffee"></span></a></li> -->
 			</ul>

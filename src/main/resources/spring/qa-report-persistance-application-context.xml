@@ -61,11 +61,10 @@
 		<property name="abstractHibernateDAOAPI" ref="abstractHibernateDAOAPI" />
 	</bean>
 	
-	<bean id="manageUsersDAO" class="com.equiniti.qa_report.dao.api.impl.ManageUsersDAOImpl">
+	<bean id="rbacDAO" class="com.equiniti.qa_report.dao.api.impl.RBACDAOImpl">
 		<property name="abstractHibernateDAOAPI" ref="abstractHibernateDAOAPI" />
 	</bean>
-	
-	<bean id="rolesDAO" class="com.equiniti.qa_report.dao.api.impl.RolesDAOImpl">
+	<bean id="rbacRolesDAO" class="com.equiniti.qa_report.dao.api.impl.RBACRolesDAOImpl">
 		<property name="abstractHibernateDAOAPI" ref="abstractHibernateDAOAPI" />
 	</bean>
 	

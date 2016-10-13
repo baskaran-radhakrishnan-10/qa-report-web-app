@@ -49,5 +49,7 @@ public class ApplicationConstants {
 	public static final String USER_DATA="USER_DATA";
 	
 	public static final String APP_CONFIG_FOLDER_PATH = System.getProperty("jboss.home.dir")+File.separator+"appconfig";
-
+	
+	public static final String DEFAULT_LOGIN_PASSWORD="root123";
+	
 }

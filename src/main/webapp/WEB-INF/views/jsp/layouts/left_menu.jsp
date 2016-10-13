@@ -26,6 +26,7 @@
 				<ul class="nav nav-list tree">
 					<li><a href="${sessionScope.baseUrl}rbac/showUser">Manage Users</a></li>
 					<li><a href="${sessionScope.baseUrl}rbac/showRoles">Manage Roles</a></li>
+					<li><a href="${sessionScope.baseUrl}rbac/managePassword">Manage Password</a></li>
 					<li><a href="${sessionScope.baseUrl}rbac/showResources">Manage Resources</a></li>
 				</ul>
 			</li>

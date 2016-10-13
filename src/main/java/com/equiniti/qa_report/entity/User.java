@@ -2,6 +2,9 @@ package com.equiniti.qa_report.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -18,6 +21,9 @@ public class User extends GeneralEntity{
 	
 	@Column(name = "user_id", unique = true,nullable = false)
 	private  String userId;
+	
+	@Column(name = "password", unique = true,nullable = false)
+	private  String password;
 
 	@Column(name = "email_id", unique = true,nullable = false)
 	private  String emailId;
@@ -29,6 +35,16 @@ public class User extends GeneralEntity{
 	@Column(name = "is_active")
 	private  boolean active;
 
+	@Column(name = "first_login")
+	private  boolean firstLogin;
+
+	public boolean isFirstLogin() {
+		return firstLogin;
+	}
+
+	public void setFirstLogin(boolean firstLogin) {
+		this.firstLogin = firstLogin;
+	}
 
 	public String getUserFullName() {
 		return userFullName;
@@ -45,7 +61,13 @@ public class User extends GeneralEntity{
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
+	public String getPassword() {
+		return password;
+	}
 
+	public void setPassword(String password) {
+		this.password = password;
+	}
 	public String getEmailId() {
 		return emailId;
 	}
