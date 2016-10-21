@@ -2,7 +2,10 @@ package com.equiniti.qa_report.enums;
 
 public enum ExportFileEnum {
 
-	BTP_SUMMARY("BTPSummaryReport.xlsx"),BTP_WEEKLY("BTPWeeklyReport.xlsx"),BTP_MONTHLY("BTPMonthlyReport.xlsx");
+	BTP_SUMMARY("BTPSummaryReport.xlsx"),
+	BTP_WEEKLY("BTPWeeklyReport.xlsx"),
+	BTP_MONTHLY("BTPMonthlyReport.xlsx"),
+	SINGLE_BTP_ROW("BTPSelectedRowReport.xlsx");
 
 	private final String name;       
 

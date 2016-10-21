@@ -1,17 +1,13 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/dt/jq-2.1.4,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.9,af-2.0.0,b-1.0.3,b-colvis-1.0.3,b-html5-1.0.3,b-print-1.0.3,se-1.0.1/datatables.min.css"/>
- 
-<script type="text/javascript" src="https://cdn.datatables.net/r/dt/jq-2.1.4,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.9,af-2.0.0,b-1.0.3,b-colvis-1.0.3,b-html5-1.0.3,b-print-1.0.3,se-1.0.1/datatables.min.js"></script>
-
 <spring:url	value="/resources/miminiumTheme/js/custom/custom_btp_report_search.js" var="customBTPReportSearchJS" />
 
 <script src="${customBTPReportSearchJS}"></script>
 
 <div class="modal fade" id="btp_report_search" tabindex="-1" role="dialog" aria-labelledby="btpReportSearchModal" aria-hidden="true" data-backdrop="static" data-keyboard="false" data-href="">	
 	<div class="modal-dialog modal-lg">
-		<div class="modal-content" style="top: 122px;width: 53%;left: 24%;">
+		<div id="multi_btp_report_modal_content" class="modal-content" style="top: 122px;width: 53%;left: 24%;">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">(x)</button>
 				<h2 class="modal-title" style="font-size: 22px;color: rgba(0, 0, 0, 0.55);">Export BTP Report</h2>
@@ -34,8 +30,23 @@
 				</div>
 			</form>
 		</div>
+		<div id="single_btp_report_modal_content" class="modal-content" style="top: 122px;width: 53%;left: 24%;display:none;">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">(x)</button>
+				<h2 class="modal-title" style="font-size: 19px;color: rgba(31, 33, 33, 0.52);">Export BTP Report</h2>
+			</div>
+			<form role="form" class="form-horizontal" id="btp_report_export_form">
+				<div class="modal-body">
+					<h4 style="color: #2196f3;font-size: 17px;">Do you want to export selected row data ?</h4>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="selected_new_export_button">Yes</button>
+					<button type="button" class="btn btn-danger" id="modal_close_button" data-dismiss="modal">No</button>
+				</div>
+			</form>
+		</div>
 	</div>
-</div>	
+</div>
 
 <input type="button" id="exportBTPReportButtonTrigger" data-toggle="modal" data-target="#btp_report_search" style="display:none" />
 

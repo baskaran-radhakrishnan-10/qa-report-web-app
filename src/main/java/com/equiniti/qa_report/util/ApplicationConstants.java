@@ -52,4 +52,12 @@ public class ApplicationConstants {
 	
 	public static final String DEFAULT_LOGIN_PASSWORD="root123";
 	
+	public static final String BTP_SUMMARY_REPORT="BTP_SUMMARY_REPORT";
+	
+	public static final String SELECTED_BTP_REPORT="SELECTED_BTP_REPORT";
+	
+	public static final String BTP_WEEKLY_REPORT = "BTP_WEEKLY_REPORT";
+	
+	public static final String DSR_CACHE_ITEM="DSR_CACHE_ITEM";
+	
 }

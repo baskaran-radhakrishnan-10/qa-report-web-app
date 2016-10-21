@@ -26,9 +26,7 @@ function fetchTestPlanEntriesSuccess(serverData){
 	$('#build_test_plan_table_id').find('#tbody_id').html(populateTestPlanEntries(serverData['BTP_ENTRIES']));
 	btpDataTableRef = $('#build_test_plan_table_id').DataTable({
 		"responsive" : false,
-		"processing": true,
-		 "dom": 'Bfrtpl',
-		 "buttons": ['excel','csv']
+		"processing": true
 	});
 	if(!isFilterConstructed){
 		fillSelectDropDown('filter_projectId',projectArray, "");

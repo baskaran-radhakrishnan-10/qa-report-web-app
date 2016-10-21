@@ -9,4 +9,6 @@ public interface ReportSearchDAO {
 
 	public List<Map<String, Object>> getBtpSummaryReportData(Map<String, Object> paramMap) throws DaoException;
 
+	public List<Map<String, Object>> getSelectedBtpReportData(Map<String, Object> paramMap) throws DaoException;
+
 }

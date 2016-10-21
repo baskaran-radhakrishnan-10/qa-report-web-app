@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.equiniti.qa_report.event.btp_report.BuildBTPMonthlyReportEvent;
 import com.equiniti.qa_report.event.btp_report.BuildBTPSummaryReportEvent;
-import com.equiniti.qa_report.event.btp_report.BuildBTPWeeklyReportEvent;
+import com.equiniti.qa_report.event.btp_report.SelectedBTPReportEvent;
 import com.equiniti.qa_report.eventapi.eventhandling.generic.BaseAPIImpl;
 import com.equiniti.qa_report.exception.api.exception.APIException;
 import com.equiniti.qa_report.exception.api.exception.ControllerException;
@@ -30,8 +30,8 @@ public class ReportSearchServiceImpl extends BaseAPIImpl implements ReportSearch
 	}
 
 	@Override
-	public void buildBTPWeeklyReport(Map<String,Object> paramMap) throws APIException {
-		BuildBTPWeeklyReportEvent event = getEvent(BuildBTPWeeklyReportEvent.class);
+	public void buildSelectedBTPReport(Map<String,Object> paramMap) throws APIException {
+		SelectedBTPReportEvent event = getEvent(SelectedBTPReportEvent.class);
 		try {
 			event.setParamMap(paramMap);
 			processEvent(event);
@@ -55,5 +55,4 @@ public class ReportSearchServiceImpl extends BaseAPIImpl implements ReportSearch
 		}
 	}
 	
-
 }

@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.equiniti.qa_report.dao.api.ReportSearchDAO;
 import com.equiniti.qa_report.event.btp_report.BuildBTPMonthlyReportEvent;
 import com.equiniti.qa_report.event.btp_report.BuildBTPSummaryReportEvent;
-import com.equiniti.qa_report.event.btp_report.BuildBTPWeeklyReportEvent;
+import com.equiniti.qa_report.event.btp_report.SelectedBTPReportEvent;
 import com.equiniti.qa_report.eventapi.eventhandling.generic.IEvent;
 import com.equiniti.qa_report.eventapi.eventhandling.handler.IEventHandler;
 import com.equiniti.qa_report.exception.api.exception.DaoException;
@@ -44,10 +44,10 @@ public class ReportSearchEventHandler implements IEventHandler<IEvent> {
 			LOG.debug("Event :" + BuildBTPSummaryReportEvent.class.getName());
 			BuildBTPSummaryReportEvent eventObj = (BuildBTPSummaryReportEvent) event;
 			buildBTPSummaryByFilter(eventObj);
-		}else if (event instanceof BuildBTPWeeklyReportEvent) {
-			LOG.debug("Event :" + BuildBTPWeeklyReportEvent.class.getName());
-			BuildBTPWeeklyReportEvent eventObj = (BuildBTPWeeklyReportEvent) event;
-			buildBTPWeeklyReportByFilter(eventObj);
+		}else if (event instanceof SelectedBTPReportEvent) {
+			LOG.debug("Event :" + SelectedBTPReportEvent.class.getName());
+			SelectedBTPReportEvent eventObj = (SelectedBTPReportEvent) event;
+			buildSelectedBTPReport(eventObj);
 		}else if (event instanceof BuildBTPMonthlyReportEvent) {
 			LOG.debug("Event :" + BuildBTPMonthlyReportEvent.class.getName());
 			BuildBTPMonthlyReportEvent eventObj = (BuildBTPMonthlyReportEvent) event;
@@ -76,8 +76,22 @@ public class ReportSearchEventHandler implements IEventHandler<IEvent> {
 		}
 	}
 
-	public void buildBTPWeeklyReportByFilter(BuildBTPWeeklyReportEvent event){
-
+	public void buildSelectedBTPReport(SelectedBTPReportEvent event) throws EventException{
+		try {
+			Map<String,Object> exportObject=new HashMap<>();
+			exportObject.put("REPORT_DATA", reportSearchDAO.getSelectedBtpReportData(event.getParamMap()));
+			exportObject.put("REPORT_TYPE", "SELECTED_BTP_REPORT");
+			exportObject.put("USER_ID", session.getAttribute(ApplicationConstants.USER_ID).toString());
+			reportQueueConnector.produce(exportObject);
+		}catch (DaoException e) {
+			throw new EventException(e.getFaultCode(), e);
+		}catch (Exception e) {
+			if(e.getCause() instanceof JMSException){
+				LOG.debug(e.getMessage());
+			}else{
+				throw new EventException(CommonFaultCode.UNKNOWN_ERROR, e);
+			}
+		}
 	}
 
 	public void buildBTPMonthlyReportByFilter(BuildBTPMonthlyReportEvent event){

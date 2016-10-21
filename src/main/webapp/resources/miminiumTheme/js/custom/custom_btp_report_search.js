@@ -44,14 +44,36 @@ $(document).ready(function() {
 			}
 		});
 		$('#btpMainDiv').hide();
+		$('#exportBTPReportButton').hide();
 	});
 	
 	$('#exportBTPReportButton').on('click',function(){
 		$("#exportBTPReportButtonTrigger").trigger( "click" );
+		$('#multi_btp_report_modal_content').show();
+        $('#single_btp_report_modal_content').hide();
 	});
 	
 	$('#export_file_button').on("click",function(){
 		btpReportSearchRef.downloadReport($('#selectExportType option:selected').attr('id'));
+	});
+	
+	$('#btp_report_search_table_id tbody').on('dblclick', 'tr', function () {
+		var btpNo=$(this).attr('id');
+        if ($(this).hasClass('selected')){
+            $(this).removeClass('selected');
+        }
+        else {
+        	btpReportSearchRef.btpReportTableRef.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+            btpReportSearchRef.exportSelectedBTP(btpNo);
+            $("#exportBTPReportButtonTrigger").trigger( "click" );
+            $('#multi_btp_report_modal_content').hide();
+            $('#single_btp_report_modal_content').show();
+        }
+    });
+	
+	$('#selected_new_export_button').on('click',function(){
+		btpReportSearchRef.downloadReport("SINGLE_BTP_ROW");
 	});
 
 });
@@ -86,8 +108,6 @@ BTPReportSearch.prototype.fetchProjectNamesSuccess = function(serverData){
 
 BTPReportSearch.prototype.filterBTPReport=function(filterObject){
 	btpReportSearchRef.showLoader();
-	console.log('prototype filter method');
-	console.log(filterObject);
 	filterObject=JSON.stringify(filterObject);
 	ajaxHandler("POST", filterObject, "application/json", getApplicationRootPath()+"build_test_plan/filterData", 'json', null, BTPReportSearch.prototype.filterBTPReportSuccess,true);
 }
@@ -95,7 +115,6 @@ BTPReportSearch.prototype.filterBTPReport=function(filterObject){
 BTPReportSearch.prototype.filterBTPReportSuccess=function(serverData){
 	if('ERROR' != serverData['STATUS']){
 		var filterReportList=serverData['SERVER_DATA'];
-		console.log(filterReportList);
 		btpReportSearchRef.constructBTPReportTable(filterReportList);
 	}
 	btpReportSearchRef.hideLoader();
@@ -146,7 +165,8 @@ BTPReportSearch.prototype.constructBTPReportTable=function(btpReportList){
 	
 	btpReportSearchRef.btpReportTableRef = $('#btp_report_search_table_id').DataTable({
 		"responsive" : false,
-		"processing": true
+		"processing": true,
+		"autoWidth": true
 	});
 	
 	if(btpReportList.length > 0){
@@ -168,6 +188,16 @@ BTPReportSearch.prototype.hideLoader=function(){
 }
 
 BTPReportSearch.prototype.downloadReport=function(fileId){
-	console.log("Selected Option :"+fileId);
 	window.location.href=getApplicationRootPath()+"report_search/export_document/"+fileId;
+}
+
+BTPReportSearch.prototype.exportSelectedBTP=function(btpNo){
+	var data={};
+	data['btpNo']=btpNo;
+	data=JSON.stringify(data);
+	ajaxHandler("POST", data, "application/json", getApplicationRootPath()+"report_search/exportBTPRow", 'json', null, BTPReportSearch.prototype.exportSelectedBTPSuccess,true);
+}
+
+BTPReportSearch.prototype.exportSelectedBTPSuccess=function(serverData){
+	if('ERROR' != serverData['STATUS']){}
 }

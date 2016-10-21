@@ -1,6 +1,56 @@
-function SessionStorage(){}
-
 var sessionStorageObj=null;
+var indexDBObj=null;
+
+$(document).ready(function() {
+	if (storageAvailable('sessionStorage')) {
+		sessionStorageObj=new SessionStorage();
+	}
+	window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+	if (window.indexedDB) {
+		indexDBObj=new IndexDB();
+	}
+});
+
+function IndexDB(){
+	var request=null;
+	var db=null;
+	var isConnectionReady=false;
+};
+
+IndexDB.prototype={
+		constructor  : IndexDB,
+		openDatabase : function(dbName,objectStorage,key){
+			indexDBObj.request = window.indexedDB.open(dbName, 2);
+			indexDBObj.request.onerror = function(event){
+				console.log("Error opening DB", event);
+			};
+			indexDBObj.request.onupgradeneeded = function(event){
+				console.log("Upgrading");
+				indexDBObj.db = event.target.result;
+				indexDBObj.db.createObjectStore(objectStorage, { keyPath : key });
+			};
+			indexDBObj.request.onsuccess = function(event){
+				console.log("Success opening DB");
+				indexDBObj.db = event.target.result;
+				indexDBObj.isConnectionReady=true;
+			};
+		},
+		addData : function(objectStoreName,data){
+			if(indexDBObj.isConnectionReady){
+				var transaction = indexDBObj.db.transaction([objectStoreName],"readwrite");
+				transaction.oncomplete = function(event) {
+					console.log("Success");
+				};
+				transaction.onerror = function(event) {
+					console.log("Error");
+				};  
+				var objectStore = transaction.objectStore(objectStoreName);
+				objectStore.add(data);
+			}
+		}
+};
+
+function SessionStorage(){};
 
 SessionStorage.prototype.setItem=function(key,value){
 	sessionStorage.setItem(key,JSON.stringify(value));
@@ -17,19 +67,10 @@ SessionStorage.prototype.removeItem=function(key,value){
 	sessionStorage.removeItem(key);
 }
 
-var sessionStorageObj=null;
-
-$(document).ready(function() {
-	console.log("common js document ready");
-	if (storageAvailable('sessionStorage')) {
-		sessionStorageObj=new SessionStorage();
-	}
-});
-
 function storageAvailable(type) {
 	try {
 		var storage = window[type],
-			x = '__storage_test__';
+		x = '__storage_test__';
 		storage.setItem(x, x);
 		storage.removeItem(x);
 		return true;
@@ -71,7 +112,7 @@ function ajaxHandler(requestType,data,contentType,url,dataType,errorCallback,suc
 	});
 }
 
-	
+
 function getApplicationRootPath(){
 	var href=window.location.href;
 	var rootPathArray=href.split("/");
@@ -140,7 +181,7 @@ function getFormatedDateByTime(dateObj,hour,min,sec,millisec){
 function fillSelectDropDown(dropDownId,arrayData,selectedOption){
 	$('#'+dropDownId).html("");
 	$.each(arrayData, function(key, value) {   
-	     $('#'+dropDownId).append($("<option></option>").attr("value",value).text(value)); 
+		$('#'+dropDownId).append($("<option></option>").attr("value",value).text(value)); 
 	});
 	$('#'+dropDownId).val(selectedOption);
 }

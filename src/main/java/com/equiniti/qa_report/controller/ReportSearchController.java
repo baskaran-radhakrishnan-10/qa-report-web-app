@@ -2,9 +2,10 @@ package com.equiniti.qa_report.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -14,9 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.equiniti.qa_report.enums.ExportFileEnum;
+import com.equiniti.qa_report.exception.api.exception.APIException;
 import com.equiniti.qa_report.exception.api.exception.ControllerException;
-import com.equiniti.qa_report.exception.api.exception.UIException;
 import com.equiniti.qa_report.exception.api.faultcode.CommonFaultCode;
+import com.equiniti.qa_report.form.model.TestPlanModelAttribute;
+import com.equiniti.qa_report.service.api.ReportSearchService;
 import com.equiniti.qa_report.util.ApplicationConstants;
 
 @Component("reportSearchController")
@@ -27,6 +30,9 @@ public class ReportSearchController {
 
 	@Autowired
 	private HttpServletResponse response;
+	
+	@Autowired
+	private ReportSearchService reportSearchService;
 
 	private static final int BUFFER_SIZE = 4096;
 
@@ -64,5 +70,15 @@ public class ReportSearchController {
 			}
 		}
 	}
-
+	
+	public void exportBTPRowData(Map<String,Object> inputData) throws ControllerException{
+		try {
+			reportSearchService.buildSelectedBTPReport(inputData);
+		} catch (APIException e) {
+			throw new ControllerException(e.getFaultCode(), e);
+		}catch(Exception e){
+			 throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+	}
+	
 }

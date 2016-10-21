@@ -28,4 +28,6 @@
 	
 	<bean class="com.equiniti.qa_report.service.api.impl.ReportSearchServiceImpl" id="reportSearchService" parent="baseAPI"/>
 	
+	<bean class="com.equiniti.qa_report.service.api.impl.DSRServiceImpl" id="dsrService" parent="baseAPI"/>
+	
 </beans>

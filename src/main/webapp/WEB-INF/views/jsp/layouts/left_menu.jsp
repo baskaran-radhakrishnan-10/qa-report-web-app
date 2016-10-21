@@ -9,7 +9,16 @@
 			
 			<li id="dashboard_li"><a href="${sessionScope.baseUrl}dashboard"><span class="fa-tachometer fa"></span>Dashboard</a></li>
 			
-			<%-- <li id="operations_li" class="ripple"><a class="tree-toggle nav-header"> <span	class="fa-cogs fa"></span>Operations<span class="fa-angle-right fa right-arrow text-right"></span></a>
+			<li id="rbac_li" class="ripple"><a class="tree-toggle nav-header"><span class="fa-user-secret fa"></span> Users &amp; Roles <span class="fa-angle-right fa right-arrow text-right"></span></a>
+				<ul class="nav nav-list tree" style="display:none;">
+					<li><a href="${sessionScope.baseUrl}rbac/showUser">Manage Users</a></li>
+					<li><a href="${sessionScope.baseUrl}rbac/showRoles">Manage Roles</a></li>
+					<li><a href="${sessionScope.baseUrl}rbac/managePassword">Manage Password</a></li>
+					<%-- <li><a href="${sessionScope.baseUrl}rbac/showResources">Manage Resources</a></li> --%>
+				</ul>
+			</li>
+			
+			<%--<li id="operations_li" class="ripple"><a class="tree-toggle nav-header"> <span	class="fa-cogs fa"></span>Operations<span class="fa-angle-right fa right-arrow text-right"></span></a>
 				<ul class="nav nav-list tree">
 					<li><a href="${sessionScope.baseUrl}add_user">Add New User</a></li>
 					<li><a href="${sessionScope.baseUrl}add_project">Add New Project</a></li>
@@ -20,20 +29,11 @@
 					<li><a href="${sessionScope.baseUrl}add_leave_plans">Add Leave Plans</a></li>
 					<li><a href="${sessionScope.baseUrl}remainder_settings">Remainder Settings</a></li>
 				</ul>
-			</li>
-			
-			<li id="rbac_li" class="ripple"><a class="tree-toggle nav-header"><span class="fa-user-secret fa"></span> Users &amp; Roles <span class="fa-angle-right fa right-arrow text-right"></span></a>
-				<ul class="nav nav-list tree">
-					<li><a href="${sessionScope.baseUrl}rbac/showUser">Manage Users</a></li>
-					<li><a href="${sessionScope.baseUrl}rbac/showRoles">Manage Roles</a></li>
-					<li><a href="${sessionScope.baseUrl}rbac/managePassword">Manage Password</a></li>
-					<li><a href="${sessionScope.baseUrl}rbac/showResources">Manage Resources</a></li>
-				</ul>
-			</li>
-				
-				 --%>
+			</li>--%>
 				
 			<li id="build_test_plan_li"><a href="${sessionScope.baseUrl}build_test_plan/show"> <span class="fa-pencil-square-o fa"></span> Build Test Plan </a></li>
+			
+			<li id="daily_status_report_li"><a href="${sessionScope.baseUrl}dsr/show"> <span class="fa-calendar fa"></span> Daily Status Report </a></li>
 			
 			<li id="report_search_li" class="ripple"><a class="tree-toggle nav-header"> <span	class="fa-search fa"></span> Report Search <span class="fa-angle-right fa right-arrow text-right"></span></a>
 				<ul class="nav nav-list tree" style="display:none;">

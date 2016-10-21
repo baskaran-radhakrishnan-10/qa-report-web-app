@@ -40,9 +40,19 @@ public class ReportSearchDAOImpl implements ReportSearchDAO{
 		return returnList;
 	}
 	
-	public List<Map<String,Object>> getBtpWeeklyReportData(Map<String,Object> paramMap){
-		List<Map<String,Object>> returnObj=null;
-		return returnObj;
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Map<String,Object>> getSelectedBtpReportData(Map<String,Object> paramMap)throws DaoException{
+		List<Map<String,Object>> returnList=null;
+		String dynamicQuery=null;
+		if(null != paramMap && !paramMap.isEmpty()){
+			Map<String,String> queryMap=new LinkedHashMap<>();
+			queryMap.put("SELECTED_BTP_REPORT_QUERY", "SELECTED_BTP_REPORT_QUERY");
+			dynamicQuery=abstractHibernateDAOAPI.constructQuery(queryMap);
+			dynamicQuery=dynamicQuery.replace("BTP_NO", paramMap.get("btpNo").toString());
+			returnList=(List<Map<String,Object>>) abstractHibernateDAOAPI.processQuery(null, null, null, QueryOperationType.SELECT, QueryType.SQL, dynamicQuery);
+		}
+		return returnList;
 	}
 	
 	public List<Map<String,Object>> getBtpMonthlyReportData(Map<String,Object> paramMap){
