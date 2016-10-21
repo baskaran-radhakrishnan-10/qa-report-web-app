@@ -227,12 +227,8 @@ function userDeatilsSave(rowId){
 	}
 }
 function isEmail(email) {
-	
-	if (/^\w+([\.-]?\ w+)*@\w+([\.-]?\ w+)*(\.\w{2,3})+$/.test(email))
-	{
-	return (true)
-	}
-	return (false)
+	var checkMail = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+	return checkMail.test(email);
 	}
 
 function userDeatilsSaveSuccess(serverData){
