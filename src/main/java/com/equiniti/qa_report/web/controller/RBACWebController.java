@@ -77,6 +77,20 @@ public class RBACWebController {
 		return returnObj;
 	}
 
+	@RequestMapping(value="/updateUserDetails", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> updateUserDetails(@RequestBody Map<String,Object> inputParam){
+		LOG.info("Begin: RBACWebController.updateUserDetails");
+		Map<String,Object> returnObj=new HashMap<>();
+		try {
+			LOG.info("RBACWebController.updateUserDetails.inputParam--> "+ inputParam);
+			returnObj=rbacController.updateUserDetails(inputParam);
+		} catch (ControllerException e) {
+			e.printStackTrace();
+		}
+		LOG.info("End: RBACWebController.updateUserDetails");
+		return returnObj;
+	}
 /*	@RequestMapping(value="/resetPassword", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> resetPassword(@RequestBody Map<String,Object> inputParam){

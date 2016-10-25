@@ -76,4 +76,7 @@
 		<property name="abstractHibernateDAOAPI" ref="abstractHibernateDAOAPI" />
 	</bean>
 	
+			<bean id="ktPlanDAO" class="com.equiniti.qa_report.dao.api.impl.KTPlanDAOImpl">
+		<property name="abstractHibernateDAOAPI" ref="abstractHibernateDAOAPI" />
+	</bean>
 </beans>

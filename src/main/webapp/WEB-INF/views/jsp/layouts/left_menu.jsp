@@ -47,9 +47,9 @@
 			</li>
 			
 			<%-- <li id="daily_status_report_li"><a href="${sessionScope.baseUrl}daily_status_report"> <span class="fa-calendar fa"></span> Daily Status Report </a></li>
-			
-			<li id="kt_plan_li"><a href="${sessionScope.baseUrl}kt_plan"> <span class="fa-bullhorn fa"></span> KT Plan </a></li>
-			 --%>
+			--%>
+			<li id="kt_plan_li"><a href="${sessionScope.baseUrl}kt_plan/ktPlan"> <span class="fa-bullhorn fa"></span> KT Plan </a></li>
+			 
 			<%-- <c:choose>
 
 				<c:when	test="${sessionScope.resourceMap.containsKey('dashboard_li')}">

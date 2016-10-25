@@ -78,6 +78,20 @@ public class RBACController {
 		return returnObjMap;
 	}
 	
+	public Map<String,Object> updateUserDetails(Map<String,Object> inputParam) throws ControllerException{
+		LOG.info("Begin :KTPlanController.updateUserDetails ");
+		Map<String,Object> returnObjMap=new HashMap<>();
+		try {
+			Object returnObj=rbacService.updateUserDetails(inputParam);
+			returnObjMap.put(ApplicationConstants.STATUS, (Boolean)returnObj ? ApplicationConstants.SUCCESS : ApplicationConstants.ERROR);
+		} catch (APIException e) {
+			throw new ControllerException(e.getFaultCode(), e);
+		} catch(Exception e){
+			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+		LOG.info("Begin :KTPlanController.updateUserDetails ");
+		return returnObjMap;
+	}
 /*	public Map<String,Object> resetPassword(Map<String,Object> inputParam) throws ControllerException{
 		LOG.info("Begin :RBACController.resetPassword");
 		Map<String,Object> returnObjMap=new HashMap<>();

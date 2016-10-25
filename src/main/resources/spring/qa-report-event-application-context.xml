@@ -28,6 +28,7 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:org/sp
 				
 				<entry key="getUserDeatilsEvent" value-ref="rbacEventProcessor"/>
 				<entry key="addUserDeatilsEvent" value-ref="rbacEventProcessor"/>
+				<entry key="updateUserDetailsEvent" value-ref="rbacEventProcessor"/>
 				<entry key="resetPasswordEvent" value-ref="rbacEventProcessor"/>
 				<entry key="getRolesEvent" value-ref="rbacRolesEventProcessor"/>
 				
@@ -38,7 +39,10 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:org/sp
 				<entry key="getDSREvent" value-ref="dsrEventProcessor"/>
 				<entry key="addDSREvent" value-ref="dsrEventProcessor"/>
 				<entry key="updateDSREvent" value-ref="dsrEventProcessor"/>
-				
+
+				<entry key="getKTPlanDetailsEvent" value-ref="ktPlanEventProcessor"/>
+				<entry key="addKTPlanDetailsEvent" value-ref="ktPlanEventProcessor"/>
+				<entry key="updateKTPlanDetailsEvent" value-ref="ktPlanEventProcessor"/>				
 			</map>	
 		</property>
 	</bean>
@@ -156,5 +160,16 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:org/sp
 		<property name="dsrDAO" ref="dsrDAO"/>
 	</bean>
 	
+			<bean class="com.equiniti.qa_report.eventapi.eventhandling.processor.BaseEventProcessor" id="ktPlanEventProcessor">
+		<property name="handlersList">
+			<list>
+				<ref bean="ktPlanEventHandler"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="com.equiniti.qa_report.event_handler.KTPlanEventHandler" id="ktPlanEventHandler">
+		<property name="ktPlanDAO" ref="ktPlanDAO"/>
+	</bean>
 
 </beans>			

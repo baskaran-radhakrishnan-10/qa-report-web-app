@@ -30,4 +30,6 @@
 	
 	<bean class="com.equiniti.qa_report.service.api.impl.DSRServiceImpl" id="dsrService" parent="baseAPI"/>
 	
+	<bean class="com.equiniti.qa_report.service.api.impl.KTPlanServiceImpl" id="ktPlanService" parent="baseAPI"/>
+	
 </beans>

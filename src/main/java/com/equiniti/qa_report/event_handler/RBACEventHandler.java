@@ -8,9 +8,11 @@ import org.codehaus.jackson.map.ObjectMapper;
 import com.equiniti.qa_report.dao.api.RBACDAO;
 import com.equiniti.qa_report.dao.api.RBACRolesDAO;
 import com.equiniti.qa_report.entity.User;
+import com.equiniti.qa_report.event.kt_plan.UpdateKTPlanDetailsEvent;
 import com.equiniti.qa_report.event.rbac.AddUserDeatilsEvent;
 import com.equiniti.qa_report.event.rbac.GetUniqueUserListEvent;
 import com.equiniti.qa_report.event.rbac.ResetPasswordEvent;
+import com.equiniti.qa_report.event.rbac.UpdateUserDetailsEvent;
 import com.equiniti.qa_report.event.roles.GetRolesEvent;
 import com.equiniti.qa_report.event.user_details.GetUserDeatilsEvent;
 import com.equiniti.qa_report.eventapi.eventhandling.generic.IEvent;
@@ -56,6 +58,10 @@ public class RBACEventHandler implements IEventHandler<IEvent> {
 			LOG.debug("Event :" + AddUserDeatilsEvent.class.getName());
 			AddUserDeatilsEvent eventObj = (AddUserDeatilsEvent) event;
 			addUserDetails(eventObj);
+		}else if(event instanceof UpdateUserDetailsEvent){
+			LOG.debug("Event :" + UpdateUserDetailsEvent.class.getName());
+			UpdateUserDetailsEvent eventObj = (UpdateUserDetailsEvent) event;
+			updateUserDetails(eventObj);
 		}
 		else if(event instanceof GetRolesEvent){
 			LOG.debug("Event :" + GetRolesEvent.class.getName());
@@ -122,7 +128,19 @@ public class RBACEventHandler implements IEventHandler<IEvent> {
 		}
 		LOG.debug("Begin: RBACEventHandler.resetPassword");
 	}
-	
+	private void updateUserDetails(UpdateUserDetailsEvent event) throws EventException {
+		LOG.debug("Begin: KTPlanEventHandler.updateUserDetails");
+		try {
+			rbacDAO.updateUserDetails(populateEntityFromMapObject(event.getRestrictionMap()));
+		} catch (DaoException e) {
+			LOG.error("DaoException Occured", e);
+			throw new EventException(e.getFaultCode(), e);
+		} catch (Exception e) {
+			LOG.error("Unknown Exception Occured", e);
+			throw new EventException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+		LOG.debug("End: KTPlanEventHandler.updateUserDetails");
+	}
 	
 	private void getRoles(GetRolesEvent event) throws EventException {
 		try {
@@ -190,14 +208,14 @@ public class RBACEventHandler implements IEventHandler<IEvent> {
 		return entity;
 	}
 	
-/*	private User populateEntityFromMapObject(Map<String,Object> mapObject){
+	private User populateEntityFromMapObject(Map<String,Object> mapObject){
 		LOG.debug("Begin: RBACEventHandler.populateEntityFromMapObject");
 		
 		User entity=objMapper.convertValue(mapObject, User.class);
 		
 		LOG.debug("End: RBACEventHandler.populateEntityFromMapObject.encryptedPassword");
 		return entity;
-	}*/
+	}
 	
 /*	private String encryptPassword(String Password) throws EventException{
 		LOG.debug("Begin: RBACServiceImpl.encryptPassword");
