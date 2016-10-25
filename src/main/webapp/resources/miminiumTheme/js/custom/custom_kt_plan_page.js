@@ -24,18 +24,6 @@ $(document).ready(function() {
 	});
 	
 	$('#apply_filter').on('click',function(){
-		var isEmpty = true;
-		$('#applyFilter :input').each(function(){
-			var value = $(this).val();
-			if(null != value && value.length > 0){
-				isEmpty=false;
-			}
-		});
-		if(isEmpty){
-			var notifyObj={msg: '<b> Please choose filter you want to apply !!! </b>',type: "warning",position: "center"};
-			notif(notifyObj);
-			return false;
-		}
 		var filterObject = {};
 		$('#applyFilter :input').each(function(){
 			var name=$(this).prop('name');
@@ -44,7 +32,15 @@ $(document).ready(function() {
 				filterObject[name]=$(this).val();
 			}
 		});
-		filterKTData(filterObject);
+		if(jQuery.isEmptyObject(filterObject)){
+			var notifyObj={msg: '<b>Warning : </b> Please choose filter you want to apply !!!',type: "warning",position: "center" ,autohide: false};
+			notif(notifyObj);
+			notif(notifyObj);
+		}
+		else{
+			filterKTData(filterObject);
+		}
+		
 	});
 	
 	$('#clear_filter').on('click',function(){
