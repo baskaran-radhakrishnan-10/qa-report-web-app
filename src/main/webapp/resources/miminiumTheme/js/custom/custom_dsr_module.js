@@ -2,6 +2,27 @@ var dsrRef = null;
 
 $(document).ready(function() {
 	
+	$('#pagination_ul').on('click',function(event){
+		event.preventDefault();
+		var currentEle=$(event['target']).parent();
+		if('li' != currentEle[0]['localName']){
+			currentEle=$(currentEle).parent();
+		}
+		var id=$(currentEle).attr('id');
+		if(!$(currentEle).hasClass('disabled')){
+			if("selectedPageLink" == id){
+				$(this).find('li').removeClass('active');
+				$(currentEle).addClass('active')
+				var currentPage=parseInt($(currentEle).find('a').attr('id'));
+				dsrRef.getDataFromCache(currentPage);
+			}else if("nextPageLink" == id || "prevPageLink" == id){
+				var startColumn=parseInt($(currentEle).find('a').attr('id'));
+				dsrRef.constructMainPaginator(dsrRef.totalRecordsSize,1000,10,startColumn,parseInt(startColumn+9));
+				dsrRef.getDataFromCache(startColumn);
+			}
+		}
+	});
+	
 	$('#apply_filter').on('click',function(){
 		var isEmpty = true;
 		$('#applyFilter :input').each(function(){
@@ -118,6 +139,10 @@ $(document).ready(function() {
 });
 
 function DSRClass(){
+	this.currentPage=0,
+	this.totalRecordsSize=0,
+	this.noOfPages=0,
+	this.lastAddedDSRRecordId=0,
 	this.resourceArraySelectHtml=null,
 	this.projectArraySelectHtml=null,
 	this.statusArraySelectHtml=null,
@@ -143,34 +168,17 @@ DSRClass.prototype = {
 		constructor : DSRClass,
 
 		onDocumentReady : function(){
-
 			dsrRef.showLoader();
-
 			var data={};
 			data=JSON.stringify(data);
 			ajaxHandler("POST", data, "application/json", getApplicationRootPath()+"dsr/getData", 'json', null, DSRClass.prototype.fetchDSREntriesSuccess,true);
-
-			/*if(indexDBObj.isDataAvailable("dsr")){
-			dsrRef.constructDSRTable(indexDBObj.getAllData("dsr"));
-		}else{
-			var data={};
-			data=JSON.stringify(data);
-			ajaxHandler("POST", data, "application/json", getApplicationRootPath()+"dsr/getData", 'json', null, DSRClass.prototype.fetchDSREntriesSuccess,true);
-		}*/
-
 		},
 		fetchDSREntriesSuccess : function(serverData){
 			if('ERROR' != serverData['STATUS']){
+				dsrRef.totalRecordsSize=parseInt(serverData['SIZE']);
+				dsrRef.noOfPages = Math.ceil(dsrRef.totalRecordsSize / 1000);
 				dsrRef.communicateDSRWorker(serverData['SERVER_DATA']);
-				/*for(var index in serverData['SERVER_DATA']){
-				var dsrEntity = serverData['SERVER_DATA'][index];
-				if(0 == index){
-					if(!indexDBObj.getDataByKey("dsr",dsrEntity['sNo'])){
-						indexDBObj.addData("dsr",dsrEntity);
-					}
-				}
-			}*/
-				//indexDBObj.getAllData("dsr");
+				dsrRef.constructMainPaginator(dsrRef.totalRecordsSize,1000,10,1,10);
 			}
 		},
 		fetchProjectNamesSuccess : function(serverData){
@@ -200,28 +208,6 @@ DSRClass.prototype = {
 			dsrRef.constructFilterForm();
 		},
 		communicateDSRWorker : function(dsrEntityList){
-			/*if(null != dsrRef.dsrWorker){
-				dsrRef.dsrWorker.addEventListener('message', function(e) {
-					//console.log('got message from worker script');
-					//console.lWorkerog(e.data);
-					var data = e.data;
-					var htmlArray = JSON.parse(data);
-					if(htmlArray.length > 0){
-						$('#dsr_table_id').find('tbody').empty();
-						$('#dsr_table_id').find('tbody').html(htmlArray);
-						dsrRef.dsrTableRef = $('#dsr_table_id').DataTable({
-							"responsive" : true,
-							"processing": true
-						});
-						dsrRef.hideLoader();
-					}
-				}, false);
-				console.log('going to send message worker');
-				var workObject={};
-				workObject['indexDBObj']=indexDBObj;
-				workObject['entityList']=dsrEntityList;
-				dsrRef.dsrWorker.postMessage(JSON.stringify(workObject));
-			}*/
 			dsrRef.constructDSRTable(dsrEntityList,false);
 		},
 		buildDSRWorkerScript : function(dsrEntityList){
@@ -383,6 +369,7 @@ DSRClass.prototype = {
 		},
 		addDSRDetailsSuccess : function(serverData,inputData){
 			if('SUCCESS' == serverData['STATUS']){
+				dsrRef.totalRecordsSize=parseInt(serverData['SIZE']);
 				var sNo = parseInt(serverData['SERVER_DATA']);
 				inputData['sNo']=sNo;
 				indexDBObj.addData("dsr",inputData);
@@ -464,14 +451,51 @@ DSRClass.prototype = {
 			$('#dsrMainDiv').hide();
 			$('#loader_div').show();
 			$('#applyFilter').hide();
+			$('#applyPagination').hide();
 		},
 		hideLoader : function(){
 			$('#dsrMainDiv').show();
 			$('#loader_div').hide();
 			$('#applyFilter').show();
+			$('#applyPagination').show();
 		},
 		isNumber : function (input){
 			return !isNaN(parseFloat(input)) && isFinite(input);
+		},
+		constructMainPaginator : function(totalRecords,recordsPerPage,columnsPerPage,startColumn,endColumn){
+			$('#size_info').html("There are "+totalRecords+" DSR records available");
+			var html = "";
+			if(startColumn == 1){
+				html += '<li class="disabled" id="prevPageLink"><a href="#"><i class="fa fa-angle-left"></i></a></li>';
+			}else{
+				html += '<li id="prevPageLink"><a id="'+(parseInt(startColumn-10))+'" href="#"><i class="fa fa-angle-left"></i></a></li>';
+			}
+			for(var index=startColumn;index<=endColumn;index++){
+				var classType = index == startColumn ? "active" : "";
+				classType = index > dsrRef.noOfPages ? "disabled" : classType ; 
+				html += classType.length > 0 ? '<li id="selectedPageLink" class="'+classType+'" ><a id="'+index+'" href="#">'+index+'</a></li>' : '<li id="selectedPageLink"><a id="'+index+'" href="#">'+index+'</a></li>';
+			}
+			if(endColumn > dsrRef.noOfPages){
+				html += '<li class="disabled" id="nextPageLink"><a href="#"><i class="fa fa-angle-right"></i></a></li>';
+			}else{
+				html += '<li id="nextPageLink"><a id="'+(parseInt(endColumn+1))+'" href="#"><i class="fa fa-angle-right"></i></a></li>';
+			}
+			$('#pagination_ul').html(html);
+		},
+		getDataFromCache : function (pageNo){
+			dsrRef.showLoader();
+			var data={};
+			data['PAGE_NO']=pageNo;
+			data=JSON.stringify(data);
+			ajaxHandler("POST", data, "application/json", getApplicationRootPath()+"dsr/getDataFromCache", 'json', null, DSRClass.prototype.getDataFromCacheSuccess,true);
+		},
+		getDataFromCacheSuccess : function(serverData,inputData){
+			if('ERROR' != serverData['STATUS']){
+				var data=serverData['SERVER_DATA'];
+				var dsrEntityList=_.values(data);
+				dsrRef.dsrTableRef.destroy();
+				dsrRef.constructDSRTable(dsrEntityList,false);
+			}
 		}
 }
 

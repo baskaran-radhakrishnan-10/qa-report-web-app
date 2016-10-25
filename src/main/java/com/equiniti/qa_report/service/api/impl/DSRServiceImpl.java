@@ -3,8 +3,12 @@ package com.equiniti.qa_report.service.api.impl;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.equiniti.qa_report.cache.CacheInstance;
 import com.equiniti.qa_report.entity.DSREntity;
 import com.equiniti.qa_report.event.dsr.AddDSREvent;
 import com.equiniti.qa_report.event.dsr.GetDSREvent;
@@ -14,9 +18,13 @@ import com.equiniti.qa_report.exception.api.exception.APIException;
 import com.equiniti.qa_report.exception.api.exception.ControllerException;
 import com.equiniti.qa_report.exception.api.faultcode.CommonFaultCode;
 import com.equiniti.qa_report.service.api.DSRService;
+import com.equiniti.qa_report.util.ApplicationConstants;
 
 @Service("dsrService")
 public class DSRServiceImpl extends BaseAPIImpl implements DSRService{
+	
+	@Autowired
+	private HttpSession session;
 	
 	@Override
 	public int addDSREntry(Map<String, Object> paramMap) throws APIException {
@@ -57,7 +65,7 @@ public class DSRServiceImpl extends BaseAPIImpl implements DSRService{
 		} catch (Exception e) {
 			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}
-		return event.getDSREntityList().subList(0, 999);
+		return event.getDSREntityList();
 	}
 
 	@Override
@@ -73,5 +81,17 @@ public class DSRServiceImpl extends BaseAPIImpl implements DSRService{
 		}
 		return event.getDSREntityList();
 	}
-
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public Map<Integer,DSREntity> getDSRFromCache(int pageNo) throws APIException {
+		try {
+			CacheInstance CACHE_INS=CacheInstance.getInstance();
+			Map<Integer,Map<Integer,DSREntity>> pagedDsrEntity=(Map<Integer, Map<Integer, DSREntity>>) CACHE_INS.getItemFromCache(ApplicationConstants.PAGED_DSR_CACHE_ITEM,(String) session.getAttribute(ApplicationConstants.USER_ID));
+			return pagedDsrEntity.get(pageNo);
+		} catch (Exception e) {
+			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+	}
+	
 }

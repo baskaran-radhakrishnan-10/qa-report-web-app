@@ -7,10 +7,12 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.jcs.access.exception.CacheException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.equiniti.qa_report.cache.CacheInstance;
 import com.equiniti.qa_report.entity.Resources;
 import com.equiniti.qa_report.entity.Roles;
 import com.equiniti.qa_report.entity.RolesResources;
@@ -19,6 +21,7 @@ import com.equiniti.qa_report.event.login.DoLoginEvent;
 import com.equiniti.qa_report.eventapi.eventhandling.generic.BaseAPIImpl;
 import com.equiniti.qa_report.exception.api.exception.APIException;
 import com.equiniti.qa_report.exception.api.exception.EventException;
+import com.equiniti.qa_report.exception.api.faultcode.CommonFaultCode;
 import com.equiniti.qa_report.exception.api.util.CollectionUtil;
 import com.equiniti.qa_report.form.model.LoginModelAttribute;
 import com.equiniti.qa_report.service.api.LoginService;
@@ -35,6 +38,8 @@ public class LoginServiceImpl extends BaseAPIImpl implements LoginService{
 
 	@Autowired
 	private RoleResourceService roleResourceService;
+	
+	private CacheInstance CACHE_INS;
 
 	@Override
 	public LoginModelAttribute doLogin(LoginModelAttribute modelAttribute) throws APIException{
@@ -44,6 +49,8 @@ public class LoginServiceImpl extends BaseAPIImpl implements LoginService{
 		DoLoginEvent event = getEvent(DoLoginEvent.class);
 		
 		try {
+			
+			CACHE_INS = CacheInstance.getInstance();
 			
 			event.setUserId(modelAttribute.getUserId());
 			event.setPassword(modelAttribute.getPassword());
@@ -105,10 +112,14 @@ public class LoginServiceImpl extends BaseAPIImpl implements LoginService{
 			
 			session.setAttribute(ApplicationConstants.USER_ID, user.getUserId());
 			
+			CACHE_INS.removeAllItemFromGroup(user.getUserId());
+			
 			LOG.debug("END doLogin Method");
 			
 		}catch (EventException e) {
 			throw new APIException(e.getFaultCode(), e);
+		} catch (CacheException e) {
+			throw new APIException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}
 		return modelAttribute;
 	}

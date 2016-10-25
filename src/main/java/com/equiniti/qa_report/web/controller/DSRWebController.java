@@ -58,6 +58,20 @@ private static final Logger LOG= Logger.getLogger(DSRWebController.class);
 		return returnObj;
 	}
 	
+	@RequestMapping(value = "/getDataFromCache", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> getDataFromCache(@RequestBody Map<String,Object> inputData) throws UIException{
+		LOG.debug("START getDataFromCache() Method!!!");
+		Map<String,Object> returnObj=new HashMap<>();
+		try {
+			returnObj=dsrController.getDataFromCache(inputData);
+		} catch (ControllerException e) {
+			throw new UIException(e.getFaultCode(), e);
+		}
+		LOG.debug("END addData() Method!!!");
+		return returnObj;
+	}
+	
 	@RequestMapping(value = "/updateData", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> editData(@RequestBody Map<String,Object> inputData) throws UIException{

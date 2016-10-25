@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.apache.jcs.access.exception.CacheException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -67,7 +68,7 @@ public class ApplicationMainWebController {
 	}
 	
 	@RequestMapping(value = "/logout")
-	public String doLogout(){
+	public String doLogout() throws CacheException{
 		loginController.doLogout();
 		return ApplicationConstants.REDIRECT_LOGIN_PAGE;
 	}

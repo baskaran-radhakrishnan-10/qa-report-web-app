@@ -222,10 +222,10 @@
 	</div>
 </form>
 
-<div class="col-md-12 top-20" id="applyPagination" style="display:none;">
-	<ul id="main_pagination_id" class="pagination pagination-lg" style="top: -9px;left: 23%;position: relative;">
-		<li class="disabled"><a href="#"><i class="fa fa-angle-left"></i></a></li>
-		<li class="active"><a href="#">1</a></li>
+<div class="col-md-12 top-20" id="applyPagination" style="display:none;background-color: rgb(232, 232, 232);">
+	<ul id="pagination_ul" class="pagination pagination-lg" style="top: -14px;left: 23%;position: relative;">
+		<li class="disabled" id="prevPageLink"><a href="#"><i class="fa fa-angle-left"></i></a></li>
+		<li class="active" ><a href="#">1</a></li>
 		<li><a href="#">2</a></li>
 		<li><a href="#">3</a></li>
 		<li><a href="#">4</a></li>
@@ -235,6 +235,7 @@
 		<li><a href="#">8</a></li>
 		<li><a href="#">9</a></li>
 		<li><a href="#">10</a></li>
-		<li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+		<li id="nextPageLink"><a href="#"><i class="fa fa-angle-right"></i></a></li>
 	</ul>
+	<p id="size_info" style="text-align: center;color: #989898;margin: -25px 0px;">Totally 10886 Entries Available</p>
 </div>

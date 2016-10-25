@@ -19,7 +19,7 @@ public class CacheInstance {
 					INSTANCE = new CacheInstance();
 				}
 				if(null == cache){
-					cache=JCS.getInstance("qa_report_app");
+					cache=JCS.getInstance("QAReportAppCache");
 				}
 			}
 		}
@@ -36,6 +36,25 @@ public class CacheInstance {
 	
 	public void removeItemFromCache(Object key) throws CacheException{
 		cache.remove(key);
+	}
+	
+	public void removeAllItemFromGroup(String groupName) throws CacheException{
+		for(Object key : cache.getGroupKeys(groupName)){
+			removeItemFromCache(key, groupName);
+		}
+	}
+	
+	public void putItemInCache(Object key,Object value,String groupName) throws CacheException{
+		cache.putInGroup(key, groupName, value);
+	}
+	
+	public Object getItemFromCache(Object key,String groupName){
+		return cache.getFromGroup(key, groupName);
+	}
+	
+	public void removeItemFromCache(Object key,String groupName) throws CacheException{
+		cache.remove(key, groupName);
+		
 	}
 
 }

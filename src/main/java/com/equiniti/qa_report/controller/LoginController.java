@@ -5,11 +5,13 @@ import java.util.Enumeration;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.jcs.access.exception.CacheException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import com.equiniti.qa_report.cache.CacheInstance;
 import com.equiniti.qa_report.exception.api.exception.APIException;
 import com.equiniti.qa_report.form.model.LoginModelAttribute;
 import com.equiniti.qa_report.service.api.LoginService;
@@ -25,8 +27,11 @@ public class LoginController {
 
 	@Autowired
 	private LoginService loginService;
+	
+	private CacheInstance CACHE_INS=null;
 
-	public String doLogout(){
+	public String doLogout() throws CacheException{
+		CACHE_INS=CacheInstance.getInstance();
 		HttpSession session=request.getSession();
 		Enumeration<String> sessionAttributeList=session.getAttributeNames();
 		while(sessionAttributeList.hasMoreElements()){
@@ -34,6 +39,7 @@ public class LoginController {
 			session.removeAttribute(attrName);
 		}
 		session.invalidate();
+		CACHE_INS.removeAllItemFromGroup((String) session.getAttribute(ApplicationConstants.USER_ID));
 		return ApplicationConstants.REDIRECT_LOGIN_PAGE;
 	}
 

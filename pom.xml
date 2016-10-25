@@ -189,8 +189,8 @@
 			<groupId>jcs</groupId>
 			<artifactId>jcs</artifactId>
 			<version>1.3</version>
-			<scope>compile</scope>
-			<optional>true</optional>
+			<!-- <scope>compile</scope>
+			<optional>true</optional> -->
 			<exclusions>
 				<exclusion>
 					<groupId>xerces</groupId>

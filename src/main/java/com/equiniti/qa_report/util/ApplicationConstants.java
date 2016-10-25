@@ -60,4 +60,12 @@ public class ApplicationConstants {
 	
 	public static final String DSR_CACHE_ITEM="DSR_CACHE_ITEM";
 	
+	public static final String DSR_RECORDS_COUNT="DSR_RECORDS_COUNT";
+	
+	public static final String PAGED_DSR_CACHE_ITEM="PAGED_DSR_CACHE_ITEM";
+	
+	public static final String SIZE="SIZE";
+	
+	public static final String PAGE_NO="PAGE_NO";
+	
 }
