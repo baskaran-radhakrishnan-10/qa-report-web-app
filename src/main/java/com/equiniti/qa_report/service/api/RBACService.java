@@ -18,5 +18,7 @@ public interface RBACService {
 	public boolean resetPassword(Map<String, Object> inputParam) throws APIException;
 	
 	public List<Roles> getRolesList() throws APIException;
+	
+	public boolean updateUserDetails(Map<String, Object> inputParam) throws APIException;
 
 }

@@ -17,5 +17,7 @@ public interface RBACDAO {
 	public List<String> getUniqueUserList() throws DaoException;
 	
 	public void resetPassword(User entity) throws DaoException;
+	
+	public void updateUserDetails(User entity) throws DaoException;
 
 }

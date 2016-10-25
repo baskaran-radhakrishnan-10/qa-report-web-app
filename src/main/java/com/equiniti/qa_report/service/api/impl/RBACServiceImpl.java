@@ -11,6 +11,7 @@ import com.equiniti.qa_report.entity.User;
 import com.equiniti.qa_report.event.rbac.AddUserDeatilsEvent;
 import com.equiniti.qa_report.event.rbac.GetUniqueUserListEvent;
 import com.equiniti.qa_report.event.rbac.ResetPasswordEvent;
+import com.equiniti.qa_report.event.rbac.UpdateUserDetailsEvent;
 import com.equiniti.qa_report.event.roles.GetRolesEvent;
 import com.equiniti.qa_report.event.user_details.GetUserDeatilsEvent;
 import com.equiniti.qa_report.eventapi.eventhandling.generic.BaseAPIImpl;
@@ -97,6 +98,22 @@ public class RBACServiceImpl extends BaseAPIImpl implements RBACService {
 		return event.isUpdated();
 	}
 	
+	@Override
+	public boolean updateUserDetails(Map<String, Object> inputParam) throws APIException {
+		LOG.info("Begin :KTPlanServiceImpl.updateUserDetails ");
+		UpdateUserDetailsEvent event=null;
+		try{
+			event=getEvent(UpdateUserDetailsEvent.class);
+			event.setRestrictionMap(inputParam);
+			processEvent(event);
+		}catch(EventException e){
+			throw new APIException(e.getFaultCode(),e);
+		}catch(Exception e){
+			throw new APIException(CommonFaultCode.UNKNOWN_ERROR,e);
+		}
+		LOG.info("End :KTPlanServiceImpl.updateUserDetails ");
+		return event.isUpdated();
+	}
 	@Override
 	public List<Roles> getRolesList() throws APIException {
 		GetRolesEvent event=null;

@@ -85,5 +85,16 @@ public class RBACDAOImpl implements RBACDAO {
 		}
 		LOG.debug("End: RBACDAOImpl.resetPassword");
 	}
-	
+	@Override
+	public void updateUserDetails(User entity) throws DaoException {
+		LOG.debug("Begin: KTPlanDAOImpl.updateUserDetails");
+		try{
+			abstractHibernateDAOAPI.updateEntity(entity);
+		}catch(DaoException e){
+			throw new DaoException(e.getFaultCode(), e);
+		}catch(Exception e){
+			throw new DaoException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+		LOG.debug("End: KTPlanDAOImpl.updateUserDetails");
+	}
 }

@@ -1,18 +1,22 @@
 var userDetailsData={};
 var rolesArray=[];
 var rolesSelectHtml="";
-var itemDetailsObject={};
 var rolesNameObj="";
 var roleListObject={};
 var rowEle="";
+var roleStatus=[true,false];
+var egKey="";
 
+var createdOnDt = $.datepicker.formatDate('yy-mm-dd', new Date());
 $(document).ready(function() {	
+	getUserDetails();
+	getRolesDetails();
+	
 	$('#addUserDetailsForm').hide();
 	$('#addUserDetailsId').on("click" ,function (event){
 		userDetailsModalData(null);
 	});
-	getUserDetails();
-	getRolesDetails();
+
 });
 
 function getUserDetails(){
@@ -27,8 +31,15 @@ function fetchUserDetailsSuccess(serverData){
 		info : false,
 		"responsive" : true
 	});
+	
+	if(null != sessionStorageObj){
+		var notifyObj=sessionStorageObj.getItem("NOTIFICATION");
+		if(null != notifyObj){
+			notif(notifyObj);
+			sessionStorageObj.removeItem("NOTIFICATION");
+		}
+	}
 }
-
 
 function populateUserDetails(entriesList){
 	var sNo = 1;
@@ -39,7 +50,7 @@ function populateUserDetails(entriesList){
 		var roleDesc=rolesObject['roleDesc'];		
 		var html ="";
 		var userDetailsModelAttribute=entriesList[i];
-		var gKey=userDetailsModelAttribute['gKey'];
+		var gKey=userDetailsModelAttribute['gkey'];
 		var name=userDetailsModelAttribute['userFullName'];
 				
 		var userId=userDetailsModelAttribute['userId'];
@@ -47,13 +58,13 @@ function populateUserDetails(entriesList){
 		var emailId=userDetailsModelAttribute['emailId'];
 
 		var active=userDetailsModelAttribute['active'];	
-		if(active){
+	/*	if(active){
 			active="Yes";
 		}
 		else{
 			active="No";
-		}
-		var createdOn=getDateValue(userDetailsModelAttribute['createdOn'],'dd/MM/yyyy',"-")	
+		}*/
+		var createdOn=getDateValue(userDetailsModelAttribute['createdOn'],'yyyy-MM-dd',"-")	
 		userDetailsData[gKey]=userDetailsModelAttribute;
 		html += '<tr id="'+gKey+'">' ;
 		html += '<td>'+sNo+'</td>' ;
@@ -95,55 +106,11 @@ function getDateValue(dateObj,format,delimeter){
 	}
 	return formatedDateStr;
 }
-
-function userDetailsModalData(gKey){
+function userDetailsEdit(gKey){
+	egKey=gKey;
+	userDetailsModalData(gKey);
 	
-	var currentSelectedObject=null;
-	
-	currentSelectedObject = null != gKey ? userDetailsData[gKey] : null;
-	
-	fillSelectDropDown('roleDescId',rolesArray, null != currentSelectedObject ? currentSelectedObject['role_name'] : "");
-	
-	$("#addUserDetailsTrigger").trigger( "click" );
-	$('#addUserDetailsDiv').html($('#addUserDetailsForm'));
-	
-	$('#addUserDetailsDiv').find('#addUserDetailsForm').show();
 }
-
-function addUserRows(){
-	var tBody=$('#show-user-details-id').find('tbody');
-	var totalRows=$(tBody).find('tr').length;
-	var nextRow=(totalRows+1);
-	var html = "";
-	var createdOnDate = $.datepicker.formatDate('dd-mm-yy', new Date());
-	html += '<tr id="row_'+nextRow+'" class="'+nextRow+'">';
-	html += '<td id="sNo">'+nextRow+'</td>';
-	html += '<td id="userNameId"><input type="text" class="input-sm form-control" value=""  /></td>';
-	html += '<td id="userId"><input type="text" class="input-sm form-control" value=""  /></td>';
-	html += '<td id="emailId"><input type="text" class="input-sm form-control" value=""  /></td>';	
-	html += '<td id="roleId">'+rolesSelectHtml+'</td>';
-	html += '<td id="activeId"><select id="activeUserId"> <option value=true>Yes</option> <option value=false>No</option> </select></td>';
-	html += '<td id="createdOnId"><input type="text" class="input-sm form-control" value="'+createdOnDate+'" readonly="readonly"/></td>';
-	html += '<td id="action" style="text-align: -webkit-center;">';
-	html += '<a  id="userDetailsEditRowId" style="display:none;" href="#" onclick="userDetailsEdit('+nextRow+')"> <span class="glyphicon glyphicon-edit"></span></a>';
-	html += '<span>&nbsp;</span>';
-	html += '<a id="userDetailsSaveRowId" href="#" onclick="userDeatilsSave('+nextRow+')"> <span class="glyphicon glyphicon-check"></span></a>';
-	html += '</td>';
-	html += '</tr>';
-	$(tBody).append(html);
-}
-
-
-
-function fillSelectDropDown(dropDownId,arrayData,selectedOption){
-	$('#'+dropDownId).html("");
-	$.each(arrayData, function(key, value) {   
-	     $('#'+dropDownId).append($("<option></option>").attr("value",value).text(value)); 
-	});
-	$('#'+dropDownId).val(selectedOption);
-}
-
-
 
 function getRolesDetails(){
 	var data={};
@@ -166,20 +133,46 @@ function fetchRolesNamesSuccess(serverData){
 	}
 }
 
-function userDetailsEdit(rowId){
-	var rowEle=$('#show-user-details-id').find('table').find('.'+rowId);
-	$(rowEle).find('input').prop('disabled',false);
-	$(rowEle).find('#action').find('#userDetailsEditRowId').hide();
-	$(rowEle).find('#action').find('#userDetailsSaveRowId').show();
+function userDetailsModalData(gKey){
+	
+	var currentSelectedObject=null;
+	currentSelectedObject = null != gKey ? userDetailsData[gKey] : null;
+	
+	fillSelectDropDown('activeId',roleStatus, null != currentSelectedObject ? currentSelectedObject['active'].toString() : "");
+	fillSelectDropDown('roleId',rolesArray, null != currentSelectedObject ? currentSelectedObject['roleId']['roleDesc'] : "");
+	
+	$('#userNameId').val(null != currentSelectedObject ? currentSelectedObject['userFullName'] : "");
+	$('#userId').val(null != currentSelectedObject ? currentSelectedObject['userId'] : "");
+	$('#emailId').val(null != currentSelectedObject ? currentSelectedObject['emailId'] : "");
+	$('#createdOnId').val(null != currentSelectedObject ? getDateValue(currentSelectedObject['createdOn'],'yyyy-MM-dd',"-") : createdOnDt);
+
+	$("#addUserDetailsTrigger").trigger( "click" );
+	$('#addUserDetailsDiv').html($('#addUserDetailsForm'));
+	$('#addUserDetailsDiv').find('#addUserDetailsForm').show();
 }
 
-function userDeatilsSave(rowId){
-	rowEle=$('#show-user-details-id').find('tbody').find('#row_'+rowId);
-	var uName=$(rowEle).find('#userNameId').find('input').val();
-	var uId=$(rowEle).find('#userId').find('input').val();
-	var eId=$(rowEle).find('#emailId').find('input').val();
+function fillSelectDropDown(dropDownId,arrayData,selectedOption){
+	$('#'+dropDownId).html("");
+	$.each(arrayData, function(key, value) {   
+	     $('#'+dropDownId).append($("<option></option>").attr("value",value).text(value)); 
+	});
+	$('#'+dropDownId).val(selectedOption);
+}
+
+
+function addOrUpdateUser(){
 	var isAdd=false;
+	var isValid=false;
 	var userObject={};
+	
+	var rowEle=$('#addUserDetailsDiv').find('form');
+	var uName=rowEle.find('#userNameId').val();
+	var uId=rowEle.find('#userId').val();
+	var eId=rowEle.find('#emailId').val();
+	var roleId=rowEle.find('#roleId').val();
+	var activeId=rowEle.find('#activeId').val();
+	var createdOn=rowEle.find('#createdOnId').val();
+//	console.log(userDetailsData[egKey]['password']);
 	if (null ==uName || ""== uName){
 		var notifyObj={msg: '<b>Warning : </b> Please Enter Name !!!',type: "warning",position: "center" ,autohide: false};
 		notif(notifyObj);
@@ -189,56 +182,76 @@ function userDeatilsSave(rowId){
 	}else if (uId.length<=2){
 		var notifyObj={msg: '<b>Warning : </b> User ID should be minimum 3 letters !!!',type: "warning",position: "center" ,autohide: false};
 		notif(notifyObj);
-	}
-	else if (null ==eId || ""== eId){
+	}else if (null ==eId || ""== eId){
 		var notifyObj={msg: '<b>Warning : </b> Please Enter Email ID !!!',type: "warning",position: "center" ,autohide: false};
 		notif(notifyObj);
-		
-	}else if (null !=eId && ""!= eId){
-		if(!isEmail(eId)){
+	}else if ((null !=eId || ""!= eId) && (!isEmail(eId))){
 			var notifyObj={msg: '<b>Warning : </b> You have entered an invalid email address !!!',type: "warning",position: "center" ,autohide: false};
 			notif(notifyObj);
-		}
-		else{
-			isAdd=true;
-		}
+	}else if (null ==roleListObject[roleId] || ""== roleListObject[roleId]){
+		var notifyObj={msg: '<b>Warning : </b> Please select role !!!',type: "warning",position: "center" ,autohide: false};
+		notif(notifyObj);
+	}else if (null ==activeId || ""== activeId){
+			var notifyObj={msg: '<b>Warning : </b> Please select active option !!!',type: "warning",position: "center" ,autohide: false};
+			notif(notifyObj);
 	}
-	userObject['userFullName']=$(rowEle).find('#userNameId').find('input').val();
-	userObject['userId']=$(rowEle).find('#userId').find('input').val();
-	userObject['emailId']=$(rowEle).find('#emailId').find('input').val();
-	userObject['roleId']=roleListObject[$(rowEle).find('#roleId').find('#rolesListId').val()];		
-	userObject['active']=$(rowEle).find('#activeUserId').val();	
-	userObject['createdOn']=$.datepicker.formatDate('yy-mm-dd', new Date());
-	userObject['roleId']['createdOn']=getDateValue(['roleId']['createdOn'],'yyyy-MM-dd',"-");
-	userObject['roleId']['modifiedOn']=getDateValue(['roleId']['modifiedOn'],'yyyy-MM-dd',"-");
-	
-	/*	
-	if(null == userObject['userId'] || "" == userObject['userId']){
-		alert("Please enter user ID");
-		isAdd=false;
+	else{
+		isValid=true;
 	}
-	if(!isAdd){
-		console.log("--- update  user---");
-		ajaxHandler("POST", JSON.stringify(userObject), "application/json", getApplicationRootPath()+"rbac/updateUserDetails", 'json', null, userDeatilsEditSuccess,true);
+	if(egKey ==null || "" == egKey){
+		isAdd=true;
+		
+	}
+	else{
+		userObject['gkey']=egKey;
+		userObject['password']=userDetailsData[egKey]['password'];
+		userObject['modifiedOn']=getDateValue(createdOnDt);
+	}
 	
-	}else*/ 
-	if(isAdd){
-		ajaxHandler("POST", JSON.stringify(userObject), "application/json", getApplicationRootPath()+"rbac/addUserDetails", 'json', null,userDeatilsSaveSuccess,true);
+	userObject['userFullName']=uName;
+	userObject['userId']=uId;
+	userObject['emailId']=eId;
+	userObject['roleId']=roleListObject[roleId];		
+	userObject['active']=activeId;
+	userObject['createdOn']=getDateValue(createdOn,'yyyy-MM-dd',"-");
+	userObject['roleId']['createdOn']=getDateValue(userObject['roleId']['createdOn'],'yyyy-MM-dd',"-");
+	userObject['roleId']['modifiedOn']=getDateValue(userObject['roleId']['modifiedOn'],'yyyy-MM-dd',"-");
+	
+	if(isAdd && isValid){
+		ajaxHandler("POST", JSON.stringify(userObject), "application/json", getApplicationRootPath()+"rbac/addUserDetails", 'json', null, addUserDetailsSuccess,true);
+	
+	}else if(isValid){
+		ajaxHandler("POST", JSON.stringify(userObject), "application/json", getApplicationRootPath()+"rbac/updateUserDetails", 'json', null,updateUserDetailsSuccess,true);
 	}
 }
+
+
 function isEmail(email) {
 	var checkMail = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
 	return checkMail.test(email);
-	}
+}
 
-function userDeatilsSaveSuccess(serverData){
+function addUserDetailsSuccess(serverData){
 	if('ERROR' != serverData['STATUS']){	
-		$(rowEle).find('#action').find('#userDetailsEditRowId').show();
-		$(rowEle).find('#action').find('#userDetailsSaveRowId').hide();
-		$(rowEle).find('input').prop('disabled',true);
-		$(rowEle).find('#roleId').find('#rolesListId').prop("disabled", true);
-		$(rowEle).find('#activeUserId').prop("disabled", true);
+
 		var notifyObj={msg: '<b>Success : </b> User added Successfully !!!',type: "success",position: "center" ,autohide: false};
 		notif(notifyObj);
+		
+		if(null != sessionStorageObj){
+			sessionStorageObj.setItem("NOTIFICATION",notifyObj);
+		}
+		window.location.href=getApplicationRootPath()+"rbac/showUser";
+	}
+}
+
+function updateUserDetailsSuccess(serverData){
+	if('ERROR' != serverData['STATUS']){	
+		var notifyObj={msg: '<b>Success : </b> User Updated Successfully !!!',type: "success",position: "center" ,autohide: false};
+		notif(notifyObj);
+		
+		if(null != sessionStorageObj){
+			sessionStorageObj.setItem("NOTIFICATION",notifyObj);
+		}
+		window.location.href=getApplicationRootPath()+"rbac/showUser";
 	}
 }
