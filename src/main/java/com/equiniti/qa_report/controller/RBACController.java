@@ -79,7 +79,7 @@ public class RBACController {
 	}
 	
 	public Map<String,Object> updateUserDetails(Map<String,Object> inputParam) throws ControllerException{
-		LOG.info("Begin :KTPlanController.updateUserDetails ");
+		LOG.info("Begin :RBACController.updateUserDetails ");
 		Map<String,Object> returnObjMap=new HashMap<>();
 		try {
 			Object returnObj=rbacService.updateUserDetails(inputParam);
@@ -89,7 +89,7 @@ public class RBACController {
 		} catch(Exception e){
 			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}
-		LOG.info("Begin :KTPlanController.updateUserDetails ");
+		LOG.info("Begin :RBACController.updateUserDetails ");
 		return returnObjMap;
 	}
 /*	public Map<String,Object> resetPassword(Map<String,Object> inputParam) throws ControllerException{
@@ -126,7 +126,7 @@ public class RBACController {
 	}
 	
 	public Map<String,Object> getRolesList(Map<String,Object> inputParam) throws ControllerException{
-		LOG.info("Begin :RolesController.getRolestList ");
+		LOG.info("Begin :RBACController.getRolestList ");
 		Map<String,Object> returnObjMap=new HashMap<String, Object>();
 		try {
 			Object returnObj=rbacService.getRolesList();
@@ -135,13 +135,13 @@ public class RBACController {
 				returnObjMap.put(ApplicationConstants.STATUS, ApplicationConstants.SUCCESS);
 				returnObjMap.put(ApplicationConstants.SERVER_DATA, returnObj);
 			}
-			LOG.info("Begin :RolesController.getRolestList.returnObjMap--> "+returnObjMap);
+			LOG.info("RBACController.getRolestList.returnObjMap--> "+returnObjMap);
 		} catch (APIException e) {
 			throw new ControllerException(e.getFaultCode(), e);
 		} catch(Exception e){
 			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}
-		LOG.info("End :RolesController.getRolestList ");
+		LOG.info("End :RBACController.getRolestList ");
 		return returnObjMap;
 	}
 

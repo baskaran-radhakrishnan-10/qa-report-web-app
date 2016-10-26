@@ -52,12 +52,35 @@ $(document).ready(function() {
 		})
 		filterKTData(filterObject);
 	});
+	
+	$('#show-kt-details-id tbody').on('click', 'tr', function () {
+		var gKey=$(this).attr('id');
+		$('#show-kt-details-id tbody tr').removeClass('selected');
+		$('#show-kt-details-id tr').css('background-color','');
+		if (!$(this).hasClass('selected')){
+			$(this).addClass('selected');
+			$(this).css('background-color','#B0BED9 !important');
+			editKTPlanDetails(gKey);
+		}
+	});
+	showLoader();
 	getKTDetails();
 	fetchProjectNames();
 	fetchResourceNames();
 	
 });
 
+function showLoader(){
+	$('#ktMainDiv').hide();
+	$('#applyFilter').hide();
+	$('#loader_div').show();
+}
+
+function hideLoader(){
+	$('#ktMainDiv').show();
+	$('#applyFilter').show();
+	$('#loader_div').hide();
+}
 function getKTDetails(){
 	var data={};
 	data=JSON.stringify(data);
@@ -91,6 +114,9 @@ function fetchKTDetailsSuccess(serverData){
 			sessionStorageObj.removeItem("NOTIFICATION");
 		}
 	}
+	setTimeout(function(){
+		hideLoader();
+	}, 1000);
 }
 
 function populateKTDetails(entriesList){
@@ -119,17 +145,19 @@ function populateKTDetails(entriesList){
 		html += '<td  nowrap="nowrap">'+gKey+'</td>' ;
 		html +=	'<td  nowrap="nowrap">'+project+'</td>' ;
 		html += '<td  nowrap="nowrap">'+trainingType+'</td>' ;
-		html += '<td  nowrap="nowrap">'+session+'</td>' ;
+		/*html += '<td  nowrap="nowrap">'+session+'</td>' ;*/
 		html +=	'<td  nowrap="nowrap">'+title+'</td>' ;
-		html += '<td  nowrap="nowrap">'+trainers+'</td>' ;
+		/*html += '<td  nowrap="nowrap">'+trainers+'</td>' ;
 		html += '<td  nowrap="nowrap">'+attendees+'</td>' ;
+		*/
 		html += '<td  nowrap="nowrap">'+location+'</td>' ;
 		html += '<td  nowrap="nowrap">'+startDate+'</td>' ;
 		html += '<td  nowrap="nowrap">'+endDate+'</td>' ;
-		html += '<td  nowrap="nowrap">'+duration+'</td>' ;
+
+/*		html += '<td  nowrap="nowrap">'+duration+'</td>' ;
 		html += '<td  nowrap="nowrap">'+remarks+'</td>' ;
-		html += '<td  nowrap="nowrap">'+feedback+'</td>' ;
-		html += '<td id="ktDetailsEditRowId" onclick="editKTPlanDetails('+gKey+')"><span><a href="#" class="glyphicon glyphicon-edit"></a></span><span>&nbsp;</span><a id="ktDetailsSaveRowId" style="display:none;" href="#"> <span class="glyphicon glyphicon-check"></span></a></td>' ;
+		html += '<td  nowrap="nowrap">'+feedback+'</td>' ;*/
+//		html += '<td id="ktDetailsEditRowId" onclick="editKTPlanDetails('+gKey+')"><span><a href="#" class="glyphicon glyphicon-edit"></a></span><span>&nbsp;</span><a id="ktDetailsSaveRowId" style="display:none;" href="#"> <span class="glyphicon glyphicon-check"></span></a></td>' ;
 		html += '</tr>' ;
 		htmlArray.push(html);
 //		sNo++;
@@ -185,7 +213,6 @@ function fetchResourceNamesSuccess(serverData){
 function ktDetailsModalData(gKey){
 
 	currentSelectedObject = null != gKey ? ktDetailsData[gKey] : null;
-
 	fillSelectDropDown('projectId',projectArray,null != currentSelectedObject ? currentSelectedObject['project'] : "");
 	fillSelectDropDown('ktTypeId',ktType,null != currentSelectedObject ? currentSelectedObject['trainingType'] : "");
 	fillSelectDropDown('locationId',ktLocation,null != currentSelectedObject ? currentSelectedObject['location'] : "");
@@ -195,7 +222,7 @@ function ktDetailsModalData(gKey){
 	$('#ktTitleId').val( null != currentSelectedObject ? currentSelectedObject['title'] : "");
 	$('#startDateId').val( null != currentSelectedObject ? getDateValue(currentSelectedObject['startDate'],'yyyy-MM-dd',"-") : "");
 	$('#endDateId').val( null != currentSelectedObject ? getDateValue(currentSelectedObject['endDate'],'yyyy-MM-dd',"-") : "");
-	$('#durationId').val( null != currentSelectedObject ? currentSelectedObject['duration'] : "");
+	$('#durationId').val( null != currentSelectedObject ? currentSelectedObject['duration'].toFixed(2) : "");
 	$('#remarksId').val( null != currentSelectedObject ? currentSelectedObject['remarks'] : "");
 	$('#feedbackId').val( null != currentSelectedObject ? currentSelectedObject['feedback'] : "");
 	

@@ -9,6 +9,7 @@ var egKey="";
 
 var createdOnDt = $.datepicker.formatDate('yy-mm-dd', new Date());
 $(document).ready(function() {	
+	showLoader();
 	getUserDetails();
 	getRolesDetails();
 	
@@ -17,7 +18,30 @@ $(document).ready(function() {
 		userDetailsModalData(null);
 	});
 
+	$('#show-user-details-id tbody').on('click', 'tr', function () {
+		console.log('user edit');
+		var gKey=$(this).attr('id');
+		$('#show-user-details-id tbody tr').removeClass('selected');
+		$('#show-user-details-id tr').css('background-color','');
+		if (!$(this).hasClass('selected')){
+			$(this).addClass('selected');
+			$(this).css('background-color','#B0BED9 !important');
+			userDetailsEdit(gKey);
+		}
+	});
 });
+
+function showLoader(){
+	$('#userMainDiv').hide();
+	$('#applyFilter').hide();
+	$('#loader_div').show();
+}
+
+function hideLoader(){
+	$('#userMainDiv').show();
+	$('#applyFilter').show();
+	$('#loader_div').hide();
+}
 
 function getUserDetails(){
 	var data={};
@@ -39,6 +63,9 @@ function fetchUserDetailsSuccess(serverData){
 			sessionStorageObj.removeItem("NOTIFICATION");
 		}
 	}
+	setTimeout(function(){
+		hideLoader();
+	}, 1000);
 }
 
 function populateUserDetails(entriesList){
@@ -74,7 +101,7 @@ function populateUserDetails(entriesList){
 		html += '<td>'+roleDesc+'</td>' ;
 		html +=	'<td>'+active+'</td>' ;
 		html += '<td>'+createdOn+'</td>' ;
-		html += '<td id="userDetailsEditRowId" onclick="userDetailsEdit('+gKey+')"><span><a href="#" class="glyphicon glyphicon-edit"></a></span><span>&nbsp;</span><a id="userDetailsSaveRowId" style="display:none;" href="#"> <span class="glyphicon glyphicon-check"></span></a></td>' ;
+//		html += '<td id="userDetailsEditRowId" onclick="userDetailsEdit('+gKey+')"><span><a href="#" class="glyphicon glyphicon-edit"></a></span><span>&nbsp;</span><a id="userDetailsSaveRowId" style="display:none;" href="#"> <span class="glyphicon glyphicon-check"></span></a></td>' ;
 		html += '</tr>' ;
 		htmlArray.push(html);
 		sNo++;

@@ -83,6 +83,7 @@ public class RBACEventHandler implements IEventHandler<IEvent> {
 		
 
 	public void getUserDetails(GetUserDeatilsEvent event) throws EventException {
+		LOG.debug("Begin: RBACEventHandler.getUserDetails");
 	try {
 		event.setUserDetailsList(rbacDAO.getUserDetails(event.getRestrictionMap()));
 	} catch (DaoException e) {
@@ -92,8 +93,10 @@ public class RBACEventHandler implements IEventHandler<IEvent> {
 		LOG.error("Unknown Exception Occured", e);
 		throw new EventException(CommonFaultCode.UNKNOWN_ERROR, e);
 	}
+	LOG.debug("End: RBACEventHandler.getUserDetails");
 	}
 	public void getUniqueUserList(GetUniqueUserListEvent event) throws EventException {
+		LOG.debug("Begin: RBACEventHandler.getUniqueUserList");
 	try {
 		event.setUniqueUserList(rbacDAO.getUniqueUserList());
 	} catch (DaoException e) {
@@ -103,6 +106,7 @@ public class RBACEventHandler implements IEventHandler<IEvent> {
 		LOG.error("Unknown Exception Occured", e);
 		throw new EventException(CommonFaultCode.UNKNOWN_ERROR, e);
 	}
+	LOG.debug("End: RBACEventHandler.getUniqueUserList");
 }
 	
 	private void addUserDetails(AddUserDeatilsEvent event) throws EventException {
@@ -129,7 +133,7 @@ public class RBACEventHandler implements IEventHandler<IEvent> {
 		LOG.debug("Begin: RBACEventHandler.resetPassword");
 	}
 	private void updateUserDetails(UpdateUserDetailsEvent event) throws EventException {
-		LOG.debug("Begin: KTPlanEventHandler.updateUserDetails");
+		LOG.debug("Begin: RBACEventHandler.updateUserDetails");
 		try {
 			rbacDAO.updateUserDetails(populateEntityFromMapObject(event.getRestrictionMap()));
 		} catch (DaoException e) {
@@ -139,10 +143,11 @@ public class RBACEventHandler implements IEventHandler<IEvent> {
 			LOG.error("Unknown Exception Occured", e);
 			throw new EventException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}
-		LOG.debug("End: KTPlanEventHandler.updateUserDetails");
+		LOG.debug("End: RBACEventHandler.updateUserDetails");
 	}
 	
 	private void getRoles(GetRolesEvent event) throws EventException {
+		LOG.debug("Begin: RBACEventHandler.getRoles");
 		try {
 			if(event.isUniqueListRequired()){
 				event.setRolesList(rbacRolesDAO.getRolesNameList());
@@ -156,19 +161,15 @@ public class RBACEventHandler implements IEventHandler<IEvent> {
 			LOG.error("Unknown Exception Occured", e);
 			throw new EventException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}
+		LOG.debug("End: RBACEventHandler.getRoles");
 	}
 	
 	private User populateEntityFromMapObjectForAddUser(Map<String,Object> mapObject) throws EventException{
 		LOG.debug("Begin: RBACEventHandler.populateEntityFromMapObject");
 		String encryptedPassword;
-		
-		LOG.info("---objMapper.convertValue---"+mapObject);
-		LOG.info("---objMapper.convertValue---"+objMapper.convertValue(mapObject, User.class));
 		User entity=objMapper.convertValue(mapObject, User.class);
 		try{
-			LOG.info("---ApplicationConstants.DEFAULT_LOGIN_PASSWORD--"+ApplicationConstants.DEFAULT_LOGIN_PASSWORD);
 			encryptedPassword=cryptoService.encrypt(ApplicationConstants.DEFAULT_LOGIN_PASSWORD);
-			LOG.info("---encryptedPassword--"+encryptedPassword);
 		}
 		catch(SecurityException se){
 			throw new EventException(SecurityFaultCodes.SECURITY_CRYPTO_ENCRIPTION_FAILED_ERROR,se);			
@@ -186,14 +187,9 @@ public class RBACEventHandler implements IEventHandler<IEvent> {
 	private User populateEntityFromMapObjectResetPassword(Map<String,Object> mapObject) throws EventException{
 		LOG.debug("Begin: RBACEventHandler.populateEntityFromMapObjectResetPassword");
 		String encryptedPassword;
-		
-		LOG.info("---objMapper.convertValue---"+mapObject);
-		LOG.info("---objMapper.convertValue---"+objMapper.convertValue(mapObject, User.class));
 		User entity=objMapper.convertValue(mapObject, User.class);
 		try{
-			LOG.info("---entity.getPassword()--"+entity.getPassword());
 			encryptedPassword=cryptoService.encrypt(entity.getPassword());
-			LOG.info("---encryptedPassword--"+encryptedPassword);
 		}
 		catch(SecurityException se){
 			throw new EventException(SecurityFaultCodes.SECURITY_CRYPTO_ENCRIPTION_FAILED_ERROR,se);			
