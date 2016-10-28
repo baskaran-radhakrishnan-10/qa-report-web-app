@@ -53,7 +53,7 @@
 	<put-attribute name="body_content" value="/WEB-INF/views/jsp/pages/btp_report_search.jsp" />
   </definition>
   
-        <definition name="kt_plan_page" extends="home.page.template">
+  <definition name="kt_plan_page" extends="home.page.template">
 	<put-attribute name="title" value="Home Page"></put-attribute>
 	<put-attribute name="body_content" value="/WEB-INF/views/jsp/pages/kt_plan_page.jsp" />
   </definition>
@@ -63,5 +63,9 @@
 	<put-attribute name="body_content" value="/WEB-INF/views/jsp/pages/dsr_page.jsp" />
   </definition>
   
+   <definition name="dsr_report_search" extends="home.page.template">
+	<put-attribute name="title" value="Home Page"></put-attribute>
+	<put-attribute name="body_content" value="/WEB-INF/views/jsp/pages/dsr_report_search.jsp" />
+  </definition>
 
 </tiles-definitions>

@@ -54,4 +54,10 @@ public class ReportSearchWebController {
 		}
 	}
 	
+	@RequestMapping(value = "/dsr_report_search" , method = RequestMethod.GET)
+	public String showDSRReportSearchPage(Model model) throws UIException{
+		return "dsr_report_search";
+	}
+	
+	
 }

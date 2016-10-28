@@ -12,7 +12,7 @@
 <spring:url value="/resources/miminiumTheme/js/plugins/moment.min.js" var="MomentJs" />
 
 <spring:url value="/resources/miminiumTheme/img/bg2.jpg" var="bg2img" />
-<spring:url	value="/resources/miminiumTheme/js/custom/dashboard_custom.js"	var="CustomJs" />
+<%-- <spring:url	value="/resources/miminiumTheme/js/custom/dashboard_custom.js"	var="CustomJs" /> --%>
 	
 <spring:url value="/resources/miminiumTheme/img/customers.png" var="cust" />
 <spring:url value="/resources/miminiumTheme/img/deliveryOrder.png" var="order" />
@@ -168,6 +168,6 @@
 
 <script src="${MomentJs}"></script>
 <script src="${chartMinJs}"></script>
-<script src="${CustomJs}"></script>
+<%-- <script src="${CustomJs}"></script> --%>
 
 <!-- end: Javascript -->

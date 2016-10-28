@@ -83,6 +83,21 @@ public class DSRServiceImpl extends BaseAPIImpl implements DSRService{
 	}
 	
 	@Override
+	public List<DSREntity> filterDSREntries(Map<String, Object> restrictionMap) throws APIException {
+		GetDSREvent event = getEvent(GetDSREvent.class);
+		try {
+			event.setFilter(true);
+			event.setRestrictionMap(restrictionMap);
+			processEvent(event);
+		} catch (APIException e) {
+			throw new ControllerException(e.getFaultCode(), e);
+		} catch (Exception e) {
+			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+		return event.getDSREntityList();
+	}
+	
+	@Override
 	@SuppressWarnings("unchecked")
 	public Map<Integer,DSREntity> getDSRFromCache(int pageNo) throws APIException {
 		try {

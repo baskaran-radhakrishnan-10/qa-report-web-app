@@ -59,6 +59,7 @@ $(document).ready(function() {
 	
 	$('#btp_report_search_table_id tbody').on('dblclick', 'tr', function () {
 		var btpNo=$(this).attr('id');
+		$('#btp_report_search_table_id tbody tr').css('background-color','');
         if ($(this).hasClass('selected')){
             $(this).removeClass('selected');
         }
@@ -66,6 +67,7 @@ $(document).ready(function() {
         	btpReportSearchRef.btpReportTableRef.$('tr.selected').removeClass('selected');
             $(this).addClass('selected');
             btpReportSearchRef.exportSelectedBTP(btpNo);
+            $(this).css('background-color','#B0BED9 !important');
             $("#exportBTPReportButtonTrigger").trigger( "click" );
             $('#multi_btp_report_modal_content').hide();
             $('#single_btp_report_modal_content').show();

@@ -17,5 +17,7 @@ public interface DSRService {
 	public List<DSREntity> getDSREntries(Map<String,Object> restrictionMap) throws APIException;
 	
 	public Map<Integer,DSREntity> getDSRFromCache(int pageNo) throws APIException;
+	
+	public List<DSREntity> filterDSREntries(Map<String, Object> restrictionMap) throws APIException;
 
 }

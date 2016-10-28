@@ -15,5 +15,7 @@ public interface DSRDAO {
 	public void updateDSREntity(DSREntity entity) throws DaoException;
 	
 	public DSREntity getDSREntity(Map<String, Object> restrictionMap) throws DaoException;
+	
+	public List<DSREntity> filterDSREntityList(Map<String, Object> restrictionMap) throws DaoException;
 
 }

@@ -1,13 +1,17 @@
 package com.equiniti.qa_report.dao.api.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
 import com.equiniti.qa_report.dao.api.DSRDAO;
 import com.equiniti.qa_report.entity.DSREntity;
 import com.equiniti.qa_report.exception.api.exception.DaoException;
+import com.equiniti.qa_report.persistance_api.consenum.QueryOperationType;
+import com.equiniti.qa_report.persistance_api.consenum.QueryType;
 import com.equiniti.qa_report.persistance_api.hibernate.api.AbstractHibernateDAOAPI;
 
 public class DSRDAOImpl implements DSRDAO{
@@ -38,6 +42,32 @@ public class DSRDAOImpl implements DSRDAO{
 	public DSREntity getDSREntity(Map<String, Object> restrictionMap) throws DaoException{
 		LOG.debug("INSIDE getDSREntity(Map<String, Object> restrictionMap) Method");
 		return abstractHibernateDAOAPI.getEntity(DSREntity.class, restrictionMap);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<DSREntity> filterDSREntityList(Map<String, Object> restrictionMap) throws DaoException{
+		StringBuffer queryBuffer=new StringBuffer();
+		Set<String> keySet = restrictionMap.keySet();
+		List<String> keyList=new ArrayList<>(keySet);
+		queryBuffer.append("FROM DSREntity WHERE ");
+		for(int index = 0;index<keyList.size();index++){
+			String key = keyList.get(index);
+			if(key.indexOf("startDate") != -1){
+				queryBuffer.append("dsrDate").append(" >= '").append(restrictionMap.get(key)).append("'");
+			}else if(key.indexOf("endDate") != -1){
+				queryBuffer.append("dsrDate").append(" <= '").append(restrictionMap.get(key)).append("'");
+			}else if(key.indexOf("plannedDate") != -1){
+				queryBuffer.append("dsrDate").append(" >= '").append(restrictionMap.get(key)).append("'");
+			}else if(key.indexOf("accomplishedDate") != -1){
+				queryBuffer.append("dsrDate").append(" >= '").append(restrictionMap.get(key)).append("'");
+			}else{
+				queryBuffer.append(key).append(" = '").append(restrictionMap.get(key)).append("'");
+			}
+			if(index < (keyList.size()-1)){
+				queryBuffer.append(" AND ");
+			}
+		}
+		return (List<DSREntity>) abstractHibernateDAOAPI.processQuery(null, null, null, QueryOperationType.SELECT, QueryType.HQL, queryBuffer.toString());
 	}
 
 }

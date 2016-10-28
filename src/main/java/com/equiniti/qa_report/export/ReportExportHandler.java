@@ -24,8 +24,10 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 
+import com.equiniti.qa_report.entity.DSREntity;
 import com.equiniti.qa_report.exception.api.util.CommonFileUtil;
 import com.equiniti.qa_report.util.ApplicationConstants;
 
@@ -37,9 +39,15 @@ public class ReportExportHandler {
 	private static final String BTP_MONTHLY_REPORT_TEMPLATE_PATH="empty-templates/BTP_MONTHLY_REPORT_XLS_TEMPLATE.xlsx";
 	private static final String BTP_SELECTED_ROW_REPORT_TEMPLATE_PATH="empty-templates/SELECTED_BTP_DETAIL_XLS_TEMPLATE.xlsx";
 
+	private static final String DSR_SUMMARY_REPORT_TEMPLATE_PATH="empty-templates/DSR_BUILD_SUMMARY_XLS_TEMPLATE.xlsx";
+	private static final String DSR_SELECTED_ROW_REPORT_TEMPLATE_PATH="empty-templates/SELECTED_DSR_DETAIL_XLS_TEMPLATE.xlsx";
+
 	private static final String BTP_SUMMARY_REPORT_OUTPUT="BTPSummaryReport.xlsx";
 	private static final String BTP_WEEKLY_REPORT_OUTPUT="BTPWeeklyReport.xlsx";
 	private static final String BTP_SELECTED_ROW_OUTPUT="BTPSelectedRowReport.xlsx";
+
+	private static final String DSR_SUMMARY_REPORT_OUTPUT="DSRSummaryReport.xlsx";
+	private static final String DSR_SELECTED_ROW_OUTPUT="DSRSelectedRowReport.xlsx";
 
 	private static final String PROJECT_CODE="PROJECT_CODE";
 	private static final String BTP_NO="BTP_NO";
@@ -69,6 +77,26 @@ public class ReportExportHandler {
 	private static final String ITEM_DETAIL="ITEM_DETAIL";
 	private static final String CYCLE = "CYCLE";
 	private static final String BTP_PLAN = "BTP_PLAN" ;
+
+	@SuppressWarnings("unchecked")
+	public void exportDSRReport(Map<String, Object> exportDataMap){
+
+		String reportType=(String) exportDataMap.get("REPORT_TYPE");
+
+		String userId=(String) exportDataMap.get("USER_ID");
+
+		Map<Integer,List<DSREntity>> dsrDataMap=  (Map<Integer,List<DSREntity>>) exportDataMap.get("REPORT_DATA");
+
+		Map<String,Object> exportMap = new HashMap<>();
+		exportMap.put("XLS_DATA", dsrDataMap);
+		exportMap.put("OUTPUT_FILE_NAME", dsrDataMap.size() > 1 ? ReportExportHandler.DSR_SELECTED_ROW_OUTPUT: ReportExportHandler.DSR_SUMMARY_REPORT_OUTPUT);
+		exportMap.put("USER_ID", userId);
+		exportMap.put("TEMPLATE_FILE_PATH", dsrDataMap.size() > 1 ? ReportExportHandler.DSR_SELECTED_ROW_REPORT_TEMPLATE_PATH : ReportExportHandler.DSR_SUMMARY_REPORT_TEMPLATE_PATH);
+		exportMap.put("ROW_NO", 1);
+		exportMap.put("EXPORT_TYPE", reportType);
+		exportXLSFile(exportMap);
+
+	}
 
 	@SuppressWarnings("unchecked")
 	public void exportBTPReport(Map<String, Object> exportDataMap){
@@ -323,7 +351,7 @@ public class ReportExportHandler {
 
 	@SuppressWarnings("unchecked")
 	private void exportXLSFile(Map<String,Object> exportDataMap){
-		
+
 		String templateFilePath = (String) exportDataMap.get("TEMPLATE_FILE_PATH");
 		String outputFileName = (String) exportDataMap.get("OUTPUT_FILE_NAME");
 		String userId = (String) exportDataMap.get("USER_ID");
@@ -338,7 +366,7 @@ public class ReportExportHandler {
 		}
 
 		if(null != inputStream){
-			
+
 			try {
 				if (templateFilePath.toLowerCase().endsWith(".xlsx")) {
 					workbook = new XSSFWorkbook(inputStream);
@@ -354,68 +382,159 @@ public class ReportExportHandler {
 			} catch (InvalidFormatException e) {
 				e.printStackTrace();
 			}
-			
+
 			if(null != workbook){
-				
+
 				if(ApplicationConstants.BTP_WEEKLY_REPORT.intern() == exportType.intern() || ApplicationConstants.BTP_SUMMARY_REPORT.intern() == exportType.intern()){
 					prepareBTPReportDocument(workbook, (Map<Integer, Map<String, Object>>) exportDataMap.get("XLS_DATA"), (int) exportDataMap.get("ROW_NO"));
 				}else if(ApplicationConstants.SELECTED_BTP_REPORT == exportType.intern()){
 					prepareBTPDeatilsExportDocument(workbook, (Map<String, Object>) exportDataMap.get("XLS_DATA"));
+				}else if(ApplicationConstants.DSR_SUMMARY_REPORT == exportType.intern()){
+					prepareDSRReportDocument(workbook, (Map<Integer,List<DSREntity>>) exportDataMap.get("XLS_DATA"), (int) exportDataMap.get("ROW_NO"));
 				}
-				
+
 				writeExportedFile(userId, outputFileName, workbook);
 
 			}
 		}
 	}
-	
-	private void prepareBTPReportDocument(Workbook workbook,Map<Integer,Map<String,Object>> xlsData,int startRowNo){
-		
+
+	private void prepareDSRReportDocument(Workbook workbook,Map<Integer,List<DSREntity>> xlsData,int startRowNo){
+
 		int rownum = startRowNo;
 		
+		int noOfSheets = workbook.getNumberOfSheets();
+		
+		for(int index = 0;index<noOfSheets;index++){
+			
+			Sheet sheet = workbook.getSheetAt(index);
+			
+			List<DSREntity> entityList = xlsData.get(index);
+			
+			for(DSREntity entity : entityList){
+				
+				Row row = sheet.createRow(rownum++);
+				
+				int cellnum = 0;
+				
+				Cell cell = row.createCell(cellnum++);
+
+				Object obj =entity.getProjectName();
+
+				setCellValue(obj, cell);
+				
+				cell = row.createCell(cellnum++);
+				
+				obj =entity.getResource();
+
+				setCellValue(obj, cell);
+				
+				cell = row.createCell(cellnum++);
+				
+				obj =entity.getDsrDate();
+
+				setCellValue(obj, cell);
+				
+				cell = row.createCell(cellnum++);
+				
+				obj =entity.getPlannedTask();
+
+				setCellValue(obj, cell);
+				
+				cell = row.createCell(cellnum++);
+				
+				obj =entity.getAccomplishedTask();
+
+				setCellValue(obj, cell);
+				
+				cell = row.createCell(cellnum++);
+				
+				obj =entity.getDsrStatus();
+
+				setCellValue(obj, cell);
+				
+				cell = row.createCell(cellnum++);
+				
+				obj =entity.getRemarks();
+
+				setCellValue(obj, cell);
+				
+				cell = row.createCell(cellnum++);
+				
+				obj =entity.getSpentHours();
+
+				setCellValue(obj, cell);
+				
+				cell = row.createCell(cellnum++);
+				
+				obj =entity.getPlannedHours();
+
+				setCellValue(obj, cell);
+				
+				cell = row.createCell(cellnum++);
+				
+			}
+			
+		}
+
+	}
+	
+	private void setCellValue(Object obj,Cell cell){
+		
+		if(obj instanceof Date) 
+			cell.setCellValue((Date)obj);
+
+		else if(obj instanceof Boolean)
+			cell.setCellValue((Boolean)obj);
+
+		else if(obj instanceof String)
+			cell.setCellValue((String)obj);
+
+		else if(obj instanceof Double)
+			cell.setCellValue((Double)obj);
+
+		else if(obj instanceof Integer)
+			cell.setCellValue((Integer)obj);
+
+		else if(obj instanceof Float)
+			cell.setCellValue((Float)obj);
+		
+		else if(obj instanceof DateTime)
+			cell.setCellValue(((DateTime)obj).toString("yyyy-MM-dd"));
+	}
+
+
+	private void prepareBTPReportDocument(Workbook workbook,Map<Integer,Map<String,Object>> xlsData,int startRowNo){
+
+		int rownum = startRowNo;
+
 		Sheet sheet = workbook.getSheetAt(0);
-		
+
 		Set<Integer> keySet = xlsData.keySet();
-		
+
 		for(int itemNo : keySet){
-			
+
 			int cellnum = 0;
-			
+
 			Row row = sheet.createRow(rownum++);
-			
+
 			Map<String,Object> rowDataMap = xlsData.get(itemNo);
-			
+
 			Set<String> columnNameKeySet = rowDataMap.keySet();
 
 			for(String columnName : columnNameKeySet){
 
 				if(ReportExportHandler.IS_ROW_PROC.intern() == columnName.intern()){
-					
+
 					continue;
-					
+
 				}
 
 				Cell cell = row.createCell(cellnum++);
 
 				Object obj =rowDataMap.get(columnName);
-				
-				if(obj instanceof Date) 
-					cell.setCellValue((Date)obj);
-				
-				else if(obj instanceof Boolean)
-					cell.setCellValue((Boolean)obj);
-				
-				else if(obj instanceof String)
-					cell.setCellValue((String)obj);
-				
-				else if(obj instanceof Double)
-					cell.setCellValue((Double)obj);
-				
-				else if(obj instanceof Integer)
-					cell.setCellValue((Integer)obj);
-				
-				else if(obj instanceof Float)
-					cell.setCellValue((Float)obj);
+
+				setCellValue(obj, cell);
 
 			}
 
@@ -469,9 +588,9 @@ public class ReportExportHandler {
 			if(key.indexOf("resource") != -1){
 
 				String resource = null != btpDetailsMap.get(key) ? btpDetailsMap.get(key).toString() : "" ;
-				
+
 				if(!resource.isEmpty()){
-					
+
 					if(resourceStartColumn == 3){
 
 						sheet.getRow(resourceStartRow).getCell(resourceStartColumn).setCellValue(resource);
@@ -487,7 +606,7 @@ public class ReportExportHandler {
 						resourceStartRow++;
 
 					}
-					
+
 				}
 
 			}
@@ -513,15 +632,15 @@ public class ReportExportHandler {
 			itemStartRow++;
 
 		}
-		
+
 		while(itemStartRow < 22){
-			
+
 			sheet.removeRow(sheet.getRow(itemStartRow));
-			
+
 			itemStartRow++;
-			
+
 		}
-		
+
 
 	}
 
@@ -536,10 +655,6 @@ public class ReportExportHandler {
 			Map<String,Object> rowMap = updateObjectMap.get(btpNo);
 
 			if(null == rowMap.get(ReportExportHandler.IS_ROW_PROC)){
-
-				String task = (String) rowMap.get(ReportExportHandler.TASK);
-
-				String resource = (String) rowMap.get(ReportExportHandler.RESOURCE);
 
 				float completed = (int) rowMap.get(ReportExportHandler.COMPLETED);
 
@@ -572,9 +687,9 @@ public class ReportExportHandler {
 
 		}
 	}
-	
+
 	private void writeExportedFile(String userId , String outputFileName , Workbook workbook){
-		
+
 		try {
 
 			File dir = new File(ApplicationConstants.APP_CONFIG_FOLDER_PATH+File.separator+userId);
@@ -586,7 +701,7 @@ public class ReportExportHandler {
 			FileOutputStream outStream = new FileOutputStream(serverFile);
 			workbook.write(outStream);
 			outStream.close();
-			
+
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

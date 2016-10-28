@@ -3,108 +3,29 @@
 
 	<div class="sub-left-menu scroll bg-yellow">
 		
-		<ul class="nav nav-list">
+		<ul class="nav nav-list" id="leftMenuUL">
 		
-			<li class="time" style="border-bottom: 1px solid #eee;"><h1></h1><p></p></li>
+			<li id="time_li" class="time" style="border-bottom: 1px solid #eee;"><h1></h1><p></p></li>
 			
 			<li id="dashboard_li"><a href="${sessionScope.baseUrl}dashboard"><span class="fa-tachometer fa"></span>Dashboard</a></li>
 			
-			<li id="rbac_li" class="ripple"><a class="tree-toggle nav-header"><span class="fa-user-secret fa"></span> Users &amp; Roles <span class="fa-angle-right fa right-arrow text-right"></span></a>
-				<ul class="nav nav-list tree" style="display:none;">
-					<li><a href="${sessionScope.baseUrl}rbac/showUser">Manage Users</a></li>
-					<li><a href="${sessionScope.baseUrl}rbac/showRoles">Manage Roles</a></li>
-					<li><a href="${sessionScope.baseUrl}rbac/managePassword">Manage Password</a></li>
-					<%-- <li><a href="${sessionScope.baseUrl}rbac/showResources">Manage Resources</a></li> --%>
-				</ul>
+			<li id="rbac_li" class="ripple" style="display:none;"><a class="tree-toggle nav-header"><span class="fa-user-secret fa"></span> Users &amp; Roles <span class="fa-angle-right fa right-arrow text-right"></span></a>
+				<ul class="nav nav-list tree" style="display:none;"></ul>
 			</li>
 			
-			<%--<li id="operations_li" class="ripple"><a class="tree-toggle nav-header"> <span	class="fa-cogs fa"></span>Operations<span class="fa-angle-right fa right-arrow text-right"></span></a>
-				<ul class="nav nav-list tree">
-					<li><a href="${sessionScope.baseUrl}add_user">Add New User</a></li>
-					<li><a href="${sessionScope.baseUrl}add_project">Add New Project</a></li>
-					<li><a href="${sessionScope.baseUrl}edit_user">Edit User Details</a></li>
-					<li><a href="${sessionScope.baseUrl}edit_project">Edit Project Details</a></li>
-					<li><a href="${sessionScope.baseUrl}add_leave">Add Leave Details</a></li>
-					<li><a href="${sessionScope.baseUrl}add_permission">Add Permission Details</a></li>
-					<li><a href="${sessionScope.baseUrl}add_leave_plans">Add Leave Plans</a></li>
-					<li><a href="${sessionScope.baseUrl}remainder_settings">Remainder Settings</a></li>
-				</ul>
-			</li>--%>
-				
-			<li id="build_test_plan_li"><a href="${sessionScope.baseUrl}build_test_plan/show"> <span class="fa-pencil-square-o fa"></span> Build Test Plan </a></li>
+			<li id="build_test_plan_li" style="display:none;"><a href="${sessionScope.baseUrl}build_test_plan/show"> <span class="fa-pencil-square-o fa"></span> Build Test Plan </a></li>
 			
-			<li id="daily_status_report_li"><a href="${sessionScope.baseUrl}dsr/show"> <span class="fa-calendar fa"></span> Daily Status Report </a></li>
+			<li id="daily_status_report_li" style="display:none;"><a href="${sessionScope.baseUrl}dsr/show"> <span class="fa-calendar fa"></span> Daily Status Report </a></li>
 			
-			<li id="report_search_li" class="ripple"><a class="tree-toggle nav-header"> <span	class="fa-search fa"></span> Report Search <span class="fa-angle-right fa right-arrow text-right"></span></a>
-				<ul class="nav nav-list tree" style="display:none;">
-					<li><a href="${sessionScope.baseUrl}report_search/btp_report_search">BTP Report Search</a></li>
-					<%-- <li><a href="${sessionScope.baseUrl}dsr_search">DSR Search</a></li>
-					<li><a href="${sessionScope.baseUrl}user_search">User Search</a></li>
-					<li><a href="${sessionScope.baseUrl}leave_search">Leave Details Search</a></li>
-					<li><a href="${sessionScope.baseUrl}permission_search">Permission Details Search</a></li>
-					<li><a href="${sessionScope.baseUrl}leave_plan_search">Leave Plans Search</a></li> --%>
-				</ul>
+			<li id="kt_plan_li" style="display:none;"><a href="${sessionScope.baseUrl}kt_plan/ktPlan"> <span class="fa-bullhorn fa"></span> KT Plan </a></li>
+			
+			<li id="report_search_li" class="ripple" style="display:none;"><a class="tree-toggle nav-header"> <span	class="fa-search fa"></span> Report Search <span class="fa-angle-right fa right-arrow text-right"></span></a>
+				<ul class="nav nav-list tree" style="display:none;"></ul>
 			</li>
 			
-			<%-- <li id="daily_status_report_li"><a href="${sessionScope.baseUrl}daily_status_report"> <span class="fa-calendar fa"></span> Daily Status Report </a></li>
-			--%>
-			<li id="kt_plan_li"><a href="${sessionScope.baseUrl}kt_plan/ktPlan"> <span class="fa-bullhorn fa"></span> KT Plan </a></li>
-			 
-			<%-- <c:choose>
-
-				<c:when	test="${sessionScope.resourceMap.containsKey('dashboard_li')}">
-					<c:out value="${sessionScope.resourceMap.get('dashboard_li')}"></c:out>
-				</c:when>
-
-			</c:choose>
-			
-			<c:choose>
-
-				<c:when	test="${sessionScope.resourceMap.containsKey('dashboard_li')}">
-					<c:out value="${sessionScope.resourceMap.get('dashboard_li')}" />
-				</c:when>
-
-			</c:choose>
-			
-			<c:choose>
-
-				<c:when	test="${sessionScope.resourceMap.containsKey('rbac_li')}">
-					<c:out value="${sessionScope.resourceMap.get('rbac_li')}" />
-				</c:when>
-
-			</c:choose>
-			
-			<c:choose>
-
-				<c:when	test="${sessionScope.resourceMap.containsKey('report_search_li')}">
-					<c:out value="${sessionScope.resourceMap.get('report_search_li')}" />
-				</c:when>
-
-			</c:choose>
-			
-			<c:choose>
-
-				<c:when	test="${sessionScope.resourceMap.containsKey('build_test_plan_li')}">
-					<c:out value="${sessionScope.resourceMap.get('build_test_plan_li')}" />
-				</c:when>
-
-			</c:choose>
-			
-			<c:choose>
-
-				<c:when	test="${sessionScope.resourceMap.containsKey('daily_status_report_li')}">
-					<c:out value='${sessionScope.resourceMap.get('daily_status_report_li')}' />
-				</c:when>
-
-			</c:choose>
-			
-			<c:choose>
-
-				<c:when	test="${sessionScope.resourceMap.containsKey('kt_plan_li')}">
-					<c:out value="${sessionScope.resourceMap.get('kt_plan_li')}" />
-				</c:when>
-
-			</c:choose> --%>
+			<li id="operations_li" class="ripple" style="display:none;"><a class="tree-toggle nav-header"> <span class="fa-cogs fa"></span>Operations<span class="fa-angle-right fa right-arrow text-right"></span></a>
+				<ul class="nav nav-list tree" style="display:none;"></ul>
+			</li>
 			
 		</ul>
 		

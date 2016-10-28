@@ -29,8 +29,8 @@
 <spring:url value="/resources/miminiumTheme/js/plugins/icheck.min.js"	var="iCheckJs" />
 <!-- custom -->
 <spring:url value="/resources/miminiumTheme/js/main.js" var="mainJs" />
-<spring:url value="/resources/core/js/custom/custom.js" var="customJS" />
-<spring:url value="/resources/core/js/custom/loginpage_custom.js" var="loginPageJS" />
+<%-- <spring:url value="/resources/core/js/custom/custom.js" var="customJS" /> --%>
+<%-- <spring:url value="/resources/core/js/custom/loginpage_custom.js" var="loginPageJS" /> --%>
 
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">

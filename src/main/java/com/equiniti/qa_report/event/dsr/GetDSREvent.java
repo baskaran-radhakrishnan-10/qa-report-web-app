@@ -14,6 +14,8 @@ public class GetDSREvent extends BaseEvent {
 	
 	private boolean isListAll;
 	
+	private boolean isFilter;
+	
 	private Map<String,Object> restrictionMap;
 	
 	private List<DSREntity> dsrEntityList;
@@ -54,6 +56,14 @@ public class GetDSREvent extends BaseEvent {
 
 	public void setDSREntity(DSREntity dsrEntity) {
 		this.dsrEntity = dsrEntity;
+	}
+
+	public boolean isFilter() {
+		return isFilter;
+	}
+
+	public void setFilter(boolean isFilter) {
+		this.isFilter = isFilter;
 	}
     
 }

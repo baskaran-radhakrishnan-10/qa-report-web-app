@@ -33,13 +33,13 @@ public class LoginController {
 	public String doLogout() throws CacheException{
 		CACHE_INS=CacheInstance.getInstance();
 		HttpSession session=request.getSession();
+		CACHE_INS.removeAllItemFromGroup((String) session.getAttribute(ApplicationConstants.USER_ID));
 		Enumeration<String> sessionAttributeList=session.getAttributeNames();
 		while(sessionAttributeList.hasMoreElements()){
 			String attrName=sessionAttributeList.nextElement();
 			session.removeAttribute(attrName);
 		}
 		session.invalidate();
-		CACHE_INS.removeAllItemFromGroup((String) session.getAttribute(ApplicationConstants.USER_ID));
 		return ApplicationConstants.REDIRECT_LOGIN_PAGE;
 	}
 

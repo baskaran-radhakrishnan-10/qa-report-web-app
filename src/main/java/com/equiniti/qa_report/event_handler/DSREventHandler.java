@@ -1,11 +1,13 @@
 package com.equiniti.qa_report.event_handler;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javax.jms.JMSException;
 import javax.servlet.http.HttpSession;
 
 import org.apache.jcs.access.exception.CacheException;
@@ -25,6 +27,7 @@ import com.equiniti.qa_report.exception.api.exception.ControllerException;
 import com.equiniti.qa_report.exception.api.exception.DaoException;
 import com.equiniti.qa_report.exception.api.exception.EventException;
 import com.equiniti.qa_report.exception.api.faultcode.CommonFaultCode;
+import com.equiniti.qa_report.queue.connector.ReportQueueConnector;
 import com.equiniti.qa_report.util.ApplicationConstants;
 
 public class DSREventHandler implements IEventHandler<IEvent> {
@@ -39,6 +42,9 @@ public class DSREventHandler implements IEventHandler<IEvent> {
 	
 	@Autowired
 	private HttpSession session;
+	
+	@Autowired
+	private ReportQueueConnector reportQueueConnector;
 	
 	private String userId = null;
 
@@ -97,7 +103,7 @@ public class DSREventHandler implements IEventHandler<IEvent> {
 	@SuppressWarnings("unchecked")
 	private void getDSR(GetDSREvent event) throws EventException {
 		try {
-			if (event.isListAll() || (null != event.getRestrictionMap())) {
+			if (event.isListAll()) {
 				CACHE_INS=CacheInstance.getInstance();
 				if(null != CACHE_INS.getItemFromCache(ApplicationConstants.DSR_CACHE_ITEM,userId)){
 					List<DSREntity> dsrEntityList=(List<DSREntity>) CACHE_INS.getItemFromCache(ApplicationConstants.DSR_CACHE_ITEM,userId);
@@ -105,8 +111,27 @@ public class DSREventHandler implements IEventHandler<IEvent> {
 				}else{
 					event.setDSREntityList(dsrDAO.getDSREntityList(event.getRestrictionMap()));
 					CACHE_INS.putItemInCache(ApplicationConstants.DSR_CACHE_ITEM, event.getDSREntityList(),userId);
+					CACHE_INS.putItemInCache(ApplicationConstants.DSR_RECORDS_COUNT, event.getDSREntityList().size(),userId);
 					designDSRCacheData();
 				}
+			} else if (event.isFilter()) {
+				Map<Integer,List<DSREntity>> reportDataMap=new HashMap<>();
+				if(event.getRestrictionMap().containsKey("MULTI_EXPORT")){
+					event.getRestrictionMap().remove("MULTI_EXPORT");
+					event.setDSREntityList(dsrDAO.filterDSREntityList(event.getRestrictionMap()));
+					reportDataMap.put(0, event.getDSREntityList());
+				}else if(event.getRestrictionMap().containsKey("SINGLE_EXPORT")){
+					event.getRestrictionMap().remove("SINGLE_EXPORT");
+					String plannedDate = (String) event.getRestrictionMap().get("plannedDate");
+					event.getRestrictionMap().remove("plannedDate");
+					event.setDSREntityList(dsrDAO.filterDSREntityList(event.getRestrictionMap()));
+					reportDataMap.put(0, event.getDSREntityList());
+					event.getRestrictionMap().put("plannedDate", plannedDate);
+					event.getRestrictionMap().remove("accomplishedDate");
+					event.setDSREntityList(dsrDAO.filterDSREntityList(event.getRestrictionMap()));
+					reportDataMap.put(1, event.getDSREntityList());
+				}
+				exportDSRReport(reportDataMap);
 			} else if (null != event.getRestrictionMap()) {
 				event.setDSREntityList(dsrDAO.getDSREntityList(event.getRestrictionMap()));
 			} 
@@ -114,6 +139,22 @@ public class DSREventHandler implements IEventHandler<IEvent> {
 			throw new EventException(e.getFaultCode(), e);
 		} catch (Exception e) {
 			throw new EventException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+	}
+	
+	private void exportDSRReport(Map<Integer,List<DSREntity>> reportDataMap) throws EventException{
+		try {
+			Map<String,Object> exportObject=new HashMap<>();
+			exportObject.put("REPORT_DATA", reportDataMap);
+			exportObject.put("REPORT_TYPE", ApplicationConstants.DSR_SUMMARY_REPORT);
+			exportObject.put("USER_ID", userId);
+			reportQueueConnector.produce(exportObject);
+		}catch (Exception e) {
+			if(e.getCause() instanceof JMSException){
+				LOG.debug(e.getMessage());
+			}else{
+				throw new EventException(CommonFaultCode.UNKNOWN_ERROR, e);
+			}
 		}
 	}
 
@@ -152,7 +193,6 @@ public class DSREventHandler implements IEventHandler<IEvent> {
 				System.out.println("Total time taken :"+(t2-t1));
 				try {
 					CACHE_INS.putItemInCache(ApplicationConstants.PAGED_DSR_CACHE_ITEM, paginationDataMap,userId);
-					CACHE_INS.putItemInCache(ApplicationConstants.DSR_RECORDS_COUNT, dsrEntityList.size(),userId);
 				} catch (CacheException e) {
 					e.printStackTrace();
 				}
@@ -176,7 +216,7 @@ public class DSREventHandler implements IEventHandler<IEvent> {
 					dsrIndexedMap.put(sNo, entity);
 					pagedDsrEntity.put(lastPageIndex+1, dsrIndexedMap);
 				}
-				CACHE_INS.putItemInCache(ApplicationConstants.DSR_RECORDS_COUNT, ((Integer)CACHE_INS.getItemFromCache(ApplicationConstants.DSR_RECORDS_COUNT))+1 , userId);
+				CACHE_INS.putItemInCache(ApplicationConstants.DSR_RECORDS_COUNT, ((Integer)CACHE_INS.getItemFromCache(ApplicationConstants.DSR_RECORDS_COUNT,userId))+1 , userId);
 			}
 		} catch (Exception e) {
 			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);

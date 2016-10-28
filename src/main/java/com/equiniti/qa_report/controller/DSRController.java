@@ -115,10 +115,10 @@ public class DSRController {
 	public Map<String,Object> filterBTP(Map<String,Object> paramMap) throws ControllerException{
 		Map<String,Object> returnObjMap=new HashMap<>();
 		try {
-			Object returnObj=dsrService.getDSREntries(paramMap);
+			Object returnObj=dsrService.filterDSREntries(paramMap);
 			if(null != returnObj){
-				returnObjMap.put(ApplicationConstants.STATUS, (Integer)returnObj != null ? ApplicationConstants.SUCCESS : ApplicationConstants.ERROR);
-				returnObjMap.put(ApplicationConstants.SERVER_DATA, (Integer)returnObj);
+				returnObjMap.put(ApplicationConstants.STATUS, returnObj != null ? ApplicationConstants.SUCCESS : ApplicationConstants.ERROR);
+				returnObjMap.put(ApplicationConstants.SERVER_DATA, returnObj);
 			}
 		} catch (APIException e) {
 			throw new ControllerException(e.getFaultCode(), e);

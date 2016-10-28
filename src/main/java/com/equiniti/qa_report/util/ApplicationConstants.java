@@ -52,6 +52,8 @@ public class ApplicationConstants {
 	
 	public static final String DEFAULT_LOGIN_PASSWORD="root123";
 	
+	public static final String DSR_SUMMARY_REPORT="DSR_SUMMARY_REPORT";
+	
 	public static final String BTP_SUMMARY_REPORT="BTP_SUMMARY_REPORT";
 	
 	public static final String SELECTED_BTP_REPORT="SELECTED_BTP_REPORT";
@@ -67,5 +69,7 @@ public class ApplicationConstants {
 	public static final String SIZE="SIZE";
 	
 	public static final String PAGE_NO="PAGE_NO";
+	
+	public static final String ROLE_RESOURCE_INFO="ROLE_RESOURCE_INFO";
 	
 }

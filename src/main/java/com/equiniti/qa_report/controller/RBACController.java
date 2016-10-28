@@ -67,8 +67,6 @@ public class RBACController {
 			Object returnObj=rbacService.addUserDetails(inputParam);
 			returnObjMap.put(ApplicationConstants.STATUS, (Integer)returnObj != null ? ApplicationConstants.SUCCESS : ApplicationConstants.ERROR);
 			returnObjMap.put(ApplicationConstants.SERVER_DATA, returnObj);
-			
-			LOG.info("RBACController.addUserDetails.returnObjMap--> "+ returnObjMap);
 		} catch (APIException e) {
 			throw new ControllerException(e.getFaultCode(), e);
 		} catch(Exception e){
@@ -135,13 +133,31 @@ public class RBACController {
 				returnObjMap.put(ApplicationConstants.STATUS, ApplicationConstants.SUCCESS);
 				returnObjMap.put(ApplicationConstants.SERVER_DATA, returnObj);
 			}
-			LOG.info("Begin :RolesController.getRolestList.returnObjMap--> "+returnObjMap);
 		} catch (APIException e) {
 			throw new ControllerException(e.getFaultCode(), e);
 		} catch(Exception e){
 			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}
 		LOG.info("End :RolesController.getRolestList ");
+		return returnObjMap;
+	}
+	
+	public Map<String,Object> getRoleResourcesInfo(Map<String,Object> inputParam) throws ControllerException{
+		LOG.info("Begin :RolesController.getRoleResourcesInfo ");
+		Map<String,Object> returnObjMap=new HashMap<String, Object>();
+		try {
+			Object returnObj=rbacService.getRoleResourcesInfo();
+			returnObjMap.put(ApplicationConstants.STATUS, ApplicationConstants.ERROR);
+			if(null != returnObj){
+				returnObjMap.put(ApplicationConstants.STATUS, ApplicationConstants.SUCCESS);
+				returnObjMap.put(ApplicationConstants.SERVER_DATA, returnObj);
+			}
+		} catch (APIException e) {
+			throw new ControllerException(e.getFaultCode(), e);
+		} catch(Exception e){
+			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+		LOG.info("End :RolesController.getRoleResourcesInfo ");
 		return returnObjMap;
 	}
 

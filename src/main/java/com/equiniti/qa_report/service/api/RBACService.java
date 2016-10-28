@@ -21,4 +21,6 @@ public interface RBACService {
 	
 	public boolean updateUserDetails(Map<String, Object> inputParam) throws APIException;
 
+	public Map<String, Object> getRoleResourcesInfo() throws APIException;
+
 }

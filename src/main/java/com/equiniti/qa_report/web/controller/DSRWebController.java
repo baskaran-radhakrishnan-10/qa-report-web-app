@@ -92,7 +92,7 @@ private static final Logger LOG= Logger.getLogger(DSRWebController.class);
 		LOG.debug("START filterData() Method!!!");
 		Map<String,Object> returnObj=new HashMap<>();
 		try {
-			returnObj = dsrController.getDSREntries(inputData);
+			returnObj = dsrController.filterBTP(inputData);
 		} catch (ControllerException e) {
 			throw new UIException(e.getFaultCode(), e);
 		}

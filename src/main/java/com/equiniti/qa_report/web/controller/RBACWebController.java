@@ -135,18 +135,28 @@ public class RBACWebController {
 		return returnObj;
 	}
 	
-
-	
 	@RequestMapping(value = "/showRoles", method = RequestMethod.GET)
 	public String manageRolesPage(Model model){
-		
 		return "manage_roles_page";
 	}
 	
 	@RequestMapping(value = "/managePassword", method = RequestMethod.GET)
 	public String managePasswordPage(Model model){
-		
 		return "manage_password_page";
+	}
+	
+	@RequestMapping(value="/getRoleResourcesInfo", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> getRoleResourcesInfo(Map<String,Object> inputParam){
+		LOG.debug("START getRoleResourcesInfo Method ");
+		Map<String,Object> returnObj=new HashMap<String, Object>();
+		try {
+			returnObj=rbacController.getRoleResourcesInfo(inputParam);
+		} catch (ControllerException e) {
+			e.printStackTrace();
+		}
+		LOG.debug("END getRoleResourcesInfo Method ");
+		return returnObj;
 	}
 
 }
