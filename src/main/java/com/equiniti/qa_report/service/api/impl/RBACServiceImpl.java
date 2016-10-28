@@ -80,6 +80,7 @@ public class RBACServiceImpl extends BaseAPIImpl implements RBACService {
 
 	@Override
 	public List<String> getUniqueUserList() throws APIException {
+		LOG.info("Begin: RBACServiceImpl.getUniqueUserList");
 		GetUniqueUserListEvent event=null;
 		try{
 			event=getEvent(GetUniqueUserListEvent.class);
@@ -90,6 +91,7 @@ public class RBACServiceImpl extends BaseAPIImpl implements RBACService {
 		}catch(Exception e){
 			throw new APIException(CommonFaultCode.UNKNOWN_ERROR,e);
 		}
+		LOG.info("End: RBACServiceImpl.getUniqueUserList");
 		return event.getUniqueUserList();
 	}
 
@@ -112,7 +114,7 @@ public class RBACServiceImpl extends BaseAPIImpl implements RBACService {
 
 	@Override
 	public boolean updateUserDetails(Map<String, Object> inputParam) throws APIException {
-		LOG.info("Begin :KTPlanServiceImpl.updateUserDetails ");
+		LOG.info("Begin :RBACServiceImpl.updateUserDetails ");
 		UpdateUserDetailsEvent event=null;
 		try{
 			event=getEvent(UpdateUserDetailsEvent.class);
@@ -123,12 +125,13 @@ public class RBACServiceImpl extends BaseAPIImpl implements RBACService {
 		}catch(Exception e){
 			throw new APIException(CommonFaultCode.UNKNOWN_ERROR,e);
 		}
-		LOG.info("End :KTPlanServiceImpl.updateUserDetails ");
+		LOG.info("End :RBACServiceImpl.updateUserDetails ");
 		return event.isUpdated();
 	}
 	
 	@Override
 	public List<Roles> getRolesList() throws APIException {
+		LOG.info("Begin: RBACServiceImpl.getRolesList");
 		GetRolesEvent event=null;
 		try{
 			event=getEvent(GetRolesEvent.class);
@@ -139,6 +142,7 @@ public class RBACServiceImpl extends BaseAPIImpl implements RBACService {
 		}catch(Exception e){
 			throw new APIException(CommonFaultCode.UNKNOWN_ERROR,e);
 		}
+		LOG.info("End: RBACServiceImpl.getRolesList");
 		return event.getEntityList();
 	}
 	

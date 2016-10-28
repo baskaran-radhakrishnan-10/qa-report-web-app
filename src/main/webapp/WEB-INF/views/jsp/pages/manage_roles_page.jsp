@@ -1,11 +1,11 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<spring:url	value="/resources/miminiumTheme/js/common/common.js" var="commonJS" />
+
 
 <spring:url	value="/resources/miminiumTheme/js/custom/custom_manage_roles.js" var="customManageRolesJS" />
 
-<script src="${commonJS}"></script>
+
 
 <script src="${customManageRolesJS}"></script>
 
@@ -25,7 +25,10 @@
 
 <div id="alertcustom"></div>
 
-<div class="col-md-12 top-20">
+<div id="loader_div" style="width: 149px;height: 149px; left: 54%;position: fixed; z-index: 1000;top: 42%;
+    background: rgba( 255, 255, 255, .8 ) url('../resources/miminiumTheme/img/gears.gif') 50% 50% no-repeat;display:none;"></div>
+    
+<div class="col-md-12 top-20" id="rolesMainDiv" style="display:none;">
 	<div class="panel" style="padding: 15px; padding-bottom: 20px;">
 		<div class="table-responsive">
 			

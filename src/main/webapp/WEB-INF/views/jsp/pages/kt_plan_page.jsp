@@ -5,19 +5,11 @@
  
 <script type="text/javascript" src="https://cdn.datatables.net/r/dt/jq-2.1.4,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.9,af-2.0.0,b-1.0.3,b-colvis-1.0.3,b-html5-1.0.3,b-print-1.0.3,se-1.0.1/datatables.min.js"></script>
 
-<spring:url	value="/resources/miminiumTheme/js/common/common.js" var="commonJS" />
-
 <spring:url	value="/resources/miminiumTheme/js/custom/custom_kt_plan_page.js" var="customKTPlanJS" />
-
-<spring:url	value="/resources/miminiumTheme/js/plugins/notify/notifIt.js"	var="notifyJs" />
 
 <%-- <spring:url value="/resources/miminiumTheme/js/jquery.min.js" var="jqueryJs" />
 <spring:url value="/resources/miminiumTheme/js/jquery.multiselect.js" var="multiSelectJs" />
 <spring:url value="/resources/miminiumTheme/css/jquery.multiselect.css" var="multiSelectCss" /> --%>
-
-<script src="${notifyJs}"></script>
-
-<script src="${commonJS}"></script>
 
 <script src="${customKTPlanJS}"></script>
 
@@ -52,9 +44,10 @@
 	</div>
 </div>
 
-<div id="loader_div" style="width: 93px;height: 88px; left: 54%;position: fixed; z-index: 1000;top: 61%;background: rgba( 255, 255, 255, .8 ) url('../resources/miminiumTheme/img/hourglass.gif') 50% 50% no-repeat;display:none;"></div>
+<div id="loader_div" style="width: 149px;height: 149px; left: 54%;position: fixed; z-index: 1000;top: 42%;
+    background: rgba( 255, 255, 255, .8 ) url('../resources/miminiumTheme/img/ripple.gif') 50% 50% no-repeat;display:none;"></div>
 
-<div class="col-md-12 top-20" id="applyFilter" >
+<div class="col-md-12 top-20" id="applyFilter"  style="display:none;">
 	<div class="panel" style="padding: 50px 0px;padding-bottom: 73px;margin: 13px 0px;">
 		<label class="col-sm-2 control-label" style="margin: -42px -23px;padding-top: 7px;padding-left: 40px;text-align: left;">Project</label>
 		<div class="col-md-2 top-20" style="margin-top: -12px;">
@@ -88,7 +81,7 @@
 </div>
 <div id="alertcustom"></div>
 
-<div class="col-md-12 top-20">
+<div class="col-md-12 top-20" id="ktMainDiv" style="display:none;">
 	<div class="panel" style="padding: 15px; padding-bottom: 20px;">
 		<div class="table-responsive">
 			
@@ -99,17 +92,17 @@
 						<th nowrap>KT ID</th>
 						<th nowrap>Project</th>
 						<th nowrap>KT Type</th>
-						<th nowrap>Session</th>
+	<!-- 					<th nowrap>Session</th> -->
 						<th nowrap>KT Title</th>
-						<th nowrap>Trainer(s)</th>
-						<th nowrap>Attendee(s)</th>
+	<!-- 					<th nowrap>Trainer(s)</th>
+						<th nowrap>Attendee(s)</th>-->
 						<th nowrap>Location</th>
 						<th nowrap>Start Date</th>
 						<th nowrap>End Date</th>
-						<th nowrap>Duration(Hrs)</th>
+				<!-- 		<th nowrap>Duration(Hrs)</th>
 						<th nowrap>Remarks</th>
 						<th nowrap>Feedback</th>	
-						<th nowrap></th>											
+						<th nowrap></th>	 -->										
 					</tr>
 				</thead>
 				<tbody id="tbody_id"></tbody>
@@ -213,9 +206,9 @@
 												<div class="col-sm-3">
 													<input id="endDateId" name="endDate" type="date" class="input-sm form-control imp">
 												</div>
-												<label class="col-sm-2 control-label">Duration:</label>
+												<label class="col-sm-2 control-label">Duration(Hrs):</label>
 												<div class="col-sm-3">
-													<input id="durationId" name="duration" type="text" class="input-sm form-control">
+													<input id="durationId" name="duration" type="text" class="input-sm form-control" data-toggle="tooltip" data-placement="auto right" title="" data-original-title="Enter duration in hours or .(dot) mins">
 												</div>
 											</div>
 										</div>

@@ -56,7 +56,7 @@ private static final long serialVersionUID = -1968065884219305808L;
 	private DateTime endDate;
 
 	@Column(name = "duration", nullable = false)
-	private float duration;
+	private double duration;
 	
 	@Column(name = "remarks")
 	private String remarks;
@@ -152,11 +152,11 @@ private static final long serialVersionUID = -1968065884219305808L;
 		this.endDate = endDate;
 	}
 
-	public float getDuration() {
+	public double getDuration() {
 		return duration;
 	}
 
-	public void setDuration(float duration) {
+	public void setDuration(double duration) {
 		this.duration = duration;
 	}
 
