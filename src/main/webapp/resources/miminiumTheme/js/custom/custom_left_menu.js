@@ -1,6 +1,6 @@
 var leftMenuRef = null;
 
-$(document).ready(function() {
+$(document).ready(function(event) {
 	leftMenuRef = new LeftMenuObject();
 	leftMenuRef.onDocumentReady();
 });
@@ -42,6 +42,7 @@ LeftMenuObject.prototype = {
 			}
 		},
 		constructLeftMenu : function(leftMenuObject){
+			console.log(leftMenuObject);
 			var leftMenuObjectArray=_.keys(leftMenuObject);
 			var leftMenuLiArray = $('#leftMenuUL').find('li');
 			var leftMenuIdArray = [];

@@ -63,9 +63,14 @@
 	<put-attribute name="body_content" value="/WEB-INF/views/jsp/pages/dsr_page.jsp" />
   </definition>
   
-   <definition name="dsr_report_search" extends="home.page.template">
+  <definition name="dsr_report_search" extends="home.page.template">
 	<put-attribute name="title" value="Home Page"></put-attribute>
 	<put-attribute name="body_content" value="/WEB-INF/views/jsp/pages/dsr_report_search.jsp" />
+  </definition>
+  
+  <definition name="under_construction_page" extends="home.page.template">
+	<put-attribute name="title" value="Home Page"></put-attribute>
+	<put-attribute name="body_content" value="/WEB-INF/views/jsp/layouts/under_construction.jsp" />
   </definition>
 
 </tiles-definitions>

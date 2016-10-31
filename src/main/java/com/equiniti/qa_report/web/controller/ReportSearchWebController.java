@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +28,9 @@ public class ReportSearchWebController {
 	
 	@Autowired
 	private ReportSearchController reportSearchController;
+	
+	@Autowired
+	private HttpSession session;
 	
 	@RequestMapping(value = "/btp_report_search" , method = RequestMethod.GET)
 	public String showBtpReportSearchPage(Model model) throws UIException{
@@ -57,6 +61,30 @@ public class ReportSearchWebController {
 	@RequestMapping(value = "/dsr_report_search" , method = RequestMethod.GET)
 	public String showDSRReportSearchPage(Model model) throws UIException{
 		return "dsr_report_search";
+	}
+	
+	@RequestMapping(value = "/user_report_search" , method = RequestMethod.GET)
+	public String showUserReportSearchPage(Model model) throws UIException{
+		session.setAttribute(ApplicationConstants.CURRENT_ACTION_PATH, "Report Search/User Report Search");
+		return "under_construction_page";
+	}
+	
+	@RequestMapping(value = "/leave_report_search" , method = RequestMethod.GET)
+	public String showLeaveReportSearchPage(Model model) throws UIException{
+		session.setAttribute(ApplicationConstants.CURRENT_ACTION_PATH, "Report Search/Leave Report Search");
+		return "under_construction_page";
+	}
+	
+	@RequestMapping(value = "/permission_report_search" , method = RequestMethod.GET)
+	public String showPermissionReportSearchPage(Model model) throws UIException{
+		session.setAttribute(ApplicationConstants.CURRENT_ACTION_PATH, "Report Search/Permission Report Search");
+		return "under_construction_page";
+	}
+	
+	@RequestMapping(value = "/leave_plan_report_search" , method = RequestMethod.GET)
+	public String showLeavePlanReportSearchPage(Model model) throws UIException{
+		session.setAttribute(ApplicationConstants.CURRENT_ACTION_PATH, "Report Search/Leave Plan Report Search");
+		return "under_construction_page";
 	}
 	
 	

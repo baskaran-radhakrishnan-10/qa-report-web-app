@@ -72,4 +72,5 @@ public class ApplicationConstants {
 	
 	public static final String ROLE_RESOURCE_INFO="ROLE_RESOURCE_INFO";
 	
+	public static final String CURRENT_ACTION_PATH="currentActionPath";
 }
