@@ -47,7 +47,7 @@ public class LoginServiceImpl extends BaseAPIImpl implements LoginService{
 			
 			CACHE_INS = CacheInstance.getInstance();
 			
-			event.setUserId(modelAttribute.getUserId());
+			event.setUserId(modelAttribute.getUserId().trim().toLowerCase());
 			event.setPassword(modelAttribute.getPassword());
 			
 			processEvent(event);

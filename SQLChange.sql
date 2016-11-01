@@ -90,3 +90,43 @@ INSERT INTO [ISDQAReports].[dbo]. [tbl_role_resource] (created_on,modified_on,ro
 INSERT INTO [ISDQAReports].[dbo]. [tbl_role_resource] (created_on,modified_on,role_id,resource_id,created_by,modified_by) values(CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,3,21,null,null);
 
 INSERT INTO [ISDQAReports].[dbo]. [tbl_users] VALUES (CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,1,'super.admin@equiniti.com','sgpbaRwRHfI=','super_admin',null,null,5,'Super Admin',0);
+
+
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Ashfak Peer','eics\ashfakp','sgpbaRwRHfI=','ashfak.peer@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Ashwin Ravichandran','isd\arn','sgpbaRwRHfI=','ashwin.ravichandran@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Aswin Ramachandran','isd\ajn','sgpbaRwRHfI=','aswin.ramachandran@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Balaji Murugan','isd\bmn','sgpbaRwRHfI=','balaji.murugan@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Deepa Shanmugam','eics\deepas','sgpbaRwRHfI=','deepa.shanmugam@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Divya','eics\divyaj','sgpbaRwRHfI=','divya@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Gobikarthick','eics\gobikarthickr','sgpbaRwRHfI=','gobikarthick@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Harini','eics\hthangamari','sgpbaRwRHfI=','harini@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Imran','eics\imranhv','sgpbaRwRHfI=','imran@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Jagan Ramasamy','eics\jaganathanr','sgpbaRwRHfI=','jagan.ramasamy@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Kamal','eics\kamalr','sgpbaRwRHfI=','kamal@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('karthick','eics\karthickv','sgpbaRwRHfI=','karthick@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Naveen Kandoji','eics\naveenk','sgpbaRwRHfI=','naveen.kandoji@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Prabhu Rajagopal','isd\prl','sgpbaRwRHfI=','prabhu.rajagopal@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Prabhu Srinivasan','eics\prabhus','sgpbaRwRHfI=','prabhu.srinivasan@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Prabu Rajasekar','eics\prabu','sgpbaRwRHfI=','prabu.rajasekar@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Pramothkumar Moorthi','eics\pramothkumarm','sgpbaRwRHfI=','pramothkumar.moorthi@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Prasanna Venkatesh','isd\pvh','sgpbaRwRHfI=','prasanna.venkatesh@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Prem Anandakrishnan','isd\pan','sgpbaRwRHfI=','prem.anandakrishnan@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Rajan Apparsamy','isd\ray','sgpbaRwRHfI=','rajan.apparsamy@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Ram Kumar','eics\ramk','sgpbaRwRHfI=','ram.kumar@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Ramesh','eics\rameshpa','sgpbaRwRHfI=','ramesh@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Ramya Chandrasekar','eics\ramyac','sgpbaRwRHfI=','ramya.chandrasekar@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('SampathkumarM','eics\sampathkumarm','sgpbaRwRHfI=','sampathkumarm@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('SampathM','eics\sampath','sgpbaRwRHfI=','sampathm@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Saranya Rajendran','eics\saranyar','sgpbaRwRHfI=','saranya.rajendran@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Saravanakumar','eics\saravanakumars','sgpbaRwRHfI=','saravanakumar@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Satheesh','eics\satheeshkumart','sgpbaRwRHfI=','satheesh@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Satheeshkumar.A','eics\satheeshkumara','sgpbaRwRHfI=','satheeshkumar.a@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('sdsds','sdsdsds','sgpbaRwRHfI=','sdsds@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Senthil Chelliah','isd\sch','sgpbaRwRHfI=','senthil.chelliah@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Shashi Kumar','isd\skr','sgpbaRwRHfI=','shashi.kumar@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Sindhu Ravi','eics\sindhur','sgpbaRwRHfI=','sindhu.ravi@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Suresh Kannan','eics\sureshk','sgpbaRwRHfI=','suresh.kannan@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('SureshKumar D','eics\sureshkde','sgpbaRwRHfI=','sureshkumar.d@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Venkadesh','eics\venkadeshr','sgpbaRwRHfI=','venkadesh@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Vidya','eics\vidyab','sgpbaRwRHfI=','vidya@equiniti.com',1,4,1,GETDATE());
+insert into ISDQAReports..tbl_users (name,user_id,password,email_id,is_active,role_id,first_login,created_on) values ('Vinoth Karunakaran','eics\vinothk','sgpbaRwRHfI=','vinoth.karunakaran@equiniti.com',1,4,1,GETDATE());
