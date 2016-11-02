@@ -1,6 +1,15 @@
 var leftMenuRef = null;
 
 $(document).ready(function(event) {
+
+	$(document).on("mouseenter", "li", function() {
+		$(this).css('background-color','#FFEB3B');
+	});
+
+	$(document).on("mouseleave", "li", function() {
+		$(this).css('background-color','');
+	});
+
 	leftMenuRef = new LeftMenuObject();
 	leftMenuRef.onDocumentReady();
 });

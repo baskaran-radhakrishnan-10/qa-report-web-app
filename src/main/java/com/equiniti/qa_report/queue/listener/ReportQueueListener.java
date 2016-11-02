@@ -42,6 +42,9 @@ public class ReportQueueListener implements MessageListener{
 						exportObject.put("REPORT_TYPE", "BTP_WEEKLY_REPORT");
 						reportExportHandler.exportBTPReport(exportObject);
 					}
+				}else if(ApplicationConstants.USER_SUMMARY_REPORT.intern().intern() == reportType.intern()){
+					exportObject.put("REPORT_DATA", (List<Map<String,Object>>) objectMessage.getObjectProperty("REPORT_DATA"));
+					reportExportHandler.exportUserReport(exportObject);
 				}
 			} catch (JMSException e) {
 				e.printStackTrace();

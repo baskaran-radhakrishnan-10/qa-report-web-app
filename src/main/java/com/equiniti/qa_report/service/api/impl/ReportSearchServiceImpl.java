@@ -1,11 +1,13 @@
 package com.equiniti.qa_report.service.api.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
 import com.equiniti.qa_report.event.btp_report.BuildBTPMonthlyReportEvent;
 import com.equiniti.qa_report.event.btp_report.BuildBTPSummaryReportEvent;
+import com.equiniti.qa_report.event.btp_report.BuildUserReportEvent;
 import com.equiniti.qa_report.event.btp_report.SelectedBTPReportEvent;
 import com.equiniti.qa_report.eventapi.eventhandling.generic.BaseAPIImpl;
 import com.equiniti.qa_report.exception.api.exception.APIException;
@@ -53,6 +55,20 @@ public class ReportSearchServiceImpl extends BaseAPIImpl implements ReportSearch
 		} catch (Exception e) {
 			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}
+	}
+	
+	@Override
+	public List<Map<String,Object>> buildUserSummaryReport(Map<String,Object> paramMap) throws APIException {
+		BuildUserReportEvent event = getEvent(BuildUserReportEvent.class);
+		try {
+			event.setParamMap(paramMap);
+			processEvent(event);
+		} catch (APIException e) {
+			throw new ControllerException(e.getFaultCode(), e);
+		} catch (Exception e) {
+			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+		return event.getDataObjectList();
 	}
 	
 }

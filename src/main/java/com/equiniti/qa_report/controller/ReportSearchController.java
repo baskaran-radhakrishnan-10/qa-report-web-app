@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -18,7 +18,6 @@ import com.equiniti.qa_report.enums.ExportFileEnum;
 import com.equiniti.qa_report.exception.api.exception.APIException;
 import com.equiniti.qa_report.exception.api.exception.ControllerException;
 import com.equiniti.qa_report.exception.api.faultcode.CommonFaultCode;
-import com.equiniti.qa_report.form.model.TestPlanModelAttribute;
 import com.equiniti.qa_report.service.api.ReportSearchService;
 import com.equiniti.qa_report.util.ApplicationConstants;
 
@@ -79,6 +78,22 @@ public class ReportSearchController {
 		}catch(Exception e){
 			 throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}
+	}
+	
+	public Map<String,Object> filterUserReportData(Map<String,Object> paramMap) throws ControllerException{
+		Map<String,Object> returnObjMap=new HashMap<>();
+		try {
+			Object returnObj=reportSearchService.buildUserSummaryReport(paramMap);
+			if(null != returnObj){
+				returnObjMap.put(ApplicationConstants.STATUS, returnObj != null ? ApplicationConstants.SUCCESS : ApplicationConstants.ERROR);
+				returnObjMap.put(ApplicationConstants.SERVER_DATA, returnObj);
+			}
+		} catch (APIException e) {
+			throw new ControllerException(e.getFaultCode(), e);
+		} catch(Exception e){
+			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+		return returnObjMap;
 	}
 	
 }

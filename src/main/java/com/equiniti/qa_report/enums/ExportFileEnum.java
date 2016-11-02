@@ -6,7 +6,8 @@ public enum ExportFileEnum {
 	BTP_WEEKLY("BTPWeeklyReport.xlsx"),
 	BTP_MONTHLY("BTPMonthlyReport.xlsx"),
 	SINGLE_BTP_ROW("BTPSelectedRowReport.xlsx"),
-	DSR_SUMMARY("DSRSummaryReport.xlsx");
+	DSR_SUMMARY("DSRSummaryReport.xlsx"),
+	USER_SUMMARY("UserSummaryReport.xlsx");
 
 	private final String name;       
 

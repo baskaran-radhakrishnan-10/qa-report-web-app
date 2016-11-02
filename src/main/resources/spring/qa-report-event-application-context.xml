@@ -35,6 +35,7 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:org/sp
 				<entry key="buildBTPMonthlyReportEvent" value-ref="reportSearchEventProcessor"/>
 				<entry key="buildBTPSummaryReportEvent" value-ref="reportSearchEventProcessor"/>
 				<entry key="selectedBTPReportEvent" value-ref="reportSearchEventProcessor"/>
+				<entry key="buildUserReportEvent" value-ref="reportSearchEventProcessor"/>
 				
 				<entry key="getDSREvent" value-ref="dsrEventProcessor"/>
 				<entry key="addDSREvent" value-ref="dsrEventProcessor"/>
@@ -160,7 +161,7 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:org/sp
 		<property name="dsrDAO" ref="dsrDAO"/>
 	</bean>
 	
-			<bean class="com.equiniti.qa_report.eventapi.eventhandling.processor.BaseEventProcessor" id="ktPlanEventProcessor">
+	<bean class="com.equiniti.qa_report.eventapi.eventhandling.processor.BaseEventProcessor" id="ktPlanEventProcessor">
 		<property name="handlersList">
 			<list>
 				<ref bean="ktPlanEventHandler"/>

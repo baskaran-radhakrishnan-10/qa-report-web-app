@@ -38,16 +38,15 @@ public class ReportExportHandler {
 	private static final String BTP_WEEKLY_REPORT_TEMPLATE_PATH="empty-templates/BTP_WEEKLY_REPORT_XLS_TEMPLATE.xlsx";
 	private static final String BTP_MONTHLY_REPORT_TEMPLATE_PATH="empty-templates/BTP_MONTHLY_REPORT_XLS_TEMPLATE.xlsx";
 	private static final String BTP_SELECTED_ROW_REPORT_TEMPLATE_PATH="empty-templates/SELECTED_BTP_DETAIL_XLS_TEMPLATE.xlsx";
-
 	private static final String DSR_SUMMARY_REPORT_TEMPLATE_PATH="empty-templates/DSR_BUILD_SUMMARY_XLS_TEMPLATE.xlsx";
 	private static final String DSR_SELECTED_ROW_REPORT_TEMPLATE_PATH="empty-templates/SELECTED_DSR_DETAIL_XLS_TEMPLATE.xlsx";
-
+	private static final String USER_SUMMARY_REPORT_TEMPLATE_PATH="empty-templates/USER_BUILD_SUMMARY_XLS_TEMPLATE.xlsx";
 	private static final String BTP_SUMMARY_REPORT_OUTPUT="BTPSummaryReport.xlsx";
 	private static final String BTP_WEEKLY_REPORT_OUTPUT="BTPWeeklyReport.xlsx";
 	private static final String BTP_SELECTED_ROW_OUTPUT="BTPSelectedRowReport.xlsx";
-
 	private static final String DSR_SUMMARY_REPORT_OUTPUT="DSRSummaryReport.xlsx";
 	private static final String DSR_SELECTED_ROW_OUTPUT="DSRSelectedRowReport.xlsx";
+	private static final String USER_SUMMARY_REPORT_OUTPUT="UserSummaryReport.xlsx";
 
 	private static final String PROJECT_CODE="PROJECT_CODE";
 	private static final String BTP_NO="BTP_NO";
@@ -96,6 +95,26 @@ public class ReportExportHandler {
 		exportMap.put("EXPORT_TYPE", reportType);
 		exportXLSFile(exportMap);
 
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void exportUserReport(Map<String, Object> exportDataMap){
+		
+		String reportType=(String) exportDataMap.get("REPORT_TYPE");
+		
+		String userId=(String) exportDataMap.get("USER_ID");
+		
+		List<Map<String,Object>> reportDataObj=  (List<Map<String, Object>>) exportDataMap.get("REPORT_DATA");
+		
+		Map<String,Object> exportMap = new HashMap<>();
+		exportMap.put("XLS_DATA", reportDataObj);
+		exportMap.put("OUTPUT_FILE_NAME", ReportExportHandler.USER_SUMMARY_REPORT_OUTPUT);
+		exportMap.put("USER_ID", userId);
+		exportMap.put("TEMPLATE_FILE_PATH", ReportExportHandler.USER_SUMMARY_REPORT_TEMPLATE_PATH );
+		exportMap.put("ROW_NO", 1);
+		exportMap.put("EXPORT_TYPE", reportType);
+		exportXLSFile(exportMap);
+		
 	}
 
 	@SuppressWarnings("unchecked")
@@ -391,12 +410,50 @@ public class ReportExportHandler {
 					prepareBTPDeatilsExportDocument(workbook, (Map<String, Object>) exportDataMap.get("XLS_DATA"));
 				}else if(ApplicationConstants.DSR_SUMMARY_REPORT == exportType.intern()){
 					prepareDSRReportDocument(workbook, (Map<Integer,List<DSREntity>>) exportDataMap.get("XLS_DATA"), (int) exportDataMap.get("ROW_NO"));
+				}else if(ApplicationConstants.USER_SUMMARY_REPORT == exportType.intern()){
+					prepareUserReportDocument(workbook, (List<Map<String,Object>>) exportDataMap.get("XLS_DATA"), (int) exportDataMap.get("ROW_NO"));
 				}
-
 				writeExportedFile(userId, outputFileName, workbook);
-
 			}
 		}
+	}
+	
+	private void prepareUserReportDocument(Workbook workbook,List<Map<String,Object>> xlsData,int startRowNo){
+		
+		int rownum = startRowNo;
+
+		Sheet sheet = workbook.getSheetAt(0);
+		
+		for(Map<String,Object> rowData : xlsData){
+			
+			int cellnum = 0;
+			
+			Row row = sheet.createRow(rownum++);
+			
+			Cell cell = row.createCell(cellnum++);
+			
+			setCellValue((rownum-1), cell);
+			
+			cell = row.createCell(cellnum++);
+			
+			Object obj = rowData.get("projectName");
+
+			setCellValue(obj, cell);
+			
+			cell = row.createCell(cellnum++);
+			
+			obj = rowData.get("resourceName");
+
+			setCellValue(obj, cell);
+			
+			cell = row.createCell(cellnum++);
+			
+			obj = rowData.get("actualTimeTaken");
+
+			setCellValue(obj, cell);
+			
+		}
+
 	}
 
 	private void prepareDSRReportDocument(Workbook workbook,Map<Integer,List<DSREntity>> xlsData,int startRowNo){

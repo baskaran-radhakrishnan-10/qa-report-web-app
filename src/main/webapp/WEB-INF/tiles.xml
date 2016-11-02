@@ -72,5 +72,10 @@
 	<put-attribute name="title" value="Home Page"></put-attribute>
 	<put-attribute name="body_content" value="/WEB-INF/views/jsp/layouts/under_construction.jsp" />
   </definition>
+  
+   <definition name="user_report_search" extends="home.page.template">
+	<put-attribute name="title" value="Home Page"></put-attribute>
+	<put-attribute name="body_content" value="/WEB-INF/views/jsp/pages/user_report_search.jsp" />
+  </definition>
 
 </tiles-definitions>

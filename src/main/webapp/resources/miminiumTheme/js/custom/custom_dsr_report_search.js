@@ -25,7 +25,7 @@ $(document).ready(function(){
 				filterObject[name]=$(this).val();
 				if('startDate' == name){
 					filterObject[name] = filterObject[name] + " 00:00:00";
-				}else if('startDate' == name){
+				}else if('endDate' == name){
 					filterObject[name] = filterObject[name] + " 23:59:59";
 				}
 			}
@@ -164,9 +164,6 @@ DSRReportSearch.prototype = {
 			var request = indexDBObj.db.transaction(["dsr"],"readwrite").objectStore("dsr").get(parseInt(sNo));
 			request.onsuccess = function(event){
 				var dsrEntity=request.result;
-				/*_.mapObject(dsrFormObject,function(value,key){
-					dsrEntity[key]=dsrFormObject[key];
-				});*/
 				var filterObject={};
 				filterObject['projectName']=dsrEntity['projectName'];
 				filterObject['plannedDate']=plannedDate;

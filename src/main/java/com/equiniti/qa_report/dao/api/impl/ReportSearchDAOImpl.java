@@ -1,14 +1,17 @@
 package com.equiniti.qa_report.dao.api.impl;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.equiniti.qa_report.dao.api.ReportSearchDAO;
 import com.equiniti.qa_report.entity.BtpEntity;
+import com.equiniti.qa_report.entity.DSREntity;
 import com.equiniti.qa_report.exception.api.exception.DaoException;
 import com.equiniti.qa_report.persistance_api.consenum.QueryOperationType;
 import com.equiniti.qa_report.persistance_api.consenum.QueryType;
@@ -58,6 +61,31 @@ public class ReportSearchDAOImpl implements ReportSearchDAO{
 	public List<Map<String,Object>> getBtpMonthlyReportData(Map<String,Object> paramMap){
 		List<Map<String,Object>> returnObj=null;
 		return returnObj;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Map<String,Object>> getUserReportData(Map<String,Object> restrictionMap) throws DaoException{
+		StringBuffer queryBuffer=new StringBuffer();
+		Set<String> keySet = restrictionMap.keySet();
+		List<String> keyList=new ArrayList<>(keySet);
+		queryBuffer.append("SELECT btp.projectname,resource.acttime as actualTimeTaken,resource.resourcename FROM ResourceTable resource,BtpTable btp WHERE btp.btpno = resource.btpno AND ");
+		for(int index = 0;index<keyList.size();index++){
+			String key = keyList.get(index);
+			if(key.indexOf("startDate") != -1){
+				queryBuffer.append("btp.startdate").append(" >= '").append(restrictionMap.get(key)).append("'");
+			}else if(key.indexOf("endDate") != -1){
+				queryBuffer.append("btp.enddate").append(" <= '").append(restrictionMap.get(key)).append("'");
+			}else if(key.indexOf("projectName") != -1){
+				queryBuffer.append("btp.projectname").append(" = '").append(restrictionMap.get(key)).append("'");
+			}else if(key.indexOf("resourceName") != -1){
+				queryBuffer.append("resource.resourcename").append(" = '").append(restrictionMap.get(key)).append("'");
+			}
+			if(index < (keyList.size()-1)){
+				queryBuffer.append(" AND ");
+			}
+		}
+		return (List<Map<String,Object>>) abstractHibernateDAOAPI.processQuery(null, null, null, QueryOperationType.SELECT, QueryType.SQL, queryBuffer.toString());
 	}
 
 }

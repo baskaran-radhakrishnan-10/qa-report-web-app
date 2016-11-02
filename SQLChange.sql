@@ -90,3 +90,9 @@ INSERT INTO [ISDQAReports].[dbo]. [tbl_role_resource] (created_on,modified_on,ro
 INSERT INTO [ISDQAReports].[dbo]. [tbl_role_resource] (created_on,modified_on,role_id,resource_id,created_by,modified_by) values(CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,3,21,null,null);
 
 INSERT INTO [ISDQAReports].[dbo]. [tbl_users] VALUES (CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,1,'super.admin@equiniti.com','sgpbaRwRHfI=','super_admin',null,null,5,'Super Admin',0);
+
+ALTER TABLE LEAVEDETAILS ADD gKey int identity(1,1);
+
+ALTER TABLE LEAVEPLANSINFO ADD gKey int identity(1,1);
+
+ALTER TABLE PERMISSIONDETAILS ADD gKey int identity(1,1);

@@ -1,12 +1,14 @@
 package com.equiniti.qa_report.web.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +27,8 @@ import com.equiniti.qa_report.util.ApplicationConstants;
 @Controller
 @RequestMapping(value="report_search")
 public class ReportSearchWebController {
+	
+	private static final Logger LOG = Logger.getLogger(ReportSearchWebController.class);
 	
 	@Autowired
 	private ReportSearchController reportSearchController;
@@ -65,8 +69,21 @@ public class ReportSearchWebController {
 	
 	@RequestMapping(value = "/user_report_search" , method = RequestMethod.GET)
 	public String showUserReportSearchPage(Model model) throws UIException{
-		session.setAttribute(ApplicationConstants.CURRENT_ACTION_PATH, "Report Search/User Report Search");
-		return "under_construction_page";
+		return "user_report_search";
+	}
+	
+	@RequestMapping(value = "/filter_user_report", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> filterUserReportData(@RequestBody Map<String,Object> inputData) throws UIException{
+		LOG.debug("START filterData() Method!!!");
+		Map<String,Object> returnObj=new HashMap<>();
+		try {
+			returnObj = reportSearchController.filterUserReportData(inputData);
+		} catch (ControllerException e) {
+			throw new UIException(e.getFaultCode(), e);
+		}
+		LOG.debug("END filterData() Method!!!");
+		return returnObj;
 	}
 	
 	@RequestMapping(value = "/leave_report_search" , method = RequestMethod.GET)
@@ -86,6 +103,5 @@ public class ReportSearchWebController {
 		session.setAttribute(ApplicationConstants.CURRENT_ACTION_PATH, "Report Search/Leave Plan Report Search");
 		return "under_construction_page";
 	}
-	
 	
 }
