@@ -201,25 +201,25 @@ function addOrUpdateUser(){
 	var createdOn=rowEle.find('#createdOnId').val();
 //	console.log(userDetailsData[egKey]['password']);
 	if (null ==uName || ""== uName){
-		var notifyObj={msg: '<b>Warning : </b> Please Enter Name !!!',type: "warning",position: "center" ,autohide: false};
+		var notifyObj={msg: '<b>Warning : </b> Please Enter Full Name !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 	}else if (null ==uId || ""== uId){
-		var notifyObj={msg: '<b>Warning : </b> Please Enter User ID !!!',type: "warning",position: "center" ,autohide: false};
+		var notifyObj={msg: '<b>Warning : </b> Please Enter User ID !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 	}else if (uId.length<=2){
-		var notifyObj={msg: '<b>Warning : </b> User ID should be minimum 3 letters !!!',type: "warning",position: "center" ,autohide: false};
+		var notifyObj={msg: '<b>Warning : </b> User ID should be minimum 3 letters !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 	}else if (null ==eId || ""== eId){
-		var notifyObj={msg: '<b>Warning : </b> Please Enter Email ID !!!',type: "warning",position: "center" ,autohide: false};
+		var notifyObj={msg: '<b>Warning : </b> Please Enter Email ID !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 	}else if ((null !=eId || ""!= eId) && (!isEmail(eId))){
-			var notifyObj={msg: '<b>Warning : </b> You have entered an invalid email address !!!',type: "warning",position: "center" ,autohide: false};
+			var notifyObj={msg: '<b>Warning : </b> You have entered an invalid email address !!!',type: "warning",position: "center" };
 			notif(notifyObj);
 	}else if (null ==roleListObject[roleId] || ""== roleListObject[roleId]){
-		var notifyObj={msg: '<b>Warning : </b> Please select role !!!',type: "warning",position: "center" ,autohide: false};
+		var notifyObj={msg: '<b>Warning : </b> Please select role !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 	}else if (null ==activeId || ""== activeId){
-			var notifyObj={msg: '<b>Warning : </b> Please select active option !!!',type: "warning",position: "center" ,autohide: false};
+			var notifyObj={msg: '<b>Warning : </b> Please select active option !!!',type: "warning",position: "center" };
 			notif(notifyObj);
 	}
 	else{
@@ -261,7 +261,7 @@ function isEmail(email) {
 function addUserDetailsSuccess(serverData){
 	if('ERROR' != serverData['STATUS']){	
 
-		var notifyObj={msg: '<b>Success : </b> User added Successfully !!!',type: "success",position: "center" ,autohide: false};
+		var notifyObj={msg: '<b>Success : </b> User added Successfully !!!',type: "success",position: "center" };
 		notif(notifyObj);
 		
 		if(null != sessionStorageObj){
@@ -273,7 +273,7 @@ function addUserDetailsSuccess(serverData){
 
 function updateUserDetailsSuccess(serverData){
 	if('ERROR' != serverData['STATUS']){	
-		var notifyObj={msg: '<b>Success : </b> User Updated Successfully !!!',type: "success",position: "center" ,autohide: false};
+		var notifyObj={msg: '<b>Success : </b> User Updated Successfully !!!',type: "success",position: "center" };
 		notif(notifyObj);
 		
 		if(null != sessionStorageObj){

@@ -91,11 +91,11 @@
 									<div class="form-group" id="important">
 										<div class="row">
 											<div class="col-md-12">
-												<label class="col-sm-2 control-label">Full Name:*</label>
+												<label class="col-sm-2 control-label">Full Name:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<input id="userNameId" name="userName" type="text" class="input-sm form-control imp" value="">
 												</div>
-												<label class="col-sm-2 control-label">User ID:*</label>
+												<label class="col-sm-2 control-label">User ID:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<input id="userId" name="user" type="text" style='text-transform:lowercase' class="input-sm form-control imp" value="" data-toggle="tooltip" data-placement="auto right" data-original-title="Allows only lowecase">
 												</div>
@@ -105,11 +105,11 @@
 									<div class="form-group" id="important">
 										<div class="row">
 											<div class="col-md-12">
-												<label class="col-sm-2 control-label">Email:*</label>
+												<label class="col-sm-2 control-label">Email:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<input id="emailId" name="email" type="text" class="input-sm form-control imp" value="">
 												</div>
-												<label class="col-sm-2 control-label">Role:*</label>
+												<label class="col-sm-2 control-label">Role:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<select id="roleId" name="role" class="input-sm form-control imp"></select>
 												</div>
@@ -119,11 +119,11 @@
 									<div class="form-group" id="important">
 										<div class="row">
 											<div class="col-md-12">
-												<label class="col-sm-2 control-label">Active:*</label>
+												<label class="col-sm-2 control-label">Active:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<select id="activeId" name="active" class="input-sm form-control imp"></select>
 												</div>
-												<label class="col-sm-2 control-label">Created On:*</label>
+												<label class="col-sm-2 control-label">Created On:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<input id="createdOnId" name="createdOn" type="text" class="input-sm form-control imp" value="" readonly="readonly">
 												</div>

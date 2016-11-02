@@ -17,22 +17,22 @@ $(document).ready(function() {
 		var cPwd=$("#confirmPasswordId").val();
 		
 		if(""==$("#userId").val()||null==$("#userId").val()){
-			var notifyObj={msg: '<b>Warning : </b> Please select the User ID !!!',type: "warning",position: "center" ,autohide: false};
+			var notifyObj={msg: '<b>Warning : </b> Please select the User ID !!!',type: "warning",position: "center" };
 			notif(notifyObj);
 		}
 		else if(""==nPwd||null==nPwd){
-			var notifyObj={msg: '<b>Warning : </b> Please enter New password !!!',type: "warning",position: "center" ,autohide: false};
+			var notifyObj={msg: '<b>Warning : </b> Please enter New password !!!',type: "warning",position: "center" };
 			notif(notifyObj);
 		}
 		else if(""==cPwd||null==cPwd){
-			var notifyObj={msg: '<b>Warning : </b> Please enter Confirm password !!!',type: "warning",position: "center" ,autohide: false};
+			var notifyObj={msg: '<b>Warning : </b> Please enter Confirm password !!!',type: "warning",position: "center" };
 			notif(notifyObj);
 		}
 		else if((nPwd.length<5) && (cPwd.length<5)){
-			var notifyObj={msg: '<b>Warning : </b> Password should be minimum 5 letters !!!',type: "warning",position: "center" ,autohide: false};
+			var notifyObj={msg: '<b>Warning : </b> Password should be minimum 5 letters !!!',type: "warning",position: "center" };
 			notif(notifyObj);
 		}else if((nPwd != cPwd)){
-			var notifyObj={msg: '<b>Warning : </b> New and Confirm Password not matching !!!',type: "warning",position: "center" ,autohide: false};
+			var notifyObj={msg: '<b>Warning : </b> New and Confirm Password not matching !!!',type: "warning",position: "center" };
 			notif(notifyObj);
 		}
 		else if((nPwd==cPwd) && (null!=nPwd && null!=cPwd) && (""!=nPwd && ""!=cPwd ) && ((nPwd.length >=5) && (cPwd.length >=5))){
@@ -117,7 +117,7 @@ function resetPasswordSuccess(serverData){
 		$('#userId').val("");
 		$('#newPasswordId').val("");
 		$('#confirmPasswordId').val("");       
-		var notifyObj={msg: '<b>Success : </b> Password Updated Successfully !!!',type: "success",position: "center" ,autohide: false};
+		var notifyObj={msg: '<b>Success : </b> Password Updated Successfully !!!',type: "success",position: "center" };
 		notif(notifyObj);
 	}
 }
