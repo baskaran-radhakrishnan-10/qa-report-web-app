@@ -272,10 +272,11 @@ function addOrUpdateKTPlan(){
 	var locationId=rowEle.find('#locationId').val();
 	var startDate=rowEle.find('#startDateId').val();
 	var endDate=rowEle.find('#endDateId').val();
+	var startDateVal=new Date(Date.parse(startDate));
+	var endDateVal=new Date(Date.parse(endDate));
 	var duration=rowEle.find('#durationId').val();
 	var remarks=rowEle.find('#remarksId').val();
 	var feedback=rowEle.find('#feedbackId').val();
-	
 	if (null ==projectId || ""== projectId){
 		var notifyObj={msg: '<b>Warning : </b> Please Select Project Name !!!',type: "warning",position: "center" ,autohide: false};
 		notif(notifyObj);
@@ -310,11 +311,14 @@ function addOrUpdateKTPlan(){
 		var notifyObj={msg: '<b>Warning : </b> Please Select End Date !!!',type: "warning",position: "center" ,autohide: false};
 		notif(notifyObj);
 		
+	}else if(startDateVal > endDateVal ){
+		var notifyObj={msg: 'EndDate should be Equal or greater than the StartDate !!!',type: "warning",position: "center" ,autohide: false};
+		notif(notifyObj);
 	}else if (null ==duration || ""== duration){
 		var notifyObj={msg: '<b>Warning : </b> Please Enter Duration !!!',type: "warning",position: "center" ,autohide: false};
 		notif(notifyObj);
-		
-	}else{
+	}
+	else{
 		isValid=true;
 	}
 	ktObject['project']=projectId;

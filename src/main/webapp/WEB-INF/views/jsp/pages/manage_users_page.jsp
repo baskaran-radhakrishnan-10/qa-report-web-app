@@ -97,7 +97,7 @@
 												</div>
 												<label class="col-sm-2 control-label">User ID:*</label>
 												<div class="col-sm-3">
-													<input id="userId" name="user" type="text" class="input-sm form-control imp" value="">
+													<input id="userId" name="user" type="text" style='text-transform:lowercase' class="input-sm form-control imp" value="" data-toggle="tooltip" data-placement="auto right" data-original-title="Allows only lowecase">
 												</div>
 											</div>
 										</div>
