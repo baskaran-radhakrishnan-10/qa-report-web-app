@@ -47,7 +47,6 @@ public class RBACDAOImpl implements RBACDAO {
 		LOG.debug("Begin: RBACDAOImpl.addUserDetails");
 		int createdRow=0;
 		try{
-			LOG.debug("AddUserDAOImpl.addUserDetails.entity--> "+entity);
 			createdRow=abstractHibernateDAOAPI.saveEntity(entity);
 		}catch(DaoException e){
 			throw new DaoException(e.getFaultCode(), e);

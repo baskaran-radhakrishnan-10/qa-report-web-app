@@ -3,8 +3,6 @@ package com.equiniti.qa_report.dao.api;
 import java.util.List;
 import java.util.Map;
 
-import com.equiniti.qa_report.entity.ItemEntity;
-import com.equiniti.qa_report.entity.Roles;
 import com.equiniti.qa_report.entity.User;
 import com.equiniti.qa_report.exception.api.exception.DaoException;
 

@@ -8,7 +8,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 import com.equiniti.qa_report.dao.api.RBACDAO;
 import com.equiniti.qa_report.dao.api.RBACRolesDAO;
 import com.equiniti.qa_report.entity.User;
-import com.equiniti.qa_report.event.kt_plan.UpdateKTPlanDetailsEvent;
 import com.equiniti.qa_report.event.rbac.AddUserDeatilsEvent;
 import com.equiniti.qa_report.event.rbac.GetUniqueUserListEvent;
 import com.equiniti.qa_report.event.rbac.ResetPasswordEvent;
@@ -213,23 +212,4 @@ public class RBACEventHandler implements IEventHandler<IEvent> {
 		return entity;
 	}
 	
-/*	private String encryptPassword(String Password) throws EventException{
-		LOG.debug("Begin: RBACServiceImpl.encryptPassword");
-		String encryptedPassword;
-		try{
-			LOG.info("---encryptPassword begin--");
-			encryptedPassword=cryptoService.encrypt(Password);
-			LOG.info("---encryptedPassword end--"+encryptedPassword);
-		}
-		catch(SecurityException se){
-			throw new EventException(SecurityFaultCodes.SECURITY_CRYPTO_ENCRIPTION_FAILED_ERROR,se);			
-		}
-		catch(Exception e){
-			throw new EventException(CommonFaultCode.UNKNOWN_ERROR, e);
-		}
-
-
-		LOG.debug("End: AddUserDeatilsEventHandler.populateEntityFromMapObject.encryptedPassword");
-		return encryptedPassword;
-	}*/
 }

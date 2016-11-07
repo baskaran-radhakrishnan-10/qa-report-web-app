@@ -77,5 +77,10 @@
 	<put-attribute name="title" value="Home Page"></put-attribute>
 	<put-attribute name="body_content" value="/WEB-INF/views/jsp/pages/user_report_search.jsp" />
   </definition>
-
+  
+  <definition name="remainder_settings_page" extends="home.page.template">
+	<put-attribute name="title" value="Home Page"></put-attribute>
+	<put-attribute name="body_content" value="/WEB-INF/views/jsp/pages/remainder_settings.jsp" />
+  </definition>
+  
 </tiles-definitions>

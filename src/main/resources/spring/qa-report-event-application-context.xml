@@ -43,7 +43,11 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:org/sp
 
 				<entry key="getKTPlanDetailsEvent" value-ref="ktPlanEventProcessor"/>
 				<entry key="addKTPlanDetailsEvent" value-ref="ktPlanEventProcessor"/>
-				<entry key="updateKTPlanDetailsEvent" value-ref="ktPlanEventProcessor"/>				
+				<entry key="updateKTPlanDetailsEvent" value-ref="ktPlanEventProcessor"/>
+				
+				<entry key="getRemainderDetailsEvent" value-ref="remainderDetailsEventProcessor"/>
+				<entry key="addRemainderDetailsEvent" value-ref="remainderDetailsEventProcessor"/>
+				<entry key="updateRemainderDetailsEvent" value-ref="remainderDetailsEventProcessor"/>				
 			</map>	
 		</property>
 	</bean>
@@ -171,6 +175,18 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:org/sp
 
 	<bean class="com.equiniti.qa_report.event_handler.KTPlanEventHandler" id="ktPlanEventHandler">
 		<property name="ktPlanDAO" ref="ktPlanDAO"/>
+	</bean>
+	
+	<bean class="com.equiniti.qa_report.eventapi.eventhandling.processor.BaseEventProcessor" id="remainderDetailsEventProcessor">
+		<property name="handlersList">
+			<list>
+				<ref bean="operationServiceEventHandler"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="com.equiniti.qa_report.event_handler.OperationServiceEventHandler" id="operationServiceEventHandler">
+		<property name="operationDAO" ref="operationDAO"/>
 	</bean>
 
 </beans>			

@@ -1,20 +1,32 @@
 package com.equiniti.qa_report.web.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.equiniti.qa_report.controller.OperationController;
+import com.equiniti.qa_report.exception.api.exception.ControllerException;
 import com.equiniti.qa_report.exception.api.exception.UIException;
 import com.equiniti.qa_report.util.ApplicationConstants;
 
 @Controller
 @RequestMapping(value="operation")
 public class OperationWebController {
+	@Autowired
+	private OperationController operationController;
 
+	private static final Logger LOG= Logger.getLogger(RBACWebController.class); 
+	
 	@Autowired
 	private HttpSession session;
 	
@@ -62,8 +74,49 @@ public class OperationWebController {
 	
 	@RequestMapping(value = "/remainder_settings" , method = RequestMethod.GET)
 	public String showRemainderSettingsPage(Model model) throws UIException{
-		session.setAttribute(ApplicationConstants.CURRENT_ACTION_PATH, "Operations/Remainder Settings");
+		//session.setAttribute(ApplicationConstants.CURRENT_ACTION_PATH, "Operations/Remainder Settings");
 		return "under_construction_page";
 	}
-
+	
+	@RequestMapping(value="/getRemainderDetails", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> getRemainderDetails(@RequestBody Map<String,Object> inputParam){
+		LOG.info("Begin :OperationWebController.getRemainderDetails ");
+		Map<String,Object> returnObj=new HashMap<>();
+		try {
+			returnObj=operationController.getRemainderDetails(inputParam);
+		} catch (ControllerException e) {
+			e.printStackTrace();
+		}
+		LOG.info("End :OperationWebController.getRemainderDetails ");
+		return returnObj;
+	}
+	
+	@RequestMapping(value="/addRemainderDetails", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> addRemainderDetails(@RequestBody Map<String,Object> inputParam){
+		LOG.info("Begin :OperationWebController.addRemainderDetails ");
+		Map<String,Object> returnObj=new HashMap<>();
+		try {
+			returnObj=operationController.addRemainderDetails(inputParam);
+		} catch (ControllerException e) {
+			e.printStackTrace();
+		}
+		LOG.info("End :OperationWebController.addRemainderDetails ");
+		return returnObj;
+	}
+	
+	@RequestMapping(value="/updateRemainderDetails", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> updateRemainderDetails(@RequestBody Map<String,Object> inputParam){
+		LOG.info("Begin :OperationWebController.updateRemainderDetails ");
+		Map<String,Object> returnObj=new HashMap<>();
+		try {
+			returnObj=operationController.updateRemainderDetails(inputParam);
+		} catch (ControllerException e) {
+			e.printStackTrace();
+		}
+		LOG.info("End :OperationWebController.updateRemainderDetails ");
+		return returnObj;
+	}
 }

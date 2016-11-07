@@ -10,7 +10,6 @@ import com.equiniti.qa_report.entity.KTPlan;
 import com.equiniti.qa_report.event.kt_plan.AddKTPlanDetailsEvent;
 import com.equiniti.qa_report.event.kt_plan.GetKTPlanDetailsEvent;
 import com.equiniti.qa_report.event.kt_plan.UpdateKTPlanDetailsEvent;
-import com.equiniti.qa_report.event.resource_details.UpdateResourceDeatilsEvent;
 import com.equiniti.qa_report.eventapi.eventhandling.generic.IEvent;
 import com.equiniti.qa_report.eventapi.eventhandling.handler.IEventHandler;
 import com.equiniti.qa_report.exception.api.exception.DaoException;

@@ -37,7 +37,6 @@ public class KTPlanWebController {
 		Map<String,Object> returnObjMap=new HashMap<>();
 		try {
 			returnObjMap=ktPlanController.getKTPlanDetails();			
-			LOG.info("KTPlanWebController.getKTPlanDetails.returnObjMap--> "+ returnObjMap);
 		} catch (ControllerException e) {
 			e.printStackTrace();
 		}
@@ -50,7 +49,6 @@ public class KTPlanWebController {
 		LOG.info("Begin: KTPlanWebController.addKTDetails");
 		Map<String,Object> returnObj=new HashMap<>();
 		try {
-			LOG.info("KTPlanWebController.addKTDetails.inputParam--> "+ inputParam);
 			returnObj=ktPlanController.addKTDetails(inputParam);
 		} catch (ControllerException e) {
 			e.printStackTrace();
@@ -65,7 +63,6 @@ public class KTPlanWebController {
 		LOG.info("Begin: KTPlanWebController.updateKTDetails");
 		Map<String,Object> returnObj=new HashMap<>();
 		try {
-			LOG.info("KTPlanWebController.updateKTDetails.inputParam--> "+ inputParam);
 			returnObj=ktPlanController.updateKTDetails(inputParam);
 		} catch (ControllerException e) {
 			e.printStackTrace();

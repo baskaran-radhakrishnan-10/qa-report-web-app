@@ -37,12 +37,6 @@ public class RBACServiceImpl extends BaseAPIImpl implements RBACService {
 	@Autowired
 	private HttpSession session;
 
-	/*private EncryptionDecryption cryptoService;
-
-	  public void setCryptoService(EncryptionDecryption cryptoService) {
-			this.cryptoService = cryptoService;
-		}*/
-
 	@Override
 	public int addUserDetails(Map<String, Object> inputParam) throws APIException {
 		LOG.info("Begin :RBACServiceImpl.addUserDetails ");
