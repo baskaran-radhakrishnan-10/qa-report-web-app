@@ -75,7 +75,7 @@ public class OperationWebController {
 	@RequestMapping(value = "/remainder_settings" , method = RequestMethod.GET)
 	public String showRemainderSettingsPage(Model model) throws UIException{
 		//session.setAttribute(ApplicationConstants.CURRENT_ACTION_PATH, "Operations/Remainder Settings");
-		return "under_construction_page";
+		return "remainder_settings_page";
 	}
 	
 	@RequestMapping(value="/getRemainderDetails", method = RequestMethod.POST)
