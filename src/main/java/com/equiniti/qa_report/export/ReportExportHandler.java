@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.apache.log4j.Logger;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -34,6 +35,8 @@ import com.equiniti.qa_report.util.ApplicationConstants;
 @Service
 public class ReportExportHandler {
 
+	private static final Logger LOG = Logger.getLogger(ReportExportHandler.class);
+
 	private static final String BTP_SUMMARY_REPORT_TEMPLATE_PATH="empty-templates/BTP_BUILD_SUMMARY_XLS_TEMPLATE.xlsx";
 	private static final String BTP_WEEKLY_REPORT_TEMPLATE_PATH="empty-templates/BTP_WEEKLY_REPORT_XLS_TEMPLATE.xlsx";
 	private static final String BTP_MONTHLY_REPORT_TEMPLATE_PATH="empty-templates/BTP_MONTHLY_REPORT_XLS_TEMPLATE.xlsx";
@@ -41,8 +44,10 @@ public class ReportExportHandler {
 	private static final String DSR_SUMMARY_REPORT_TEMPLATE_PATH="empty-templates/DSR_BUILD_SUMMARY_XLS_TEMPLATE.xlsx";
 	private static final String DSR_SELECTED_ROW_REPORT_TEMPLATE_PATH="empty-templates/SELECTED_DSR_DETAIL_XLS_TEMPLATE.xlsx";
 	private static final String USER_SUMMARY_REPORT_TEMPLATE_PATH="empty-templates/USER_BUILD_SUMMARY_XLS_TEMPLATE.xlsx";
+	
 	private static final String BTP_SUMMARY_REPORT_OUTPUT="BTPSummaryReport.xlsx";
 	private static final String BTP_WEEKLY_REPORT_OUTPUT="BTPWeeklyReport.xlsx";
+	private static final String BTP_MONTHLY_REPORT_OUTPUT="BTPMonthlyReport.xlsx";
 	private static final String BTP_SELECTED_ROW_OUTPUT="BTPSelectedRowReport.xlsx";
 	private static final String DSR_SUMMARY_REPORT_OUTPUT="DSRSummaryReport.xlsx";
 	private static final String DSR_SELECTED_ROW_OUTPUT="DSRSelectedRowReport.xlsx";
@@ -80,11 +85,11 @@ public class ReportExportHandler {
 	@SuppressWarnings("unchecked")
 	public void exportDSRReport(Map<String, Object> exportDataMap){
 
-		String reportType=(String) exportDataMap.get("REPORT_TYPE");
+		String reportType=(String) exportDataMap.get(ApplicationConstants.REPORT_TYPE);
 
 		String userId=(String) exportDataMap.get("USER_ID");
 
-		Map<Integer,List<DSREntity>> dsrDataMap=  (Map<Integer,List<DSREntity>>) exportDataMap.get("REPORT_DATA");
+		Map<Integer,List<DSREntity>> dsrDataMap=  (Map<Integer,List<DSREntity>>) exportDataMap.get(ApplicationConstants.REPORT_DATA);
 
 		Map<String,Object> exportMap = new HashMap<>();
 		exportMap.put("XLS_DATA", dsrDataMap);
@@ -96,16 +101,16 @@ public class ReportExportHandler {
 		exportXLSFile(exportMap);
 
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public void exportUserReport(Map<String, Object> exportDataMap){
-		
-		String reportType=(String) exportDataMap.get("REPORT_TYPE");
-		
+
+		String reportType=(String) exportDataMap.get(ApplicationConstants.REPORT_TYPE);
+
 		String userId=(String) exportDataMap.get("USER_ID");
-		
-		List<Map<String,Object>> reportDataObj=  (List<Map<String, Object>>) exportDataMap.get("REPORT_DATA");
-		
+
+		List<Map<String,Object>> reportDataObj=  (List<Map<String, Object>>) exportDataMap.get(ApplicationConstants.REPORT_DATA);
+
 		Map<String,Object> exportMap = new HashMap<>();
 		exportMap.put("XLS_DATA", reportDataObj);
 		exportMap.put("OUTPUT_FILE_NAME", ReportExportHandler.USER_SUMMARY_REPORT_OUTPUT);
@@ -114,17 +119,295 @@ public class ReportExportHandler {
 		exportMap.put("ROW_NO", 1);
 		exportMap.put("EXPORT_TYPE", reportType);
 		exportXLSFile(exportMap);
+
+	}
+
+	private void updateItemDetails(List<Map<String,Object>> btpItemDetailsList,String btpKey,Map<String,Object> internalObject){
+
+		for(Map<String,Object> dataMap : btpItemDetailsList){
+
+			String projectName = String.valueOf(dataMap.get("projectname"));
+			
+			int btpNo = Integer.valueOf(String.valueOf(dataMap.get("btpno")));
+			
+			String key = new StringBuffer().append(projectName).append("~~~").append(btpNo).toString();
+
+			if(btpKey.intern() == key.intern()){
+
+				String itemDescription = String.valueOf(dataMap.get("itemdescription"));
+
+				int itemCount = (int) dataMap.get("itemcount");
+
+				itemDescription = itemDescription.indexOf("null") != -1 ? "" : itemDescription;
+
+				if(itemDescription.indexOf("US-Retesting") != -1){
+
+					if(internalObject.containsKey("US_RETEST")){
+
+						itemCount += (Integer)internalObject.get("US_RETEST");
+
+					}
+
+					internalObject.put("US_RETEST", itemCount);
+
+				}else if(itemDescription.indexOf("US-Regression") != -1){
+
+					if(internalObject.containsKey("US_REGRESSION")){
+
+						itemCount += (Integer)internalObject.get("US_REGRESSION");
+
+					}
+
+					internalObject.put("US_REGRESSION", itemCount);
+
+				}else if(itemDescription.indexOf("US-Execution") != -1){
+
+					if(internalObject.containsKey("US_EXECUTION")){
+
+						itemCount += (Integer)internalObject.get("US_EXECUTION");
+
+					}
+
+					internalObject.put("US_EXECUTION", itemCount);
+
+				}else if(itemDescription.indexOf("Test Design") != -1){
+
+					if(internalObject.containsKey("TEST_DESIGN")){
+
+						itemCount += (Integer)internalObject.get("TEST_DESIGN");
+
+					}
+
+					internalObject.put("TEST_DESIGN", itemCount);
+
+				}else if(itemDescription.indexOf("Test Review") != -1){
+
+					if(internalObject.containsKey("TEST_REVIEW")){
+
+						itemCount += (Integer)internalObject.get("TEST_REVIEW");
+
+					}
+
+					internalObject.put("TEST_REVIEW", itemCount);
+
+				}
+
+			}
+
+		}
+
+	}
+
+	private void updateResourceDetails(List<Map<String,Object>> btpResourceDetailsList,String btpKey,Map<String,Object> internalObject){
+
+		for(Map<String,Object> dataMap : btpResourceDetailsList){
+
+			String projectName = String.valueOf(dataMap.get("projectname"));
+			
+			int btpNo = Integer.valueOf(String.valueOf(dataMap.get("btpno")));
+			
+			String key = new StringBuffer().append(projectName).append("~~~").append(btpNo).toString();
+
+			if(btpKey.intern() == key.intern()){
+
+				String itemName = String.valueOf(dataMap.get("itemname"));
+
+				itemName = itemName.indexOf("null") != -1 ? "" : itemName;
+
+				if(itemName.indexOf("Bugs Verification") != -1){
+
+					if(internalObject.containsKey("BUGS_CLOSED")){
+
+						int bugsClosedCount = (Integer)internalObject.get("BUGS_CLOSED")+(int) dataMap.get("pass");
+
+						internalObject.put("BUGS_CLOSED", bugsClosedCount);
+
+					}
+
+				}
+
+				if(internalObject.containsKey("BUGS_LOGGED")){
+
+					int bugsLoggedCount = (Integer)internalObject.get("BUGS_LOGGED") + (int) dataMap.get("bugslogged");
+
+					internalObject.put("BUGS_LOGGED", bugsLoggedCount);
+
+				}
+
+			}
+
+		}
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public void exportBTPMonthlyReport(Map<String, Object> exportDataMap){
+
+		String reportType=(String) exportDataMap.get(ApplicationConstants.REPORT_TYPE);
+
+		String userId=(String) exportDataMap.get("USER_ID");
+
+		Map<String,List<Map<String,Object>>> dataObj = (Map<String,List<Map<String,Object>>>) exportDataMap.get(ApplicationConstants.REPORT_DATA);
+
+		List<Map<String,Object>> btpItemDetailsList = dataObj.get("BTP_ITEM_DETAILS");
+
+		List<Map<String,Object>> btpResourceDetailsList = dataObj.get("BTP_RESOURCE_DETAILS");
+
+		Map<String,Map<String,Object>> updateObjectMap = new TreeMap<>();
+
+		for(Map<String,Object> dataMap : btpItemDetailsList){
+
+			int bugsReleasedCount = 0 , bugsLoggedCount = 0 , bugsClosedCount = 0 ;
+
+			String projectName = String.valueOf(dataMap.get("projectname"));
+			
+			int btpNo = Integer.valueOf(String.valueOf(dataMap.get("btpno")));
+			
+			String key = new StringBuffer().append(projectName).append("~~~").append(btpNo).toString();
+
+			String btpPlan = String.valueOf(dataMap.get("btpplan"));
+
+			String cycle = String.valueOf(dataMap.get("cycle"));
+
+			String buildNo = String.valueOf(dataMap.get("buildno"));
+
+			String build = new StringBuffer().append(cycle).append("-").append(buildNo).toString();
+
+			String btpRemarks = new StringBuffer(String.valueOf(dataMap.get("btpremarks"))).toString();
+			
+			String reportMonth = String.valueOf(dataMap.get("report_month"));
+			
+			String reportYear = String.valueOf(dataMap.get("report_year"));
+
+			btpRemarks = btpRemarks.indexOf("null") != -1 ? "" : btpRemarks;
+
+			Map<String,Object> internalObject = null;
+
+			if(!updateObjectMap.containsKey(key)){
+
+				internalObject = new LinkedHashMap<>();
+
+				internalObject.put("PROJECT", projectName);
+				
+				internalObject.put("BUILD_COUNT", bugsReleasedCount);
+
+				internalObject.put("BUILD_DETAILS", "");
+
+				internalObject.put("BUGS_CLOSED", bugsClosedCount);
+
+				internalObject.put("BUGS_LOGGED", bugsLoggedCount);
+				
+				internalObject.put("US", 0);
+
+				internalObject.put("US_RETEST", 0);
+
+				internalObject.put("US_REGRESSION", 0);
+
+				internalObject.put("US_EXECUTION", 0);
+				
+				internalObject.put("TEST", 0);
+
+				internalObject.put("TEST_DESIGN", 0);
+
+				internalObject.put("TEST_REVIEW", 0);
+				
+				internalObject.put("REMARKS", "");
+				
+				internalObject.put("REPORT_MONTH", reportMonth);
+
+				internalObject.put("REPORT_YEAR", reportYear);
+
+				if("Build Test Plan".intern() ==  btpPlan.intern()){
+
+					if(internalObject.containsKey("BUILD_COUNT")){
+
+						bugsReleasedCount = (Integer)internalObject.get("BUILD_COUNT");
+
+						bugsReleasedCount++;
+
+					}
+
+					internalObject.put("BUILD_COUNT", bugsReleasedCount);
+
+				}
+				
+				if(internalObject.containsKey("BUILD_DETAILS")){
+
+					String buildDetails = new StringBuffer(String.valueOf(internalObject.get("BUILD_DETAILS"))).append(build).toString();
+
+					internalObject.put("BUILD_DETAILS", buildDetails);
+
+				}
+				
+				if(internalObject.containsKey("REMARKS")){
+					
+					String buildDetails = new StringBuffer(String.valueOf(internalObject.get("REMARKS"))).append(btpRemarks).toString();
+					
+					internalObject.put("REMARKS", buildDetails);
+					
+				}
+
+				updateItemDetails(btpItemDetailsList, key, internalObject);
+
+				updateResourceDetails(btpResourceDetailsList, key, internalObject);
+				
+				StringBuffer detBuffer=new StringBuffer();
+				
+				detBuffer.append("US-Execution = ").append(internalObject.get("US_EXECUTION")).append(";");
+				
+				detBuffer.append("US-Retesting = ").append(internalObject.get("US_RETEST")).append(";");
+				
+				detBuffer.append("US-Regression = ").append(internalObject.get("US_REGRESSION")).append(";");
+				
+				internalObject.put("US", detBuffer.toString());
+				
+				detBuffer=new StringBuffer();
+				
+				detBuffer.append("Test-Design = ").append(internalObject.get("TEST_DESIGN")).append(";");
+				
+				detBuffer.append("Test-Review = ").append(internalObject.get("TEST_REVIEW")).append(";");
+				
+				internalObject.put("TEST", detBuffer.toString());
+				
+				internalObject.remove("US_RETEST");
+				
+				internalObject.remove("US_REGRESSION");
+				
+				internalObject.remove("US_EXECUTION");
+				
+				internalObject.remove("TEST_DESIGN");
+
+				internalObject.remove("TEST_REVIEW");
+				
+				updateObjectMap.put(key, internalObject);
+
+			}
+			
+		}
+
+		System.out.println(updateObjectMap);
 		
+		if(!updateObjectMap.isEmpty()){
+			Map<String,Object> exportMap = new HashMap<>();
+			exportMap.put("XLS_DATA", updateObjectMap);
+			exportMap.put("OUTPUT_FILE_NAME", ReportExportHandler.BTP_MONTHLY_REPORT_OUTPUT);
+			exportMap.put("USER_ID", userId);
+			exportMap.put("TEMPLATE_FILE_PATH", ReportExportHandler.BTP_MONTHLY_REPORT_TEMPLATE_PATH);
+			exportMap.put("ROW_NO", 2);
+			exportMap.put("EXPORT_TYPE", reportType);
+			exportXLSFile(exportMap);
+		}
+
 	}
 
 	@SuppressWarnings("unchecked")
 	public void exportBTPReport(Map<String, Object> exportDataMap){
 
-		String reportType=(String) exportDataMap.get("REPORT_TYPE");
+		String reportType=(String) exportDataMap.get(ApplicationConstants.REPORT_TYPE);
 
 		String userId=(String) exportDataMap.get("USER_ID");
 
-		List<Map<String,Object>> dataObj = (List<Map<String, Object>>) exportDataMap.get("REPORT_DATA");
+		List<Map<String,Object>> dataObj = (List<Map<String, Object>>) exportDataMap.get(ApplicationConstants.REPORT_DATA);
 
 		boolean isBTPWeeklyReport= (ApplicationConstants.BTP_WEEKLY_REPORT.intern() == reportType.intern());
 
@@ -135,6 +418,8 @@ public class ReportExportHandler {
 		int sNo = 1;
 
 		for(Map<String,Object> dataMap : dataObj){
+
+			System.out.println(dataMap);
 
 			if(ApplicationConstants.SELECTED_BTP_REPORT.intern() == reportType.intern()){
 
@@ -403,7 +688,6 @@ public class ReportExportHandler {
 			}
 
 			if(null != workbook){
-
 				if(ApplicationConstants.BTP_WEEKLY_REPORT.intern() == exportType.intern() || ApplicationConstants.BTP_SUMMARY_REPORT.intern() == exportType.intern()){
 					prepareBTPReportDocument(workbook, (Map<Integer, Map<String, Object>>) exportDataMap.get("XLS_DATA"), (int) exportDataMap.get("ROW_NO"));
 				}else if(ApplicationConstants.SELECTED_BTP_REPORT == exportType.intern()){
@@ -412,46 +696,98 @@ public class ReportExportHandler {
 					prepareDSRReportDocument(workbook, (Map<Integer,List<DSREntity>>) exportDataMap.get("XLS_DATA"), (int) exportDataMap.get("ROW_NO"));
 				}else if(ApplicationConstants.USER_SUMMARY_REPORT == exportType.intern()){
 					prepareUserReportDocument(workbook, (List<Map<String,Object>>) exportDataMap.get("XLS_DATA"), (int) exportDataMap.get("ROW_NO"));
+				}else if(ApplicationConstants.BTP_MONTHLY_REPORT == exportType.intern()){
+					prepareBTPMonthlyReportDocument(workbook, (Map<String,Map<String,Object>>) exportDataMap.get("XLS_DATA"), (int) exportDataMap.get("ROW_NO"));
 				}
 				writeExportedFile(userId, outputFileName, workbook);
 			}
 		}
 	}
 	
-	private void prepareUserReportDocument(Workbook workbook,List<Map<String,Object>> xlsData,int startRowNo){
+	private void prepareBTPMonthlyReportDocument(Workbook workbook,Map<String,Map<String,Object>> xlsData,int startRowNo){
 		
 		int rownum = startRowNo;
 
 		Sheet sheet = workbook.getSheetAt(0);
 		
-		for(Map<String,Object> rowData : xlsData){
+		Set<String> xlsKeySet = xlsData.keySet();
+		
+		for(String xlsKey : xlsKeySet){
+			
+			Map<String,Object> rowDataMap = xlsData.get(xlsKey);
 			
 			int cellnum = 0;
+			
+			if(startRowNo == rownum){
+				
+				String cellValue = sheet.getRow(0).getCell(0).getStringCellValue();
+				
+				String month = rowDataMap.get("REPORT_MONTH").toString();
+				
+				String year = rowDataMap.get("REPORT_YEAR").toString();
+				
+				sheet.getRow(0).getCell(0).setCellValue(new StringBuffer().append(cellValue).append(" ").append(month).append("-").append(year).toString());
+				
+			}
 			
 			Row row = sheet.createRow(rownum++);
 			
 			Cell cell = row.createCell(cellnum++);
+
+			setCellValue((rownum-2), cell);
 			
+			Set<String> rowDataKeySet = rowDataMap.keySet();
+			
+			for(String rowDataKey : rowDataKeySet){
+				
+				if(rowDataKey.indexOf("REPORT_") == -1){
+					
+					cell = row.createCell(cellnum++);
+					
+					setCellValue((rowDataMap.get(rowDataKey)), cell);
+					
+				}
+				
+			}
+			
+		}
+		
+	}
+
+	private void prepareUserReportDocument(Workbook workbook,List<Map<String,Object>> xlsData,int startRowNo){
+
+		int rownum = startRowNo;
+
+		Sheet sheet = workbook.getSheetAt(0);
+
+		for(Map<String,Object> rowData : xlsData){
+
+			int cellnum = 0;
+
+			Row row = sheet.createRow(rownum++);
+
+			Cell cell = row.createCell(cellnum++);
+
 			setCellValue((rownum-1), cell);
-			
+
 			cell = row.createCell(cellnum++);
-			
+
 			Object obj = rowData.get("projectName");
 
 			setCellValue(obj, cell);
-			
+
 			cell = row.createCell(cellnum++);
-			
+
 			obj = rowData.get("resourceName");
 
 			setCellValue(obj, cell);
-			
+
 			cell = row.createCell(cellnum++);
-			
+
 			obj = rowData.get("actualTimeTaken");
 
 			setCellValue(obj, cell);
-			
+
 		}
 
 	}
@@ -459,85 +795,85 @@ public class ReportExportHandler {
 	private void prepareDSRReportDocument(Workbook workbook,Map<Integer,List<DSREntity>> xlsData,int startRowNo){
 
 		int rownum = startRowNo;
-		
+
 		int noOfSheets = workbook.getNumberOfSheets();
-		
+
 		for(int index = 0;index<noOfSheets;index++){
-			
+
 			Sheet sheet = workbook.getSheetAt(index);
-			
+
 			List<DSREntity> entityList = xlsData.get(index);
-			
+
 			for(DSREntity entity : entityList){
-				
+
 				Row row = sheet.createRow(rownum++);
-				
+
 				int cellnum = 0;
-				
+
 				Cell cell = row.createCell(cellnum++);
 
 				Object obj =entity.getProjectName();
 
 				setCellValue(obj, cell);
-				
+
 				cell = row.createCell(cellnum++);
-				
+
 				obj =entity.getResource();
 
 				setCellValue(obj, cell);
-				
+
 				cell = row.createCell(cellnum++);
-				
+
 				obj =entity.getDsrDate();
 
 				setCellValue(obj, cell);
-				
+
 				cell = row.createCell(cellnum++);
-				
+
 				obj =entity.getPlannedTask();
 
 				setCellValue(obj, cell);
-				
+
 				cell = row.createCell(cellnum++);
-				
+
 				obj =entity.getAccomplishedTask();
 
 				setCellValue(obj, cell);
-				
+
 				cell = row.createCell(cellnum++);
-				
+
 				obj =entity.getDsrStatus();
 
 				setCellValue(obj, cell);
-				
+
 				cell = row.createCell(cellnum++);
-				
+
 				obj =entity.getRemarks();
 
 				setCellValue(obj, cell);
-				
+
 				cell = row.createCell(cellnum++);
-				
+
 				obj =entity.getSpentHours();
 
 				setCellValue(obj, cell);
-				
+
 				cell = row.createCell(cellnum++);
-				
+
 				obj =entity.getPlannedHours();
 
 				setCellValue(obj, cell);
-				
+
 				cell = row.createCell(cellnum++);
-				
+
 			}
-			
+
 		}
 
 	}
-	
+
 	private void setCellValue(Object obj,Cell cell){
-		
+
 		if(obj instanceof Date) 
 			cell.setCellValue((Date)obj);
 
@@ -555,7 +891,7 @@ public class ReportExportHandler {
 
 		else if(obj instanceof Float)
 			cell.setCellValue((Float)obj);
-		
+
 		else if(obj instanceof DateTime)
 			cell.setCellValue(((DateTime)obj).toString("yyyy-MM-dd"));
 	}
@@ -749,16 +1085,23 @@ public class ReportExportHandler {
 
 		try {
 
+			System.out.println("userId :"+userId);
+
+			System.out.println("outputFileName :"+outputFileName);
+
 			File dir = new File(ApplicationConstants.APP_CONFIG_FOLDER_PATH+File.separator+userId);
 			if (!dir.exists()){
 				dir.mkdirs();
 			}
+
+			System.out.println("dir :"+dir.getAbsolutePath());
 
 			File serverFile = new File(dir.getAbsolutePath()+ File.separator +outputFileName);
 			FileOutputStream outStream = new FileOutputStream(serverFile);
 			workbook.write(outStream);
 			outStream.close();
 
+			System.out.println("File Export Done Successfully!!!");
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

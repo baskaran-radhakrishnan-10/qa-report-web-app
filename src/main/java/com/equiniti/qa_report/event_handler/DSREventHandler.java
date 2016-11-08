@@ -145,8 +145,8 @@ public class DSREventHandler implements IEventHandler<IEvent> {
 	private void exportDSRReport(Map<Integer,List<DSREntity>> reportDataMap) throws EventException{
 		try {
 			Map<String,Object> exportObject=new HashMap<>();
-			exportObject.put("REPORT_DATA", reportDataMap);
-			exportObject.put("REPORT_TYPE", ApplicationConstants.DSR_SUMMARY_REPORT);
+			exportObject.put(ApplicationConstants.REPORT_DATA, reportDataMap);
+			exportObject.put(ApplicationConstants.REPORT_TYPE, ApplicationConstants.DSR_SUMMARY_REPORT);
 			exportObject.put("USER_ID", userId);
 			reportQueueConnector.produce(exportObject);
 		}catch (Exception e) {

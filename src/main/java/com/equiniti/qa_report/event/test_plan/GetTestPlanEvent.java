@@ -14,9 +14,13 @@ public class GetTestPlanEvent extends BaseEvent {
 	
 	private boolean isListAll;
 	
+	private boolean isUniqueYearRequired;
+	
 	private Map<String,Object> restrictionMap;
 	
 	private List<BtpEntity> btpEntityList;
+	
+	private List<String> btpYearList;
 	
 	private BtpEntity btpEntity;
 
@@ -54,6 +58,22 @@ public class GetTestPlanEvent extends BaseEvent {
 
 	public void setBtpEntity(BtpEntity btpEntity) {
 		this.btpEntity = btpEntity;
+	}
+
+	public boolean isUniqueYearRequired() {
+		return isUniqueYearRequired;
+	}
+
+	public void setUniqueYearRequired(boolean isUniqueYearRequired) {
+		this.isUniqueYearRequired = isUniqueYearRequired;
+	}
+
+	public List<String> getBtpYearList() {
+		return btpYearList;
+	}
+
+	public void setBtpYearList(List<String> btpYearList) {
+		this.btpYearList = btpYearList;
 	}
     
 }

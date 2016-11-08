@@ -62,6 +62,16 @@ public class ReportSearchWebController {
 		}
 	}
 	
+	@RequestMapping(value = "/buildBtpMonthlyReport", method = RequestMethod.POST)
+	@ResponseBody
+	public void buildBtpMonthlyReport(@RequestBody Map<String,Object> inputData) throws UIException{
+		try {
+			reportSearchController.buildBtpMonthlyReport(inputData);
+		} catch (ControllerException e) {
+			throw new UIException(e.getFaultCode(), e);
+		}
+	}
+	
 	@RequestMapping(value = "/dsr_report_search" , method = RequestMethod.GET)
 	public String showDSRReportSearchPage(Model model) throws UIException{
 		return "dsr_report_search";

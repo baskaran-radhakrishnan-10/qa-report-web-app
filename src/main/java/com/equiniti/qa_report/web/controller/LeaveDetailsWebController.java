@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.equiniti.qa_report.controller.LeaveDetailsController;
 import com.equiniti.qa_report.exception.api.exception.ControllerException;
 import com.equiniti.qa_report.exception.api.exception.UIException;
 
@@ -20,18 +22,21 @@ public class LeaveDetailsWebController {
 	
 	private static final Logger LOG = Logger.getLogger(LeaveDetailsWebController.class);
 	
+	@Autowired
+	private LeaveDetailsController leaveDetailsController;
+	
 	@RequestMapping(value = "/show")
-	public String showDSRPage(Model model){
+	public String showLeaveDetailsPage(Model model){
 		return "dsr_page";
 	}
 	
-	/*@RequestMapping(value = "/getData", method = RequestMethod.POST)
+	@RequestMapping(value = "/getData", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> getData(@RequestBody Map<String,Object> inputData) throws UIException{
 		LOG.debug("START getData() Method!!!");
 		Map<String,Object> returnObj=new HashMap<>();
 		try {
-			returnObj = dsrController.getDSREntries();
+			returnObj = leaveDetailsController.getLeaveDetailsEntries();
 		} catch (ControllerException e) {
 			throw new UIException(e.getFaultCode(), e);
 		}
@@ -45,7 +50,7 @@ public class LeaveDetailsWebController {
 		LOG.debug("START addData() Method!!!");
 		Map<String,Object> returnObj=new HashMap<>();
 		try {
-			returnObj=dsrController.addDSREntry(inputData);
+			returnObj=leaveDetailsController.addLeaveDetailsEntry(inputData);
 		} catch (ControllerException e) {
 			throw new UIException(e.getFaultCode(), e);
 		}
@@ -59,7 +64,7 @@ public class LeaveDetailsWebController {
 		LOG.debug("START getDataFromCache() Method!!!");
 		Map<String,Object> returnObj=new HashMap<>();
 		try {
-			returnObj=dsrController.getDataFromCache(inputData);
+			returnObj=leaveDetailsController.getDataFromCache(inputData);
 		} catch (ControllerException e) {
 			throw new UIException(e.getFaultCode(), e);
 		}
@@ -73,7 +78,7 @@ public class LeaveDetailsWebController {
 		LOG.debug("START editData() Method!!!");
 		Map<String,Object> returnObj=new HashMap<>();
 		try {
-			returnObj=dsrController.editDSREntry(inputData);
+			returnObj=leaveDetailsController.editLeaveDetailsEntry(inputData);
 		} catch (ControllerException e) {
 			throw new UIException(e.getFaultCode(), e);
 		}
@@ -87,12 +92,12 @@ public class LeaveDetailsWebController {
 		LOG.debug("START filterData() Method!!!");
 		Map<String,Object> returnObj=new HashMap<>();
 		try {
-			returnObj = dsrController.filterBTP(inputData);
+			returnObj = leaveDetailsController.filterLeaveDetails(inputData);
 		} catch (ControllerException e) {
 			throw new UIException(e.getFaultCode(), e);
 		}
 		LOG.debug("END filterData() Method!!!");
 		return returnObj;
-	}*/
+	}
 	
 }

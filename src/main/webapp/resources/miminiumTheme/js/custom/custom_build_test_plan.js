@@ -150,7 +150,7 @@ function validateBeforeSave(){
 	});
 	console.log(errorMsgArray);
 	if(errorMsgArray.length > 0){
-		var notifyObj={msg: '<b>Please Fix Butil Test Plan Form Validation Errors</b>',type: "error",position: "center",autohide: false};
+		var notifyObj={msg: '<b>Please Fix BTP Form Validation Errors</b>',type: "error",position: "center",autohide: true};
 		notif(notifyObj);
 		return false;
 	}
@@ -249,7 +249,7 @@ function constructResourceTable(resourceArray){
 
 function updateBtpModifiedChangesSuccess(serverData){
 	if('ERROR' != serverData['STATUS']){
-		var notifyObj={msg: "<b>Success:</b> BTP Details Updated Successfully !!!",type: "success",position: "center",autohide: false};
+		var notifyObj={msg: "<b>Success:</b> BTP Details Updated Successfully !!!",type: "success",position: "center",autohide: true};
 		if(null != sessionStorageObj){
 			sessionStorageObj.setItem("NOTIFICATION",notifyObj);
 		}
@@ -261,7 +261,7 @@ function updateBtpModifiedChangesSuccess(serverData){
 
 function addBtpChangesSuccess(serverData){
 	if('ERROR' != serverData['STATUS']){
-		var notifyObj={msg: "<b>Success:</b> BTP Details Added Successfully !!!",type: "success",position: "center",autohide: false};
+		var notifyObj={msg: "<b>Success:</b> BTP Details Added Successfully !!!",type: "success",position: "center",autohide: true};
 		if(null != sessionStorageObj){
 			sessionStorageObj.setItem("NOTIFICATION",notifyObj);
 		}
@@ -273,7 +273,7 @@ function addBtpChangesSuccess(serverData){
 
 function addBtpChangesError(errorData){
 	console.log(errorData);
-	var notifyObj={msg: '<b>'+errorData['status']+'</b> '+errorData['statusText'],type: "error",position: "center",autohide: false};
+	var notifyObj={msg: '<b>'+errorData['status']+'</b> '+errorData['statusText'],type: "error",position: "center",autohide: true};
 	notif(notifyObj);
 }
 

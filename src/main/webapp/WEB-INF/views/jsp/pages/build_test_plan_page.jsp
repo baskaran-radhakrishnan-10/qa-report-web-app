@@ -389,7 +389,7 @@
 					<div class="col-md-8" style="float: right;margin-right: 1.2em;margin-top: 1em;" >
 						<input data-dismiss="modal" id="cancel_button" type="reset" class="btn btn-default" value="Cancel" style="float: right;"> 
 						<span></span> 
-						<input id="save_button" onclick="addOrUpdateBtp()" type="reset" class="btn btn-primary" value="Save" style="float: right; margin-right: 1em;">
+						<input id="save_button" onclick="addOrUpdateBtp()" class="btn btn-primary" value="Save" style="float: right; margin-right: 1em;width: 77px;">
 					</div>
 					<div class="clearfix"></div>
 				</div>

@@ -12,12 +12,14 @@ import org.springframework.stereotype.Service;
 
 import com.equiniti.qa_report.entity.BtpEntity;
 import com.equiniti.qa_report.entity.User;
+import com.equiniti.qa_report.event.project.GetProjectEvent;
 import com.equiniti.qa_report.event.test_plan.AddTestPlanEvent;
 import com.equiniti.qa_report.event.test_plan.GetTestPlanEvent;
 import com.equiniti.qa_report.event.test_plan.UpdateTestPlanEvent;
 import com.equiniti.qa_report.eventapi.eventhandling.generic.BaseAPIImpl;
 import com.equiniti.qa_report.exception.api.exception.APIException;
 import com.equiniti.qa_report.exception.api.exception.ControllerException;
+import com.equiniti.qa_report.exception.api.exception.EventException;
 import com.equiniti.qa_report.exception.api.faultcode.CommonFaultCode;
 import com.equiniti.qa_report.form.model.TestPlanModelAttribute;
 import com.equiniti.qa_report.objectmapper.ObjectTranslatorAPI;
@@ -140,6 +142,21 @@ public class TestPlanServiceImpl extends BaseAPIImpl implements TestPlanService{
 		}
 		LOG.debug("END filterBTP(Map<String,Object> paramMap) METHOD");
 		return entityList;
+	}
+	
+	@Override
+	public List<String> getUniqueBtpYearList() throws APIException {
+		GetTestPlanEvent event = null;
+		try{
+			event=getEvent(GetTestPlanEvent.class);
+			event.setUniqueYearRequired(true);
+			processEvent(event);
+		}catch(EventException e){
+			throw new APIException(e.getFaultCode(),e);
+		}catch(Exception e){
+			throw new APIException(CommonFaultCode.UNKNOWN_ERROR,e);
+		}
+		return event.getBtpYearList();
 	}
 	
 }

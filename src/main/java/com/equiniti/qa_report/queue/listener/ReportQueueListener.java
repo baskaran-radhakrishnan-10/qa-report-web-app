@@ -28,23 +28,29 @@ public class ReportQueueListener implements MessageListener{
 			Map<String,Object> exportObject=new HashMap<>();
 			ObjectMessage objectMessage=(ObjectMessage) message;
 			try {
-				String userId = (String) objectMessage.getObjectProperty("USER_ID");
-				String reportType=(String) objectMessage.getObjectProperty("REPORT_TYPE");
-				exportObject.put("REPORT_TYPE", reportType);
-				exportObject.put("USER_ID", userId);
+				String userId = (String) objectMessage.getObjectProperty(ApplicationConstants.USER_ID);
+				String reportType=(String) objectMessage.getObjectProperty(ApplicationConstants.REPORT_TYPE);
+				exportObject.put(ApplicationConstants.REPORT_TYPE, reportType);
+				exportObject.put(ApplicationConstants.USER_ID, userId);
 				if(ApplicationConstants.DSR_SUMMARY_REPORT.intern() == reportType.intern()){
-					exportObject.put("REPORT_DATA", (Map<Integer,List<DSREntity>>) objectMessage.getObjectProperty("REPORT_DATA"));
+					exportObject.put(ApplicationConstants.REPORT_DATA, (Map<Integer,List<DSREntity>>) objectMessage.getObjectProperty(ApplicationConstants.REPORT_DATA));
 					reportExportHandler.exportDSRReport(exportObject);
 				}else if(ApplicationConstants.BTP_SUMMARY_REPORT.intern() == reportType.intern()){
-					exportObject.put("REPORT_DATA", (List<Map<String, Object>>) objectMessage.getObjectProperty("REPORT_DATA"));
+					exportObject.put(ApplicationConstants.REPORT_DATA, (List<Map<String, Object>>) objectMessage.getObjectProperty(ApplicationConstants.REPORT_DATA));
 					reportExportHandler.exportBTPReport(exportObject);
 					if(ApplicationConstants.SELECTED_BTP_REPORT.intern() != reportType.intern()){
-						exportObject.put("REPORT_TYPE", "BTP_WEEKLY_REPORT");
+						exportObject.put(ApplicationConstants.REPORT_TYPE, ApplicationConstants.BTP_WEEKLY_REPORT);
 						reportExportHandler.exportBTPReport(exportObject);
 					}
 				}else if(ApplicationConstants.USER_SUMMARY_REPORT.intern().intern() == reportType.intern()){
-					exportObject.put("REPORT_DATA", (List<Map<String,Object>>) objectMessage.getObjectProperty("REPORT_DATA"));
+					exportObject.put(ApplicationConstants.REPORT_DATA, (List<Map<String,Object>>) objectMessage.getObjectProperty(ApplicationConstants.REPORT_DATA));
 					reportExportHandler.exportUserReport(exportObject);
+				}else if(ApplicationConstants.SELECTED_BTP_REPORT.intern().intern() == reportType.intern()){
+					exportObject.put(ApplicationConstants.REPORT_DATA, (List<Map<String,Object>>) objectMessage.getObjectProperty(ApplicationConstants.REPORT_DATA));
+					reportExportHandler.exportBTPReport(exportObject);
+				}else if(ApplicationConstants.BTP_MONTHLY_REPORT.intern().intern() == reportType.intern()){
+					exportObject.put(ApplicationConstants.REPORT_DATA, (Map<String,List<Map<String, Object>>>) objectMessage.getObjectProperty(ApplicationConstants.REPORT_DATA));
+					reportExportHandler.exportBTPMonthlyReport(exportObject);
 				}
 			} catch (JMSException e) {
 				e.printStackTrace();

@@ -13,6 +13,8 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 
+import com.equiniti.qa_report.util.ApplicationConstants;
+
 @Service("reportQueueConnector")
 public class ReportQueueConnector {
 
@@ -29,9 +31,9 @@ public class ReportQueueConnector {
 				
 				ObjectMessage objectMessage=session.createObjectMessage();
 				
-				objectMessage.setObjectProperty("REPORT_DATA", exportObject.get("REPORT_DATA"));
-				objectMessage.setObjectProperty("REPORT_TYPE", exportObject.get("REPORT_TYPE"));
-				objectMessage.setObjectProperty("USER_ID", exportObject.get("USER_ID"));
+				objectMessage.setObjectProperty(ApplicationConstants.REPORT_DATA, exportObject.get(ApplicationConstants.REPORT_DATA));
+				objectMessage.setObjectProperty(ApplicationConstants.REPORT_TYPE, exportObject.get(ApplicationConstants.REPORT_TYPE));
+				objectMessage.setObjectProperty(ApplicationConstants.USER_ID, exportObject.get("USER_ID"));
 				
 				return objectMessage;
 				

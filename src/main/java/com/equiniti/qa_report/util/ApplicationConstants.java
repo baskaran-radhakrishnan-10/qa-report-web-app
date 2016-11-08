@@ -58,6 +58,8 @@ public class ApplicationConstants {
 	
 	public static final String SELECTED_BTP_REPORT="SELECTED_BTP_REPORT";
 	
+	public static final String BTP_MONTHLY_REPORT = "BTP_MONTHLY_REPORT";
+	
 	public static final String BTP_WEEKLY_REPORT = "BTP_WEEKLY_REPORT";
 	
 	public static final String DSR_CACHE_ITEM="DSR_CACHE_ITEM";
@@ -75,4 +77,8 @@ public class ApplicationConstants {
 	public static final String CURRENT_ACTION_PATH="currentActionPath";
 	
 	public static final String USER_SUMMARY_REPORT = "USER_SUMMARY_REPORT";
+	
+	public static final String REPORT_DATA= "REPORT_DATA";
+	
+	public static final String REPORT_TYPE = "REPORT_TYPE";
 }

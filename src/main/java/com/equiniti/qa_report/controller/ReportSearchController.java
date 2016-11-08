@@ -80,6 +80,16 @@ public class ReportSearchController {
 		}
 	}
 	
+	public void buildBtpMonthlyReport(Map<String,Object> inputData) throws ControllerException{
+		try {
+			reportSearchService.buildBTPMonthlyReport(inputData);
+		} catch (APIException e) {
+			throw new ControllerException(e.getFaultCode(), e);
+		}catch(Exception e){
+			 throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+	}
+	
 	public Map<String,Object> filterUserReportData(Map<String,Object> paramMap) throws ControllerException{
 		Map<String,Object> returnObjMap=new HashMap<>();
 		try {

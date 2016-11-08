@@ -4,7 +4,15 @@ $(document).ready(function() {
 
 	btpReportSearchRef=new BTPReportSearch();
 	btpReportSearchRef.setProjectArray();
+	btpReportSearchRef.setBtpYearArray();
 	btpReportSearchRef.onDocumentReady();
+	
+	$('#selectExportType').on('change',function(event){
+		console.log($(this));
+		if("BTP Monthly Report" == $(this).val()){
+			$('#timePeriodDiv').show();
+		}
+	});
 
 	$('#apply_filter').on('click',function(){
 		
@@ -51,10 +59,23 @@ $(document).ready(function() {
 		$("#exportBTPReportButtonTrigger").trigger( "click" );
 		$('#multi_btp_report_modal_content').show();
         $('#single_btp_report_modal_content').hide();
+        $('#timePeriodDiv').hide();
 	});
 	
 	$('#export_file_button').on("click",function(){
-		btpReportSearchRef.downloadReport($('#selectExportType option:selected').attr('id'));
+		if("BTP_MONTHLY" == $('#selectExportType option:selected').attr('id')){
+			var year = parseInt($('#yearSelector').val());
+			var month = parseInt($('#monthSelector').find('option:selected').attr('id'));
+			var startDate = year+'-'+(month+1)+'-'+1+' 00:00:00';
+			var endDate = year+'-'+(month+1)+'-'+getDaysInMonth(month,year)+' 23:59:59';
+			var dataObj = {};
+			dataObj['startDate'] = startDate;
+			dataObj['endDate'] = endDate;
+			btpReportSearchRef.btpMonthlyReport(dataObj);
+		}else{
+			btpReportSearchRef.downloadReport($('#selectExportType option:selected').attr('id'));
+		}
+		
 	});
 	
 	$('#btp_report_search_table_id tbody').on('dblclick', 'tr', function () {
@@ -84,12 +105,18 @@ function BTPReportSearch(){
 	this.planArray=['Automation Plan','Build Test Plan','Test Design Plan'];
 	this.statusArray=['Completed','Deferred','In Progress','Planned','Abandoned'];
 	this.projectArray=[];
+	this.btpYearArray=[];
 	this.btpReportTableRef=null;
 	this.setProjectArray=function(){
 		var data={};
 		data=JSON.stringify(data);
 		ajaxHandler("POST", data, "application/json", getApplicationRootPath()+"project/getUniqueProjectList", 'json', null, BTPReportSearch.prototype.fetchProjectNamesSuccess,true);
 	};
+	this.setBtpYearArray=function(){
+		var data={};
+		data=JSON.stringify(data);
+		ajaxHandler("POST", data, "application/json", getApplicationRootPath()+"build_test_plan/getUniqueBtpYearList", 'json', null, BTPReportSearch.prototype.fetchBtpYearSuccess,true);
+	}
 }
 
 BTPReportSearch.prototype.onDocumentReady = function(){
@@ -105,6 +132,17 @@ BTPReportSearch.prototype.fetchProjectNamesSuccess = function(serverData){
 			btpReportSearchRef.projectArray.push(projectNameObj['projectname']);
 		}
 		fillSelectDropDown('filter_projectId',btpReportSearchRef.projectArray,"");
+	}
+}
+
+BTPReportSearch.prototype.fetchBtpYearSuccess = function(serverData){
+	if('ERROR' != serverData['STATUS']){
+		var yearList=serverData['SERVER_DATA'];
+		for(var index in yearList){
+			var yearObj=yearList[index];
+			btpReportSearchRef.btpYearArray.push(yearObj['btpYear']);
+		}
+		fillSelectDropDown('yearSelector',btpReportSearchRef.btpYearArray,btpReportSearchRef.btpYearArray[0]);
 	}
 }
 
@@ -198,6 +236,18 @@ BTPReportSearch.prototype.exportSelectedBTP=function(btpNo){
 	data['btpNo']=btpNo;
 	data=JSON.stringify(data);
 	ajaxHandler("POST", data, "application/json", getApplicationRootPath()+"report_search/exportBTPRow", 'json', null, BTPReportSearch.prototype.exportSelectedBTPSuccess,true);
+}
+
+BTPReportSearch.prototype.btpMonthlyReport=function(dataObj){
+	var data={};
+	data=JSON.stringify(dataObj);
+	ajaxHandler("POST", data, "application/json", getApplicationRootPath()+"report_search/buildBtpMonthlyReport", 'json', null, BTPReportSearch.prototype.btpMonthlyReportSuccess,true);
+}
+
+BTPReportSearch.prototype.btpMonthlyReportSuccess=function(serverData){
+	if('ERROR' != serverData['STATUS']){
+		
+	}
 }
 
 BTPReportSearch.prototype.exportSelectedBTPSuccess=function(serverData){

@@ -82,5 +82,17 @@ public class TestPlanWebController {
 		}
 		return returnObj;
 	}
-
+	
+	@RequestMapping(value = "/getUniqueBtpYearList", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> getUniqueBtpYear(@RequestBody Map<String,Object> inputData) throws UIException{
+		Map<String,Object> returnObj=new HashMap<>();
+		try {
+			returnObj = testPlanController.getUniqueBtpYear(inputData);
+		} catch (ControllerException e) {
+			throw new UIException(e.getFaultCode(), e);
+		}
+		return returnObj;
+	}
+	
 }

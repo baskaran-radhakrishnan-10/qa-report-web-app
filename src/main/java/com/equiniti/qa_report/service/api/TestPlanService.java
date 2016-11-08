@@ -21,4 +21,6 @@ public interface TestPlanService {
 	
 	public List<BtpEntity> getTestPlanEntries(Map<String,Object> restrictionMap) throws APIException;
 
+	public List<String> getUniqueBtpYearList() throws APIException;
+
 }

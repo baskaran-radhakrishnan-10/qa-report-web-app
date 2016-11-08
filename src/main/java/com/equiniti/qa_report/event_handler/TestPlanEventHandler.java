@@ -74,7 +74,9 @@ public class TestPlanEventHandler implements IEventHandler<IEvent> {
 
     private void getTestPlan(GetTestPlanEvent event) throws EventException {
         try {
-            if (event.isListAll() || (null != event.getRestrictionMap())) {
+        	if (event.isUniqueYearRequired()) {
+                event.setBtpYearList(testPlanDAO.getUniqueBtpYearList());
+            } else if (event.isListAll() || (null != event.getRestrictionMap())) {
                 event.setBtpEntityList(testPlanDAO.getBtpEntityList(event.getRestrictionMap()));
             } else if (null != event.getRestrictionMap()) {
                 event.setBtpEntityList(testPlanDAO.getBtpEntityList(event.getRestrictionMap()));

@@ -178,6 +178,10 @@ function getFormatedDateByTime(dateObj,hour,min,sec,millisec){
 	return dateObj;
 }
 
+function getDaysInMonth(month,year) {
+    return new Date(year, (month+1), 0).getDate();
+}
+
 function fillSelectDropDown(dropDownId,arrayData,selectedOption){
 	$('#'+dropDownId).html("");
 	$.each(arrayData, function(key, value) {   

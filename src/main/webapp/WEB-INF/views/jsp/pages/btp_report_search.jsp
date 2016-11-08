@@ -19,10 +19,37 @@
 							<select name="selector1" id="selectExportType" class="form-control1" style="margin: 14px 120px; width: 50%; height: 37px; cursor: pointer;">
 								<option id="BTP_SUMMARY">BTP Summary Report</option>
 								<option id="BTP_WEEKLY">BTP Weekly Report</option>
-								<!-- <option id="300">BTP Monthly Report</option> -->
+								<option id="BTP_MONTHLY">BTP Monthly Report</option>
 							</select>
 						</div>
 					</div>
+					
+					<div id="timePeriodDiv" class="form-group" style="margin-right: -27px; margin-left: -15px;display: none;">
+						<div class="col-sm-8" style="width: 36.666667%;cursor: pointer;">
+							<select name="yearSelector" id="yearSelector" class="form-control1" style="margin: -21px 119px;width: 50%;height: 37px;cursor: pointer;">
+								<option id="BTP_SUMMARY">2013</option>
+								<option id="BTP_WEEKLY">2014</option>
+								<option id="BTP_MONTHLY">2015</option>
+							</select>
+						</div>
+						<div class="col-sm-8" style="width: 47.666667%;cursor: pointer;">
+							<select name="monthSelector" id="monthSelector" class="form-control1" style="margin: -9px 24px;width: 50%;height: 37px;cursor: pointer;">
+								<option id="0">January</option>
+								<option id="1">February</option>
+								<option id="2">March</option>
+								<option id="3">April</option>
+								<option id="4">May</option>
+								<option id="5">June</option>
+								<option id="6">July</option>
+								<option id="7">August</option>
+								<option id="8">September</option>
+								<option id="9">October</option>
+								<option id="10">November</option>
+								<option id="11">December</option>
+							</select>
+						</div>
+					</div>
+					
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-primary" id="export_file_button">Export</button>

@@ -1,6 +1,7 @@
 package com.equiniti.qa_report.dao.api.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Repository;
 
 import com.equiniti.qa_report.dao.api.ReportSearchDAO;
 import com.equiniti.qa_report.entity.BtpEntity;
-import com.equiniti.qa_report.entity.DSREntity;
 import com.equiniti.qa_report.exception.api.exception.DaoException;
 import com.equiniti.qa_report.persistance_api.consenum.QueryOperationType;
 import com.equiniti.qa_report.persistance_api.consenum.QueryType;
@@ -56,6 +56,29 @@ public class ReportSearchDAOImpl implements ReportSearchDAO{
 			returnList=(List<Map<String,Object>>) abstractHibernateDAOAPI.processQuery(null, null, null, QueryOperationType.SELECT, QueryType.SQL, dynamicQuery);
 		}
 		return returnList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String,List<Map<String,Object>>> getBTPMontlyReportData(Map<String,Object> paramMap)throws DaoException{
+		Map<String,List<Map<String,Object>>> returnObj=null;
+		String dynamicQuery=null;
+		if(null != paramMap && !paramMap.isEmpty()){
+			returnObj = new HashMap<>();
+			Map<String,String> queryMap=new LinkedHashMap<>();
+			queryMap.put("BTP_MONTHLY_REPORT_QUERY1", "BTP_MONTHLY_REPORT_QUERY1");
+			dynamicQuery=abstractHibernateDAOAPI.constructQuery(queryMap);
+			dynamicQuery=dynamicQuery.replace("START_DATE", "'"+paramMap.get("startDate").toString()+"'");
+			dynamicQuery=dynamicQuery.replace("END_DATE", "'"+paramMap.get("endDate").toString()+"'");
+			returnObj.put("BTP_ITEM_DETAILS", (List<Map<String,Object>>) abstractHibernateDAOAPI.processQuery(null, null, null, QueryOperationType.SELECT, QueryType.SQL, dynamicQuery));
+			queryMap=new LinkedHashMap<>();
+			queryMap.put("BTP_MONTHLY_REPORT_QUERY2", "BTP_MONTHLY_REPORT_QUERY2");
+			dynamicQuery=abstractHibernateDAOAPI.constructQuery(queryMap);
+			dynamicQuery=dynamicQuery.replace("START_DATE", "'"+paramMap.get("startDate").toString()+"'");
+			dynamicQuery=dynamicQuery.replace("END_DATE", "'"+paramMap.get("endDate").toString()+"'");
+			returnObj.put("BTP_RESOURCE_DETAILS", (List<Map<String,Object>>) abstractHibernateDAOAPI.processQuery(null, null, null, QueryOperationType.SELECT, QueryType.SQL, dynamicQuery));
+		}
+		return returnObj;
 	}
 	
 	public List<Map<String,Object>> getBtpMonthlyReportData(Map<String,Object> paramMap){

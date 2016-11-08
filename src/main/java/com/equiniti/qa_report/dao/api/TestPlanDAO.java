@@ -16,4 +16,6 @@ public interface TestPlanDAO {
 	
 	public BtpEntity getBtpEntity(Map<String, Object> restrictionMap) throws DaoException;
 
+	public List<String> getUniqueBtpYearList() throws DaoException;
+
 }

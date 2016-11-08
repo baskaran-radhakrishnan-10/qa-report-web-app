@@ -19,11 +19,11 @@
 			
 			<li id="kt_plan_li" style="display:none;"><a href="${sessionScope.baseUrl}kt_plan/ktPlan"> <span class="fa-bullhorn fa"></span> KT Plan </a></li>
 			
-			<li id="report_search_li" class="ripple" style="display:none;"><a class="tree-toggle nav-header"> <span	class="fa-search fa"></span> Report Search <span class="fa-angle-right fa right-arrow text-right"></span></a>
+			<li id="report_search_li" class="ripple" style="display:none;"><a class="tree-toggle nav-header"> <span	class="fa-search fa"></span> Report <span class="fa-angle-right fa right-arrow text-right"></span></a>
 				<ul class="nav nav-list tree" style="display:none;"></ul>
 			</li>
 			
-			<li id="operations_li" class="ripple" style="display:none;"><a class="tree-toggle nav-header"> <span class="fa-cogs fa"></span>Operations<span class="fa-angle-right fa right-arrow text-right"></span></a>
+			<li id="operations_li" class="ripple" style="display:none;"><a class="tree-toggle nav-header"> <span class="fa-cogs fa"></span>Operation<span class="fa-angle-right fa right-arrow text-right"></span></a>
 				<ul class="nav nav-list tree" style="display:none;"></ul>
 			</li>
 			

@@ -8,6 +8,9 @@ import org.apache.log4j.Logger;
 import com.equiniti.qa_report.dao.api.TestPlanDAO;
 import com.equiniti.qa_report.entity.BtpEntity;
 import com.equiniti.qa_report.exception.api.exception.DaoException;
+import com.equiniti.qa_report.exception.api.faultcode.CommonFaultCode;
+import com.equiniti.qa_report.persistance_api.consenum.QueryOperationType;
+import com.equiniti.qa_report.persistance_api.consenum.QueryType;
 import com.equiniti.qa_report.persistance_api.hibernate.api.AbstractHibernateDAOAPI;
 
 public class TestPlanDAOImpl implements TestPlanDAO{
@@ -38,6 +41,20 @@ public class TestPlanDAOImpl implements TestPlanDAO{
 	public BtpEntity getBtpEntity(Map<String, Object> restrictionMap) throws DaoException{
 		LOG.debug("INSIDE getBtpEntity(Map<String, Object> restrictionMap) Method");
 		return abstractHibernateDAOAPI.getEntity(BtpEntity.class, restrictionMap);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<String> getUniqueBtpYearList() throws DaoException {
+		List<String> returnList=null;
+		try{
+			returnList=(List<String>) abstractHibernateDAOAPI.processQuery("QUERY_6", null, null, QueryOperationType.SELECT, QueryType.SQL, null);
+		}catch(DaoException e){
+			throw new DaoException(e.getFaultCode(), e);
+		}catch(Exception e){
+			throw new DaoException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+		return returnList;
 	}
 
 }

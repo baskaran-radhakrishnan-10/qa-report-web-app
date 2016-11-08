@@ -69,8 +69,8 @@ public class ReportSearchEventHandler implements IEventHandler<IEvent> {
 	private void buildBTPSummaryByFilter(BuildBTPSummaryReportEvent event) throws EventException{
 		try {
 			Map<String,Object> exportObject=new HashMap<>();
-			exportObject.put("REPORT_DATA", reportSearchDAO.getBtpSummaryReportData(event.getParamMap()));
-			exportObject.put("REPORT_TYPE", ApplicationConstants.BTP_SUMMARY_REPORT);
+			exportObject.put(ApplicationConstants.REPORT_DATA, reportSearchDAO.getBtpSummaryReportData(event.getParamMap()));
+			exportObject.put(ApplicationConstants.REPORT_TYPE, ApplicationConstants.BTP_SUMMARY_REPORT);
 			exportObject.put("USER_ID", session.getAttribute(ApplicationConstants.USER_ID).toString());
 			reportQueueConnector.produce(exportObject);
 		}catch (DaoException e) {
@@ -87,8 +87,8 @@ public class ReportSearchEventHandler implements IEventHandler<IEvent> {
 	private void buildSelectedBTPReport(SelectedBTPReportEvent event) throws EventException{
 		try {
 			Map<String,Object> exportObject=new HashMap<>();
-			exportObject.put("REPORT_DATA", reportSearchDAO.getSelectedBtpReportData(event.getParamMap()));
-			exportObject.put("REPORT_TYPE", ApplicationConstants.SELECTED_BTP_REPORT);
+			exportObject.put(ApplicationConstants.REPORT_DATA, reportSearchDAO.getSelectedBtpReportData(event.getParamMap()));
+			exportObject.put(ApplicationConstants.REPORT_TYPE, ApplicationConstants.SELECTED_BTP_REPORT);
 			exportObject.put("USER_ID", session.getAttribute(ApplicationConstants.USER_ID).toString());
 			reportQueueConnector.produce(exportObject);
 		}catch (DaoException e) {
@@ -102,16 +102,30 @@ public class ReportSearchEventHandler implements IEventHandler<IEvent> {
 		}
 	}
 
-	private void buildBTPMonthlyReportByFilter(BuildBTPMonthlyReportEvent event){
-		
+	private void buildBTPMonthlyReportByFilter(BuildBTPMonthlyReportEvent event) throws EventException{
+		try {
+			Map<String,Object> exportObject=new HashMap<>();
+			exportObject.put(ApplicationConstants.REPORT_DATA, reportSearchDAO.getBTPMontlyReportData(event.getParamMap()));
+			exportObject.put(ApplicationConstants.REPORT_TYPE, ApplicationConstants.BTP_MONTHLY_REPORT);
+			exportObject.put("USER_ID", session.getAttribute(ApplicationConstants.USER_ID).toString());
+			reportQueueConnector.produce(exportObject);
+		}catch (DaoException e) {
+			throw new EventException(e.getFaultCode(), e);
+		}catch (Exception e) {
+			if(e.getCause() instanceof JMSException){
+				LOG.debug(e.getMessage());
+			}else{
+				throw new EventException(CommonFaultCode.UNKNOWN_ERROR, e);
+			}
+		}
 	}
 	
 	private void buildUserSummaryByFilter(BuildUserReportEvent event) throws EventException{
 		try {
 			Map<String,Object> exportObject=new HashMap<>();
 			event.setDataObjectList(buildUserReportObject(reportSearchDAO.getUserReportData(event.getParamMap())));
-			exportObject.put("REPORT_DATA", event.getDataObjectList());
-			exportObject.put("REPORT_TYPE", ApplicationConstants.USER_SUMMARY_REPORT);
+			exportObject.put(ApplicationConstants.REPORT_DATA, event.getDataObjectList());
+			exportObject.put(ApplicationConstants.REPORT_TYPE, ApplicationConstants.USER_SUMMARY_REPORT);
 			exportObject.put("USER_ID", session.getAttribute(ApplicationConstants.USER_ID).toString());
 			reportQueueConnector.produce(exportObject);
 		}catch (DaoException e) {

@@ -63,7 +63,7 @@ $(document).ready(function() {
 			console.log(" isResourceNameExsist :"+isResourceNameExsist);
 			if(isResourceNameExsist){
 				$(this).addClass('error');
-				var notifyObj={msg: '<b> Resource : '+currentValue+' </b> is already selected ',type: "error",position: "center"};
+				var notifyObj={msg: '<b> Resource : '+currentValue+' </b> is already selected ',type: "error",position: "center",autohide: true};
 				notif(notifyObj);
 			}else{
 				$(this).removeClass('error');
@@ -80,7 +80,7 @@ $(document).ready(function() {
 			}
 		});
 		if(isEmpty){
-			var notifyObj={msg: '<b> Please choose filter you want to apply !!! </b>',type: "warning",position: "center"};
+			var notifyObj={msg: '<b> Please choose filter you want to apply !!! </b>',type: "warning",position: "center",autohide: true};
 			notif(notifyObj);
 			return false;
 		}
@@ -106,24 +106,20 @@ $(document).ready(function() {
 		filterBTPData(filterObject);
 	});
 	
-	$('#buildTestPlanForm :input').on('blur', function() {
-		console.log($(this));
+	$(document).on("blur", ":input", function() {
 		var value=$(this).val();
-		console.log(value);
 		var id=$(this).attr('id');
-		
-		if($(this).hasClass('error')){
-			if(null != value && value.length > 0){
-				$(this).removeClass('error');
-			}
-		}else{
-			if(null == value || value.length == 0){
-				$(this).addClass('error');
+		if($(this).hasClass('imp')){
+			if($(this).hasClass('error')){
+				if(null != value && value.length > 0){
+					$(this).removeClass('error');
+				}
+			}else{
+				if(null == value || value.length == 0){
+					$(this).addClass('error');
+				}
 			}
 		}
-		
-		console.log("$(this).hasClass('error') :" +$(this).hasClass('error'));
-		
 		if(!$(this).hasClass('error')){
 			if("startDateId" == id){
 				
@@ -144,7 +140,7 @@ $(document).ready(function() {
 			}else if("endDateId" == id){
 				var startDateStr=$('#startDateId').val();
 				if(null == startDateStr || startDateStr.length == 0){
-					var notifyObj={msg: '<b> StartDate should not be empty </b>',type: "error",position: "center"};
+					var notifyObj={msg: '<b> StartDate should not be empty </b>',type: "error",position: "center",autohide: true};
 					notif(notifyObj);
 				}else{
 					var revisedEndDate = null;
@@ -155,13 +151,13 @@ $(document).ready(function() {
 					}
 					if(null != revisedEndDate){
 						if(endDate > revisedEndDate){
-							var notifyObj={msg: '<b> EndDate should be lesser than the RevisedEndDate </b>',type: "error",position: "center"};
+							var notifyObj={msg: '<b> EndDate should be lesser than the RevisedEndDate </b>',type: "error",position: "center",autohide: true};
 							notif(notifyObj);
 							$(this).addClass('error');
 						}
 					}
 					if(startDate > endDate ){
-						var notifyObj={msg: '<b> EndDate should be greater than the StartDate </b>',type: "error",position: "center"};
+						var notifyObj={msg: '<b> EndDate should be greater than the StartDate </b>',type: "error",position: "center",autohide: true};
 						notif(notifyObj);
 						$(this).addClass('error');
 					}
@@ -169,17 +165,19 @@ $(document).ready(function() {
 			}else if("revisedEndDateId" == id){
 				var endDateStr=$('#endDateId').val();
 				if(null == endDateStr || endDateStr.length == 0){
-					var notifyObj={msg: '<b> EndDate should not be empty </b>',type: "error",position: "center"};
+					var notifyObj={msg: '<b> EndDate should not be empty </b>',type: "error",position: "center",autohide: true};
 					notif(notifyObj);
 				}else{
 					var endate=new Date(Date.parse(endDateStr));
 					var revEndDate = new Date(Date.parse(value));
-					if(endate < revEndDate){
-						
-					}else{
-						var notifyObj={msg: '<b> RevisedEndDate should be greater than the EndDate </b>',type: "error",position: "center"};
-						notif(notifyObj);
-						$(this).addClass('error');
+					if('Invalid Date' != revEndDate){
+						if(endate < revEndDate){
+							
+						}else{
+							var notifyObj={msg: '<b> RevisedEndDate should be greater than the EndDate </b>',type: "error",position: "center",autohide: true};
+							notif(notifyObj);
+							$(this).addClass('error');
+						}
 					}
 				}
 			}
