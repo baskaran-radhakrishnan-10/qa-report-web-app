@@ -23,8 +23,8 @@
 <!-- end: Css -->
 
 <spring:url value="/resources/miminiumTheme/img/logomi.png"	var="LogoMiImg" />
-<spring:url value="/resources/miminiumTheme/img/ajax-loader.gif"	var="ajaxLoaderImage" />
-
+<spring:url value="/resources/miminiumTheme/img/ajax-loader.gif" var="ajaxLoaderImage" />
+<spring:url value="/resources/miminiumTheme/img/equiniti.ico" var="equIcon" />
 <!--  Javascript -->
 <spring:url value="/resources/miminiumTheme/js/jquery.min.js"	var="jqueryJs" />
 <spring:url value="/resources/miminiumTheme/js/jquery.ui.min.js"	var="jqueryUIJs" />
@@ -81,7 +81,7 @@
 <link href="${StyleCss}" rel="stylesheet" type="text/css">
 <link href="${LogoMiImg}" rel="stylesheet" type="image/x-icon">
 <link href="${notifyCss}" rel="stylesheet" type="text/css">
-
+<link href="${equIcon}" rel="shortcut icon"  type="image/x-icon">
 <!-- <style>
 /* Start by setting display:none to make this hidden.
    Then we position it in relation to the viewport window
@@ -134,6 +134,7 @@ body.loading .ajaxloader {
 </head>
 
 <body id="mimin" class="dashboard">
+<input id="loggedInUserId" name="loggedInUser" type="hidden" value="<%=session.getAttribute("USER_ID")%>">
 	<!-- start: Header -->
 	<tiles:insertAttribute name="header_menu" />
 	<!-- end: Header -->

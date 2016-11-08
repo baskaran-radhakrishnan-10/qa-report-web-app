@@ -16,8 +16,10 @@
 
 <!-- end: Css -->
 
+<spring:url value="/resources/miminiumTheme/img/equiniti.ico" var="equIcon" />
 <spring:url value="/resources/miminiumTheme/img/logomi.png" var="LogoMiImg" />
 <spring:url value="/resources/miminiumTheme/img/equiniti-logo.png" var="equinitiLogo" />
+
 
 <!--  Javascript -->
 <spring:url value="/resources/miminiumTheme/js/jquery.min.js" var="jqueryJs" />
@@ -38,6 +40,7 @@
 <title>Login Page</title>
 <!-- Custom Theme files -->
 
+<link href="${equIcon}" rel="icon" type="image/x-icon">
 <link href="${boostrapCss}" rel="stylesheet" type="text/css">
 <link href="${FontAwesomeCss}" rel="stylesheet">
 <link href="${SimpleLineIconCss}" rel="stylesheet" type="text/css">
@@ -45,6 +48,7 @@
 <link href="${StyleCss}" rel="stylesheet" type="text/css">
 <%-- <link href="${loginCss}" rel="stylesheet" type="text/css" media="all"> --%>
 <link href="${LogoMiImg}" rel="stylesheet" type="image/x-icon">
+
 
 <!-- Custom Theme files -->
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">

@@ -33,7 +33,7 @@ $(document).ready(function() {
 			}
 		});
 		if(jQuery.isEmptyObject(filterObject)){
-			var notifyObj={msg: '<b>Warning : </b> Please choose filter you want to apply !!!',type: "warning",position: "center" ,autohide: false};
+			var notifyObj={msg: '<b>Warning : </b> Please choose filter you want to apply !!!',type: "warning",position: "center" };
 			notif(notifyObj);
 			notif(notifyObj);
 		}
@@ -97,7 +97,13 @@ function fetchKTDetailsSuccess(serverData){
 		"responsive" : false,
 		"processing": true,
 		"dom": 'Bfrtpl',
-		"buttons": ['excel','csv']
+		"buttons": [{
+					extend: 'excelHtml5',
+                    title: 'KTPlanDataExport',
+                },{
+                    extend: 'csv',
+                    title: 'KTPlanDataExport',
+                }]
 	});
 	if(!isFilterConstructed){
 		//fillSelectDropDown('filter_projectId',projectArray, "");
@@ -142,21 +148,21 @@ function populateKTDetails(entriesList){
 		ktDetailsData[gKey]=KTDetailsModelAttribute;
 		html += '<tr id="'+gKey+'">' ;
 //		html += '<td  nowrap="nowrap">'+sNo+'</td>' ;
-		html += '<td  nowrap="nowrap">'+gKey+'</td>' ;
-		html +=	'<td  nowrap="nowrap">'+project+'</td>' ;
-		html += '<td  nowrap="nowrap">'+trainingType+'</td>' ;
-		/*html += '<td  nowrap="nowrap">'+session+'</td>' ;*/
-		html +=	'<td  nowrap="nowrap">'+title+'</td>' ;
-		/*html += '<td  nowrap="nowrap">'+trainers+'</td>' ;
-		html += '<td  nowrap="nowrap">'+attendees+'</td>' ;
-		*/
-		html += '<td  nowrap="nowrap">'+location+'</td>' ;
-		html += '<td  nowrap="nowrap">'+startDate+'</td>' ;
-		html += '<td  nowrap="nowrap">'+endDate+'</td>' ;
+		html += '<td  nowrap>'+gKey+'</td>' ;
+		html +=	'<td  nowrap>'+project+'</td>' ;
+		html += '<td  nowrap>'+trainingType+'</td>' ;
+		html += '<td  hidden>'+session+'</td>' ;
+		html +=	'<td  nowrap>'+title+'</td>' ;
+		html += '<td  hidden>'+trainers+'</td>' ;
+		html += '<td  hidden>'+attendees+'</td>' ;
+		
+		html += '<td  nowrap>'+location+'</td>' ;
+		html += '<td  nowrap>'+startDate+'</td>' ;
+		html += '<td  nowrap>'+endDate+'</td>' ;
 
-/*		html += '<td  nowrap="nowrap">'+duration+'</td>' ;
-		html += '<td  nowrap="nowrap">'+remarks+'</td>' ;
-		html += '<td  nowrap="nowrap">'+feedback+'</td>' ;*/
+		html += '<td  hidden>'+duration+'</td>' ;
+		html += '<td  hidden>'+remarks+'</td>' ;
+		html += '<td  hidden>'+feedback+'</td>' ;
 //		html += '<td id="ktDetailsEditRowId" onclick="editKTPlanDetails('+gKey+')"><span><a href="#" class="glyphicon glyphicon-edit"></a></span><span>&nbsp;</span><a id="ktDetailsSaveRowId" style="display:none;" href="#"> <span class="glyphicon glyphicon-check"></span></a></td>' ;
 		html += '</tr>' ;
 		htmlArray.push(html);
@@ -278,44 +284,44 @@ function addOrUpdateKTPlan(){
 	var remarks=rowEle.find('#remarksId').val();
 	var feedback=rowEle.find('#feedbackId').val();
 	if (null ==projectId || ""== projectId){
-		var notifyObj={msg: '<b>Warning : </b> Please Select Project Name !!!',type: "warning",position: "center" ,autohide: false};
+		var notifyObj={msg: '<b>Warning : </b> Please Select Project Name !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 	}else if (null ==typeId || ""== typeId){
-		var notifyObj={msg: '<b>Warning : </b> Please Select KT Type !!!',type: "warning",position: "center" ,autohide: false};
+		var notifyObj={msg: '<b>Warning : </b> Please Select KT Type !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 	}else if (null ==title || ""== title){
-		var notifyObj={msg: '<b>Warning : </b> Please Enter Title !!!',type: "warning",position: "center" ,autohide: false};
+		var notifyObj={msg: '<b>Warning : </b> Please Enter Title !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 		
 	}else if (null ==sessionId || ""== sessionId){
-		var notifyObj={msg: '<b>Warning : </b> Please Select Session !!!',type: "warning",position: "center" ,autohide: false};
+		var notifyObj={msg: '<b>Warning : </b> Please Select Session !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 		
 	}else if (null ==trainersNameListId || ""== trainersNameListId){
-		var notifyObj={msg: '<b>Warning : </b> Please Select Trainer Name !!!',type: "warning",position: "center" ,autohide: false};
+		var notifyObj={msg: '<b>Warning : </b> Please Select Trainer Name !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 		
 	}else if (null ==attendeesNameListId || ""== attendeesNameListId){
-		var notifyObj={msg: '<b>Warning : </b> Please Select Attendees Name !!!',type: "warning",position: "center" ,autohide: false};
+		var notifyObj={msg: '<b>Warning : </b> Please Select Attendees Name !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 		
 	}else if (null ==locationId || ""== locationId){
-		var notifyObj={msg: '<b>Warning : </b> Please Select Location !!!',type: "warning",position: "center" ,autohide: false};
+		var notifyObj={msg: '<b>Warning : </b> Please Select Location !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 		
 	}else if (null ==startDate || ""== startDate){
-		var notifyObj={msg: '<b>Warning : </b> Please Select Start Date !!!',type: "warning",position: "center" ,autohide: false};
+		var notifyObj={msg: '<b>Warning : </b> Please Select Start Date !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 		
 	}else if (null ==endDate || ""== endDate){
-		var notifyObj={msg: '<b>Warning : </b> Please Select End Date !!!',type: "warning",position: "center" ,autohide: false};
+		var notifyObj={msg: '<b>Warning : </b> Please Select End Date !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 		
 	}else if(startDateVal > endDateVal ){
-		var notifyObj={msg: 'EndDate should be Equal or greater than the StartDate !!!',type: "warning",position: "center" ,autohide: false};
+		var notifyObj={msg: 'EndDate should be Equal or greater than the StartDate !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 	}else if (null ==duration || ""== duration){
-		var notifyObj={msg: '<b>Warning : </b> Please Enter Duration !!!',type: "warning",position: "center" ,autohide: false};
+		var notifyObj={msg: '<b>Warning : </b> Please Enter Duration !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 	}
 	else{
@@ -345,7 +351,7 @@ function addOrUpdateKTPlan(){
 
 function ktDeatilsSaveSuccess(serverData){
 	if('ERROR' != serverData['STATUS']){	
-		var notifyObj={msg: '<b>Success : </b> KT Details added Successfully !!!',type: "success",position: "center" ,autohide: false};
+		var notifyObj={msg: '<b>Success : </b> KT Details added Successfully !!!',type: "success",position: "center" };
 		notif(notifyObj);
 		if(null != sessionStorageObj){
 			sessionStorageObj.setItem("NOTIFICATION",notifyObj);
@@ -356,7 +362,7 @@ function ktDeatilsSaveSuccess(serverData){
 
 function ktDeatilsUpdateSuccess(serverData){
 	if('ERROR' != serverData['STATUS']){	
-		var notifyObj={msg: '<b>Success : </b> KT Details Updated Successfully !!!',type: "success",position: "center" ,autohide: false};
+		var notifyObj={msg: '<b>Success : </b> KT Details Updated Successfully !!!',type: "success",position: "center" };
 		notif(notifyObj);
 		if(null != sessionStorageObj){
 			sessionStorageObj.setItem("NOTIFICATION",notifyObj);

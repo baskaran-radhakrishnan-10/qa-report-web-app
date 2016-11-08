@@ -92,17 +92,16 @@
 						<th nowrap>KT ID</th>
 						<th nowrap>Project</th>
 						<th nowrap>KT Type</th>
-	<!-- 					<th nowrap>Session</th> -->
+						<th hidden="true">Session</th>
 						<th nowrap>KT Title</th>
-	<!-- 					<th nowrap>Trainer(s)</th>
-						<th nowrap>Attendee(s)</th>-->
+						<th hidden="true">Trainer(s)</th>
+						<th hidden="true">Attendee(s)</th>
 						<th nowrap>Location</th>
 						<th nowrap>Start Date</th>
 						<th nowrap>End Date</th>
-				<!-- 		<th nowrap>Duration(Hrs)</th>
-						<th nowrap>Remarks</th>
-						<th nowrap>Feedback</th>	
-						<th nowrap></th>	 -->										
+						<th hidden="true">Duration(Hrs)</th>
+						<th hidden="true">Remarks</th>
+						<th hidden="true">Feedback</th>	
 					</tr>
 				</thead>
 				<tbody id="tbody_id"></tbody>
@@ -141,11 +140,11 @@
 									<div class="form-group" id="important">
 										<div class="row">
 											<div class="col-md-12">
-												<label class="col-sm-2 control-label">Project:*</label>
+												<label class="col-sm-2 control-label">Project:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<select id="projectId" name="project" class="input-sm form-control imp"></select>
 												</div>
-												<label class="col-sm-2 control-label">KT Type:*</label>
+												<label class="col-sm-2 control-label">KT Type:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<select id="ktTypeId" name="kttype" class="input-sm form-control imp"></select>
 												</div>
@@ -155,15 +154,15 @@
 									<div class="form-group" id="important">
 										<div class="row">
 											<div class="col-md-12">
-												<label class="col-sm-2 control-label">KT Title:*</label>
+												<label class="col-sm-2 control-label">KT Title:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<input id="ktTitleId" name="kttitle" type="text" class="input-sm form-control imp" value="">
 												</div>
-												<label class="col-sm-2 control-label">Session:*</label>
+												<label class="col-sm-2 control-label">Session:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<select id="sessionId" name="session" class="input-sm form-control imp"></select>
 												</div>
-												<!-- <label class="col-sm-2 control-label">Status:*</label>
+												<!-- <label class="col-sm-2 control-label">Status:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<select id="statusId" name="status" class="input-sm form-control imp"></select>
 												</div> -->
@@ -173,11 +172,11 @@
 									<div class="form-group" id="important">
 										<div class="row">
 											<div class="col-md-12">
-												<label class="col-sm-2 control-label">Trainer(s):*</label>
+												<label class="col-sm-2 control-label">Trainer(s):<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<select id="trainerId" multiple="multiple" name="trainer" class="input-sm form-control imp"></select>
 												</div>
-												<label class="col-sm-2 control-label">Attendee(s):*</label>
+												<label class="col-sm-2 control-label">Attendee(s):<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<select id="attendeeId" multiple="multiple" name="attendee" class="input-sm form-control imp"></select>
 												</div>
@@ -187,11 +186,11 @@
 									<div class="form-group" id="important">
 										<div class="row">
 											<div class="col-md-12">
-												<label class="col-sm-2 control-label">Location:*</label>
+												<label class="col-sm-2 control-label">Location:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<select id="locationId" name="location" class="input-sm form-control imp"></select>
 												</div>
-												<label class="col-sm-2 control-label">Start Date:*</label>
+												<label class="col-sm-2 control-label">Start Date:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<input id="startDateId" name="startDate" type="date" class="input-sm form-control imp">
 												</div>												
@@ -202,11 +201,11 @@
 										<div class="row">
 											<div class="col-md-12">
 												
-												<label class="col-sm-2 control-label">End Date:*</label>
+												<label class="col-sm-2 control-label">End Date:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<input id="endDateId" name="endDate" type="date" class="input-sm form-control imp">
 												</div>
-												<label class="col-sm-2 control-label">Duration(Hrs):</label>
+												<label class="col-sm-2 control-label">Duration(Hrs):<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<input id="durationId" name="duration" type="text" class="input-sm form-control" data-toggle="tooltip" data-placement="auto right" title="" data-original-title="Enter duration in hours or .(dot) mins">
 												</div>

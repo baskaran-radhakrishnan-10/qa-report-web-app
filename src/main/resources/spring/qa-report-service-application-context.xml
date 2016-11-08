@@ -32,4 +32,6 @@
 	
 	<bean class="com.equiniti.qa_report.service.api.impl.KTPlanServiceImpl" id="ktPlanService" parent="baseAPI"/>
 	
+	<bean class="com.equiniti.qa_report.service.api.impl.OperationServiceImpl" id="operationService" parent="baseAPI"/>
+	
 </beans>

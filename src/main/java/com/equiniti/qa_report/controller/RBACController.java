@@ -90,24 +90,6 @@ public class RBACController {
 		LOG.info("Begin :RBACController.updateUserDetails ");
 		return returnObjMap;
 	}
-/*	public Map<String,Object> resetPassword(Map<String,Object> inputParam) throws ControllerException{
-		LOG.info("Begin :RBACController.resetPassword");
-		Map<String,Object> returnObjMap=new HashMap<>();
-		try {
-			Object returnObj=rbacService.resetPassword(inputParam);
-			returnObjMap.put(ApplicationConstants.STATUS, (Integer)returnObj != null ? ApplicationConstants.SUCCESS : ApplicationConstants.ERROR);
-			returnObjMap.put(ApplicationConstants.SERVER_DATA, returnObj);
-			
-			LOG.info("RBACController.resetPassword.returnObjMap--> "+ returnObjMap);
-		} catch (APIException e) {
-			throw new ControllerException(e.getFaultCode(), e);
-		} catch(Exception e){
-			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
-		}
-		LOG.info("End :RBACController.resetPassword ");
-		return returnObjMap;
-	}*/
-	
 	public Map<String,Object> resetPassword(Map<String,Object> inputParam) throws ControllerException{
 		LOG.info("Begin :RBACController.resetPassword");
 		Map<String,Object> returnObjMap=new HashMap<>();

@@ -39,7 +39,6 @@ public class RBACWebController {
 		Map<String,Object> returnObjMap=new HashMap<>();
 		try {
 			returnObjMap=rbacController.getUserDetails();			
-			LOG.info("RBACWebController.getUserDetails.returnObjMap--> "+ returnObjMap);
 		} catch (ControllerException e) {
 			e.printStackTrace();
 		}
@@ -53,8 +52,7 @@ public class RBACWebController {
 		LOG.info("Begin :RBACWebController.getUniqueUserList ");
 		Map<String,Object> returnObj=new HashMap<String, Object>();
 		try {
-			returnObj=rbacController.getUniqueUserList();
-			LOG.info("RBACWebController.getUniqueUserList.returnObjMap--> "+ returnObj);
+			returnObj=rbacController.getUniqueUserList();			
 		} catch (ControllerException e) {
 			e.printStackTrace();
 		}
@@ -68,7 +66,6 @@ public class RBACWebController {
 		LOG.info("Begin :RBACWebController.addUserDetails ");
 		Map<String,Object> returnObj=new HashMap<>();
 		try {
-			LOG.info("RBACWebController.addUserDetails.inputParam--> "+ inputParam);
 			returnObj=rbacController.addUserDetails(inputParam);
 		} catch (ControllerException e) {
 			e.printStackTrace();
@@ -83,7 +80,6 @@ public class RBACWebController {
 		LOG.info("Begin: RBACWebController.updateUserDetails");
 		Map<String,Object> returnObj=new HashMap<>();
 		try {
-			LOG.info("RBACWebController.updateUserDetails.inputParam--> "+ inputParam);
 			returnObj=rbacController.updateUserDetails(inputParam);
 		} catch (ControllerException e) {
 			e.printStackTrace();
@@ -91,20 +87,6 @@ public class RBACWebController {
 		LOG.info("End: RBACWebController.updateUserDetails");
 		return returnObj;
 	}
-/*	@RequestMapping(value="/resetPassword", method = RequestMethod.POST)
-	@ResponseBody
-	public Map<String,Object> resetPassword(@RequestBody Map<String,Object> inputParam){
-		LOG.info("Begin :RBACWebController.resetPassword ");
-		Map<String,Object> returnObj=new HashMap<>();
-		try {
-			LOG.info("RBACWebController.resetPassword.inputParam--> "+ inputParam);
-			returnObj=rbacController.resetPassword(inputParam);
-		} catch (ControllerException e) {
-			e.printStackTrace();
-		}
-		LOG.info("End :RBACWebController.resetPassword ");
-		return returnObj;
-	}*/
 	
 	@RequestMapping(value="/resetPassword", method = RequestMethod.POST)
 	@ResponseBody
@@ -127,7 +109,6 @@ public class RBACWebController {
 		Map<String,Object> returnObj=new HashMap<String, Object>();
 		try {
 			returnObj=rbacController.getRolesList(inputParam);
-			LOG.info("RBACWebController.getRolesList.returnObjMap--> "+ returnObj);
 		} catch (ControllerException e) {
 			e.printStackTrace();
 		}

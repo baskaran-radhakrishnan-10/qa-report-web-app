@@ -48,12 +48,12 @@
 										<div class="row">
 											<div class="col-md-12">											
 																								
-												<label class="col-sm-2 control-label">User ID:*</label>
+												<label class="col-sm-2 control-label">User ID:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<select id="userId" name="user" class="input-sm form-control"></select>
 												</div>
 												
-												<label class="col-sm-2 control-label">New Password:*</label>
+												<label class="col-sm-2 control-label">New Password:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<input id="newPasswordId" name="newPassword" type="password" autocomplete="off" class="input-sm form-control" value="">
 												</div>
@@ -63,11 +63,11 @@
 									<div class="form-group">
 										<div class="row">
 											<div class="col-md-12">
-												<label class="col-sm-2 control-label">Confirm Password :*</label>
+												<label class="col-sm-2 control-label">Confirm Password :<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<input id="confirmPasswordId" name="confirmPassword" type="password" autocomplete="off" class="input-sm form-control">
 												</div>
-												<label class="col-sm-2 control-label">Date Modified:*</label>
+												<label class="col-sm-2 control-label">Date Modified:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<input id="modifiedOnId" name="modifiedOn" type="text" class="input-sm form-control" readonly="readonly" >
 												</div>
