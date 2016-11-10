@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.apache.jcs.access.exception.CacheException;
 import org.apache.log4j.Logger;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -28,6 +29,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 
+import com.equiniti.qa_report.cache.CacheInstance;
 import com.equiniti.qa_report.entity.DSREntity;
 import com.equiniti.qa_report.exception.api.util.CommonFileUtil;
 import com.equiniti.qa_report.util.ApplicationConstants;
@@ -81,9 +83,17 @@ public class ReportExportHandler {
 	private static final String ITEM_DETAIL="ITEM_DETAIL";
 	private static final String CYCLE = "CYCLE";
 	private static final String BTP_PLAN = "BTP_PLAN" ;
+	
+	private static final String[] monthArray = {"January","Feburary","March","April","May","June","July","August","September","October","November","December"};
+	
+	private CacheInstance cache =null;
+	
+	public ReportExportHandler() throws CacheException{
+		this.cache= CacheInstance.getInstance();
+	}
 
 	@SuppressWarnings("unchecked")
-	public void exportDSRReport(Map<String, Object> exportDataMap){
+	public void exportDSRReport(Map<String, Object> exportDataMap) throws CacheException{
 
 		String reportType=(String) exportDataMap.get(ApplicationConstants.REPORT_TYPE);
 
@@ -96,14 +106,14 @@ public class ReportExportHandler {
 		exportMap.put("OUTPUT_FILE_NAME", dsrDataMap.size() > 1 ? ReportExportHandler.DSR_SELECTED_ROW_OUTPUT: ReportExportHandler.DSR_SUMMARY_REPORT_OUTPUT);
 		exportMap.put("USER_ID", userId);
 		exportMap.put("TEMPLATE_FILE_PATH", dsrDataMap.size() > 1 ? ReportExportHandler.DSR_SELECTED_ROW_REPORT_TEMPLATE_PATH : ReportExportHandler.DSR_SUMMARY_REPORT_TEMPLATE_PATH);
-		exportMap.put("ROW_NO", 1);
+		exportMap.put("ROW_NO", dsrDataMap.size() > 1 ? 2 : 1);
 		exportMap.put("EXPORT_TYPE", reportType);
 		exportXLSFile(exportMap);
 
 	}
 
 	@SuppressWarnings("unchecked")
-	public void exportUserReport(Map<String, Object> exportDataMap){
+	public void exportUserReport(Map<String, Object> exportDataMap) throws CacheException{
 
 		String reportType=(String) exportDataMap.get(ApplicationConstants.REPORT_TYPE);
 
@@ -241,7 +251,7 @@ public class ReportExportHandler {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void exportBTPMonthlyReport(Map<String, Object> exportDataMap){
+	public void exportBTPMonthlyReport(Map<String, Object> exportDataMap) throws CacheException{
 
 		String reportType=(String) exportDataMap.get(ApplicationConstants.REPORT_TYPE);
 
@@ -401,7 +411,7 @@ public class ReportExportHandler {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void exportBTPReport(Map<String, Object> exportDataMap){
+	public void exportBTPReport(Map<String, Object> exportDataMap) throws CacheException{
 
 		String reportType=(String) exportDataMap.get(ApplicationConstants.REPORT_TYPE);
 
@@ -654,7 +664,7 @@ public class ReportExportHandler {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void exportXLSFile(Map<String,Object> exportDataMap){
+	private void exportXLSFile(Map<String,Object> exportDataMap) throws CacheException{
 
 		String templateFilePath = (String) exportDataMap.get("TEMPLATE_FILE_PATH");
 		String outputFileName = (String) exportDataMap.get("OUTPUT_FILE_NAME");
@@ -700,6 +710,11 @@ public class ReportExportHandler {
 					prepareBTPMonthlyReportDocument(workbook, (Map<String,Map<String,Object>>) exportDataMap.get("XLS_DATA"), (int) exportDataMap.get("ROW_NO"));
 				}
 				writeExportedFile(userId, outputFileName, workbook);
+				if(ApplicationConstants.BTP_MONTHLY_REPORT == exportType.intern()){
+					this.cache.putItemInCache(ApplicationConstants.BTP_MONTHLY_REPORT_CONSTRUCTED, true, userId);
+				}else if(ApplicationConstants.DSR_SUMMARY_REPORT == exportType.intern() && 2 == (int) exportDataMap.get("ROW_NO")){
+					this.cache.putItemInCache(ApplicationConstants.DSR_DAILY_REPORT_CONSTRUCTED, true, userId);
+				}
 			}
 		}
 	}
@@ -722,7 +737,7 @@ public class ReportExportHandler {
 				
 				String cellValue = sheet.getRow(0).getCell(0).getStringCellValue();
 				
-				String month = rowDataMap.get("REPORT_MONTH").toString();
+				String month = monthArray[Integer.valueOf(rowDataMap.get("REPORT_MONTH").toString())-1];
 				
 				String year = rowDataMap.get("REPORT_YEAR").toString();
 				
@@ -794,23 +809,43 @@ public class ReportExportHandler {
 
 	private void prepareDSRReportDocument(Workbook workbook,Map<Integer,List<DSREntity>> xlsData,int startRowNo){
 
-		int rownum = startRowNo;
-
 		int noOfSheets = workbook.getNumberOfSheets();
 
 		for(int index = 0;index<noOfSheets;index++){
+			
+			int rownum = startRowNo;
 
 			Sheet sheet = workbook.getSheetAt(index);
 
 			List<DSREntity> entityList = xlsData.get(index);
 
 			for(DSREntity entity : entityList){
+				
+				if(rownum == startRowNo && startRowNo > 1){
+					
+					String cellValue = sheet.getRow(0).getCell(0).getStringCellValue();
+					
+					DateTime dsrDate = entity.getDsrDate();
+					
+					String month = monthArray[Integer.valueOf(dsrDate.getMonthOfYear())-1];
+					
+					String year = String.valueOf(dsrDate.getYear());
+					
+					String day = String.valueOf(dsrDate.getDayOfMonth());
+					
+					sheet.getRow(0).getCell(0).setCellValue(new StringBuffer().append(cellValue).append(" ").append(day).append("-").append(month).append("-").append(year).toString());
+					
+				}
 
 				Row row = sheet.createRow(rownum++);
 
 				int cellnum = 0;
-
+				
 				Cell cell = row.createCell(cellnum++);
+
+				setCellValue((rownum-startRowNo), cell);
+
+				cell = row.createCell(cellnum++);
 
 				Object obj =entity.getProjectName();
 
@@ -821,12 +856,16 @@ public class ReportExportHandler {
 				obj =entity.getResource();
 
 				setCellValue(obj, cell);
+				
+				if(noOfSheets == 1){
+					
+					cell = row.createCell(cellnum++);
 
-				cell = row.createCell(cellnum++);
+					obj =entity.getDsrDate();
 
-				obj =entity.getDsrDate();
-
-				setCellValue(obj, cell);
+					setCellValue(obj, cell);
+					
+				}
 
 				cell = row.createCell(cellnum++);
 
@@ -851,20 +890,22 @@ public class ReportExportHandler {
 				obj =entity.getRemarks();
 
 				setCellValue(obj, cell);
+				
+				if(noOfSheets == 1){
+					
+					cell = row.createCell(cellnum++);
 
-				cell = row.createCell(cellnum++);
+					obj =entity.getSpentHours();
 
-				obj =entity.getSpentHours();
+					setCellValue(obj, cell);
 
-				setCellValue(obj, cell);
+					cell = row.createCell(cellnum++);
 
-				cell = row.createCell(cellnum++);
+					obj =entity.getPlannedHours();
 
-				obj =entity.getPlannedHours();
-
-				setCellValue(obj, cell);
-
-				cell = row.createCell(cellnum++);
+					setCellValue(obj, cell);
+					
+				}
 
 			}
 

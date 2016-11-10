@@ -124,14 +124,22 @@ public class DSREventHandler implements IEventHandler<IEvent> {
 					event.getRestrictionMap().remove("SINGLE_EXPORT");
 					String plannedDate = (String) event.getRestrictionMap().get("plannedDate");
 					event.getRestrictionMap().remove("plannedDate");
-					event.setDSREntityList(dsrDAO.filterDSREntityList(event.getRestrictionMap()));
-					reportDataMap.put(0, event.getDSREntityList());
+					List<DSREntity> entityList = dsrDAO.filterDSREntityList(event.getRestrictionMap()) ;
+					if(null != entityList && !entityList.isEmpty()){
+						event.setDSREntityList(entityList);
+					}
+					reportDataMap.put(0, entityList);
 					event.getRestrictionMap().put("plannedDate", plannedDate);
 					event.getRestrictionMap().remove("accomplishedDate");
-					event.setDSREntityList(dsrDAO.filterDSREntityList(event.getRestrictionMap()));
-					reportDataMap.put(1, event.getDSREntityList());
+					entityList = dsrDAO.filterDSREntityList(event.getRestrictionMap()) ;
+					if(null != entityList && !entityList.isEmpty()){
+						event.setDSREntityList(entityList);
+					}
+					reportDataMap.put(1, entityList);
 				}
-				exportDSRReport(reportDataMap);
+				if(!reportDataMap.isEmpty()){
+					exportDSRReport(reportDataMap);
+				}
 			} else if (null != event.getRestrictionMap()) {
 				event.setDSREntityList(dsrDAO.getDSREntityList(event.getRestrictionMap()));
 			} 

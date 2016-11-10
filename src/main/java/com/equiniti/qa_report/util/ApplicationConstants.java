@@ -81,4 +81,9 @@ public class ApplicationConstants {
 	public static final String REPORT_DATA= "REPORT_DATA";
 	
 	public static final String REPORT_TYPE = "REPORT_TYPE";
+	
+	public static final String BTP_MONTHLY_REPORT_CONSTRUCTED = "isBtpMonthlyReportConstructed";
+	
+	public static final String DSR_DAILY_REPORT_CONSTRUCTED = "isDsrDailyReportConstructed";
+	
 }

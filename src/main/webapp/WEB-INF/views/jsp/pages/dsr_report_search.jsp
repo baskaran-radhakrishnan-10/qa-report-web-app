@@ -7,7 +7,43 @@
 
 <div class="modal fade" id="dsr_report_search" tabindex="-1" role="dialog" aria-labelledby="dsrReportSearchModal" aria-hidden="true" data-backdrop="static" data-keyboard="false" data-href="">	
 	<div class="modal-dialog modal-lg">
+		
 		<div id="multi_dsr_report_modal_content" class="modal-content" style="top: 122px;width: 53%;left: 24%;">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">(x)</button>
+				<h2 class="modal-title" style="font-size: 22px;color: rgba(0, 0, 0, 0.55);">Export BTP Report</h2>
+			</div>
+			<form role="form" class="form-horizontal" id="dsr_report_export_form">
+				<div class="modal-body">
+					<div class="form-group"	style="margin-right: -27px; margin-left: -15px;">
+						<div class="col-sm-8" style="width: 81.666667%;">
+							<select name="selector1" id="selectExportType" class="form-control1" style="margin: 14px 120px; width: 50%; height: 37px; cursor: pointer;">
+								<option id="DSR_SUMMARY">DSR Summary Report</option>
+								<option id="DSR_DAY_REPORT">DSR Day Report</option>
+							</select>
+						</div>
+					</div>
+					<div id="timePeriodDiv" class="form-group" style="margin-right: -27px; margin-left: -15px;display: none;">
+						<div class="col-sm-8" style="width: 80.666667%;">
+  							<label class="col-sm-2 control-label" style="margin: -21px -5%;padding-top: 11px;padding-left: 50px;text-align: center;width: 47.666667%;">Accomplished Date</label>
+							<div class="col-md-2 top-20" style="margin: 14px 4%;width: 50.666667%;">
+								<input id="filter_dateFromId" name="accomplishedDate" type="date" class="input-sm form-control imp" placeholder="Accomplished Date">
+							</div>
+							<label class="col-sm-2 control-label" style="margin: -69px 59%;padding-top: 7px;padding-left: 40px;text-align: left;width: 47.666667%;">Planned Date</label>
+							<div class="col-md-2 top-20" style="margin: -39px 66%;width: 50.666667%;">
+								<input id="filter_dateToId" name="plannedDate" type="date" class="input-sm form-control imp" placeholder="Planned Date">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="export_file_button">Export</button>
+					<button type="button" class="btn btn-default" id="modal_close_button" data-dismiss="modal">Close</button>
+				</div>
+			</form>
+		</div>
+		
+		<!-- <div id="multi_dsr_report_modal_content" class="modal-content" style="top: 122px;width: 53%;left: 24%;">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">(x)</button>
 				<h2 class="modal-title" style="font-size: 22px;color: rgba(0, 0, 0, 0.55);">Export DSR Report</h2>
@@ -32,7 +68,7 @@
 					<button type="button" class="btn btn-default" id="modal_close_button" data-dismiss="modal">Close</button>
 				</div>
 			</form>
-		</div>
+		</div> -->
 	</div>
 </div>
 

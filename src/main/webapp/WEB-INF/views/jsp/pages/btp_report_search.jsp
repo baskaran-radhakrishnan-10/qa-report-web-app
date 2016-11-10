@@ -23,7 +23,6 @@
 							</select>
 						</div>
 					</div>
-					
 					<div id="timePeriodDiv" class="form-group" style="margin-right: -27px; margin-left: -15px;display: none;">
 						<div class="col-sm-8" style="width: 36.666667%;cursor: pointer;">
 							<select name="yearSelector" id="yearSelector" class="form-control1" style="margin: -21px 119px;width: 50%;height: 37px;cursor: pointer;">

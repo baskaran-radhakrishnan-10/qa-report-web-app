@@ -45,7 +45,7 @@ public class ReportSearchServiceImpl extends BaseAPIImpl implements ReportSearch
 	}
 
 	@Override
-	public void buildBTPMonthlyReport(Map<String,Object> paramMap) throws APIException {
+	public boolean buildBTPMonthlyReport(Map<String,Object> paramMap) throws APIException {
 		BuildBTPMonthlyReportEvent event = getEvent(BuildBTPMonthlyReportEvent.class);
 		try {
 			event.setParamMap(paramMap);
@@ -55,6 +55,7 @@ public class ReportSearchServiceImpl extends BaseAPIImpl implements ReportSearch
 		} catch (Exception e) {
 			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}
+		return event.isEmptyResult();
 	}
 	
 	@Override

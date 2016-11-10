@@ -116,10 +116,8 @@ public class DSRController {
 		Map<String,Object> returnObjMap=new HashMap<>();
 		try {
 			Object returnObj=dsrService.filterDSREntries(paramMap);
-			if(null != returnObj){
-				returnObjMap.put(ApplicationConstants.STATUS, returnObj != null ? ApplicationConstants.SUCCESS : ApplicationConstants.ERROR);
-				returnObjMap.put(ApplicationConstants.SERVER_DATA, returnObj);
-			}
+			returnObjMap.put(ApplicationConstants.STATUS,ApplicationConstants.SUCCESS);
+			returnObjMap.put(ApplicationConstants.SERVER_DATA, returnObj);
 		} catch (APIException e) {
 			throw new ControllerException(e.getFaultCode(), e);
 		} catch(Exception e){

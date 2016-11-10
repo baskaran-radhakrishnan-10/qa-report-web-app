@@ -20,6 +20,8 @@ public class GetDSREvent extends BaseEvent {
 	
 	private List<DSREntity> dsrEntityList;
 	
+	private boolean isDataAvailable;
+	
 	private DSREntity dsrEntity;
 
     public GetDSREvent() {
@@ -64,6 +66,14 @@ public class GetDSREvent extends BaseEvent {
 
 	public void setFilter(boolean isFilter) {
 		this.isFilter = isFilter;
+	}
+
+	public boolean isDataAvailable() {
+		return isDataAvailable;
+	}
+
+	public void setDataAvailable(boolean isDataAvailable) {
+		this.isDataAvailable = isDataAvailable;
 	}
     
 }

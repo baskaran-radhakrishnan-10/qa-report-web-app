@@ -9,6 +9,7 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
+import org.apache.jcs.access.exception.CacheException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.equiniti.qa_report.entity.DSREntity;
@@ -54,9 +55,10 @@ public class ReportQueueListener implements MessageListener{
 				}
 			} catch (JMSException e) {
 				e.printStackTrace();
+			} catch (CacheException e) {
+				e.printStackTrace();
 			}
 		}
 	}
-	
 	
 }

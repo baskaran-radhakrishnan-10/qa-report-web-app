@@ -10,7 +10,9 @@ public class BuildBTPMonthlyReportEvent extends BaseEvent{
 
 	private static final String EVENT_NAME = "buildBTPMonthlyReportEvent";
 	
-	private Map<String,Object> paramMap; 
+	private Map<String,Object> paramMap;
+	
+	private boolean isEmptyResult = false;
 	
     public BuildBTPMonthlyReportEvent() {
         super(EVENT_NAME);
@@ -22,6 +24,14 @@ public class BuildBTPMonthlyReportEvent extends BaseEvent{
 
 	public void setParamMap(Map<String, Object> paramMap) {
 		this.paramMap = paramMap;
+	}
+
+	public boolean isEmptyResult() {
+		return isEmptyResult;
+	}
+
+	public void setEmptyResult(boolean isEmptyResult) {
+		this.isEmptyResult = isEmptyResult;
 	}
 
 }

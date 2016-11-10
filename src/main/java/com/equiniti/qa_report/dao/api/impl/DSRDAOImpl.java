@@ -44,6 +44,8 @@ public class DSRDAOImpl implements DSRDAO{
 		return abstractHibernateDAOAPI.getEntity(DSREntity.class, restrictionMap);
 	}
 	
+	//btp.startdate between START_DATE and END_DATE
+	
 	@SuppressWarnings("unchecked")
 	public List<DSREntity> filterDSREntityList(Map<String, Object> restrictionMap) throws DaoException{
 		StringBuffer queryBuffer=new StringBuffer();
@@ -57,9 +59,9 @@ public class DSRDAOImpl implements DSRDAO{
 			}else if(key.indexOf("endDate") != -1){
 				queryBuffer.append("dsrDate").append(" <= '").append(restrictionMap.get(key)).append("'");
 			}else if(key.indexOf("plannedDate") != -1){
-				queryBuffer.append("dsrDate").append(" >= '").append(restrictionMap.get(key)).append("'");
+				queryBuffer.append("dsrDate").append(" between ").append("'").append(restrictionMap.get(key)).append(" 00:00:00").append("'").append(" and ").append("'").append(restrictionMap.get(key)).append(" 23:59:59").append("'");
 			}else if(key.indexOf("accomplishedDate") != -1){
-				queryBuffer.append("dsrDate").append(" >= '").append(restrictionMap.get(key)).append("'");
+				queryBuffer.append("dsrDate").append(" between ").append("'").append(restrictionMap.get(key)).append(" 00:00:00").append("'").append(" and ").append("'").append(restrictionMap.get(key)).append(" 23:59:59").append("'");
 			}else{
 				queryBuffer.append(key).append(" = '").append(restrictionMap.get(key)).append("'");
 			}

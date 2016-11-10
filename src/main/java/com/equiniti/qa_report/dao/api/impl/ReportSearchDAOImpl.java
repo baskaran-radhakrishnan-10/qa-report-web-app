@@ -70,13 +70,19 @@ public class ReportSearchDAOImpl implements ReportSearchDAO{
 			dynamicQuery=abstractHibernateDAOAPI.constructQuery(queryMap);
 			dynamicQuery=dynamicQuery.replace("START_DATE", "'"+paramMap.get("startDate").toString()+"'");
 			dynamicQuery=dynamicQuery.replace("END_DATE", "'"+paramMap.get("endDate").toString()+"'");
-			returnObj.put("BTP_ITEM_DETAILS", (List<Map<String,Object>>) abstractHibernateDAOAPI.processQuery(null, null, null, QueryOperationType.SELECT, QueryType.SQL, dynamicQuery));
+			List<Map<String,Object>> btpItemDetailsDataList = (List<Map<String,Object>>) abstractHibernateDAOAPI.processQuery(null, null, null, QueryOperationType.SELECT, QueryType.SQL, dynamicQuery);
+			if(null != btpItemDetailsDataList && !btpItemDetailsDataList.isEmpty()){
+				returnObj.put("BTP_ITEM_DETAILS",btpItemDetailsDataList);
+			}
 			queryMap=new LinkedHashMap<>();
 			queryMap.put("BTP_MONTHLY_REPORT_QUERY2", "BTP_MONTHLY_REPORT_QUERY2");
 			dynamicQuery=abstractHibernateDAOAPI.constructQuery(queryMap);
 			dynamicQuery=dynamicQuery.replace("START_DATE", "'"+paramMap.get("startDate").toString()+"'");
 			dynamicQuery=dynamicQuery.replace("END_DATE", "'"+paramMap.get("endDate").toString()+"'");
-			returnObj.put("BTP_RESOURCE_DETAILS", (List<Map<String,Object>>) abstractHibernateDAOAPI.processQuery(null, null, null, QueryOperationType.SELECT, QueryType.SQL, dynamicQuery));
+			List<Map<String,Object>> btpResDetailsDataList = (List<Map<String,Object>>) abstractHibernateDAOAPI.processQuery(null, null, null, QueryOperationType.SELECT, QueryType.SQL, dynamicQuery);
+			if(null != btpResDetailsDataList && !btpResDetailsDataList.isEmpty()){
+				returnObj.put("BTP_RESOURCE_DETAILS",btpResDetailsDataList);
+			}
 		}
 		return returnObj;
 	}

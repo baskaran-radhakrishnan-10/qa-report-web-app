@@ -7,11 +7,17 @@ $(document).ready(function() {
 	btpReportSearchRef.setBtpYearArray();
 	btpReportSearchRef.onDocumentReady();
 	
-	$('#selectExportType').on('change',function(event){
+	$('#selectExportType').on('input',function(event){
 		console.log($(this));
 		if("BTP Monthly Report" == $(this).val()){
 			$('#timePeriodDiv').show();
+		}else{
+			$('#timePeriodDiv').hide();
 		}
+	});
+	
+	$("#exportBTPReportButtonTrigger").on('click',function(){
+		$('#selectExportType option:eq(0)').prop('selected', true)
 	});
 
 	$('#apply_filter').on('click',function(){
@@ -73,6 +79,7 @@ $(document).ready(function() {
 			dataObj['endDate'] = endDate;
 			btpReportSearchRef.btpMonthlyReport(dataObj);
 		}else{
+			$('#export_file_button').attr('disabled', true);
 			btpReportSearchRef.downloadReport($('#selectExportType option:selected').attr('id'));
 		}
 		
@@ -246,7 +253,11 @@ BTPReportSearch.prototype.btpMonthlyReport=function(dataObj){
 
 BTPReportSearch.prototype.btpMonthlyReportSuccess=function(serverData){
 	if('ERROR' != serverData['STATUS']){
-		
+		btpReportSearchRef.downloadReport("BTP_MONTHLY");
+		$('#export_file_button').attr('disabled', false);
+	}else{
+		var notifyObj={msg: '<b>BTP MONTHLY REPORT IS NOT AVAILABLE</b>',type: "error",position: "center",autohide: true};
+		notif(notifyObj);
 	}
 }
 

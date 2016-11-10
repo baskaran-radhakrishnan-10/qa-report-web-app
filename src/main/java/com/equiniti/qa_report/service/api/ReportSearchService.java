@@ -9,7 +9,7 @@ public interface ReportSearchService {
 	
 	public void buildBTPSummaryReport(Map<String,Object> paramMap) throws APIException;
 	
-	public void buildBTPMonthlyReport(Map<String,Object> paramMap) throws APIException;
+	public boolean buildBTPMonthlyReport(Map<String,Object> paramMap) throws APIException;
 
 	public void buildSelectedBTPReport(Map<String, Object> paramMap) throws APIException;
 

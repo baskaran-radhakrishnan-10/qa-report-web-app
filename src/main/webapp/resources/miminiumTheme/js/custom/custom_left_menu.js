@@ -2,8 +2,10 @@ var leftMenuRef = null;
 
 $(document).ready(function(event) {
 
-	$(document).on("mouseenter", "li", function() {
-		$(this).css('background-color','#FFEB3B');
+	$(document).on("mouseenter", "li", function(event) {
+		if(!$(this).parent().hasClass("user-nav")){
+			$(this).css('background-color','#FFEB3B');
+		}
 	});
 
 	$(document).on("mouseleave", "li", function() {

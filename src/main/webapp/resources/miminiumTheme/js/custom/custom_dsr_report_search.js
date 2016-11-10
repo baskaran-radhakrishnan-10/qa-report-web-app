@@ -44,20 +44,6 @@ $(document).ready(function(){
 		$('#exportDSRReportButton').hide();
 	});
 
-	/*$('#dsr_table_id tbody').on('dblclick', 'tr', function () {
-		var sNo=$(this).attr('id');
-		$('#dsr_table_id tbody tr').removeClass('selected');
-		$('#dsr_table_id tbody tr').css('background-color','');
-		if (!$(this).hasClass('selected')){
-			dsrReportSearchRef.dsrTableRef.$('tr.selected').removeClass('selected');
-			$(this).addClass('selected');
-			$(this).css('background-color','#B0BED9 !important');
-			$("#exportDSRReportButtonTrigger").trigger( "click" );
-			$('#filter_dateFromId').removeClass('error');
-			$('#filter_dateToId').removeClass('error');
-		}
-	});*/
-	
 	$('#filter_dateFromId').on("blur" , function(){
 		var value=$(this).val();
 		if(null == value || value.length == 0 || typeof(value) == 'undefined'){
@@ -77,27 +63,43 @@ $(document).ready(function(){
 	});
 	
 	$('#export_file_button').on("click",function(){
-		var hasErrorClass=false;
-		var sNo=$('#dsr_table_id tbody').find('tr.selected').attr('id');
-		var accomplishedDate=$('#filter_dateFromId').val();
-		var plannedDate=$('#filter_dateToId').val();
-		if(null == accomplishedDate || accomplishedDate.length == 0 || typeof(accomplishedDate) == 'undefined'){
-			$('#filter_dateFromId').addClass('error');
-			hasErrorClass=true;
-		}
-		if(null == plannedDate || plannedDate.length == 0 || typeof(plannedDate) == 'undefined'){
-			$('#filter_dateToId').addClass('error');
-			hasErrorClass=true;
-		}
-		if(hasErrorClass){
-			return false;
-		}
 		
-		dsrReportSearchRef.exportSelectedBTP(sNo,accomplishedDate,plannedDate);
+		if("DSR Day Report" == $('#selectExportType').val()){
+			var hasErrorClass=false;
+			var accomplishedDate=$('#filter_dateFromId').val();
+			var plannedDate=$('#filter_dateToId').val();
+			if(null == accomplishedDate || accomplishedDate.length == 0 || typeof(accomplishedDate) == 'undefined'){
+				$('#filter_dateFromId').addClass('error');
+				hasErrorClass=true;
+			}
+			if(null == plannedDate || plannedDate.length == 0 || typeof(plannedDate) == 'undefined'){
+				$('#filter_dateToId').addClass('error');
+				hasErrorClass=true;
+			}
+			if(hasErrorClass){
+				return false;
+			}
+			dsrReportSearchRef.exportSelectedBTP(accomplishedDate,plannedDate);
+		}else{
+			dsrReportSearchRef.downloadReport('DSR_SUMMARY');
+		}
 	});
 	
 	$('#exportDSRReportButton').on("click",function(){
-		dsrReportSearchRef.downloadReport('DSR_SUMMARY');
+		$("#exportDSRReportButtonTrigger").trigger( "click" );
+		$('#filter_dateFromId').removeClass('error');
+		$('#filter_dateToId').removeClass('error');
+		$('#timePeriodDiv').hide();
+		$('#selectExportType option:eq(0)').prop('selected', true);
+	});
+	
+	$('#selectExportType').on('input',function(event){
+		console.log($(this));
+		if("DSR Day Report" == $(this).val()){
+			$('#timePeriodDiv').show();
+		}else{
+			$('#timePeriodDiv').hide();
+		}
 	});
 	
 	if(null != indexDBObj){
@@ -160,17 +162,12 @@ DSRReportSearch.prototype = {
 			fillSelectDropDown('filter_resourceId',dsrReportSearchRef.resourceArray,"");
 			fillSelectDropDown('filter_statusId',dsrReportSearchRef.statusArray,"");
 		},
-		exportSelectedBTP : function(sNo,accomplishedDate,plannedDate){
-			var request = indexDBObj.db.transaction(["dsr"],"readwrite").objectStore("dsr").get(parseInt(sNo));
-			request.onsuccess = function(event){
-				var dsrEntity=request.result;
-				var filterObject={};
-				filterObject['projectName']=dsrEntity['projectName'];
-				filterObject['plannedDate']=plannedDate;
-				filterObject['accomplishedDate']=accomplishedDate;
-				filterObject['SINGLE_EXPORT']=true;
-				ajaxHandler("POST", JSON.stringify(filterObject), "application/json", getApplicationRootPath()+"dsr/filterData", 'json', null, DSRReportSearch.prototype.filterDSRReportSuccess,true);
-			}
+		exportSelectedBTP : function(accomplishedDate,plannedDate){
+			var filterObject={};
+			filterObject['plannedDate']=plannedDate;
+			filterObject['accomplishedDate']=accomplishedDate;
+			filterObject['SINGLE_EXPORT']=true;
+			ajaxHandler("POST", JSON.stringify(filterObject), "application/json", getApplicationRootPath()+"dsr/filterData", 'json', null, DSRReportSearch.prototype.filterDSRReportSuccess,true);
 		},
 		filterDSRReport : function(filterObject){
 			dsrReportSearchRef.showLoader();
@@ -183,7 +180,16 @@ DSRReportSearch.prototype = {
 			console.log(serverData);
 			if('ERROR' != serverData['STATUS']){
 				var entityList = serverData['SERVER_DATA'];
-				dsrReportSearchRef.constructDSRReportTable(entityList);
+				if(null != inputData["SINGLE_EXPORT"]){
+					if(null != entityList && entityList.length > 0){
+						dsrReportSearchRef.downloadReport("DSR_DAY_REPORT");
+					}else{
+						var notifyObj={msg: '<b>DSR DAILY REPORT IS NOT AVAILABLE</b>',type: "error",position: "center",autohide: true};
+						notif(notifyObj);
+					}
+				}else{
+					dsrReportSearchRef.constructDSRReportTable(entityList);
+				}
 			}
 		},
 		constructDSRReportTable : function(dsrEntityList){
@@ -216,6 +222,7 @@ DSRReportSearch.prototype = {
 				htmlArray.push(html);
 				sNo++;
 			}
+			
 			if(null != dsrReportSearchRef.dsrTableRef){
 				dsrReportSearchRef.dsrTableRef.destroy();
 			}

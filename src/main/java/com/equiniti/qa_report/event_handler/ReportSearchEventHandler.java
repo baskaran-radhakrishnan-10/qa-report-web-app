@@ -105,7 +105,12 @@ public class ReportSearchEventHandler implements IEventHandler<IEvent> {
 	private void buildBTPMonthlyReportByFilter(BuildBTPMonthlyReportEvent event) throws EventException{
 		try {
 			Map<String,Object> exportObject=new HashMap<>();
-			exportObject.put(ApplicationConstants.REPORT_DATA, reportSearchDAO.getBTPMontlyReportData(event.getParamMap()));
+			Map<String,List<Map<String,Object>>> dataObject = reportSearchDAO.getBTPMontlyReportData(event.getParamMap());
+			if(null == dataObject || dataObject.isEmpty()){
+				event.setEmptyResult(true);
+				return ;
+			}
+			exportObject.put(ApplicationConstants.REPORT_DATA, dataObject);
 			exportObject.put(ApplicationConstants.REPORT_TYPE, ApplicationConstants.BTP_MONTHLY_REPORT);
 			exportObject.put("USER_ID", session.getAttribute(ApplicationConstants.USER_ID).toString());
 			reportQueueConnector.produce(exportObject);

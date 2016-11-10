@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.equiniti.qa_report.controller.ReportSearchController;
+import com.equiniti.qa_report.enums.ExportFileEnum;
 import com.equiniti.qa_report.exception.api.exception.ControllerException;
 import com.equiniti.qa_report.exception.api.exception.UIException;
 import com.equiniti.qa_report.exception.api.faultcode.CommonFaultCode;
@@ -44,11 +45,19 @@ public class ReportSearchWebController {
 	@RequestMapping(value = "/export_document/{fileId}" , method = RequestMethod.GET)
 	public void downloadReportDocument(HttpServletRequest request,HttpServletResponse response,@PathVariable("fileId") String fileId) throws UIException{
 		try {
-			reportSearchController.downloadReportDocument(fileId, request.getSession().getAttribute(ApplicationConstants.USER_ID).toString());
+			if(fileId.intern() == ExportFileEnum.BTP_MONTHLY.name()){
+				reportSearchController.downloadBTPMonthlyReport();
+			}else if(fileId.intern() == ExportFileEnum.DSR_DAY_REPORT.name()){
+				reportSearchController.downloadDSRDailyReport();
+			}else{
+				reportSearchController.downloadReportDocument(fileId, request.getSession().getAttribute(ApplicationConstants.USER_ID).toString());
+			}
 		} catch (IOException e) {
 			throw new UIException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}catch (ControllerException e){
 			throw new UIException(e.getFaultCode(), e);
+		} catch (Exception e) {
+			throw new UIException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}
 	}
 	
@@ -64,12 +73,14 @@ public class ReportSearchWebController {
 	
 	@RequestMapping(value = "/buildBtpMonthlyReport", method = RequestMethod.POST)
 	@ResponseBody
-	public void buildBtpMonthlyReport(@RequestBody Map<String,Object> inputData) throws UIException{
+	public Map<String,Object> buildBtpMonthlyReport(@RequestBody Map<String,Object> inputData) throws UIException{
+		Map<String,Object> returnObj=new HashMap<>();
 		try {
-			reportSearchController.buildBtpMonthlyReport(inputData);
+			returnObj=reportSearchController.buildBtpMonthlyReport(inputData);
 		} catch (ControllerException e) {
 			throw new UIException(e.getFaultCode(), e);
 		}
+		return returnObj;
 	}
 	
 	@RequestMapping(value = "/dsr_report_search" , method = RequestMethod.GET)
