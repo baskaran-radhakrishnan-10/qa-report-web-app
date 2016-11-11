@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog  xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+    
+    <include file="db-table-tbl_resources-changelog.xml" relativeToChangelogFile="true" />
+    
+    <include file="db-table-tbl_roles-changelog.xml" relativeToChangelogFile="true" />
+    
+    <include file="db-table-tbl_users-changelog.xml" relativeToChangelogFile="true" />
+    
+    <include file="db-table-tbl_role_resource-changelog.xml" relativeToChangelogFile="true" />
+    
+    <include file="db-table-BtpTable-changelog.xml" relativeToChangelogFile="true" />
+    
+    <include file="db-table-ItemTable-changelog.xml" relativeToChangelogFile="true" /> 
+    
+    <include file="db-table-ResourceTable-changelog.xml" relativeToChangelogFile="true" />
+    
+    <include file="db-table-DSRTable-changelog.xml" relativeToChangelogFile="true" />
+     
+    <include file="db-table-KTTable-changelog.xml" relativeToChangelogFile="true" />
+    
+    <include file="db-table-REMAINDERS-changelog.xml" relativeToChangelogFile="true" />
+        
+</databaseChangeLog>

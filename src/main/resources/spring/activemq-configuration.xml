@@ -13,7 +13,7 @@
     <!-- setup an embedded JMS Broker for testing purposes -->
 	<amq:broker id="my-broker" useJmx="false" persistent="false" brokerName="localhost">
 		<amq:transportConnectors>
-			<amq:transportConnector name="openwire" uri="tcp://0.0.0.0:61616" enableStatusMonitor="true" />
+			<amq:transportConnector name="openwire" uri="tcp://0.0.0.0:61617" enableStatusMonitor="true" />
 		</amq:transportConnectors>
 	</amq:broker>
 

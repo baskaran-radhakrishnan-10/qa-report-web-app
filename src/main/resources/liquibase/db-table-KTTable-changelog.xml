@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd" >
+	
+	<changeSet author="baskaran radhakrishnan" id="alter_KTTable_changeset"	runOnChange="true">
+		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">ALTER TABLE KTTable ALTER COLUMN title varchar(1000)</sql>
+		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">ALTER TABLE KTTable ALTER COLUMN trainers varchar(1000)</sql>
+		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">ALTER TABLE KTTable ALTER COLUMN attendees varchar(1000)</sql>
+		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">ALTER TABLE KTTable ALTER COLUMN remarks varchar(1000)</sql>
+		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">ALTER TABLE KTTable ALTER COLUMN feedback varchar(1000)</sql>
+		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">ALTER TABLE KTTable ADD CONSTRAINT PK_TRAINING_ID PRIMARY KEY CLUSTERED (tri_id)</sql>
+	</changeSet>
+	
+</databaseChangeLog>

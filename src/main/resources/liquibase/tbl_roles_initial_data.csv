@@ -1,0 +1,4 @@
+role_desc,role_name,created_by,modified_by
+Super Admin,ROLE_SUPER_ADMIN,null,null
+Admin,ROLE_ADMIN,null,null
+Normal User,ROLE_NORMAL_USER,null,null

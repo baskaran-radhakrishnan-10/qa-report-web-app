@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd" >
+	
+	<changeSet author="baskaran radhakrishnan" id="alter_DSRTable_changeset"	runOnChange="true">
+		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">ALTER TABLE DSRTable ALTER  COLUMN  plannedtask varchar(1000)</sql>
+		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">ALTER TABLE DSRTable ALTER  COLUMN  accomplishedtask varchar(1000)</sql>
+		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">ALTER TABLE DSRTable ALTER  COLUMN  remarks varchar(1000)</sql>
+	</changeSet>
+	
+</databaseChangeLog>

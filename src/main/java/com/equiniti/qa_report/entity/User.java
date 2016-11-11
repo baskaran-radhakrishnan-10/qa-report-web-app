@@ -19,7 +19,7 @@ public class User extends GeneralEntity{
 	@Column(name = "user_id", unique = true,nullable = false)
 	private  String userId;
 	
-	@Column(name = "password", unique = true,nullable = false)
+	@Column(name = "password" ,nullable = false)
 	private  String password;
 
 	@Column(name = "email_id", unique = true,nullable = false)

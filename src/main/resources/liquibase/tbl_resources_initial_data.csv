@@ -1,0 +1,22 @@
+resource_module,resource_name,resource_url,resource_module_icon,created_by,modified_by
+dashboard_li,Dashboard,dashboard,fa-tachometer,null,null
+rbac_li,Manage Users,rbac/showUser,fa-user-secret,null,null
+rbac_li,Manage Roles,rbac/showRoles,fa-user-secret,null,null
+rbac_li,Manage Password,rbac/managePassword,fa-user-secret,null,null
+build_test_plan_li,Build Test Plan,build_test_plan/show,fa-pencil-square-o,null,null
+daily_status_report_li,Daily Status Report,dsr/show,fa-calendar,null,null
+kt_plan_li,KT Plan,kt_plan/ktPlan,fa-bullhorn,null,null
+report_search_li,BTP Report,report_search/btp_report_search,fa-search,null,null
+report_search_li,DSR Report,report_search/dsr_report_search,fa-search,null,null
+report_search_li,User Report,report_search/user_report_search,fa-search,null,null
+report_search_li,Leave Report,report_search/leave_report_search,fa-search,null,null
+report_search_li,Permission Report,report_search/permission_report_search,fa-search,null,null
+report_search_li,Leave Plans Report,report_search/leave_plan_report_search,fa-search,null,null
+operations_li,Add New User,operation/add_user,fa-cogs,null,null
+operations_li,Add New Project,operation/add_project,fa-cogs,null,null
+operations_li,Edit User Details,operation/edit_user,fa-cogs,null,null
+operations_li,Edit Project Details,operation/edit_project,fa-cogs,null,null
+operations_li,Add Leave Details,operation/add_leave,fa-cogs,null,null
+operations_li,Add Permission Details,operation/add_permission,fa-cogs,null,null
+operations_li,Add Leave Plans,operation/add_leave_plans,fa-cogs,null,null
+operations_li,Remainder Settings,operation/remainder_settings,fa-cogs,null,null

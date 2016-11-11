@@ -1,5 +1,7 @@
 package com.equiniti.qa_report.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,7 +14,8 @@ import org.joda.time.DateTime;
 
 @Entity
 @Table(name="REMAINDERS")
-public class Remainder {
+public class Remainder implements Serializable{
+	
 	private static final long serialVersionUID = 5342632135099568516L;
 
 	@Id
@@ -30,7 +33,7 @@ public class Remainder {
 	@Column(name="MESSAGE")
 	private String remainderMessage;
 	
-	@Column(name="USER_ID")
+	@Column(name="USER_ID",nullable = true)
 	private String remainderUser;
 
 	public String getRemainderUser() {
