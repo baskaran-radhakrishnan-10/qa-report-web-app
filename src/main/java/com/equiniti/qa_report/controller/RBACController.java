@@ -60,13 +60,23 @@ public class RBACController {
 		return returnObjMap;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Map<String,Object> addUserDetails(Map<String,Object> inputParam) throws ControllerException{
 		LOG.info("Begin :RBACController.addUserDetails ");
 		Map<String,Object> returnObjMap=new HashMap<>();
+		String inputRoleName=((Map<String, Object>)inputParam.get("roleId")).get("roleName").toString();
 		try {
-			Object returnObj=rbacService.addUserDetails(inputParam);
-			returnObjMap.put(ApplicationConstants.STATUS, (Integer)returnObj != null ? ApplicationConstants.SUCCESS : ApplicationConstants.ERROR);
-			returnObjMap.put(ApplicationConstants.SERVER_DATA, returnObj);
+			if(!"ROLE_SUPER_ADMIN".equalsIgnoreCase(inputRoleName)){
+				Object returnObj=rbacService.addUserDetails(inputParam);
+				returnObjMap.put(ApplicationConstants.STATUS, (Integer)returnObj != null ? ApplicationConstants.SUCCESS : ApplicationConstants.ERROR);
+				returnObjMap.put(ApplicationConstants.SERVER_DATA, returnObj);	
+			}
+			else{
+				returnObjMap.put(ApplicationConstants.STATUS, ApplicationConstants.ERROR);
+				returnObjMap.put(ApplicationConstants.SERVER_DATA, "");
+				LOG.info("Not a Super Admin");
+			}
+			
 		} catch (APIException e) {
 			throw new ControllerException(e.getFaultCode(), e);
 		} catch(Exception e){
@@ -76,12 +86,23 @@ public class RBACController {
 		return returnObjMap;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Map<String,Object> updateUserDetails(Map<String,Object> inputParam) throws ControllerException{
 		LOG.info("Begin :RBACController.updateUserDetails ");
 		Map<String,Object> returnObjMap=new HashMap<>();
+		String inputRoleName=((Map<String, Object>)inputParam.get("roleId")).get("roleName").toString();
 		try {
-			Object returnObj=rbacService.updateUserDetails(inputParam);
-			returnObjMap.put(ApplicationConstants.STATUS, (Boolean)returnObj ? ApplicationConstants.SUCCESS : ApplicationConstants.ERROR);
+			if(!"ROLE_SUPER_ADMIN".equalsIgnoreCase(inputRoleName))
+			{
+				Object returnObj=rbacService.updateUserDetails(inputParam);
+				returnObjMap.put(ApplicationConstants.STATUS, (Boolean)returnObj ? ApplicationConstants.SUCCESS : ApplicationConstants.ERROR);
+			}
+			else
+			{
+				returnObjMap.put(ApplicationConstants.STATUS, ApplicationConstants.ERROR);
+				returnObjMap.put(ApplicationConstants.SERVER_DATA, "");
+				LOG.info("Not a Super Admin");
+			}
 		} catch (APIException e) {
 			throw new ControllerException(e.getFaultCode(), e);
 		} catch(Exception e){

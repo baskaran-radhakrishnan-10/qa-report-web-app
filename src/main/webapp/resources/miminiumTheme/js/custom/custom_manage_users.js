@@ -197,9 +197,10 @@ function addOrUpdateUser(){
 	var uId=rowEle.find('#userId').val();
 	var eId=rowEle.find('#emailId').val();
 	var roleId=rowEle.find('#roleId').val();
+	var roleName=roleListObject[roleId]['roleName'];
 	var activeId=rowEle.find('#activeId').val();
 	var createdOn=rowEle.find('#createdOnId').val();
-//	console.log(userDetailsData[egKey]['password']);
+//	console.log(roleListObject[roleId]['roleName']);
 	if (null ==uName || ""== uName){
 		var notifyObj={msg: '<b>Warning : </b> Please Enter Full Name !!!',type: "warning",position: "center" };
 		notif(notifyObj);
@@ -217,6 +218,9 @@ function addOrUpdateUser(){
 			notif(notifyObj);
 	}else if (null ==roleListObject[roleId] || ""== roleListObject[roleId]){
 		var notifyObj={msg: '<b>Warning : </b> Please select role !!!',type: "warning",position: "center" };
+		notif(notifyObj);
+	}else if ("ROLE_SUPER_ADMIN" == roleName){
+		var notifyObj={msg: '<b>Warning : </b> Super Admin role already available !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 	}else if (null ==activeId || ""== activeId){
 			var notifyObj={msg: '<b>Warning : </b> Please select active option !!!',type: "warning",position: "center" };
@@ -269,6 +273,11 @@ function addUserDetailsSuccess(serverData){
 		}
 		window.location.href=getApplicationRootPath()+"rbac/showUser";
 	}
+	else if('ERROR' == serverData['STATUS']){
+		var notifyObj={msg: '<b>Error : </b> User not added Successfully !!!',type: "error",position: "center" };
+		notif(notifyObj);
+	
+	}
 }
 
 function updateUserDetailsSuccess(serverData){
@@ -280,5 +289,10 @@ function updateUserDetailsSuccess(serverData){
 			sessionStorageObj.setItem("NOTIFICATION",notifyObj);
 		}
 		window.location.href=getApplicationRootPath()+"rbac/showUser";
+	}
+	else if('ERROR' == serverData['STATUS']){
+		var notifyObj={msg: '<b>Error : </b> User not Updated Successfully !!!',type: "error",position: "center" };
+		notif(notifyObj);
+	
 	}
 }

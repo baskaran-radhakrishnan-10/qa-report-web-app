@@ -72,6 +72,54 @@ public class OperationWebController {
 		return "under_construction_page";
 	}
 	
+	@RequestMapping(value = "/manage_projects" , method = RequestMethod.GET)
+	public String showManageProjectsPage(Model model) throws UIException{
+	//session.setAttribute(ApplicationConstants.CURRENT_ACTION_PATH, "Operations/Manage Projects");
+		return "manage_projects_page";
+	}
+	
+	@RequestMapping(value="/getProjectList", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> getProjectList(@RequestBody Map<String,Object> inputParam){
+		LOG.info("Begin :OperationWebController.getProjectList ");
+		Map<String,Object> returnObj=new HashMap<>();
+		try {
+			returnObj=operationController.getProjectList(inputParam);
+		} catch (ControllerException e) {
+			e.printStackTrace();
+		}
+		LOG.info("End :OperationWebController.getProjectList ");
+		return returnObj;
+	}
+	
+	@RequestMapping(value="/addProject", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> addProject(@RequestBody Map<String,Object> inputParam){
+		LOG.info("Begin:OperationWebController.addProject");
+		Map<String,Object> returnObj=new HashMap<>();
+		try {
+			returnObj=operationController.addProject(inputParam);
+		} catch (ControllerException e) {
+			e.printStackTrace();
+		}
+		LOG.info("End:OperationWebController.addProject");
+		return returnObj;
+	}
+	
+	@RequestMapping(value="/updateProject", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> updateProject(@RequestBody Map<String,Object> inputParam){
+		LOG.info("Begin :OperationWebController.updateProject ");
+		Map<String,Object> returnObj=new HashMap<>();
+		try {
+			returnObj=operationController.updateProject(inputParam);
+		} catch (ControllerException e) {
+			e.printStackTrace();
+		}
+		LOG.info("End :OperationWebController.updateProject ");
+		return returnObj;
+	}
+	
 	@RequestMapping(value = "/remainder_settings" , method = RequestMethod.GET)
 	public String showRemainderSettingsPage(Model model) throws UIException{
 		//session.setAttribute(ApplicationConstants.CURRENT_ACTION_PATH, "Operations/Remainder Settings");

@@ -10,7 +10,10 @@ var resourcesArray=[];
 
 var projectSelectHtml="";
 var projectArray=[];
-var tranerAndAttendeeArray=[];
+var tranerArray=[];
+var attendeeArray=[];
+var trainierSelectedVal=[];
+var attendeeSelectedVal=[];
 
 var rowEle="";
 var egKey="";
@@ -19,6 +22,12 @@ var ktType=['Internal','External'];
 var ktSession=['General','KT','Reverse KT'];
 
 $(document).ready(function() {
+	
+	showLoader();
+	getKTDetails();
+	fetchProjectNames();
+	fetchResourceNames();
+	
 	$('#addKtDetailsId').on("click" ,function (event){
 		ktDetailsModalData(null);
 	});
@@ -63,11 +72,42 @@ $(document).ready(function() {
 			editKTPlanDetails(gKey);
 		}
 	});
-	showLoader();
-	getKTDetails();
-	fetchProjectNames();
-	fetchResourceNames();
+
+	$(document).on("change", "#trainerId", function(event) {
+		trainierSelectedVal=$("#trainerId").val();
+		attendeeSelectedVal=$("#attendeeId").val();
+		console.log('trainerId changed');
+		if(tranerArray !=null || ""!=tranerArray){
+		tranerArray=resourcesArray;
+		}
+		if(null != trainierSelectedVal && trainierSelectedVal.indexOf(",") != -1){
+			trainierSelectedVal=trainierSelectedVal.split(",");
+		}
+		tranerArray = $.grep(tranerArray, function(value) {
+			return $.inArray(value, trainierSelectedVal) < 0;
+			});
+		fillSelectDropDown('attendeeId',tranerArray,attendeeSelectedVal);
+		console.log(tranerArray);
+	});
 	
+	$(document).on("change","#attendeeId",function (event){
+		trainierSelectedVal=$("#trainerId").val();
+		attendeeSelectedVal=$("#attendeeId").val();
+		console.log('attendeeId changed');
+		if(attendeeArray !=null || ""!=attendeeArray){
+		attendeeArray=resourcesArray;
+		}
+
+		if(null != attendeeSelectedVal && attendeeSelectedVal.indexOf(",") != -1){
+			attendeeSelectedVal=attendeeSelectedVal.split(",");
+		}
+		attendeeArray = $.grep(attendeeArray, function(value) {
+			return $.inArray(value, attendeeSelectedVal) < 0;
+			});
+		fillSelectDropDown('trainerId',attendeeArray,trainierSelectedVal);
+		console.log(attendeeArray);
+	});
+
 });
 
 function showLoader(){
