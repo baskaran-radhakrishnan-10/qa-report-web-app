@@ -7,8 +7,11 @@ var rowEle="";
 var roleStatus=[true,false];
 var egKey="";
 
-var createdOnDt = $.datepicker.formatDate('yy-mm-dd', new Date());
+var currentDate = $.datepicker.formatDate('yy-mm-dd', new Date());
 var currentUser=$('#loggedInUserId').val();
+var date = new Date();
+var currentTime=(date.getHours()<10 ? "0"+date.getHours() : date.getHours())+":"+(date.getMinutes()<10 ? "0"+date.getMinutes() : date.getMinutes());
+currentTime=parseInt(currentTime.replace(":",""));
 $(document).ready(function() {	
 //	showLoader();
 	getReminderDetails();
@@ -72,18 +75,19 @@ function populateReminderDetails(entriesList){
 	var htmlArray=new Array();
 	var html ="";
 	for(var i=0;i<entriesList.length;i++){		
-		var userDetailsModelAttribute=entriesList[i];
-//		var gKey=userDetailsModelAttribute['gkey'];
-		var remainderDate=getDateValue(userDetailsModelAttribute['remainderDate'],'yyyy-MM-dd',"-");
-		var remainderTime=userDetailsModelAttribute['remainderTime'];
-		var remainderMessage=userDetailsModelAttribute['remainderMessage'];
-		var remainderUser=userDetailsModelAttribute['remainderUser'];
-			if(createdOnDt==remainderDate && currentUser==remainderUser){
+		var reminderDetailsModelAttribute=entriesList[i];
+//		var gKey=reminderDetailsModelAttribute['gkey'];
+		var remainderDate=getDateValue(reminderDetailsModelAttribute['remainderDate'],'yyyy-MM-dd',"-");
+		var remainderTime=reminderDetailsModelAttribute['remainderTime'];
+//		var remainderTimeVal=parseInt(remainderTime.replace(":",""));
+		var remainderMessage=reminderDetailsModelAttribute['remainderMessage'];
+		var remainderUser=reminderDetailsModelAttribute['remainderUser'];
+			if(currentDate==remainderDate && currentUser==remainderUser && currentTime<=parseInt(remainderTime.replace(":",""))){
 				html += '<h4> <span class="glyphicon glyphicon-hand-right" style="color:blue"></span>'+" "+ remainderMessage+' Today @ '+remainderTime+'</h4>';
 			}
 	}
 	if(null == html | ""==html){
-		html += '<h4> <span class="glyphicon glyphicon-hand-right" style="color:blue"></span> No Reminders for Today</h4>';
+		html += '<h4> <span class="glyphicon glyphicon-hand-right" style="color:blue"></span> No Reminders Now !</h4>';
 	}
 	htmlArray.push(html);
 	return htmlArray;

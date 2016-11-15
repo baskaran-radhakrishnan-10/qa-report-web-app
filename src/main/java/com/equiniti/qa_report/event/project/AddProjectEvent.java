@@ -1,5 +1,7 @@
 package com.equiniti.qa_report.event.project;
 
+import java.util.Map;
+
 import com.equiniti.qa_report.entity.ProjectEntity;
 import com.equiniti.qa_report.eventapi.eventhandling.generic.BaseEvent;
 
@@ -13,7 +15,17 @@ public class AddProjectEvent extends BaseEvent {
 	
 	private ProjectEntity entity;
 	
-    public AddProjectEvent() {
+	private Map<String,Object> requestParam;
+	
+    public Map<String, Object> getRequestParam() {
+		return requestParam;
+	}
+
+	public void setRequestParam(Map<String, Object> requestParam) {
+		this.requestParam = requestParam;
+	}
+
+	public AddProjectEvent() {
         super(EVENT_NAME);
     }
 

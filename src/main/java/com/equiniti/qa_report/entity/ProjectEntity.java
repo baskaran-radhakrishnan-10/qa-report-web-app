@@ -9,12 +9,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 
 @Entity
 @Table(name = "projectstable")
-@Cache(usage=CacheConcurrencyStrategy.READ_ONLY, region="qa_report")
 public class ProjectEntity implements Serializable{
 	
 	private static final long serialVersionUID = 2558606975176786279L;
@@ -29,6 +28,52 @@ public class ProjectEntity implements Serializable{
 	
 	@Column(name = "obsolete")
 	private boolean obsolete;
+	
+	@Column(name = "created_on")
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+	private DateTime createdOn;
+
+	@Column(name = "created_by")
+	private String createdBy;
+
+	@Column(name = "modified_on")
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+	private DateTime modifiedOn;
+
+	@Column(name = "modified_by")
+	private String modifiedBy;
+
+	public DateTime getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(DateTime createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public DateTime getModifiedOn() {
+		return modifiedOn;
+	}
+
+	public void setModifiedOn(DateTime modifiedOn) {
+		this.modifiedOn = modifiedOn;
+	}
+
+	public String getModifiedBy() {
+		return modifiedBy;
+	}
+
+	public void setModifiedBy(String modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
 
 	public int getProjectId() {
 		return projectId;

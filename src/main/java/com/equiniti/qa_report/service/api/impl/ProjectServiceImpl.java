@@ -3,8 +3,10 @@ package com.equiniti.qa_report.service.api.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
+import com.equiniti.qa_report.controller.OperationController;
 import com.equiniti.qa_report.entity.ProjectEntity;
 import com.equiniti.qa_report.event.project.AddProjectEvent;
 import com.equiniti.qa_report.event.project.GetProjectEvent;
@@ -17,7 +19,7 @@ import com.equiniti.qa_report.service.api.ProjectService;
 
 @Service("projectService")
 public class ProjectServiceImpl extends BaseAPIImpl implements ProjectService{
-	
+	private static final Logger LOG= Logger.getLogger(OperationController.class);
 	@Override
 	public List<String> getUniqueProjectNameList() throws APIException {
 		GetProjectEvent event=null;
@@ -35,6 +37,7 @@ public class ProjectServiceImpl extends BaseAPIImpl implements ProjectService{
 	
 	@Override
 	public List<ProjectEntity> getProjectList(Map<String, Object> inputParam) throws APIException {
+		LOG.info("Begin :ProjectServiceImpl.getProjectList");
 		GetProjectEvent event=null;
 		try{
 			event=getEvent(GetProjectEvent.class);
@@ -45,44 +48,44 @@ public class ProjectServiceImpl extends BaseAPIImpl implements ProjectService{
 		}catch(Exception e){
 			throw new APIException(CommonFaultCode.UNKNOWN_ERROR,e);
 		}
+		LOG.info("End :ProjectServiceImpl.getProjectList");
 		return event.getProjectEntityList();
 	}
 
 	@Override
 	public int addProject(Map<String, Object> inputParam) throws APIException {
+		LOG.info("Begin :ProjectServiceImpl.addProject");
 		AddProjectEvent event=null;
 		try{
 			event=getEvent(AddProjectEvent.class);
-			event.setEntity(populateProjectEntityFromMap(inputParam));
+			event.setRequestParam(inputParam);
 			processEvent(event);
 		}catch(EventException e){
 			throw new APIException(e.getFaultCode(),e);
 		}catch(Exception e){
 			throw new APIException(CommonFaultCode.UNKNOWN_ERROR,e);
 		}
+		LOG.info("End :ProjectServiceImpl.addProject");
 		return event.getRowId();
 	}
 
 	@Override
-	public void updateProject(Map<String, Object> inputParam) throws APIException {
+	public boolean updateProject(Map<String, Object> inputParam) throws APIException {
+		LOG.info("Begin :ProjectServiceImpl.updateProject");
 		UpdateProjectEvent event=null;
 		try{
 			event=getEvent(UpdateProjectEvent.class);
-			event.setEntity(populateProjectEntityFromMap(inputParam));
+			event.setRequestParam(inputParam);
 			processEvent(event);
 		}catch(EventException e){
 			throw new APIException(e.getFaultCode(),e);
 		}catch(Exception e){
 			throw new APIException(CommonFaultCode.UNKNOWN_ERROR,e);
 		}
+		LOG.info("End :ProjectServiceImpl.updateProject");
+		return event.isUpdated();
 	}
 	
-	private ProjectEntity populateProjectEntityFromMap(Map<String, Object> inputParam){
-		
-		ProjectEntity entity=new ProjectEntity();
-		
-		return entity;
-		
-	}
+
 
 }

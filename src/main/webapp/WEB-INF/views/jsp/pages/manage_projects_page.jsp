@@ -1,17 +1,17 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<spring:url	value="/resources/miminiumTheme/js/custom/custom_remainder_settings.js" var="customRemainderJS" />
+<spring:url	value="/resources/miminiumTheme/js/custom/custom_manage_projects.js" var="customProjectsJS" />
 
-<script src="${customRemainderJS}"></script>
+<script src="${customProjectsJS}"></script>
 
-<div class="modal fade" id="add_reminder_details" tabindex="-1" role="dialog" aria-labelledby="buildTestPlanModal" aria-hidden="true" data-backdrop="static" data-keyboard="false" data-href="">	
+<div class="modal fade" id="add_project_details" tabindex="-1" role="dialog" aria-labelledby="buildTestPlanModal" aria-hidden="true" data-backdrop="static" data-keyboard="false" data-href="">	
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content" style="width: 124%;margin: -5px -118px;border-radius: 0px;">
 			<div id="btp_modal_header_id" class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Reminder Details</h4>
-				<div id="addReminderDetailsDiv"></div>
+				<h4 class="modal-title">Manage Projects</h4>
+				<div id="addProjectDetailsDiv"></div>
 			</div>
 		</div>
 	</div>
@@ -20,10 +20,10 @@
 <div class="panel box-shadow-none content-header">
 	<div class="panel-body">
 		<div class="col-md-12">
-			<h3 style="margin-top: 0px;">Reminder Details
+			<h3 style="margin-top: 0px;">Manage Projects
 			<!-- <a id="exportUserDetailsId" type="button" href="ser_det_page" class="btn  btn-3d btn-default pull-right" style="margin: 0px 5px;">Export</a> -->
-			<!-- <a id="addReminderDetailsId" type="button" data-toggle="modal" data-target="#add_reminder_details" href="" class="btn  btn-3d btn-success pull-right" style="margin: 0px 5px;">Add</a> -->
-			<a id="addReminderDetailsId" type="button"  data-target="#add_reminder_details" class="btn  btn-3d btn-success pull-right" style="margin: 0px 5px;" data-toggle="tooltip" data-placement="auto left" title="" data-original-title="Add new Reminder">Add</a>
+			<!-- <a id="addProjectDetailsId" type="button" data-toggle="modal" data-target="#add_project_details" href="" class="btn  btn-3d btn-success pull-right" style="margin: 0px 5px;">Add</a> -->
+			<a id="addProjectDetailsId" type="button"  data-target="#add_project_details" class="btn  btn-3d btn-success pull-right" style="margin: 0px 5px;" data-toggle="tooltip" data-placement="auto left" title="" data-original-title="Add new Project">Add</a>
 			</h3>
 			<!-- <p style="margin-bottom: 0px;">
 				Home <span class="fa-angle-right fa"></span> Serial Numbers
@@ -36,17 +36,19 @@
 
 <div id="loader_div" style="width: 93px;height: 88px; left: 54%;position: fixed; z-index: 1000;top: 61%;background: rgba( 255, 255, 255, .8 ) url('../resources/miminiumTheme/img/hourglass.gif') 50% 50% no-repeat;display:none;"></div>
 
-<div class="col-md-12 top-20" id="reminderMainDiv" style="display:none;">
+<div class="col-md-12 top-20" id="projectMainDiv" style="display:none;">
 	<div class="panel" style="padding: 15px; padding-bottom: 20px;">
 		<div class="table-responsive">
 			
-			<table class="table table-striped table-hover table-bordered listView-table" id="show-reminder-details-id">
+			<table class="table table-striped table-hover table-bordered listView-table" id="show-project-details-id">
 				<thead id="thead_id">
 					<tr>
 						<th>S.No</th>
-						<th>Reminder Date</th>
-						<th>Reminder Time (24 Hrs)</th>
-						<th>Reminder About</th>
+						<th>Project Name</th>
+						<th>Created Date</th>
+						<th>Created By</th>
+						<th>Modified Date</th>
+						<th>Modified By</th>
 					</tr>
 				</thead>
 				<tbody id="tbody_id"></tbody>
@@ -64,9 +66,9 @@
 	</div>
 </div>
 
-<input type="button" id="addReminderDetailsTrigger" data-toggle="modal" data-target="#add_reminder_details" style="display:none" />
+<input type="button" id="addProjectDetailsTrigger" data-toggle="modal" data-target="#add_project_details" style="display:none" />
 
-<form id="addReminderDetailsForm" name="addReminderDetailsForm" role="form" class="form-horizontal" action="#" method="post" style="display:none;">
+<form id="addProjectDetailsForm" name="addProjectDetailsForm" role="form" class="form-horizontal" action="#" method="post" style="display:none;">
 	
 	<div id="alertcustom"></div>
 	
@@ -86,13 +88,13 @@
 									<div class="form-group" id="important">
 										<div class="row">
 											<div class="col-md-12">
-												<label class="col-sm-2 control-label">Reminder Date:<font color="red">*</font></label>
+												<label class="col-sm-2 control-label">Project Name:<font color="red">*</font></label>
 												<div class="col-sm-3">
-													<input id="remainderDateId" name="remainderDate" type="date" class="input-sm form-control imp" value="">
+													<input id="projectNameId" name="projectName" type="text" class="input-sm form-control imp" value="" maxlength="50" data-toggle="tooltip" data-placement="auto right" data-original-title="Allows maximum 50 characters">
 												</div>
-												<label class="col-sm-2 control-label">Reminder Time:<font color="red">*</font></label>
+												<label class="col-sm-2 control-label">Created Date:<font color="red">*</font></label>
 												<div class="col-sm-3">
-													<input id="remainderTimeId" name="remainderTime" type="time" class="input-sm form-control imp" value="">
+													<input id="createdDateId" name="createdDate" type="date" class="input-sm form-control imp" value="" readonly="readonly">
 												</div>
 											</div>
 										</div>
@@ -100,14 +102,32 @@
 									<div class="form-group" id="important">
 										<div class="row">
 											<div class="col-md-12">
-												<label class="col-sm-2 control-label">Reminder About:<font color="red">*</font></label>
+												<label class="col-sm-2 control-label">Created By:<font color="red">*</font></label>
 												<div class="col-sm-3">
-													<input id="remainderAboutId" name="remainderAbout" type="text" class="input-sm form-control imp" value="" maxlength="100" data-toggle="tooltip" data-placement="auto right" data-original-title="Allows maximum 100 characters">
+													<input id="createdById" name="createdBy" type="text" class="input-sm form-control imp" value="" readonly="readonly">
+												</div>
+												<label class="col-sm-2 control-label">Modified Date:<font color="red">*</font></label>
+												<div class="col-sm-3">
+													<input id="modifiedDateId" name="modifiedDate" type="date" class="input-sm form-control imp" value="" readonly="readonly">
 												</div>
 											</div>
 										</div>
 									</div>
 									
+										<div class="form-group" id="important">
+										<div class="row">
+											<div class="col-md-12">
+												<label class="col-sm-2 control-label">Modified By:<font color="red">*</font></label>
+												<div class="col-sm-3">
+													<input id="modifiedById" name="modifiedBy" type="text" class="input-sm form-control imp" value="" readonly="readonly">
+												</div>
+												<!-- <label class="col-sm-2 control-label">Modified Date:<font color="red">*</font></label>
+												<div class="col-sm-3">
+													<input id="modifiedDateId" name="modifiedDate" type="date" class="input-sm form-control imp" value="">
+												</div> -->
+											</div>
+										</div>
+									</div>
 							<!-- 	</div> -->
 								<!-- class="col-md-8" -->
 								
@@ -124,7 +144,7 @@
 					<div class="col-md-8" style="float: right;margin-right: 1.2em;margin-top: 1em;" >
 						<input data-dismiss="modal" id="cancel_button" type="reset" class="btn btn-default" value="Cancel" style="float: right;"> 
 						<span></span> 
-						<input id="save_button" onclick="addOrUpdateReminder()" type="button" class="btn btn-primary" value="Save" style="float: right; margin-right: 1em;">
+						<input id="save_button" onclick="addOrUpdateProject()" type="button" class="btn btn-primary" value="Save" style="float: right; margin-right: 1em;">
 					</div>
 					<div class="clearfix"></div>
 				</div>

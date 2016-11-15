@@ -14,6 +14,6 @@ public interface ProjectService {
 
 	int addProject(Map<String, Object> inputParam) throws APIException;
 
-	void updateProject(Map<String, Object> inputParam) throws APIException;
+	boolean updateProject(Map<String, Object> inputParam) throws APIException;
 
 }
