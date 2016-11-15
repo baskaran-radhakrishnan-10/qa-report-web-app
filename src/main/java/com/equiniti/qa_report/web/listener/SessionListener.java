@@ -18,16 +18,16 @@ public class SessionListener implements HttpSessionListener {
 	 */
 	public void sessionCreated(HttpSessionEvent sessionEvt) {
 		LOG.debug("entered into sessionCreated()");
-		System.out.println("entered into sessionCreated()");
+		LOG.debug("entered into sessionCreated()");
 		HttpSession session =  sessionEvt.getSession();
 		try{
-			System.out.println("Session Id :"+session.getId());
-			System.out.println("session.getAttribute(REDIRECT_TO_LOGIN_PAGE) : "+session.getAttribute("REDIRECT_TO_LOGIN_PAGE"));
+			LOG.debug("Session Id :"+session.getId());
+			LOG.debug("session.getAttribute(REDIRECT_TO_LOGIN_PAGE) : "+session.getAttribute("REDIRECT_TO_LOGIN_PAGE"));
 			sessionEvt.getSession().setMaxInactiveInterval(50*60);
 		}catch(Exception e){
 			LOG.warn("SESSION_TIMEOUT_DURATION is not configured properly in core.properties. Please check.");
 		}
-		System.out.println("end of sessionCreated()");
+		LOG.debug("end of sessionCreated()");
 		LOG.debug("end of sessionCreated()");
 	}
 
@@ -36,7 +36,7 @@ public class SessionListener implements HttpSessionListener {
 	 */
 	public void sessionDestroyed(HttpSessionEvent sessionEvt) {
 		LOG.debug("SESSIONDESTROYED Method called...");
-		System.out.println("SESSIONDESTROYED Method called...");
+		LOG.debug("SESSIONDESTROYED Method called...");
 		CacheManager cacheManager=CacheManager.getInstance();
 		HttpSession session =  sessionEvt.getSession();
 		if(null != cacheManager.getCache(session.getId())){
@@ -44,7 +44,7 @@ public class SessionListener implements HttpSessionListener {
 			cacheManager.getCache(session.getId()).put(new Element("SESSION_ALIVE", false));
 		}
 		LOG.debug("Called session destroy for user" );
-		System.out.println("Called session destroy for user" );
+		LOG.debug("Called session destroy for user" );
 		LOG.debug("Session is destoryed");
 	}
 

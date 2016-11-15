@@ -198,7 +198,7 @@ public class DSREventHandler implements IEventHandler<IEvent> {
 					}
 				}
 				t2=System.nanoTime();
-				System.out.println("Total time taken :"+(t2-t1));
+				LOG.debug("Total time taken :"+(t2-t1));
 				try {
 					CACHE_INS.putItemInCache(ApplicationConstants.PAGED_DSR_CACHE_ITEM, paginationDataMap,userId);
 				} catch (CacheException e) {

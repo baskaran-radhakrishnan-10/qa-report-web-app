@@ -25,11 +25,11 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter{
 		
 		this.uri = request.getRequestURI();
 		
-		System.out.println("inside interceptor  and uri = "+this.uri);
+		LOG.debug("inside interceptor  and uri = "+this.uri);
 
 		this.ajax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
 
-		System.out.println("ajax :"+ajax);
+		LOG.debug("ajax :"+ajax);
 
 		HttpSession session=request.getSession();
 		
@@ -60,7 +60,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter{
 			}
 			
 			if ((-1 == this.uri.indexOf("/login") ) && this.uri.indexOf(".js") == -1 && this.uri.indexOf(".css") == -1 && this.uri.indexOf(".png") == -1 && this.uri.indexOf(".gif") == -1 && this.uri.indexOf(".jpg") == -1  && this.uri.indexOf(".ttf") == -1) {
-				System.out.println("<<<< -- There is no session Available -- >>>>");
+				LOG.debug("<<<< -- There is no session Available -- >>>>");
 				request.setAttribute("loginModelAttribute", new LoginModelAttribute());
 				response.sendRedirect(request.getContextPath()+"/login");
 				return false;
@@ -73,17 +73,17 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter{
 
 	@Override
 	public void postHandle(HttpServletRequest request,HttpServletResponse response, Object handler,ModelAndView modelAndView) throws Exception {
-		System.out.println("Post handle :");
+		LOG.debug("Post handle :");
 	}
 
 	@Override
 	public void afterCompletion(HttpServletRequest request,HttpServletResponse response, Object handler, Exception ex)throws Exception {
 		if(null != ex){
 			if(ex instanceof UIException){
-				System.out.println("Exception Message :"+ex.getMessage());
+				LOG.debug("Exception Message :"+ex.getMessage());
 			}
 		}
-		System.out.println("After Complettion :");
+		LOG.debug("After Complettion :");
 	}
 
 }

@@ -108,11 +108,15 @@
 
 <input type="button" id="addBuildTestPlanTrigger" data-toggle="modal" data-target="#build_test_plan" style="display:none" />
 
-<input type="hidden" id="selectedBtpGKey" style="display:none" />
+<input type="hidden" id="selectedBtpGKey" />
 
-<input type="hidden" id="selectedItemNo" style="display:none" />
+<input type="hidden" id="selectedItemNo" />
 
-<input type="hidden" id="selectedResourceGKey" style="display:none" />
+<input type="hidden" id="selectedResourceGKey" />
+
+<input type="hidden" id="itemCountId" />
+
+<input type="hidden" id="accEffortId" />
 
 <form id="buildTestPlanForm" name="buildTestPlanForm" role="form" class="form-horizontal" action="#" method="post" style="display:none;">
 	

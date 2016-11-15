@@ -41,9 +41,9 @@ function fetchTestPlanEntriesSuccess(serverData){
 			sessionStorageObj.removeItem("NOTIFICATION");
 		}
 	}
-	setTimeout(function(){
+	/*setTimeout(function(){
 		hideLoader();
-	}, 1000);
+	}, 1000);*/
 }
 
 function populateTestPlanEntries(entriesList){
@@ -79,6 +79,8 @@ function populateTestPlanEntries(entriesList){
 }
 
 function buildTestPlanModalData(gKey){
+	
+	$('#resourceDeatilsParentDivId').hide();
 	
 	$('#buildTestPlanForm :input').removeClass('error');
 	

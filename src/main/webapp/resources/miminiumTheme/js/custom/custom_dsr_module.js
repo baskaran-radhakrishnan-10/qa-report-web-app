@@ -168,6 +168,7 @@ DSRClass.prototype = {
 		constructor : DSRClass,
 
 		onDocumentReady : function(){
+			dsrRef.showLoader();
 			var data={};
 			data=JSON.stringify(data);
 			ajaxHandler("POST", data, "application/json", getApplicationRootPath()+"dsr/getData", 'json', null, DSRClass.prototype.fetchDSREntriesSuccess,true);

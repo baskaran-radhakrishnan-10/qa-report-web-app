@@ -395,7 +395,7 @@ public class ReportExportHandler {
 			
 		}
 
-		System.out.println(updateObjectMap);
+		LOG.debug(updateObjectMap);
 		
 		if(!updateObjectMap.isEmpty()){
 			Map<String,Object> exportMap = new HashMap<>();
@@ -429,7 +429,7 @@ public class ReportExportHandler {
 
 		for(Map<String,Object> dataMap : dataObj){
 
-			System.out.println(dataMap);
+			LOG.debug(dataMap);
 
 			if(ApplicationConstants.SELECTED_BTP_REPORT.intern() == reportType.intern()){
 
@@ -1126,23 +1126,23 @@ public class ReportExportHandler {
 
 		try {
 
-			System.out.println("userId :"+userId);
+			LOG.debug("userId :"+userId);
 
-			System.out.println("outputFileName :"+outputFileName);
+			LOG.debug("outputFileName :"+outputFileName);
 
 			File dir = new File(ApplicationConstants.APP_CONFIG_FOLDER_PATH+File.separator+userId);
 			if (!dir.exists()){
 				dir.mkdirs();
 			}
 
-			System.out.println("dir :"+dir.getAbsolutePath());
+			LOG.debug("dir :"+dir.getAbsolutePath());
 
 			File serverFile = new File(dir.getAbsolutePath()+ File.separator +outputFileName);
 			FileOutputStream outStream = new FileOutputStream(serverFile);
 			workbook.write(outStream);
 			outStream.close();
 
-			System.out.println("File Export Done Successfully!!!");
+			LOG.debug("File Export Done Successfully!!!");
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

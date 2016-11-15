@@ -181,8 +181,6 @@ function resourceDeatilsSave(rowId){
 	$(rowEle).find('#resourceName').append('<input type="text" class="input-sm form-control" value="'+currentResourceDetObj['resourceName']+'" disabled />');
 	$(rowEle).find('input').prop('disabled',true);
 	
-	console.log(currentResourceDetObj);
-	
 	if(!isUpdate){
 		ajaxHandler("POST", JSON.stringify(currentResourceDetObj), "application/json", getApplicationRootPath()+"resource_details/addResourceDetails", 'json', null, resourceDeatilsSaveSuccess,true);
 	}else{
@@ -193,13 +191,27 @@ function resourceDeatilsSave(rowId){
 function resourceDeatilsSaveSuccess(serverData){
 	var notifyObj={msg: '<b>Success</b> Row Saved Successfully !!!',type: "success",position: "center"};
 	notif(notifyObj);
+	updateItemRowInfoByResource();
 }
 
 function resourceDeatilsEditSuccess(serverData,inputData){
 	var notifyObj={msg: '<b>Success</b> Row Updated Successfully !!!',type: "success",position: "center"};
 	notif(notifyObj);
+	updateItemRowInfoByResource();
 }
 
+function updateItemRowInfoByResource(){
+	var resRowsArray=$('#resourceDeatilsParentDivId').find('table tbody').find('tr');
+	var itemCount = 0;
+	var actualTime = 0.0;
+	$.each( resRowsArray, function( index, resRow ) {
+		itemCount += parseInt($(resRow).find('#itemCount input').val());
+		actualTime += parseFloat($(resRow).find('#actualTime input').val());
+	});
+	var itemRow=$('#itemDeatilsParentDivId').find('table').find('tbody').find('#row_'+$('#selectedItemNo').val());
+	$(itemRow).find('#itemCount input').val(itemCount);
+	$(itemRow).find('#effortActual input').val(actualTime);
+}
 
 function backToItemDeatils(){
 	var rowEleArray=$('#itemDeatilsParentDivId').find('table').find('tbody').find('tr');

@@ -1,5 +1,6 @@
 package com.equiniti.qa_report.dao.api.impl;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -51,6 +52,7 @@ public class ResourceDeatilsDAOImpl implements ResourceDeatilsDAO{
 		int createdRow=0;
 		try{
 			createdRow=abstractHibernateDAOAPI.saveEntity(entity);
+			updateItemActTimeByQuery(entity.getItemNo(), entity.getBtpNo().getgKey());
 		}catch(DaoException e){
 			throw new DaoException(e.getFaultCode(), e);
 		}catch(Exception e){
@@ -63,12 +65,32 @@ public class ResourceDeatilsDAOImpl implements ResourceDeatilsDAO{
 	public void updateResourceDetails(ResourceEntity entity) throws DaoException {
 		try{
 			abstractHibernateDAOAPI.updateEntity(entity);
+			updateItemActTimeByQuery(entity.getItemNo(), entity.getBtpNo().getgKey());
 		}catch(DaoException e){
 			throw new DaoException(e.getFaultCode(), e);
 		}catch(Exception e){
 			throw new DaoException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}
-
+	}
+	
+	private void updateItemActTimeByQuery(int itemNo,int btpNo) throws DaoException {
+		try{
+			abstractHibernateDAOAPI.processQuery(null, null, null, QueryOperationType.INSERT_UPDATE_DELETE, QueryType.SQL, constructDynamicQuery(itemNo, btpNo));
+		}catch(DaoException e){
+			throw new DaoException(e.getFaultCode(), e);
+		}catch(Exception e){
+			throw new DaoException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+	}
+	
+	private String constructDynamicQuery(int itemNo,int btpNo){
+		String dynamicQuery = null;
+		Map<String,String> queryMap=new LinkedHashMap<>();
+		queryMap.put("QUERY_7", "QUERY_7");
+		dynamicQuery=abstractHibernateDAOAPI.constructQuery(queryMap);
+		dynamicQuery=dynamicQuery.replace("ITEM_NO", String.valueOf(itemNo));
+		dynamicQuery=dynamicQuery.replace("BTP_NO", String.valueOf(btpNo));
+		return dynamicQuery;
 	}
 
 }

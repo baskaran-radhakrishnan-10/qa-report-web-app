@@ -9,6 +9,7 @@ function addItemDetailsRows(){
 	var tBody=$('#itemDeatilsParentDivId').find('table').find('tbody');
 	var rowEle=$('#itemDeatilsParentDivId').find('table tbody').find('tr');
 	if(!$(rowEle).hasClass('selected')){
+		console.log(statusArraySelectHtml);
 		var totalRows=$(tBody).find('tr').length;
 		var nextRow=(totalRows+1);
 		var html = "";
@@ -17,8 +18,8 @@ function addItemDetailsRows(){
 		html += '<td id="itemDesc">'+itemDescArraySelectHtml+'</td>';
 		html += '<td id="itemCount"><input type="text" class="input-sm form-control" value=""  /></td>';
 		html += '<td id="effortCost"><input type="text" class="input-sm form-control" value=""  /></td>';
-		html += '<td id="effortActual"><input type="text" class="input-sm form-control" value=""  /></td>';
-		html += '<td id="status"><input type="text" class="input-sm form-control" value=""  /></td>';
+		html += '<td id="effortActual"><input type="text" class="input-sm form-control" value=""  disabled /></td>';
+		html += '<td id="status">'+statusArraySelectHtml+'</td>';
 		html += '<td id="remarks"><input type="text" class="input-sm form-control" value=""  /></td>';
 		html += '<td id="action" style="text-align: -webkit-center;">';
 		html += '<a  id="itemRowEditId" style="display:none;" href="#" onclick="itemDeatilsEdit('+nextRow+')"> <span class="glyphicon glyphicon-edit"></span></a>'; 

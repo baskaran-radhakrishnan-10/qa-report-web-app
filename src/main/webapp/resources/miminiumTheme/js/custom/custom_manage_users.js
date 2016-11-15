@@ -12,7 +12,7 @@ $(document).ready(function() {
 	showLoader();
 	getUserDetails();
 	getRolesDetails();
-	
+
 	$('#addUserDetailsForm').hide();
 	$('#addUserDetailsId').on("click" ,function (event){
 		userDetailsModalData(null);
@@ -55,7 +55,7 @@ function fetchUserDetailsSuccess(serverData){
 		info : false,
 		"responsive" : true
 	});
-	
+
 	if(null != sessionStorageObj){
 		var notifyObj=sessionStorageObj.getItem("NOTIFICATION");
 		if(null != notifyObj){
@@ -63,9 +63,7 @@ function fetchUserDetailsSuccess(serverData){
 			sessionStorageObj.removeItem("NOTIFICATION");
 		}
 	}
-	setTimeout(function(){
-		hideLoader();
-	}, 1000);
+	hideLoader();
 }
 
 function populateUserDetails(entriesList){
@@ -79,13 +77,13 @@ function populateUserDetails(entriesList){
 		var userDetailsModelAttribute=entriesList[i];
 		var gKey=userDetailsModelAttribute['gkey'];
 		var name=userDetailsModelAttribute['userFullName'];
-				
+
 		var userId=userDetailsModelAttribute['userId'];
-		
+
 		var emailId=userDetailsModelAttribute['emailId'];
 
 		var active=userDetailsModelAttribute['active'];	
-	/*	if(active){
+		/*	if(active){
 			active="Yes";
 		}
 		else{
@@ -136,7 +134,7 @@ function getDateValue(dateObj,format,delimeter){
 function userDetailsEdit(gKey){
 	egKey=gKey;
 	userDetailsModalData(gKey);
-	
+
 }
 
 function getRolesDetails(){
@@ -149,25 +147,25 @@ function fetchRolesNamesSuccess(serverData){
 	if('ERROR' != serverData['STATUS']){
 		var rolesNameObjList=serverData['SERVER_DATA'];
 		rolesSelectHtml += '<select id="rolesListId" class="input-sm form-control">'
-		for(var index in rolesNameObjList){
-			var roleName=rolesNameObjList[index]['roleDesc'];
-			roleListObject[roleName]=rolesNameObjList[index];
-			rolesNameObj=rolesNameObjList[index];
-			rolesArray.push(rolesNameObj['roleDesc']);
-			rolesSelectHtml += '<option value="'+rolesNameObj['roleDesc']+'">'+rolesNameObj['roleDesc']+'</option>';
-		}
+			for(var index in rolesNameObjList){
+				var roleName=rolesNameObjList[index]['roleDesc'];
+				roleListObject[roleName]=rolesNameObjList[index];
+				rolesNameObj=rolesNameObjList[index];
+				rolesArray.push(rolesNameObj['roleDesc']);
+				rolesSelectHtml += '<option value="'+rolesNameObj['roleDesc']+'">'+rolesNameObj['roleDesc']+'</option>';
+			}
 		rolesSelectHtml += '</select>'
 	}
 }
 
 function userDetailsModalData(gKey){
-	
+
 	var currentSelectedObject=null;
 	currentSelectedObject = null != gKey ? userDetailsData[gKey] : null;
-	
+
 	fillSelectDropDown('activeId',roleStatus, null != currentSelectedObject ? currentSelectedObject['active'].toString() : "");
 	fillSelectDropDown('roleId',rolesArray, null != currentSelectedObject ? currentSelectedObject['roleId']['roleDesc'] : "");
-	
+
 	$('#userNameId').val(null != currentSelectedObject ? currentSelectedObject['userFullName'] : "");
 	$('#userId').val(null != currentSelectedObject ? currentSelectedObject['userId'] : "");
 	$('#emailId').val(null != currentSelectedObject ? currentSelectedObject['emailId'] : "");
@@ -181,7 +179,7 @@ function userDetailsModalData(gKey){
 function fillSelectDropDown(dropDownId,arrayData,selectedOption){
 	$('#'+dropDownId).html("");
 	$.each(arrayData, function(key, value) {   
-	     $('#'+dropDownId).append($("<option></option>").attr("value",value).text(value)); 
+		$('#'+dropDownId).append($("<option></option>").attr("value",value).text(value)); 
 	});
 	$('#'+dropDownId).val(selectedOption);
 }
@@ -191,7 +189,7 @@ function addOrUpdateUser(){
 	var isAdd=false;
 	var isValid=false;
 	var userObject={};
-	
+
 	var rowEle=$('#addUserDetailsDiv').find('form');
 	var uName=rowEle.find('#userNameId').val();
 	var uId=rowEle.find('#userId').val();
@@ -213,28 +211,28 @@ function addOrUpdateUser(){
 		var notifyObj={msg: '<b>Warning : </b> Please Enter Email ID !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 	}else if ((null !=eId || ""!= eId) && (!isEmail(eId))){
-			var notifyObj={msg: '<b>Warning : </b> You have entered an invalid email address !!!',type: "warning",position: "center" };
-			notif(notifyObj);
+		var notifyObj={msg: '<b>Warning : </b> You have entered an invalid email address !!!',type: "warning",position: "center" };
+		notif(notifyObj);
 	}else if (null ==roleListObject[roleId] || ""== roleListObject[roleId]){
 		var notifyObj={msg: '<b>Warning : </b> Please select role !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 	}else if (null ==activeId || ""== activeId){
-			var notifyObj={msg: '<b>Warning : </b> Please select active option !!!',type: "warning",position: "center" };
-			notif(notifyObj);
+		var notifyObj={msg: '<b>Warning : </b> Please select active option !!!',type: "warning",position: "center" };
+		notif(notifyObj);
 	}
 	else{
 		isValid=true;
 	}
 	if(egKey ==null || "" == egKey){
 		isAdd=true;
-		
+
 	}
 	else{
 		userObject['gkey']=egKey;
 		userObject['password']=userDetailsData[egKey]['password'];
 		userObject['modifiedOn']=getDateValue(createdOnDt);
 	}
-	
+
 	userObject['userFullName']=uName;
 	userObject['userId']=uId;
 	userObject['emailId']=eId;
@@ -243,10 +241,10 @@ function addOrUpdateUser(){
 	userObject['createdOn']=getDateValue(createdOn,'yyyy-MM-dd',"-");
 	userObject['roleId']['createdOn']=getDateValue(userObject['roleId']['createdOn'],'yyyy-MM-dd',"-");
 	userObject['roleId']['modifiedOn']=getDateValue(userObject['roleId']['modifiedOn'],'yyyy-MM-dd',"-");
-	
+
 	if(isAdd && isValid){
 		ajaxHandler("POST", JSON.stringify(userObject), "application/json", getApplicationRootPath()+"rbac/addUserDetails", 'json', null, addUserDetailsSuccess,true);
-	
+
 	}else if(isValid){
 		ajaxHandler("POST", JSON.stringify(userObject), "application/json", getApplicationRootPath()+"rbac/updateUserDetails", 'json', null,updateUserDetailsSuccess,true);
 	}
@@ -263,7 +261,7 @@ function addUserDetailsSuccess(serverData){
 
 		var notifyObj={msg: '<b>Success : </b> User added Successfully !!!',type: "success",position: "center" };
 		notif(notifyObj);
-		
+
 		if(null != sessionStorageObj){
 			sessionStorageObj.setItem("NOTIFICATION",notifyObj);
 		}
@@ -275,7 +273,7 @@ function updateUserDetailsSuccess(serverData){
 	if('ERROR' != serverData['STATUS']){	
 		var notifyObj={msg: '<b>Success : </b> User Updated Successfully !!!',type: "success",position: "center" };
 		notif(notifyObj);
-		
+
 		if(null != sessionStorageObj){
 			sessionStorageObj.setItem("NOTIFICATION",notifyObj);
 		}
