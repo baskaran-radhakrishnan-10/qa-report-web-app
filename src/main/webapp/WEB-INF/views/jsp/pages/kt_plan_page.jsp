@@ -1,9 +1,9 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/dt/jq-2.1.4,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.9,af-2.0.0,b-1.0.3,b-colvis-1.0.3,b-html5-1.0.3,b-print-1.0.3,se-1.0.1/datatables.min.css"/>
+<!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/dt/jq-2.1.4,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.9,af-2.0.0,b-1.0.3,b-colvis-1.0.3,b-html5-1.0.3,b-print-1.0.3,se-1.0.1/datatables.min.css"/> -->
  
-<script type="text/javascript" src="https://cdn.datatables.net/r/dt/jq-2.1.4,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.9,af-2.0.0,b-1.0.3,b-colvis-1.0.3,b-html5-1.0.3,b-print-1.0.3,se-1.0.1/datatables.min.js"></script>
+<!-- <script type="text/javascript" src="https://cdn.datatables.net/r/dt/jq-2.1.4,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.9,af-2.0.0,b-1.0.3,b-colvis-1.0.3,b-html5-1.0.3,b-print-1.0.3,se-1.0.1/datatables.min.js"></script> -->
 
 <spring:url	value="/resources/miminiumTheme/js/custom/custom_kt_plan_page.js" var="customKTPlanJS" />
 
@@ -88,8 +88,8 @@
 			<table class="table table-striped table-hover table-bordered listView-table" id="show-kt-details-id">
 				<thead id="thead_id">
 					<tr>
-<!-- 						<th nowrap="nowrap">S.No</th> -->
-						<th nowrap>KT ID</th>
+						<th nowrap="nowrap">S.No</th>
+<!-- 						<th nowrap>KT ID</th> -->
 						<th nowrap>Project</th>
 						<th nowrap>KT Type</th>
 						<th hidden="true">Session</th>
@@ -107,13 +107,13 @@
 				<tbody id="tbody_id"></tbody>
 			</table>
 			
-<!-- 			<div class="col-md-12 padding-0">
+			<div class="col-md-12 padding-0">
 				<div class="pull-left">
-					<button type="button" id="addUserRowButton"  onclick="addUserRows()" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="auto right" title="" data-original-title="Add Row">
+					<!-- <button type="button" id="addUserRowButton"  onclick="addUserRows()" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="auto right" title="" data-original-title="Add Row">
 						<i class="fa fa-plus" aria-hidden="true"></i>
-					</button>
+					</button> -->
 				</div>
-			</div> -->
+			</div>
 			
 		</div>
 	</div>

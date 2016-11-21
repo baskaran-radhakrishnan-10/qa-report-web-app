@@ -20,5 +20,7 @@
     <include file="db-table-KTTable-changelog.xml" relativeToChangelogFile="true" />
     
     <include file="db-table-REMAINDERS-changelog.xml" relativeToChangelogFile="true" />
+    
+    <include file="db-table-projectstable-changelog.xml" relativeToChangelogFile="true" />
         
 </databaseChangeLog>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd" >
+	
+	<changeSet author="Meganathan Sengodan" id="update_projectstable_changeset"	runOnChange="true">
+		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">update ISDQAReports..projectstable set created_on=getdate() where created_on is null</sql>
+		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">update ISDQAReports..projectstable set created_by='SYSTEM' where created_by is null</sql>
+	</changeSet>
+	
+</databaseChangeLog>

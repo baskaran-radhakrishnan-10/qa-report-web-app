@@ -73,12 +73,12 @@
 <!--script-->
 
 </head>
-<body id="mimin" class="dashboard form-signin-wrapper" style=" background-color: #FFEB3B !important;">
+<!-- style=" background-color: #54a3ab !important;" -->
+<body id="mimin" class="dashboard form-signin-wrapper" style="background: rgba( 255, 255, 255, .8 ) url('./resources/miminiumTheme/img/QA.jpg') no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; !important;">
  <!-- 	style="background: rgba(33, 150, 243, 0.1) !important;"> -->
 	<div class="container">
 
-		<form:form modelAttribute="loginModelAttribute" id="loginForm"
-			action="doLogin" method="post" class="form-signin">
+		<form:form modelAttribute="loginModelAttribute" id="loginForm" action="doLogin" method="post" class="form-signin">
 			<div class="panel periodic-login">
 				<!-- 				<span class="atomic-number">28</span> -->
 				<div class="panel-body text-center">

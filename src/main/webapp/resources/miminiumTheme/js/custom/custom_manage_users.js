@@ -4,10 +4,10 @@ var rolesSelectHtml="";
 var rolesNameObj="";
 var roleListObject={};
 var rowEle="";
-var roleStatus=[true,false];
+var roleStatus=['Yes','No'];
 var egKey="";
 
-var createdOnDt = $.datepicker.formatDate('yy-mm-dd', new Date());
+var currentDate = $.datepicker.formatDate('yy-mm-dd', new Date());
 $(document).ready(function() {	
 	showLoader();
 	getUserDetails();
@@ -15,11 +15,13 @@ $(document).ready(function() {
 
 	$('#addUserDetailsForm').hide();
 	$('#addUserDetailsId').on("click" ,function (event){
+		egKey="";
 		userDetailsModalData(null);
+		$("#userId").prop("readonly", false);
+		
 	});
 
 	$('#show-user-details-id tbody').on('click', 'tr', function () {
-		console.log('user edit');
 		var gKey=$(this).attr('id');
 		$('#show-user-details-id tbody tr').removeClass('selected');
 		$('#show-user-details-id tr').css('background-color','');
@@ -29,6 +31,13 @@ $(document).ready(function() {
 			userDetailsEdit(gKey);
 		}
 	});
+	$(document).on("keydown", "#userId",function (e) {
+	    return e.which !== 32;
+	});
+	$(document).on("keydown", "#emailId",function (e) {
+	    return e.which !== 32;
+	});
+
 });
 
 function showLoader(){
@@ -83,14 +92,17 @@ function populateUserDetails(entriesList){
 		var emailId=userDetailsModelAttribute['emailId'];
 
 		var active=userDetailsModelAttribute['active'];	
-		/*	if(active){
+		if(active){
 			active="Yes";
 		}
 		else{
 			active="No";
-		}*/
+		}
 		var createdOn=getDateValue(userDetailsModelAttribute['createdOn'],'yyyy-MM-dd',"-")	
 		userDetailsData[gKey]=userDetailsModelAttribute;
+		userDetailsData[userId]=userDetailsModelAttribute;
+		userDetailsData[emailId]=userDetailsModelAttribute;
+
 		html += '<tr id="'+gKey+'">' ;
 		html += '<td>'+sNo+'</td>' ;
 		html += '<td>'+name+'</td>' ;
@@ -132,6 +144,7 @@ function getDateValue(dateObj,format,delimeter){
 	return formatedDateStr;
 }
 function userDetailsEdit(gKey){
+	$("#userId").prop("readonly", true);
 	egKey=gKey;
 	userDetailsModalData(gKey);
 
@@ -169,8 +182,16 @@ function userDetailsModalData(gKey){
 	$('#userNameId').val(null != currentSelectedObject ? currentSelectedObject['userFullName'] : "");
 	$('#userId').val(null != currentSelectedObject ? currentSelectedObject['userId'] : "");
 	$('#emailId').val(null != currentSelectedObject ? currentSelectedObject['emailId'] : "");
-	$('#createdOnId').val(null != currentSelectedObject ? getDateValue(currentSelectedObject['createdOn'],'yyyy-MM-dd',"-") : createdOnDt);
-
+	$('#createdOnId').val(null != currentSelectedObject ? getDateValue(currentSelectedObject['createdOn'],'yyyy-MM-dd',"-") : currentDate);
+	if(null != gKey){
+		var active=currentSelectedObject['active'];
+		if(active){
+			fillSelectDropDown('activeId',roleStatus, "Yes");
+		}
+		else{
+			fillSelectDropDown('activeId',roleStatus, "No");
+		}
+	}
 	$("#addUserDetailsTrigger").trigger( "click" );
 	$('#addUserDetailsDiv').html($('#addUserDetailsForm'));
 	$('#addUserDetailsDiv').find('#addUserDetailsForm').show();
@@ -189,38 +210,61 @@ function addOrUpdateUser(){
 	var isAdd=false;
 	var isValid=false;
 	var userObject={};
-
+	var roleName="";
 	var rowEle=$('#addUserDetailsDiv').find('form');
 	var uName=rowEle.find('#userNameId').val();
 	var uId=rowEle.find('#userId').val();
+	var checkUser=(userDetailsData[uId]);
 	var eId=rowEle.find('#emailId').val();
+	var checkEmail=(userDetailsData[eId]);
 	var roleId=rowEle.find('#roleId').val();
-	var roleName=roleListObject[roleId]['roleName'];
 	var activeId=rowEle.find('#activeId').val();
+	if(activeId=="Yes"){
+		userObject['active']=true;
+	}
+	else{
+		userObject['active']=false;
+	}
 	var createdOn=rowEle.find('#createdOnId').val();
-//	console.log(roleListObject[roleId]['roleName']);
-	if (null ==uName || ""== uName){
+	if (null ==uName || ""== uName || uName.length == 0 || typeof(uName) == 'undefined'){
 		var notifyObj={msg: '<b>Warning : </b> Please Enter Full Name !!!',type: "warning",position: "center" };
 		notif(notifyObj);
-	}else if (null ==uId || ""== uId){
+	}else if(isUserFullNameValid(uName.trim())){
+		var notifyObj={msg: '<b>Warning : </b> Please Enter valid Full Name !!!',type: "warning",position: "center" };
+		notif(notifyObj);
+	}
+	else if (null ==uId || ""== uId || uId.length == 0 || typeof(uId) == 'undefined'){
 		var notifyObj={msg: '<b>Warning : </b> Please Enter User ID !!!',type: "warning",position: "center" };
 		notif(notifyObj);
-	}else if (uId.length<=2){
-		var notifyObj={msg: '<b>Warning : </b> User ID should be minimum 3 letters !!!',type: "warning",position: "center" };
+	}else if (uId.length<=5 || uId.length == 0 || typeof(uId) == 'undefined'){
+		var notifyObj={msg: '<b>Warning : </b> User ID should be minimum 5 letters !!!',type: "warning",position: "center" };
 		notif(notifyObj);
-	}else if (null ==eId || ""== eId){
+	}else if (isUserIDValid(uId) || uId.length == 0 || typeof(uId) == 'undefined'){
+		var notifyObj={msg: '<b>Warning : </b> User ID criteria not matching !!!',type: "warning",position: "center" };
+		notif(notifyObj);
+	}else if ((null ==egKey || "" == egKey || egKey.length == 0 || typeof(egKey) == 'undefined') && (null!=checkUser && ""!=checkUser && checkUser.length != 0 && typeof(checkUser) != 'undefined')){
+		var notifyObj={msg: '<b>Warning : </b> User ID already available !!!',type: "warning",position: "center" };
+		notif(notifyObj);
+	}else if (null ==eId || ""== eId || eId.length == 0 || typeof(eId) == 'undefined'){
 		var notifyObj={msg: '<b>Warning : </b> Please Enter Email ID !!!',type: "warning",position: "center" };
 		notif(notifyObj);
-	}else if ((null !=eId || ""!= eId) && (!isEmail(eId))){
+	}else if ((null !=eId || ""!= eId || eId.length != 0 || typeof(eId) != 'undefined') && (!isEmail(eId))){
 		var notifyObj={msg: '<b>Warning : </b> You have entered an invalid email address !!!',type: "warning",position: "center" };
+		notif(notifyObj);
+	}else if ((null ==egKey || "" == egKey || egKey.length == 0 || typeof(egKey) == 'undefined') && (null!=checkEmail && ""!=checkEmail && checkEmail.length != 0 && typeof(checkEmail) != 'undefined')){
+		var notifyObj={msg: '<b>Warning : </b> Email ID already available !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 	}else if (null ==roleListObject[roleId] || ""== roleListObject[roleId]){
 		var notifyObj={msg: '<b>Warning : </b> Please select role !!!',type: "warning",position: "center" };
 		notif(notifyObj);
-	}else if ("ROLE_SUPER_ADMIN" == roleName){
+	}
+	if (null !=roleListObject[roleId] || ""!= roleListObject[roleId] || roleListObject[roleId].length != 0 || typeof(roleListObject[roleId]) != 'undefined'){
+		roleName=roleListObject[roleId]['roleName'];
+	}
+	if ("ROLE_SUPER_ADMIN" == roleName.trim()){
 		var notifyObj={msg: '<b>Warning : </b> Super Admin role already available !!!',type: "warning",position: "center" };
 		notif(notifyObj);
-	}else if (null ==activeId || ""== activeId){
+	}else if (null ==activeId || ""== activeId || activeId.length == 0 || activeId == 'undefined'){
 		var notifyObj={msg: '<b>Warning : </b> Please select active option !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 	}
@@ -229,19 +273,17 @@ function addOrUpdateUser(){
 	}
 	if(egKey ==null || "" == egKey){
 		isAdd=true;
-
 	}
 	else{
 		userObject['gkey']=egKey;
 		userObject['password']=userDetailsData[egKey]['password'];
-		userObject['modifiedOn']=getDateValue(createdOnDt);
+		userObject['modifiedOn']=getDateValue(currentDate);
 	}
-
-	userObject['userFullName']=uName;
-	userObject['userId']=uId;
-	userObject['emailId']=eId;
+	userObject['userFullName']=uName.trim();
+	userObject['userId']=uId.trim();
+	userObject['emailId']=eId.trim();
 	userObject['roleId']=roleListObject[roleId];		
-	userObject['active']=activeId;
+	/*userObject['active']=activeId;*/
 	userObject['createdOn']=getDateValue(createdOn,'yyyy-MM-dd',"-");
 	userObject['roleId']['createdOn']=getDateValue(userObject['roleId']['createdOn'],'yyyy-MM-dd',"-");
 	userObject['roleId']['modifiedOn']=getDateValue(userObject['roleId']['modifiedOn'],'yyyy-MM-dd',"-");
@@ -258,6 +300,14 @@ function addOrUpdateUser(){
 function isEmail(email) {
 	var checkMail = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
 	return checkMail.test(email);
+}
+function isUserFullNameValid(name){
+	var regexp= /^[A-Za-z']+( [A-Za-z']+)*$/;
+	return name.search(regexp);
+}
+function isUserIDValid(uId){
+	var regexp = /^[a-z0-9\\\-\_]+$/;
+	return uId.search(regexp);
 }
 
 function addUserDetailsSuccess(serverData){

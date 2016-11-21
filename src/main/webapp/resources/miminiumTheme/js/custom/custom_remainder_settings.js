@@ -153,23 +153,23 @@ function addOrUpdateReminder(){
 	
 	var remainderDate=rowEle.find('#remainderDateId').val();
 	var remainderTime=rowEle.find('#remainderTimeId').val();
-	var remainderAbout=rowEle.find('#remainderAboutId').val();
+	var remainderAbout=rowEle.find('#remainderAboutId').val().trim();
 	var remainderDateTime=rowEle.find('#remainderDateTimeId').val(); 
 	
 	var remainderDateVal=new Date(Date.parse(remainderDate));
 	var currentDateVal=new Date(Date.parse(createdOnDt));
 	
-	if (null ==remainderDate || ""== remainderDate){
+	if (null ==remainderDate || ""== remainderDate || remainderDate.length == 0 || typeof(remainderDate) == 'undefined'){
 		var notifyObj={msg: '<b>Warning : </b> Please select Reminder Date !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 	}else if (remainderDateVal< currentDateVal){
 		var notifyObj={msg: '<b>Warning : </b>Reminder Date must be >= current date !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 	}
-	else if (null ==remainderTime || ""== remainderTime){
+	else if (null ==remainderTime || ""== remainderTime || remainderTime.length == 0 || typeof(remainderTime) == 'undefined'){
 		var notifyObj={msg: '<b>Warning : </b> Please select Reminder time !!!',type: "warning",position: "center" };
 		notif(notifyObj);
-	}else if (null ==remainderAbout || ""== remainderAbout){
+	}else if (null ==remainderAbout || ""== remainderAbout || remainderAbout.length == 0 || typeof(remainderAbout) == 'undefined'){
 			var notifyObj={msg: '<b>Warning : </b> Please enter Reminder message !!!',type: "warning",position: "center" };
 			notif(notifyObj);
 	}

@@ -13,18 +13,18 @@ $(document).ready(function() {
 	$("#modifiedOnId").val($.datepicker.formatDate('dd-mm-yy', new Date()));
 	$('#reset_password_button').on("click" ,function (event){
 		
-		var nPwd=$("#newPasswordId").val();
-		var cPwd=$("#confirmPasswordId").val();
+		var nPwd=$("#newPasswordId").val().trim();
+		var cPwd=$("#confirmPasswordId").val().trim();
 		
-		if(""==$("#userId").val()||null==$("#userId").val()){
+		if(""==$("#userId").val()||null==$("#userId").val() || $("#userId").val().length == 0 || typeof($("#userId").val()) == 'undefined'){
 			var notifyObj={msg: '<b>Warning : </b> Please select the User ID !!!',type: "warning",position: "center" };
 			notif(notifyObj);
 		}
-		else if(""==nPwd||null==nPwd){
+		else if(""==nPwd||null==nPwd || nPwd.length == 0 || typeof(nPwd) == 'undefined'){
 			var notifyObj={msg: '<b>Warning : </b> Please enter New password !!!',type: "warning",position: "center" };
 			notif(notifyObj);
 		}
-		else if(""==cPwd||null==cPwd){
+		else if(""==cPwd||null==cPwd || cPwd.length == 0 || typeof(cPwd) == 'undefined'){
 			var notifyObj={msg: '<b>Warning : </b> Please enter Confirm password !!!',type: "warning",position: "center" };
 			notif(notifyObj);
 		}
@@ -44,7 +44,7 @@ $(document).ready(function() {
 			userObject['userId']=$("#userId").val();
 			userObject['gkey']=userIdListObject[userObject['userId']]['gkey']
 			userObject['userFullName']=userIdListObject[userObject['userId']]['userFullName']
-			userObject['password']=$("#newPasswordId").val();
+			userObject['password']=nPwd;
 			userObject['emailId']= userIdListObject[userObject['userId']]['emailId']
 			userObject['active']= userIdListObject[userObject['userId']]['active']
 			userObject['roleId']= userIdListObject[userObject['userId']]['roleId']
@@ -53,6 +53,13 @@ $(document).ready(function() {
 			userObject['modifiedOn']=$.datepicker.formatDate('yy-mm-dd', new Date());
 			ajaxHandler("POST", JSON.stringify(userObject), "application/json", getApplicationRootPath()+"rbac/resetPassword", 'json', null, resetPasswordSuccess,true);
 		}
+	});
+	
+	$("#newPasswordId").on("keydown", function (e) {
+	    return e.which !== 32;
+	});
+	$("#confirmPasswordId").on("keydown", function (e) {
+	    return e.which !== 32;
 	});
 	
 });
@@ -64,7 +71,6 @@ function getUserDetails(){
 }
 
 function fetchUserDetailsSuccess(serverData){
-	console.log(serverData);
 	populateUserDetails(serverData['SERVER_DATA']);
 }
 

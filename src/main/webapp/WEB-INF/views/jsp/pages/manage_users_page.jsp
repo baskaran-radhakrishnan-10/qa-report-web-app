@@ -93,11 +93,11 @@
 											<div class="col-md-12">
 												<label class="col-sm-2 control-label">Full Name:<font color="red">*</font></label>
 												<div class="col-sm-3">
-													<input id="userNameId" name="userName" type="text" class="input-sm form-control imp" value="">
+													<input id="userNameId" name="userName" type="text" class="input-sm form-control imp" value="" data-toggle="tooltip" data-placement="auto right" data-original-title="Allows only Letters and Single Space">
 												</div>
 												<label class="col-sm-2 control-label">User ID:<font color="red">*</font></label>
 												<div class="col-sm-3">
-													<input id="userId" name="user" type="text" style='text-transform:lowercase' class="input-sm form-control imp" value="" data-toggle="tooltip" data-placement="auto right" data-original-title="Allows only lowecase">
+													<input id="userId" name="user" type="text" style='text-transform:lowercase' class="input-sm form-control imp" value="" data-toggle="tooltip" data-placement="auto right" data-original-title="Allows only lowercase - \ _">
 												</div>
 											</div>
 										</div>

@@ -166,7 +166,7 @@ function fetchKTDetailsSuccess(serverData){
 }
 
 function populateKTDetails(entriesList){
-//	var sNo = 1;
+	var sNo = 1;
 	var htmlArray=new Array();
 	for(var i=0;i<entriesList.length;i++){		
 		var html ="";
@@ -188,7 +188,7 @@ function populateKTDetails(entriesList){
 		ktDetailsData[gKey]=KTDetailsModelAttribute;
 		html += '<tr id="'+gKey+'">' ;
 //		html += '<td  nowrap="nowrap">'+sNo+'</td>' ;
-		html += '<td  nowrap>'+gKey+'</td>' ;
+		html += '<td  nowrap>'+sNo+'</td>' ;
 		html +=	'<td  nowrap>'+project+'</td>' ;
 		html += '<td  nowrap>'+trainingType+'</td>' ;
 		html += '<td  hidden>'+session+'</td>' ;
@@ -206,7 +206,7 @@ function populateKTDetails(entriesList){
 //		html += '<td id="ktDetailsEditRowId" onclick="editKTPlanDetails('+gKey+')"><span><a href="#" class="glyphicon glyphicon-edit"></a></span><span>&nbsp;</span><a id="ktDetailsSaveRowId" style="display:none;" href="#"> <span class="glyphicon glyphicon-check"></span></a></td>' ;
 		html += '</tr>' ;
 		htmlArray.push(html);
-//		sNo++;
+		sNo++;
 	}
 	return htmlArray;
 }

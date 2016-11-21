@@ -4,7 +4,7 @@ $(document).ready(function(event) {
 
 	$(document).on("mouseenter", "li", function(event) {
 		if(!$(this).parent().hasClass("user-nav")){
-			$(this).css('background-color','#FFEB3B');
+			$(this).css('background-color','#f4f4f4');
 		}
 	});
 

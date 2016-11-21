@@ -123,7 +123,6 @@ function projectDetailsEdit(gKey){
 }
 
 function projectDetailsModalData(gKey){
-	console.log(gKey);
 	var currentSelectedObject=null;
 	currentSelectedObject = null != gKey ? projectDetailsData[gKey] : null;
 	
@@ -160,15 +159,18 @@ function addOrUpdateProject(){
 	
 	var rowEle=$('#addProjectDetailsDiv').find('form');
 	
-	var projectNameId=rowEle.find('#projectNameId').val();
+	var projectName=rowEle.find('#projectNameId').val();
 	var createdDateId=rowEle.find('#createdDateId').val();
 	var createdById=rowEle.find('#createdById').val();
 	var modifiedDateId=rowEle.find('#modifiedDateId').val(); 
 	var modifiedById=rowEle.find('#modifiedById').val(); 
 
 	
-	if (null ==projectNameId || ""== projectNameId){
+	if (null ==projectName || ""== projectName  || projectName.length == 0 || typeof(projectName) == 'undefined'){
 		var notifyObj={msg: '<b>Warning : </b> Please enter project name !!!',type: "warning",position: "center" };
+		notif(notifyObj);
+	}else if(isProjectNameValid(projectName.trim())){
+		var notifyObj={msg: '<b>Warning : </b> Please Enter valid project Name !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 	}
 	else{
@@ -182,12 +184,11 @@ function addOrUpdateProject(){
 		projectObject['projectId']=egKey;
 	}
 
-	projectObject['projectName']=projectNameId;
+	projectObject['projectName']=projectName.trim();
 	projectObject['createdOn']=getDateValue(createdDateId,'yyyy-MM-dd',"-");
 	projectObject['createdBy']=createdById;
 	projectObject['modifiedOn']=getDateValue(modifiedDateId,'yyyy-MM-dd',"-");
 	projectObject['modifiedBy']=modifiedById;
-	console.log(projectObject);
 	
 	if(isAdd && isValid){
 		ajaxHandler("POST", JSON.stringify(projectObject), "application/json", getApplicationRootPath()+"operation/addProject", 'json', null, addProjectDetailsSuccess,true);
@@ -220,4 +221,8 @@ function updateProjectDetailsSuccess(serverData){
 		}
 		window.location.href=getApplicationRootPath()+"operation/manage_projects";
 	}
+}
+function isProjectNameValid(name){
+	var regexp= /^[A-Za-z\-']+( [A-Za-z']+)*$/;
+	return name.search(regexp);
 }

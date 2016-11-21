@@ -8,6 +8,10 @@
 		<addDefaultValue columnName="modified_on" columnDataType="DATETIME" defaultValueComputed="CURRENT_TIMESTAMP" tableName="tbl_roles" />
 	</changeSet>
 	
+	<changeSet author="Meganathan Sengodan" id="update_tbl_roles_changeset"	runOnChange="true">
+		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">update tbl_roles set role_desc='User' where role_desc='Normal User'</sql>
+	</changeSet>
+	
 	<changeSet author="baskaran radhakrishnan" id="insert_tbl_roles_changeset"	runOnChange="true">
 		<loadData file="/WEB-INF/classes/liquibase/tbl_roles_initial_data.csv" tableName="tbl_roles"/>
 	</changeSet>
