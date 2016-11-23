@@ -13,7 +13,7 @@ var date = new Date();
 var currentTime=(date.getHours()<10 ? "0"+date.getHours() : date.getHours())+":"+(date.getMinutes()<10 ? "0"+date.getMinutes() : date.getMinutes());
 currentTime=parseInt(currentTime.replace(":",""));
 $(document).ready(function() {	
-//	showLoader();
+	showLoader();
 	getReminderDetails();
 	getKTDetails();
 	fetchTestPlanEntries();
@@ -21,15 +21,15 @@ $(document).ready(function() {
 	
 });
 
-/*function showLoader(){
+function showLoader(){
 	$('#homeMainDiv').hide();
-	$('#loader_divGear').show();
+	$('#homeLoader_div').show();
 }
 
 function hideLoader(){
 	$('#homeMainDiv').show();
-	$('#loader_divGear').hide();
-}*/
+	$('#homeLoader_div').hide();
+}
 function getUserDetails(){
 	var data={};
 	data=JSON.stringify(data);
@@ -47,9 +47,9 @@ function getKTDetails(){
 function fetchKTDetailsSuccess(serverData){
 $('#hKtPlanId').html(populateKTDetails(serverData['SERVER_DATA']));
 $('#hOrdersId').html(populateKTDetails(serverData['SERVER_DATA']));
-/*setTimeout(function(){
+setTimeout(function(){
 	hideLoader();
-}, 1000);*/
+}, 1000);
 }
 
 function fetchTestPlanEntries(){
@@ -206,12 +206,12 @@ function populateUserDetails(entriesList){
 	for (var i=0; i<entriesList.length; i++){
 		var userObject=entriesList[i];
 		var rolesObject= userObject['roleId'];
-		var roleDesc=rolesObject['roleDesc'];
-		if(roleDesc=="Administrator Role"){
+		var roleName=rolesObject['roleName'];
+		if(roleName=="ROLE_ADMIN"){
 			adminCount++;
-		}else if(roleDesc=="Super Admin"){
+		}else if(roleName=="ROLE_SUPER_ADMIN"){
 			superAdminCount++;
-		}else if(roleDesc=="Normal User"){
+		}else if(roleName=="ROLE_NORMAL_USER"){
 			normalUserCount++;
 		}
 	}

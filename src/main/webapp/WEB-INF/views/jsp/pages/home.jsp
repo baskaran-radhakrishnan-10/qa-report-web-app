@@ -12,6 +12,7 @@
 <spring:url value="/resources/miminiumTheme/js/plugins/moment.min.js" var="MomentJs" />
 
 <spring:url value="/resources/miminiumTheme/img/bg2.jpg" var="bg2img" />
+<spring:url value="/resources/miminiumTheme/img/gears.gif" var="gearsImg" />
 <%-- <spring:url	value="/resources/miminiumTheme/js/custom/dashboard_custom.js"	var="CustomJs" /> --%>
 <spring:url	value="/resources/miminiumTheme/js/custom/custom_home.js"	var="customHomeJS" />
 	
@@ -30,14 +31,15 @@
 <link href="${calendarCss}" rel="stylesheet" type="text/css">
 <link href="${equIcon}" rel="shortcut icon" type="image/x-icon">
 
+<img src="${gearsImg}" alt="Loading.." id="homeLoader_div" style="width: 150px;height: 150px; left: 54%;position: fixed; z-index: 1000;top: 45%; background: rgba( 255, 255, 255, .8 ) 50% 50% no-repeat;display:none;"/>
 <!-- start: content -->
 
-<div class="col-md-12" style="padding: 20px;">
+<div class="col-md-12" id="homeMainDiv" style="display:none;">
 	<!-- 	<div class="col-md-12 padding-0"> -->
 	<!-- 		<div class="col-md-8 padding-0"> -->
 	<div class="col-md-12 padding-0">
 		<div class="col-md-3">
-			<div class="panel box-v1" style="overflow-y: auto; height: 183px;">
+			<div class="panel box-v1" style="overflow-y: auto; height: 182px;">
 				<div class="panel-heading bg-amber border-none" style="color: #FFF !important;">
 					<div class="col-md-6 col-sm-6 col-xs-6 text-left padding-0">
 						<h4 class="text-left">Users</h4>
@@ -54,7 +56,7 @@
 			</div>
 		</div>
 		<div class="col-md-3">
-			<div class="panel box-v1" style="overflow-y: auto; height: 183px;">
+			<div class="panel box-v1" style="overflow-y: auto; height: 182px;">
 				<div class="panel-heading bg-success border-none" style="color: #FFF !important;">
 					<div class="col-md-6 col-sm-6 col-xs-6 text-left padding-0">
 						<h4 class="text-left">Test Plan</h4>
@@ -72,7 +74,7 @@
 		</div>
 	
 		<div class="col-md-3">
-			<div class="panel box-v1" style="overflow-y: auto; height: 183px;">
+			<div class="panel box-v1" style="overflow-y: auto; height: 182px;">
 				<div class="panel-heading bg-lime border-none" style="color: #FFF !important;">
 					<div class="col-md-6 col-sm-6 col-xs-6 text-left padding-0">
 						<h4 class="text-left">KT Plan</h4>
@@ -90,7 +92,7 @@
 		</div>
 		
 		<div class="col-md-3">
-			<div class="panel box-v1" style="overflow-y: auto; height: 183px;">
+			<div class="panel box-v1" style="overflow-y: auto; height: 182px;">
 				<div class="panel-heading bg-danger border-none" style="color: #FFF !important;">
 					<div class="col-md-6 col-sm-6 col-xs-6 text-left padding-0">
 						<h4 class="text-left">Orders</h4>

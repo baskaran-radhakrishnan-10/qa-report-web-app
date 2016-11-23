@@ -10,7 +10,6 @@
 
             if ($rippler.children("a").first()) {
                 $rippler.children("a").first().append($ink);
-                console.log("found");
             }
             else {
                 $rippler.append($ink);
@@ -240,7 +239,7 @@
             rippler.css({'z-index':9999});
             rippler.animate({
               // backgroundColor: "#FF6656",
-            	 backgroundColor: "#FFEB3B",
+            	 backgroundColor: "#f9f9f9",
               width: '100%'
             }, 750 );
 
@@ -313,8 +312,6 @@
       $(".fileupload-v1-file").click();   
       $(".fileupload-v1-file").on("change",function(){
           path.attr("placeholder",$(this).val());
-          console.log(wrapper);
-          console.log(path);
       });
     });
 

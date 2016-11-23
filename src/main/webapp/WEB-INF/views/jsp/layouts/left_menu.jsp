@@ -1,7 +1,7 @@
 <!-- start:Left Menu -->
 <div id="left-menu">
 
-	<div class="sub-left-menu scroll bg-yellow">
+	<div class="sub-left-menu scroll bg-verylight-grey">
 		
 		<ul class="nav nav-list" id="leftMenuUL">
 		

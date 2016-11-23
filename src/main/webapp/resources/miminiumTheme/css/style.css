@@ -143,6 +143,7 @@ p.quote{
  .bg-brown       {background-color: #795548 !important;}
  .bg-grey        {background-color: #9E9E9E !important;}
  .bg-light-grey  {background-color: #f0f3f4 !important;}
+ .bg-verylight-grey  {background-color: #f4f4f4 !important;}
  .bg-blue-grey   {background-color: #607D8B !important;}
 
  .bg-dark-red         {background-color: #d32f2f !important;}
@@ -297,7 +298,7 @@ p.quote{
 /*end: product grid*/
 
 /*start: Login*/
- .form-signin-wrapper{background: #2196f3 !important;}
+ .form-signin-wrapper{background: #54a3ab;}
  .form-signin{
          max-width: 330px;
          padding: 15px;
@@ -307,12 +308,19 @@ p.quote{
     .form-signin .btn{margin-top: 30px;}
     .form-signin .form-group{margin-bottom: 20px !important;}
     .form-signin .pane{background: #FFFFFF; color: #FF0000; padding: 10px;border:none !important;box-shadow: 0 7px 16px #0a86e9, 0 4px 5px #0a86e9;}
-	.form-signin .panel{background: #2196f3;color: #fff;padding: 10px;border:none !important;box-shadow: 0 7px 16px #0a86e9, 0 4px 5px #0a86e9;}
+	/* .form-signin .panel{background: #2196f3;color: #fff;padding: 10px;border:none !important;box-shadow: 0 7px 16px #0a86e9, 0 4px 5px #0a86e9;} */
+	.form-signin .panel {
+    background: #ffffff;
+    color: #333;
+    padding: 10px;
+    border: none !important;
+    box-shadow: 0 7px 16px #333, 0 4px 5px #333;
+	}
     .form-signin .panel-body{padding-bottom: 50px;padding-top: 30px;}
     .form-signin .atomic-number{font-size: 20px;}
     .form-signin .atomic-symbol{font-size: 10em !important;font-weight: 500;padding-bottom: 20spx;}
     .form-signin .element-name,.form-signin .atomic-mass{font-size: 18px;margin-top: -10px;font-weight: 600;line-height: 1.2;}
-    .form-signin label{color:#fff !important;}
+    .form-signin label{color:#333 !important;}
     .form-signin .bar:before,.form-signin .bar:after{background-color:#fff !important;}
 /*end: login*/
 
@@ -2689,7 +2697,7 @@ ul li a:focus {
 }
 
 #content {
-  margin-top: 51px;
+  margin-top: 80px;
   padding: 0px;
   padding-bottom: 10px;
   padding-left: 230px;
@@ -6657,7 +6665,7 @@ div#accordion {
     color: #2196F3;
 } */
 #left-menu .sub-left-menu a {
-    color: #2196F3;
+    color: #333333;
     font-weight: 600;
 }
 #left-menu .sub-left-menu .time p {
@@ -6673,7 +6681,7 @@ div#accordion {
 } */
 
 #left-menu .sub-left-menu .tree {
-    background-color: #fff389;
+    background-color: #f9f9f9;
 }
 body {
     background-color: #FFF;
@@ -6682,13 +6690,13 @@ body {
     margin-top: 0px;
 }
 #mimin-mobile .tree {
-     background-color: #fff389;
+     background-color: #f9f9f9;
 }
 #mimin-mobile a {
     color: #2196F3;
 }
 #mimin-mobile .ink {
-  background: #fff389;
+  background: #f9f9f9;
 }
 #mimin-mobile-menu-opener{
   left: 20px;
