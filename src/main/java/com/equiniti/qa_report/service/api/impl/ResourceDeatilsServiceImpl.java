@@ -7,12 +7,14 @@ import org.springframework.stereotype.Service;
 
 import com.equiniti.qa_report.entity.ResourceEntity;
 import com.equiniti.qa_report.event.resource_details.AddResourceDeatilsEvent;
+import com.equiniti.qa_report.event.resource_details.DeleteResourceDetailsEvent;
 import com.equiniti.qa_report.event.resource_details.GetResourceDeatilsEvent;
 import com.equiniti.qa_report.event.resource_details.UpdateResourceDeatilsEvent;
 import com.equiniti.qa_report.eventapi.eventhandling.generic.BaseAPIImpl;
 import com.equiniti.qa_report.exception.api.exception.APIException;
 import com.equiniti.qa_report.exception.api.exception.EventException;
 import com.equiniti.qa_report.exception.api.faultcode.CommonFaultCode;
+import com.equiniti.qa_report.exception.api.faultcode.EventFaultCodes;
 import com.equiniti.qa_report.service.api.ResourceDeatilsService;
 
 @Service("resourceDeatilsService")
@@ -76,6 +78,23 @@ public class ResourceDeatilsServiceImpl extends BaseAPIImpl implements ResourceD
 			throw new APIException(CommonFaultCode.UNKNOWN_ERROR,e);
 		}
 		return event.isUpdated();
+	}
+	
+	@Override
+	public void deleteResourceDeatils(Map<String, Object> paramMap) throws APIException {
+		DeleteResourceDetailsEvent event=getEvent(DeleteResourceDetailsEvent.class);
+		try{
+			if(paramMap.containsKey("gKey")){
+				event.setgKey(Integer.parseInt(paramMap.get("gKey").toString()));
+				processEvent(event);
+			}else{
+				throw new APIException(EventFaultCodes.UN_KNOWN_ERROR,null);
+			}
+		}catch(EventException e){
+			throw new APIException(e.getFaultCode(),e);
+		}catch(Exception e){
+			throw new APIException(CommonFaultCode.UNKNOWN_ERROR,e);
+		}
 	}
 	
 }

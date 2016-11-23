@@ -8,6 +8,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import com.equiniti.qa_report.dao.api.ItemDetailsDAO;
 import com.equiniti.qa_report.entity.ItemEntity;
 import com.equiniti.qa_report.event.item_details.AddItemDeatilsEvent;
+import com.equiniti.qa_report.event.item_details.DeleteItemDetailsEvent;
 import com.equiniti.qa_report.event.item_details.GetItemDeatilsEvent;
 import com.equiniti.qa_report.event.item_details.UpdateItemDeatilsEvent;
 import com.equiniti.qa_report.eventapi.eventhandling.generic.IEvent;
@@ -15,6 +16,7 @@ import com.equiniti.qa_report.eventapi.eventhandling.handler.IEventHandler;
 import com.equiniti.qa_report.exception.api.exception.DaoException;
 import com.equiniti.qa_report.exception.api.exception.EventException;
 import com.equiniti.qa_report.exception.api.faultcode.CommonFaultCode;
+import com.equiniti.qa_report.util.CommonUtil;
 
 public class ItemDeatilsEventHandler implements IEventHandler<IEvent> {
 
@@ -43,7 +45,13 @@ public class ItemDeatilsEventHandler implements IEventHandler<IEvent> {
 			LOG.debug("Event :" + UpdateItemDeatilsEvent.class.getName());
 			UpdateItemDeatilsEvent eventObj = (UpdateItemDeatilsEvent) event;
 			updateResourceDetails(eventObj);
-		}
+		}else if (event instanceof DeleteItemDetailsEvent) {
+            LOG.debug("Event :" + DeleteItemDetailsEvent.class.getName());
+            DeleteItemDetailsEvent eventObj = (DeleteItemDetailsEvent) event;
+            deleteItemDetails(eventObj);
+        }else {
+            LOG.debug("Unknow Event");
+        }
 		LOG.debug("processEvent END");
 	}
 
@@ -69,6 +77,16 @@ public class ItemDeatilsEventHandler implements IEventHandler<IEvent> {
 		}
 	}
 	
+	private void deleteItemDetails(DeleteItemDetailsEvent event) throws EventException {
+        try {
+        	itemDetailsDAO.deleteItemDetails(event.getBtpNo(), event.getItemNo());
+        } catch (DaoException e) {
+            throw new EventException(e.getFaultCode(), e);
+        } catch (Exception e) {
+            throw new EventException(CommonFaultCode.UNKNOWN_ERROR, e);
+        }
+    }
+	
 	private void getResourceDetails(GetItemDeatilsEvent event) throws EventException {
 		try {
 			if(null != event.getRestrictionMap()){
@@ -84,7 +102,7 @@ public class ItemDeatilsEventHandler implements IEventHandler<IEvent> {
 	}
 	
 	private ItemEntity populateEntityFromMapObject(Map<String,Object> mapObject){
-		ItemEntity entity=objMapper.convertValue(mapObject, ItemEntity.class);
+		ItemEntity entity=objMapper.convertValue(CommonUtil.removeTransientObject(mapObject), ItemEntity.class);
 		return entity;
 	}
 

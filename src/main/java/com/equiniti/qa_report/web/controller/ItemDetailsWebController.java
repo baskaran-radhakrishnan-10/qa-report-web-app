@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.equiniti.qa_report.controller.ItemDetailsController;
 import com.equiniti.qa_report.exception.api.exception.ControllerException;
+import com.equiniti.qa_report.exception.api.exception.UIException;
 
 @Controller
 @RequestMapping(value="/item_details")
@@ -64,6 +65,18 @@ public class ItemDetailsWebController {
 			returnObj=itemDetailsController.updateItemDeatils(inputParam);
 		} catch (ControllerException e) {
 			e.printStackTrace();
+		}
+		return returnObj;
+	}
+	
+	@RequestMapping(value = "/deleteData", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> deleteData(@RequestBody Map<String,Object> inputData) throws UIException{
+		Map<String,Object> returnObj=new HashMap<>();
+		try {
+			returnObj=itemDetailsController.deleteItemDeatils(inputData);
+		} catch (ControllerException e) {
+			throw new UIException(e.getFaultCode(), e);
 		}
 		return returnObj;
 	}

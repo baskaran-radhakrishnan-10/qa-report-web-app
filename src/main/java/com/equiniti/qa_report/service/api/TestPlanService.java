@@ -23,4 +23,6 @@ public interface TestPlanService {
 
 	public List<String> getUniqueBtpYearList() throws APIException;
 
+	public void deleteTestPlanEntry(Map<String, Object> paramMap) throws APIException;
+
 }

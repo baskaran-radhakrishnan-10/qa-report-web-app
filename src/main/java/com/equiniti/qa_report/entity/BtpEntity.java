@@ -8,13 +8,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
+import com.equiniti.qa_report.persistance_api.audit.api.IAuditLog;
+
 @Entity
 @Table(name = "BtpTable")
-public class BtpEntity implements Serializable{
+public class BtpEntity implements Serializable,IAuditLog{
 	
 	private static final long serialVersionUID = 6353634667945363641L;
 
@@ -90,7 +93,18 @@ public class BtpEntity implements Serializable{
 	@Column(name = "updateddate")
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private DateTime updatesDate;
+	
+	@Column(name = "is_deleted")
+	private  boolean deleted;
 
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+	
 	public int getgKey() {
 		return gKey;
 	}
@@ -267,4 +281,24 @@ public class BtpEntity implements Serializable{
 		this.updatesDate = updatesDate;
 	}
 	
+	@Override
+	@Transient
+	public Long getId() {
+		return (long) this.gKey;
+	}
+
+	@Override
+	@Transient
+	public String getLogDeatil() {
+		return this.toString();
+	}
+
+	@Override
+	public String toString(){
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("Project Name : ").append(projectName).append(" -- ").append("Phase : ").append(phase).append(" -- ");
+		buffer.append("BTP Plan : ").append(btpPlan).append(" -- ").append("S-Print : ").append(sPrint);
+		buffer.append("Cycle : ").append(cycle).append(" -- ").append("Build No : ").append(buildNo);
+		return buffer.toString();
+	}
 }

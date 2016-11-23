@@ -185,6 +185,69 @@ $(document).ready(function() {
 		
 	});
 	
+	$('#build_test_plan_table_id tbody').on('dblclick', 'tr', function () {
+		if("ROLE_SUPER_ADMIN" == $('#loggedInRoleId').val()){
+			var btpNo=$(this).attr('id');
+	        if ($(this).hasClass('selected')){
+	            $(this).removeClass('selected');
+	            $(this).css('background-color','');
+	        }
+	        else {
+	            $(this).addClass('selected');
+	            $(this).css('background-color','#B0BED9 !important');
+	        }
+	        var selectedRowList=$('#build_test_plan_table_id tbody').find('.selected')
+	        if(selectedRowList.length > 0){
+	        	$('#delete_btp_button').show();
+	        }else{
+	        	$('#delete_btp_button').hide();
+	        }
+		}
+    });
+	
+	$('#delete_btp_button').on('click',function(){
+		$("#showDeleteRowModal").trigger( "click" );
+		$('#row_delete_confirm_div').show();
+	});
+	
+	$('#row_delete_confirm_div').on("click",function(){
+		var btpNoArray = [];
+		var selectedRowList=$('#build_test_plan_table_id tbody').find('.selected');
+		if(selectedRowList.length > 0){
+			$.each(selectedRowList,function(index,row){
+				btpNoArray.push(parseInt($(row).attr('id')));
+			});
+			if(btpNoArray.length > 0){
+				deleteBtpRows(btpNoArray);
+			}
+		}
+	});
+	
+	$('#modal_close_button').on("click",function(){
+		$('#delete_btp_button').hide();
+		$('#build_test_plan_table_id tbody tr').removeClass('selected');
+		$('#build_test_plan_table_id tbody tr').css('background-color','');
+	});
+	
+	$(document).on("keypress", "tr input", function(e) {
+		var tdId = $(this).parent().attr('id');
+		var tableId=$(this).parent().parent().parent().parent().attr('id');
+		var charCode = e.which;
+		if(tdId.indexOf("itemCount") != -1){
+			return checkisNumber(charCode);
+		}else if(tdId.indexOf("effortCost") != -1 ){
+			return checkIsDecimelNumber(charCode);
+		}else if(tableId.indexOf("resourceMgmtTableId") != -1){
+			if(tdId.indexOf("Time") != -1){
+				return checkIsDecimelNumber(charCode);
+			}else{
+				return checkisNumber(charCode);
+			}
+		}
+		return true;
+	});
+
+	
 	showLoader();
 	
 	fetchTestPlanEntries();
@@ -198,6 +261,20 @@ $(document).ready(function() {
 	fillStatusArrayHtml(statusArray);
 	
 });
+
+function checkisNumber(charCode){
+	if (charCode != 8 && charCode != 0 && (charCode < 48 || charCode > 57)) {
+		return false;
+	}
+	return true;
+}
+
+function checkIsDecimelNumber(charCode){
+	if (charCode != 8 && charCode != 0 && (charCode < 48 || charCode > 57) && charCode != 46) {
+		return false;
+	}
+	return true;
+}
 
 function fetchProjectNames(){
 	var data={};

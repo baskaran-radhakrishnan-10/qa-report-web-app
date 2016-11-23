@@ -1,6 +1,7 @@
 package com.equiniti.qa_report.dao.api.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,6 +27,10 @@ public class DSRDAOImpl implements DSRDAO{
 
 	public List<DSREntity> getDSREntityList(Map<String, Object> restrictionMap) throws DaoException{
 		LOG.debug("INSIDE getDSREntityList(Map<String, Object> restrictionMap) Method");
+		if(null == restrictionMap){
+			restrictionMap = new HashMap<>();
+		}
+		restrictionMap.put("is_deleted", false);
 		return abstractHibernateDAOAPI.getEntityList(DSREntity.class, restrictionMap);
 	}
 	

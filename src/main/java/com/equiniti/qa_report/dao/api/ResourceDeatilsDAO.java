@@ -16,4 +16,6 @@ public interface ResourceDeatilsDAO {
 	
 	public void updateResourceDetails(ResourceEntity entity) throws DaoException;
 
+	public void deleteResourceDetails(int gKey) throws DaoException;
+
 }

@@ -27,11 +27,6 @@ public class TestPlanWebController {
 	
 	@RequestMapping(value = "/show")
 	public String showBuildTestPlanPage(Model model){
-		/*try {
-			model.addAttribute("BTP_ENTRIES", testPlanController.listTestPlanEntries());
-		} catch (ControllerException e) {
-			e.printStackTrace();
-		}*/
 		return "test_plan_page";
 	}
 	
@@ -65,6 +60,18 @@ public class TestPlanWebController {
 		Map<String,Object> returnObj=new HashMap<>();
 		try {
 			returnObj=testPlanController.editTestPlanEntry(inputData);
+		} catch (ControllerException e) {
+			throw new UIException(e.getFaultCode(), e);
+		}
+		return returnObj;
+	}
+	
+	@RequestMapping(value = "/deleteData", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> deleteData(@RequestBody Map<String,Object> inputData) throws UIException{
+		Map<String,Object> returnObj=new HashMap<>();
+		try {
+			returnObj=testPlanController.deleteTestPlanEntry(inputData);
 		} catch (ControllerException e) {
 			throw new UIException(e.getFaultCode(), e);
 		}

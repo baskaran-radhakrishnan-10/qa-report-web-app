@@ -8,13 +8,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
+import com.equiniti.qa_report.persistance_api.audit.api.IAuditLog;
+
 @Entity
 @Table(name = "DSRTable")
-public class DSREntity implements Serializable{
+public class DSREntity implements Serializable,IAuditLog{
 
 	private static final long serialVersionUID = -2887174745146398993L;
 	
@@ -50,7 +53,18 @@ public class DSREntity implements Serializable{
 	
 	@Column(name = "spenthours")
 	private Float spentHours;
+	
+	@Column(name = "is_deleted")
+	private  boolean deleted;
 
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+	
 	public int getsNo() {
 		return sNo;
 	}
@@ -131,4 +145,24 @@ public class DSREntity implements Serializable{
 		this.spentHours = spentHours;
 	}
 	
+	@Override
+	@Transient
+	public Long getId() {
+		return (long) this.sNo;
+	}
+
+	@Override
+	@Transient
+	public String getLogDeatil() {
+		return this.toString();
+	}
+
+	@Override
+	public String toString(){
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("Project Name : ").append(projectName).append(" -- ").append("Resource : ").append(resource).append(" -- ");
+		buffer.append("DSR Date : ").append(dsrDate).append(" -- ").append("Planned Task : ").append(plannedTask);
+		buffer.append("Accomplished Task : ").append(accomplishedTask).append(" -- ").append("DSR Status : ").append(dsrStatus);
+		return buffer.toString();
+	}
 }

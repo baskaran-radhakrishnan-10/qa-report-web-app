@@ -80,6 +80,8 @@ public class LoginServiceImpl extends BaseAPIImpl implements LoginService{
 			
 			session.setAttribute(ApplicationConstants.USER_ID, user.getUserId());
 			
+			session.setAttribute(ApplicationConstants.ROLE_ID, role.getRoleName());
+			
 			CACHE_INS.removeAllItemFromGroup(user.getUserId());
 			
 			CACHE_INS.putItemInCache(ApplicationConstants.ROLE_RESOURCE_INFO, roleResourceList, user.getUserId());

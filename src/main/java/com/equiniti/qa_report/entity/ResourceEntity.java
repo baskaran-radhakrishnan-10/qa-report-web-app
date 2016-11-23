@@ -10,10 +10,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.equiniti.qa_report.persistance_api.audit.api.IAuditLog;
 
 @Entity
 @Table(name = "ResourceTable")
-public class ResourceEntity implements Serializable{
+public class ResourceEntity implements Serializable,IAuditLog{
 	
 	private static final long serialVersionUID = 6132396313576051532L;
 	
@@ -61,7 +64,18 @@ public class ResourceEntity implements Serializable{
 	
 	@Column(name = "blocked")
 	private int blocked;
+	
+	@Column(name = "is_deleted")
+	private  boolean deleted;
 
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+	
 	public int getItemNo() {
 		return itemNo;
 	}
@@ -174,4 +188,26 @@ public class ResourceEntity implements Serializable{
 		this.gKey = gKey;
 	}
 	
+	@Override
+	@Transient
+	public Long getId() {
+		return (long) this.gKey;
+	}
+
+	@Override
+	@Transient
+	public String getLogDeatil() {
+		return this.toString();
+	}
+
+	@Override
+	public String toString(){
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("Item No : ").append(itemNo).append(" -- ").append("BTP No : ").append(btpNo).append(" -- ");
+		buffer.append("Item Name : ").append(itemName).append(" -- ").append("Resource Name : ").append(resourceName);
+		buffer.append("Item Count : ").append(itemCount).append(" -- ").append("Actual Time : ").append(actTime);
+		buffer.append("Bugs Logged : ").append(bugsLogged).append(" -- ").append("Pass : ").append(pass);
+		buffer.append("Fail : ").append(fail).append(" -- ").append("Pending : ").append(pending);
+		return buffer.toString();
+	}
 }

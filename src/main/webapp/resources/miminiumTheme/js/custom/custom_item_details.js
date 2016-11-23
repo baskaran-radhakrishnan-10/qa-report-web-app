@@ -51,6 +51,10 @@ function fetchItemDetailsByBtpNoSuccess(serverData){
 			html += '<a  id="itemRowEditId" href="#" onclick="itemDeatilsEdit('+sNo+')"> <span	class="glyphicon glyphicon-edit"></span></a>'; 
 			html += '<span>&nbsp;</span>';
 			html += '<a id="itemRowSaveId" style="display:none;" href="#" onclick="itemDeatilsSave('+sNo+')"> <span class="glyphicon glyphicon-check"></span></a>';
+			if("ROLE_SUPER_ADMIN" == $('#loggedInRoleId').val()){
+				html += '<span>&nbsp;</span>';
+				html += '<a id="itemRowRemoveId" href="#" onclick="deleteItemDetails('+itemDetailObj['itemNo']+')"> <span class="glyphicon glyphicon-trash"></span></a>';
+			}
 			html += '<span>&nbsp;</span>';
 			html += '<a id="itemRowDeleteId" href="#" onclick="showResourceDetails('+sNo+')"> <span class="glyphicon glyphicon-link"></span></a>';
 			html += '</td>';
@@ -61,6 +65,30 @@ function fetchItemDetailsByBtpNoSuccess(serverData){
 		$('#itemDeatilsParentDivId').find('table').find('tbody').html(itemDetailsHtmlArray);
 		$('#itemDeatilsParentDivId').show();
 	}
+}
+
+function deleteItemDetails(itemNo){
+	if("ROLE_SUPER_ADMIN" == $('#loggedInRoleId').val()){
+		var btpNo = $('#selectedRowKeyInput').val();
+		var data = {};
+		data['btpNo'] = btpNo;
+		data['itemNo'] = itemNo;
+		ajaxHandler("POST", JSON.stringify(data), "application/json", getApplicationRootPath()+"item_details/deleteData", 'json', deleteItemDetailsError, deleteItemDetailsSuccess,true);
+	}
+}
+
+function deleteItemDetailsSuccess(serverData,inputData){
+	if('ERROR' != serverData['STATUS']){
+		var notifyObj={msg: "<b>Success:</b> Selected Record Deleted Successfully !!!",type: "success",position: "center",autohide: true};
+		notif(notifyObj);
+		fetchItemDetailsByBtpNo(inputData['btpNo']);
+	}
+}
+
+function deleteItemDetailsError(errorData){
+	console.log(errorData);
+	var notifyObj={msg: '<b>Error : </b> Operation Failed Due to Server Issue !!!',type: "error",position: "center" };
+	notif(notifyObj);
 }
 
 function itemDeatilsEdit(rowId){

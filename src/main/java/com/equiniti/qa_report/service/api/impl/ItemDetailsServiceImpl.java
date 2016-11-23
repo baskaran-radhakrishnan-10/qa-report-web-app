@@ -7,12 +7,14 @@ import org.springframework.stereotype.Service;
 
 import com.equiniti.qa_report.entity.ItemEntity;
 import com.equiniti.qa_report.event.item_details.AddItemDeatilsEvent;
+import com.equiniti.qa_report.event.item_details.DeleteItemDetailsEvent;
 import com.equiniti.qa_report.event.item_details.GetItemDeatilsEvent;
 import com.equiniti.qa_report.event.item_details.UpdateItemDeatilsEvent;
 import com.equiniti.qa_report.eventapi.eventhandling.generic.BaseAPIImpl;
 import com.equiniti.qa_report.exception.api.exception.APIException;
 import com.equiniti.qa_report.exception.api.exception.EventException;
 import com.equiniti.qa_report.exception.api.faultcode.CommonFaultCode;
+import com.equiniti.qa_report.exception.api.faultcode.EventFaultCodes;
 import com.equiniti.qa_report.service.api.ItemDetailsService;
 
 @Service("itemDetailsService")
@@ -76,6 +78,24 @@ public class ItemDetailsServiceImpl extends BaseAPIImpl implements ItemDetailsSe
 			throw new APIException(CommonFaultCode.UNKNOWN_ERROR,e);
 		}
 		return event.isUpdated();
+	}
+	
+	@Override
+	public void deleteItemDeatils(Map<String, Object> paramMap) throws APIException {
+		DeleteItemDetailsEvent event=getEvent(DeleteItemDetailsEvent.class);
+		try{
+			if(paramMap.containsKey("btpNo") && paramMap.containsKey("itemNo")){
+				event.setBtpNo(Integer.parseInt(paramMap.get("btpNo").toString()));
+				event.setItemNo(Integer.parseInt(paramMap.get("itemNo").toString()));
+				processEvent(event);
+			}else{
+				throw new APIException(EventFaultCodes.UN_KNOWN_ERROR,null);
+			}
+		}catch(EventException e){
+			throw new APIException(e.getFaultCode(),e);
+		}catch(Exception e){
+			throw new APIException(CommonFaultCode.UNKNOWN_ERROR,e);
+		}
 	}
 
 }

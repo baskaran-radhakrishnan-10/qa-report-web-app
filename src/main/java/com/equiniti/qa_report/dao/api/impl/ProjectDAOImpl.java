@@ -1,5 +1,6 @@
 package com.equiniti.qa_report.dao.api.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +41,10 @@ public class ProjectDAOImpl implements ProjectDAO{
 	public List<ProjectEntity> getProjectList(Map<String, Object> restrictionMap) throws DaoException {
 		List<ProjectEntity> returnList=null;
 		try{
+			if(null == restrictionMap){
+				restrictionMap = new HashMap<>();
+			}
+			restrictionMap.put("is_deleted", false);
 			returnList=(List<ProjectEntity>) abstractHibernateDAOAPI.getEntityList(ProjectEntity.class, restrictionMap);
 		}catch(DaoException e){
 			throw new DaoException(e.getFaultCode(), e);

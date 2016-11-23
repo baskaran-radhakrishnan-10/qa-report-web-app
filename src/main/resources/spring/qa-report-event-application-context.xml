@@ -13,10 +13,13 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:org/sp
 				<entry key="getTestPlanEvent" value-ref="testPlanEventProcessor"/>
 				<entry key="addTestPlanEvent" value-ref="testPlanEventProcessor"/>
 				<entry key="updateTestPlanEvent" value-ref="testPlanEventProcessor"/>
+				<entry key="deleteTestPlanEvent" value-ref="testPlanEventProcessor"/>
 				
 				<entry key="getResourceDeatilsEvent" value-ref="resourceDeatilsEventProcessor"/>
 				<entry key="addResourceDeatilsEvent" value-ref="resourceDeatilsEventProcessor"/>
+				<entry key="deleteResourceDetailsEvent" value-ref="resourceDeatilsEventProcessor"/>
 				<entry key="updateResourceDeatilsEvent" value-ref="resourceDeatilsEventProcessor"/>
+				
 				
 				<entry key="getProjectEvent" value-ref="projectEventProcessor"/>
 				<entry key="addProjectEvent" value-ref="projectEventProcessor"/>
@@ -24,7 +27,9 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:org/sp
 				
 				<entry key="getItemDetailsEvent" value-ref="itemDetailsEventProcessor"/>
 				<entry key="addItemDetailsEvent" value-ref="itemDetailsEventProcessor"/>
+				<entry key="deleteItemDetailsEvent" value-ref="itemDetailsEventProcessor"/>
 				<entry key="updateItemDetailsEvent" value-ref="itemDetailsEventProcessor"/>
+				
 				
 				<entry key="getUserDeatilsEvent" value-ref="rbacEventProcessor"/>
 				<entry key="addUserDeatilsEvent" value-ref="rbacEventProcessor"/>

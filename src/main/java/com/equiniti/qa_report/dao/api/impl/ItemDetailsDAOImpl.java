@@ -1,5 +1,7 @@
 package com.equiniti.qa_report.dao.api.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +25,10 @@ public class ItemDetailsDAOImpl implements ItemDetailsDAO{
 	public List<ItemEntity> getItemDetailsList(Map<String, Object> restrictionMap) throws DaoException {
 		List<ItemEntity> returnList=null;
 		try{
+			if(null == restrictionMap){
+				restrictionMap = new HashMap<>();
+			}
+			restrictionMap.put("is_deleted", false);
 			returnList=abstractHibernateDAOAPI.getEntityList(ItemEntity.class, restrictionMap);
 		}catch(DaoException e){
 			throw new DaoException(e.getFaultCode(), e);
@@ -68,7 +74,22 @@ public class ItemDetailsDAOImpl implements ItemDetailsDAO{
 		}catch(Exception e){
 			throw new DaoException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}
-
+	}
+	
+	@Override
+	public void deleteItemDetails(int btpNo,int itemNo) throws DaoException{
+		abstractHibernateDAOAPI.bulkSQLNativeOperation(buildItemDetailsDeleteQuery(btpNo,itemNo));
+	}
+	
+	private List<String> buildItemDetailsDeleteQuery(int btpNo,int itemNo){
+		List<String> queryList = new ArrayList<>();
+		StringBuffer queryBuffer = new StringBuffer();
+		queryBuffer.append("UPDATE ResourceTable SET is_deleted = 1 WHERE btpno = ").append(btpNo).append(" AND itemno = ").append(itemNo);
+		queryList.add(queryBuffer.toString());
+		queryBuffer = new StringBuffer();
+		queryBuffer.append("UPDATE ItemTable SET is_deleted = 1 WHERE btpno = ").append(btpNo).append(" AND itemno = ").append(itemNo);
+		queryList.add(queryBuffer.toString());
+		return queryList;
 	}
 
 }

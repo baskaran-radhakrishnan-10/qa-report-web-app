@@ -29,6 +29,7 @@ import com.equiniti.qa_report.exception.api.exception.EventException;
 import com.equiniti.qa_report.exception.api.faultcode.CommonFaultCode;
 import com.equiniti.qa_report.queue.connector.ReportQueueConnector;
 import com.equiniti.qa_report.util.ApplicationConstants;
+import com.equiniti.qa_report.util.CommonUtil;
 
 public class DSREventHandler implements IEventHandler<IEvent> {
 
@@ -167,7 +168,7 @@ public class DSREventHandler implements IEventHandler<IEvent> {
 	}
 
 	private DSREntity populateEntityFromMap(Map<String,Object> mapObject){
-		DSREntity entity=objMapper.convertValue(mapObject, DSREntity.class);
+		DSREntity entity=objMapper.convertValue(CommonUtil.removeTransientObject(mapObject), DSREntity.class);
 		return entity;
 	}
 
