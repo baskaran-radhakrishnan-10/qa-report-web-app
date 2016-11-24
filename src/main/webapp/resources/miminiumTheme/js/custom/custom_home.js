@@ -222,11 +222,11 @@ function populateUserDetails(entriesList){
 	  html+='<td>'+superAdminCount+'</td>';
 	  html+='</tr>';
 	  html+='<tr>';
-	  html+='<td>Administrator</td>';
+	  html+='<td>Admin</td>';
 	  html+=' <td>'+adminCount+'</td>';
 	  html+='</tr>';
 	  html+='<tr>';
-	  html+='<td>Normal User</td>';
+	  html+='<td>User</td>';
 	  html+='<td>'+normalUserCount+'</td>';
 	  html+='</tr>';
 	  html+='<tr>';

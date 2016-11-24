@@ -528,10 +528,10 @@
 					<filter-ref name="x-powered-by-header" />
 				</host>
 			</server>
-			<servlet-container name="default">
-				<jsp-config />
-				<websockets />
-			</servlet-container>
+  		<servlet-container name="default">
+	        	<jsp-config development="true" keep-generated="false" check-interval="1" modification-test-interval="1"/>
+	        	<websockets/>
+    		</servlet-container>
 			<handlers>
 				<file name="welcome-content" path="${jboss.home.dir}/welcome-content" />
 			</handlers>

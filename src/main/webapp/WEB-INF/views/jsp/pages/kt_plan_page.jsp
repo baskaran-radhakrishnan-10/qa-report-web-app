@@ -1,9 +1,11 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/dt/jq-2.1.4,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.9,af-2.0.0,b-1.0.3,b-colvis-1.0.3,b-html5-1.0.3,b-print-1.0.3,se-1.0.1/datatables.min.css"/> -->
- 
-<!-- <script type="text/javascript" src="https://cdn.datatables.net/r/dt/jq-2.1.4,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.9,af-2.0.0,b-1.0.3,b-colvis-1.0.3,b-html5-1.0.3,b-print-1.0.3,se-1.0.1/datatables.min.js"></script> -->
+<!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/dt/jq-2.1.4,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.9,af-2.0.0,b-1.0.3,b-colvis-1.0.3,b-html5-1.0.3,b-print-1.0.3,se-1.0.1/datatables.min.css"/>
+<script type="text/javascript" src="https://cdn.datatables.net/r/dt/jq-2.1.4,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.9,af-2.0.0,b-1.0.3,b-colvis-1.0.3,b-html5-1.0.3,b-print-1.0.3,se-1.0.1/datatables.min.js"></script> -->
+
+<!-- for pdf export -->
+<!--  <script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script> -->
 
 <spring:url	value="/resources/miminiumTheme/js/custom/custom_kt_plan_page.js" var="customKTPlanJS" />
 
@@ -37,9 +39,9 @@
 			<!-- <a id="addKtDetailsId" type="button" data-toggle="modal" data-target="#add_kt_details" href="ser_det_page" class="btn  btn-3d btn-success pull-right" style="margin: 0px 5px;">Add</a> -->
 			<a id="addKtDetailsId" type="button"  data-target="#add_kt_details" class="btn  btn-3d btn-success pull-right" style="margin: 0px 5px;" data-toggle="tooltip" data-placement="auto left" title="" data-original-title="Add new KT Plan Details">Add</a>
 			</h3>
-			<!-- <p style="margin-bottom: 0px;">
-				Home <span class="fa-angle-right fa"></span> Serial Numbers
-			</p> -->
+			<p style="margin-bottom: 0px;">
+				Home <span class="fa-angle-right fa"></span> KT Plan
+			</p>
 		</div>
 	</div>
 </div>
@@ -131,7 +133,7 @@
 			<div class="col-md-12 panel">
 				<div class="col-md-12" id="accordion" style="margin-top: 10px;">
 					<h5>
-						<a href="#" class="" aria-expanded="true" style="cursor: text;"> <!-- KT Plan Details --> </a>
+						<a href="#" class="" aria-expanded="true" style="cursor: text;"> <font color="red"> * </font> Indicates Mandatory Field </a>
 					</h5>
 					<div id="collapse1" class="panel-collapse collapse in" style="border-style: ridge; border-width: thin;" aria-expanded="true">
 						<div class="panel-body">
@@ -162,10 +164,6 @@
 												<div class="col-sm-3">
 													<select id="sessionId" name="session" class="input-sm form-control imp"></select>
 												</div>
-												<!-- <label class="col-sm-2 control-label">Status:<font color="red">*</font></label>
-												<div class="col-sm-3">
-													<select id="statusId" name="status" class="input-sm form-control imp"></select>
-												</div> -->
 											</div>
 										</div>
 									</div>
@@ -207,7 +205,7 @@
 												</div>
 												<label class="col-sm-2 control-label">Duration(Hrs):<font color="red">*</font></label>
 												<div class="col-sm-3">
-													<input id="durationId" name="duration" type="text" class="input-sm form-control" data-toggle="tooltip" data-placement="auto right" title="" data-original-title="Enter duration in hours or .(dot) mins">
+													<input id="durationId" name="duration" type="text" class="input-sm form-control imp" data-toggle="tooltip" data-placement="auto right" title="" data-original-title="Enter duration in hours or .(dot) mins">
 												</div>
 											</div>
 										</div>
@@ -259,3 +257,7 @@
 	</div>
 </form>
 
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>

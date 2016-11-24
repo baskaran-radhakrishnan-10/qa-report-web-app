@@ -7,7 +7,13 @@ var rowEle="";
 var roleStatus=['Yes','No'];
 var egKey="";
 
+var userRolesArray=[];
+var adminRolesArray=[];
+
 var currentDate = $.datepicker.formatDate('yy-mm-dd', new Date());
+var currentUser=$('#loggedInUserId').val();
+var superAdminUser="";
+
 $(document).ready(function() {	
 	showLoader();
 	getUserDetails();
@@ -18,6 +24,7 @@ $(document).ready(function() {
 		egKey="";
 		userDetailsModalData(null);
 		$("#userId").prop("readonly", false);
+		$("#roleId").attr("disabled", false); 
 		
 	});
 
@@ -81,9 +88,13 @@ function populateUserDetails(entriesList){
 	for(var i=0;i<entriesList.length;i++){		
 		var userObject = entriesList[i];
 		var rolesObject= userObject['roleId'];
-		var roleDesc=rolesObject['roleDesc'];		
+		var roleName=rolesObject['roleName'];
+		var roleDesc=rolesObject['roleDesc'];	
 		var html ="";
 		var userDetailsModelAttribute=entriesList[i];
+		if("ROLE_SUPER_ADMIN"==roleName){
+			superAdminUser=userDetailsModelAttribute['userId'];
+		}
 		var gKey=userDetailsModelAttribute['gkey'];
 		var name=userDetailsModelAttribute['userFullName'];
 
@@ -165,6 +176,11 @@ function fetchRolesNamesSuccess(serverData){
 				roleListObject[roleName]=rolesNameObjList[index];
 				rolesNameObj=rolesNameObjList[index];
 				rolesArray.push(rolesNameObj['roleDesc']);
+				if("ROLE_SUPER_ADMIN"!=rolesNameObj['roleName']){
+					userRolesArray.push(rolesNameObj['roleDesc']);
+				}else if("ROLE_SUPER_ADMIN"==rolesNameObj['roleName']){
+					adminRolesArray.push(rolesNameObj['roleDesc']);
+				}
 				rolesSelectHtml += '<option value="'+rolesNameObj['roleDesc']+'">'+rolesNameObj['roleDesc']+'</option>';
 			}
 		rolesSelectHtml += '</select>'
@@ -175,14 +191,23 @@ function userDetailsModalData(gKey){
 
 	var currentSelectedObject=null;
 	currentSelectedObject = null != gKey ? userDetailsData[gKey] : null;
-
-	fillSelectDropDown('activeId',roleStatus, null != currentSelectedObject ? currentSelectedObject['active'].toString() : "");
-	fillSelectDropDown('roleId',rolesArray, null != currentSelectedObject ? currentSelectedObject['roleId']['roleDesc'] : "");
-
+	
+	
 	$('#userNameId').val(null != currentSelectedObject ? currentSelectedObject['userFullName'] : "");
 	$('#userId').val(null != currentSelectedObject ? currentSelectedObject['userId'] : "");
 	$('#emailId').val(null != currentSelectedObject ? currentSelectedObject['emailId'] : "");
 	$('#createdOnId').val(null != currentSelectedObject ? getDateValue(currentSelectedObject['createdOn'],'yyyy-MM-dd',"-") : currentDate);
+	fillSelectDropDown('activeId',roleStatus, null != currentSelectedObject ? currentSelectedObject['active'].toString() : "");
+	
+	if(null != gKey && currentSelectedObject['userId']==superAdminUser){
+		fillSelectDropDown('roleId',adminRolesArray, null != currentSelectedObject ? currentSelectedObject['roleId']['roleDesc'] : "");
+		$("#activeId").attr("disabled", true);
+	}
+	else{
+		fillSelectDropDown('roleId',userRolesArray, null != currentSelectedObject ? currentSelectedObject['roleId']['roleDesc'] : "");
+		$("#activeId").attr("disabled", false);
+	}
+	
 	if(null != gKey){
 		var active=currentSelectedObject['active'];
 		if(active){

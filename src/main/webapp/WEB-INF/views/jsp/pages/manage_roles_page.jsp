@@ -16,9 +16,9 @@
 			<!-- <a id="exportUserDetailsId" type="button" href="ser_det_page" class="btn  btn-3d btn-default pull-right" style="margin: 0px 5px;">Export</a> -->
 			<!-- <a id="addRoleDetailsId" type="button" data-toggle="modal" data-target="" href="ser_det_page" class="btn  btn-3d btn-success pull-right" style="margin: 0px 5px;">Add</a> -->
 			</h3>
-			<!-- <p style="margin-bottom: 0px;">
-				Home <span class="fa-angle-right fa"></span> Serial Numbers
-			</p> -->
+			<p style="margin-bottom: 0px;">
+				Home <span class="fa-angle-right fa"></span> Users & Roles <span class="fa-angle-right fa"></span> Manage Roles
+			</p>
 		</div>
 	</div>
 </div>
