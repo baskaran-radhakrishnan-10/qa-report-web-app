@@ -25,9 +25,9 @@
 			<!-- <a id="addProjectDetailsId" type="button" data-toggle="modal" data-target="#add_project_details" href="" class="btn  btn-3d btn-success pull-right" style="margin: 0px 5px;">Add</a> -->
 			<a id="addProjectDetailsId" type="button"  data-target="#add_project_details" class="btn  btn-3d btn-success pull-right" style="margin: 0px 5px;" data-toggle="tooltip" data-placement="auto left" title="" data-original-title="Add new Project">Add</a>
 			</h3>
-			<!-- <p style="margin-bottom: 0px;">
-				Home <span class="fa-angle-right fa"></span> Serial Numbers
-			</p> -->
+			<p style="margin-bottom: 0px;">
+				Home <span class="fa-angle-right fa"></span> Operation <span class="fa-angle-right fa"></span> Manage Projects
+			</p>
 		</div>
 	</div>
 </div>
@@ -79,7 +79,7 @@
 			<div class="col-md-12 panel">
 				<div class="col-md-12" id="accordion" style="margin-top: 10px;">
 					<h5>
-						<a href="#" class="" aria-expanded="true" style="cursor: text;"> <!-- Build Test Plan Details --> </a>
+						<a href="#" class="" aria-expanded="true" style="cursor: text;"> <font color="red"> * </font> Indicates Mandatory Field </a>
 					</h5>
 					<div id="collapse1" class="panel-collapse collapse in" style="border-style: ridge; border-width: thin;" aria-expanded="true">
 						<div class="panel-body">
@@ -90,7 +90,7 @@
 											<div class="col-md-12">
 												<label class="col-sm-2 control-label">Project Name:<font color="red">*</font></label>
 												<div class="col-sm-3">
-													<input id="projectNameId" name="projectName" type="text" class="input-sm form-control imp" value="" maxlength="50" data-toggle="tooltip" data-placement="auto right" data-original-title="Allows maximum 50 characters and -">
+													<input id="projectNameId" name="projectName" type="text" class="input-sm form-control imp" value="" maxlength="50" data-toggle="tooltip" data-placement="auto right" data-original-title="Allows maximum 50 characters and - only">
 												</div>
 												<label class="col-sm-2 control-label">Created Date:<font color="red">*</font></label>
 												<div class="col-sm-3">

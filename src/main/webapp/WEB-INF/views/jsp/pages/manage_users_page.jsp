@@ -25,9 +25,9 @@
 			<!-- <a id="addUserDetailsId" type="button" data-toggle="modal" data-target="#add_user_details" href="" class="btn  btn-3d btn-success pull-right" style="margin: 0px 5px;">Add</a> -->
 			<a id="addUserDetailsId" type="button"  data-target="#add_user_details" class="btn  btn-3d btn-success pull-right" style="margin: 0px 5px;" data-toggle="tooltip" data-placement="auto left" title="" data-original-title="Add new User">Add</a>
 			</h3>
-			<!-- <p style="margin-bottom: 0px;">
-				Home <span class="fa-angle-right fa"></span> Serial Numbers
-			</p> -->
+			<p style="margin-bottom: 0px;">
+				Home <span class="fa-angle-right fa"></span> Users & Roles <span class="fa-angle-right fa"></span> Manage Users
+			</p>
 		</div>
 	</div>
 </div>
@@ -82,7 +82,7 @@
 			<div class="col-md-12 panel">
 				<div class="col-md-12" id="accordion" style="margin-top: 10px;">
 					<h5>
-						<a href="#" class="" aria-expanded="true" style="cursor: text;"> <!-- Build Test Plan Details --> </a>
+						<a href="#" class="" aria-expanded="true" style="cursor: text;"> <font color="red"> * </font> Indicates Mandatory Field </a>
 					</h5>
 					<div id="collapse1" class="panel-collapse collapse in" style="border-style: ridge; border-width: thin;" aria-expanded="true">
 						<div class="panel-body">

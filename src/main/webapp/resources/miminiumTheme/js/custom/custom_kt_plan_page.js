@@ -27,7 +27,7 @@ $(document).ready(function() {
 	getKTDetails();
 	fetchProjectNames();
 	fetchResourceNames();
-	
+
 	$('#addKtDetailsId').on("click" ,function (event){
 		ktDetailsModalData(null);
 	});
@@ -76,7 +76,6 @@ $(document).ready(function() {
 	$(document).on("change", "#trainerId", function(event) {
 		trainierSelectedVal=$("#trainerId").val();
 		attendeeSelectedVal=$("#attendeeId").val();
-		console.log('trainerId changed');
 		if(tranerArray !=null || ""!=tranerArray){
 		tranerArray=resourcesArray;
 		}
@@ -87,13 +86,11 @@ $(document).ready(function() {
 			return $.inArray(value, trainierSelectedVal) < 0;
 			});
 		fillSelectDropDown('attendeeId',tranerArray,attendeeSelectedVal);
-		console.log(tranerArray);
 	});
 	
 	$(document).on("change","#attendeeId",function (event){
 		trainierSelectedVal=$("#trainerId").val();
 		attendeeSelectedVal=$("#attendeeId").val();
-		console.log('attendeeId changed');
 		if(attendeeArray !=null || ""!=attendeeArray){
 		attendeeArray=resourcesArray;
 		}
@@ -105,7 +102,6 @@ $(document).ready(function() {
 			return $.inArray(value, attendeeSelectedVal) < 0;
 			});
 		fillSelectDropDown('trainerId',attendeeArray,trainierSelectedVal);
-		console.log(attendeeArray);
 	});
 
 });
@@ -138,13 +134,15 @@ function fetchKTDetailsSuccess(serverData){
 		"processing": true,
 		"dom": 'Bfrtpl',
 		"buttons": [{
-					extend: 'excelHtml5',
+					extend: 'excel',
                     title: 'KTPlanDataExport',
                 },{
                     extend: 'csv',
                     title: 'KTPlanDataExport',
                 }]
 	});
+	$('#show-kt-details-id_wrapper').find('.dt-buttons').children().removeClass('btn-default')
+	$('#show-kt-details-id_wrapper').find('.dt-buttons').children().addClass('bg-light-grey')
 	if(!isFilterConstructed){
 		//fillSelectDropDown('filter_projectId',projectArray, "");
 		fillSelectDropDown('filter_trainingTypeId',ktType, "");
