@@ -139,18 +139,17 @@ function validateBeforeSave(){
 	$("#buildTestPlanForm :input").each(function(){
 		if($(this).hasClass('imp')){
 			var input = $(this);
-			//console.log($(input));
-			//console.log($(input).attr('id'));
 			var id=$(input).attr('id');
 			var value=$(input).val();
-			
 			if(null == value || value.length == 0){
 				errorMsgArray.push(btpFormErrorMessages[id]);
 				$(input).addClass('error');
 			}
 		}
+		if($('#resourceNameTDId select').hasClass('error')){
+			errorMsgArray.push("Resource Name Already selected");
+		}
 	});
-	console.log(errorMsgArray);
 	if(errorMsgArray.length > 0){
 		var notifyObj={msg: '<b>Please Fix BTP Form Validation Errors</b>',type: "error",position: "center",autohide: true};
 		notif(notifyObj);

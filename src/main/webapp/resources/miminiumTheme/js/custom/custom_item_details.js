@@ -25,10 +25,16 @@ function addItemDetailsRows(){
 		html += '<a  id="itemRowEditId" style="display:none;" href="#" onclick="itemDeatilsEdit('+nextRow+')"> <span class="glyphicon glyphicon-edit"></span></a>'; 
 		html += '<span>&nbsp;</span>';
 		html += '<a id="itemRowSaveId" href="#" onclick="itemDeatilsSave('+nextRow+')"> <span class="glyphicon glyphicon-check"></span></a>';
+		html += '<span>&nbsp;</span>';
+		html += '<a id="itemRowRemoveId" href="#" onclick="itemDeatilsRemove('+nextRow+')"> <span class="glyphicon glyphicon-remove"></span></a>';
 		html += '</td>';
 		html += '</tr>';
 		$(tBody).append(html);
 	}
+}
+
+function itemDeatilsRemove(rowId){
+	$('#itemDeatilsParentDivId').find('table tbody').find('.'+rowId).remove();
 }
 
 function fetchItemDetailsByBtpNoSuccess(serverData){
@@ -129,6 +135,24 @@ function itemDeatilsSave(rowId){
 	
 	var rowEle=$('#itemDeatilsParentDivId').find('table').find('.'+rowId);
 	
+	var effortCost = $(rowEle).find('#effortCost').find('input').val();
+	
+	var itemCount = $(rowEle).find('#itemCount').find('input').val();
+	
+	$(rowEle).find('td input').removeClass('error');
+	
+	if(!$.isNumeric(effortCost)){
+		$(rowEle).find('#effortCost').find('input').addClass('error');
+	}
+	
+	if(!$.isNumeric(itemCount)){
+		$(rowEle).find('#itemCount').find('input').addClass('error');
+	}
+	
+	if($(rowEle).find('td input').hasClass('error')){
+		return false;
+	}
+	
 	var gKey = $('#selectedRowKeyInput').val();
 	
 	btpObject = null != gKey ? buildTestPlanData[gKey] : null;
@@ -149,8 +173,8 @@ function itemDeatilsSave(rowId){
 	currentItemDetailsObj['btpNo']['updatesDate']=getDateValue(currentItemDetailsObj['btpNo']['updatesDate'],'yyyy-MM-dd',"-");
 	
 	currentItemDetailsObj['actualEffort']=$(rowEle).find('#effortActual').find('input').val();
-	currentItemDetailsObj['estimatedEffort']=$(rowEle).find('#effortCost').find('input').val();
-	currentItemDetailsObj['itemCount']=$(rowEle).find('#itemCount').find('input').val();
+	currentItemDetailsObj['estimatedEffort']=effortCost;
+	currentItemDetailsObj['itemCount']=itemCount;
 	currentItemDetailsObj['itemDescription']=$(rowEle).find('#itemDesc :input').val();
 	currentItemDetailsObj['itemStatus']=$(rowEle).find('#status :input').val();
 	currentItemDetailsObj['itemRemarks']=$(rowEle).find('#remarks').find('input').val();

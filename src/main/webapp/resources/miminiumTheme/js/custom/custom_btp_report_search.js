@@ -27,8 +27,6 @@ $(document).ready(function() {
 		$('#applyFilter :input').each(function(){
 			var value = $(this).val();
 			var type = $(this).prop('type');
-			console.log( $(this));
-			console.log("value :"+value);
 			if(null != value && value.length > 0 && "button" != type){
 				isEmpty=false;
 			}
@@ -49,9 +47,8 @@ $(document).ready(function() {
 			}
 		});
 		
-		console.log(filterObject);
-
-		//btpReportSearchRef.filterBTPReport(filterObject);
+		btpReportSearchRef.filterBTPReport(filterObject);
+		
 	});
 
 	$('#clear_filter').on('click',function(){

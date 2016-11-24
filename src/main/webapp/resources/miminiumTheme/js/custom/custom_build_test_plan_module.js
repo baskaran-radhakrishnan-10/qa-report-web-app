@@ -44,7 +44,7 @@ $(document).ready(function() {
 		buildTestPlanModalData(null);
 	});
 	
-	$('#resourceMgmtTableId').on('blur', 'td#resourceNameTDId :input', function (event) {
+	$(document).on("blur","#resourceMgmtTableId td#resourceNameTDId :input" , function (event) {
 		var currentValue=$(this).val();
 		var rowId=parseInt($(this).parent().parent().attr('id').replace('resourcetr_',''));
 		if(null != currentValue && currentValue.length > 0){
@@ -60,7 +60,6 @@ $(document).ready(function() {
 					}
 				}
 			}
-			console.log(" isResourceNameExsist :"+isResourceNameExsist);
 			if(isResourceNameExsist){
 				$(this).addClass('error');
 				var notifyObj={msg: '<b> Resource : '+currentValue+' </b> is already selected ',type: "error",position: "center",autohide: true};
@@ -75,7 +74,7 @@ $(document).ready(function() {
 		var isEmpty = true;
 		$('#applyFilter :input').each(function(){
 			var value = $(this).val();
-			if(null != value && value.length > 0){
+			if(null != value && value.length > 0 && "button" != $(this).prop('type')){
 				isEmpty=false;
 			}
 		});
@@ -92,7 +91,6 @@ $(document).ready(function() {
 				filterObject[name]=$(this).val();
 			}
 		});
-		console.log(filterObject);
 		filterBTPData(filterObject);
 	});
 	
@@ -106,7 +104,7 @@ $(document).ready(function() {
 		filterBTPData(filterObject);
 	});
 	
-	$(document).on("blur", ":input", function() {
+	$(document).on("blur", "#buildTestPlanForm :input", function() {
 		var value=$(this).val();
 		var id=$(this).attr('id');
 		if($(this).hasClass('imp')){
@@ -182,7 +180,6 @@ $(document).ready(function() {
 				}
 			}
 		}
-		
 	});
 	
 	$('#build_test_plan_table_id tbody').on('dblclick', 'tr', function () {
@@ -246,6 +243,20 @@ $(document).ready(function() {
 		}
 		return true;
 	});
+	
+	/*$(document).on('click', '#build_test_plan_table_id tbody tr', function () {
+		var sNo=$(this).attr('id');
+		$('#build_test_plan_table_id tbody tr').removeClass('selected');
+		$('#build_test_plan_table_id tbody tr').css('background-color','');
+		if (!$(this).hasClass('selected')){
+			$(this).addClass('selected');
+			$(this).css('background-color','#B0BED9 !important');
+			buildTestPlanModalData(sNo);
+		}else{
+			$(this).removeClass('selected');
+			$(this).css('background-color','');
+		}
+	});*/
 
 	
 	showLoader();

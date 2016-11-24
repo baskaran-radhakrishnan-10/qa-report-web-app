@@ -273,6 +273,11 @@
 					<div id="itemDeatilsParentDivId" style="display:none;">
 					<h5>
 						<a href="#" class="" aria-expanded="true"> Item Details </a>
+						<span class="glyphicon glyphicon-edit" data-toggle="tooltip" data-placement="auto top" title="" data-original-title="EDIT ITEM" style="left: 86%;"></span>
+						<span class="glyphicon glyphicon-check" data-toggle="tooltip" data-placement="auto top" title="" data-original-title="SAVE ITEM" style="left: 82%;"></span>
+						<span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="auto top" title="" data-original-title="DELETE ITEM" style="left: 85%;"></span>
+						<span class="glyphicon glyphicon-link" data-toggle="tooltip" data-placement="auto top" title="" data-original-title="SHOW LINKED RESOURCE" style="left: 76%;"></span>
+						<span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="auto top" title="" data-original-title="DISCARD ITEM" style="left: 72%;"></span>
 					</h5>
 					<div id="collapse2" class="panel-collapse collapse in" style="border-style: ridge; border-width: thin;" aria-expanded="true">
 						<div class="panel-body">
@@ -361,6 +366,10 @@
 					<div id="resourceDeatilsParentDivId" style="display:none;">
 					<h5>
 						<a href="#" class="" aria-expanded="true">Resource Details</a>
+						<span class="glyphicon glyphicon-edit" data-toggle="tooltip" data-placement="auto top" title="" data-original-title="EDIT RESOURCE" style="left: 83%;"></span>
+						<span class="glyphicon glyphicon-check" data-toggle="tooltip" data-placement="auto top" title="" data-original-title="SAVE RESOURCE" style="left: 79%;"></span>
+						<span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="auto top" title="" data-original-title="DELETE RESOURCE" style="left: 82%;"></span>
+						<span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="auto top" title="" data-original-title="DISCARD RESOURCE" style="left: 73%;"></span>
 					</h5>
 					<div id="collapse2" class="panel-collapse collapse in" style="border-style: ridge; border-width: thin;" aria-expanded="true">
 						<div class="panel-body">

@@ -154,9 +154,15 @@ function addResourceDetRows(){
 	html += '<a  id="resourceRowEditId" style="display:none;" href="#" onclick="resourceDeatilsEdit('+nextRow+')"> <span	class="glyphicon glyphicon-edit"></span></a>'; 
 	html += '<span>&nbsp;</span>';
 	html += '<a id="resourceRowSaveId" href="#" onclick="resourceDeatilsSave('+nextRow+')"> <span class="glyphicon glyphicon-check"></span></a>';
+	html += '<span>&nbsp;</span>';
+	html += '<a id="resourceRowRemoveId" href="#" onclick="resourceDeatilsRemove('+nextRow+')"> <span class="glyphicon glyphicon-remove"></span></a>';
 	html += '</td>';
 	html += '</tr>';
 	$(tBody).append(html);
+}
+
+function resourceDeatilsRemove(rowId){
+	$('#resourceDeatilsParentDivId').find('table tbody').find('.'+rowId).remove();
 }
 
 function resourceDeatilsSave(rowId){
@@ -166,6 +172,30 @@ function resourceDeatilsSave(rowId){
 	var isUpdate=true;
 	
 	var rowEle=$('#resourceDeatilsParentDivId').find('table tbody').find('.'+rowId);
+	
+	$(rowEle).find('td input').removeClass('error');
+	
+	$.each($(rowEle).find('td'),function(index,td){
+		
+		var tdId = $(td).attr('id');
+		
+		if("resourceName" != tdId && $(td).has('input')){
+			
+			var input = $(td).find('input');
+			
+			if(!$.isNumeric($(input).val())){
+				
+				$(input).addClass('error');
+				
+			}
+			
+		}
+		
+	});
+	
+	if($(rowEle).find('td input').hasClass('error')){
+		return false;
+	}
 	
 	var gKey = $('#selectedRowKeyInput').val();
 	
