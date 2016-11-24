@@ -1,5 +1,7 @@
 package com.equiniti.qa_report.dao.api.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +40,10 @@ public class ResourceDeatilsDAOImpl implements ResourceDeatilsDAO{
 	public List<ResourceEntity> getResourceDetailsList(Map<String, Object> restrictionMap) throws DaoException {
 		List<ResourceEntity> returnList=null;
 		try{
+			if(null == restrictionMap){
+				restrictionMap = new HashMap<>();
+			}
+			restrictionMap.put("is_deleted", false);
 			returnList=abstractHibernateDAOAPI.getEntityList(ResourceEntity.class, restrictionMap);
 		}catch(DaoException e){
 			throw new DaoException(e.getFaultCode(), e);
@@ -91,6 +97,19 @@ public class ResourceDeatilsDAOImpl implements ResourceDeatilsDAO{
 		dynamicQuery=dynamicQuery.replace("ITEM_NO", String.valueOf(itemNo));
 		dynamicQuery=dynamicQuery.replace("BTP_NO", String.valueOf(btpNo));
 		return dynamicQuery;
+	}
+	
+	@Override
+	public void deleteResourceDetails(int gKey) throws DaoException{
+		abstractHibernateDAOAPI.bulkSQLNativeOperation(buildeResourceDetailsDeleteQuery(gKey));
+	}
+	
+	private List<String> buildeResourceDetailsDeleteQuery(int gKey){
+		List<String> queryList = new ArrayList<>();
+		StringBuffer queryBuffer = new StringBuffer();
+		queryBuffer.append("UPDATE ResourceTable SET is_deleted = 1 WHERE gKey = ").append(gKey);
+		queryList.add(queryBuffer.toString());
+		return queryList;
 	}
 
 }

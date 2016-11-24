@@ -39,7 +39,7 @@ public class GeneralEntity implements Serializable {
 	@OneToOne(cascade = { CascadeType.ALL })
 	@JoinColumn(name = "modified_by")
 	private User modifiedBy;
-
+	
 	public int getGkey() {
 		return gkey;
 	}

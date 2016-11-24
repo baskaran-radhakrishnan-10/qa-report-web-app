@@ -15,6 +15,7 @@ import com.equiniti.qa_report.eventapi.eventhandling.handler.IEventHandler;
 import com.equiniti.qa_report.exception.api.exception.DaoException;
 import com.equiniti.qa_report.exception.api.exception.EventException;
 import com.equiniti.qa_report.exception.api.faultcode.CommonFaultCode;
+import com.equiniti.qa_report.util.CommonUtil;
 
 public class KTPlanEventHandler implements IEventHandler<IEvent> {
 	private static final Logger LOG=Logger.getLogger(KTPlanEventHandler.class); 
@@ -86,7 +87,7 @@ public class KTPlanEventHandler implements IEventHandler<IEvent> {
 	
 	private KTPlan populateEntityFromMapObject(Map<String,Object> mapObject) throws EventException{
 		LOG.debug("Begin: KTPlanEventHandler.populateEntityFromMapObject");
-		KTPlan entity=objMapper.convertValue(mapObject, KTPlan.class);
+		KTPlan entity=objMapper.convertValue(CommonUtil.removeTransientObject(mapObject), KTPlan.class);
 		LOG.debug("End: KTPlanEventHandler.populateEntityFromMapObject");
 		return entity;
 	}

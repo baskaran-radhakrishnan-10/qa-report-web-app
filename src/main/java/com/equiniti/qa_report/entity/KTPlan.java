@@ -8,13 +8,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
+import com.equiniti.qa_report.persistance_api.audit.api.IAuditLog;
+
 @Entity
 @Table(name = "KTTable")
-public class KTPlan implements Serializable {
+public class KTPlan implements Serializable,IAuditLog{
 	
 private static final long serialVersionUID = -1968065884219305808L;
 	
@@ -63,6 +66,17 @@ private static final long serialVersionUID = -1968065884219305808L;
 	
 	@Column(name = "feedback")
 	private String feedback;
+	
+	@Column(name = "is_deleted")
+	private  boolean deleted;
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
 
 	public int getGkey() {
 		return gkey;
@@ -176,5 +190,24 @@ private static final long serialVersionUID = -1968065884219305808L;
 		this.feedback = feedback;
 	}
 	
-	
+	@Override
+	@Transient
+	public Long getId() {
+		return (long) this.gkey;
+	}
+
+	@Override
+	@Transient
+	public String getLogDeatil() {
+		return this.toString();
+	}
+
+	@Override
+	public String toString(){
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("Project : ").append(project).append(" -- ").append("Training Type : ").append(trainingType).append(" -- ");
+		buffer.append("Session : ").append(session).append(" -- ").append("Title : ").append(title);
+		buffer.append("Trainers : ").append(trainers).append(" -- ").append("Attendees : ").append(attendees);
+		return buffer.toString();
+	}
 }

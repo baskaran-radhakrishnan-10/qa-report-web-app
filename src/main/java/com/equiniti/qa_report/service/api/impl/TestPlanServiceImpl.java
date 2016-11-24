@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 
 import com.equiniti.qa_report.entity.BtpEntity;
 import com.equiniti.qa_report.entity.User;
-import com.equiniti.qa_report.event.project.GetProjectEvent;
 import com.equiniti.qa_report.event.test_plan.AddTestPlanEvent;
+import com.equiniti.qa_report.event.test_plan.DeleteTestPlanEvent;
 import com.equiniti.qa_report.event.test_plan.GetTestPlanEvent;
 import com.equiniti.qa_report.event.test_plan.UpdateTestPlanEvent;
 import com.equiniti.qa_report.eventapi.eventhandling.generic.BaseAPIImpl;
@@ -126,6 +126,24 @@ public class TestPlanServiceImpl extends BaseAPIImpl implements TestPlanService{
 			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}
 		return event.isUpdated();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void deleteTestPlanEntry(Map<String, Object> paramMap) throws APIException {
+		DeleteTestPlanEvent event=getEvent(DeleteTestPlanEvent.class);
+		try{
+			if(paramMap.containsKey("btpNo")){
+				event.setDeleteEntityKey(Integer.parseInt(paramMap.get("btpNo").toString()));
+			}else if(paramMap.containsKey("btpNoList")){
+				event.setDeleteKeyList((List<Integer>) paramMap.get("btpNoList"));
+			}
+			processEvent(event);
+		} catch (APIException e) {
+			throw new ControllerException(e.getFaultCode(), e);
+		} catch (Exception e) {
+			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
 	}
 	
 	private List<BtpEntity> filterBTP(List<BtpEntity> entityList) throws APIException {

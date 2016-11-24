@@ -16,4 +16,6 @@ public interface ResourceDeatilsService {
 
 	public boolean updateResourceDeatils(Map<String, Object> inputParam) throws APIException;
 
+	public void deleteResourceDeatils(Map<String, Object> paramMap) throws APIException;
+
 }

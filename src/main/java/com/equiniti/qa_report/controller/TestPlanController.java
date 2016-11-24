@@ -73,6 +73,19 @@ public class TestPlanController {
 		return returnObjMap;
 	}
 	
+	public Map<String,Object> deleteTestPlanEntry(Map<String,Object> paramMap) throws ControllerException{
+		Map<String,Object> returnObjMap=new HashMap<>();
+		try {
+			testPlanService.deleteTestPlanEntry(paramMap);
+			returnObjMap.put(ApplicationConstants.STATUS, ApplicationConstants.SUCCESS);
+		} catch (APIException e) {
+			throw new ControllerException(e.getFaultCode(), e);
+		} catch(Exception e){
+			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+		return returnObjMap;
+	}
+	
 	public Map<String,Object> addTestPlanEntry(Map<String,Object> paramMap) throws ControllerException{
 		Map<String,Object> returnObjMap=new HashMap<>();
 		try {

@@ -41,9 +41,9 @@ function fetchTestPlanEntriesSuccess(serverData){
 			sessionStorageObj.removeItem("NOTIFICATION");
 		}
 	}
-	/*setTimeout(function(){
+	setTimeout(function(){
 		hideLoader();
-	}, 1000);*/
+	}, 500);
 }
 
 function populateTestPlanEntries(entriesList){
@@ -209,9 +209,6 @@ function addOrUpdateBtp(){
 	}else{
 		ajaxHandler("POST", JSON.stringify(btpObject), "application/json", getApplicationRootPath()+"build_test_plan/updateData", 'json', null, updateBtpModifiedChangesSuccess,true);
 	}
-	
-	console.log("%%%%%% GKey :"+gKey);
-	
 }
 
 function constructResourceTable(resourceArray){
@@ -388,5 +385,27 @@ function filterBTPData(filterObj){
 	filteredBtpDataObject['BTP_ENTRIES']=filteredBtpDataList;
 	btpDataTableRef.destroy();
 	fetchTestPlanEntriesSuccess(filteredBtpDataObject);
+}
+
+function deleteBtpRows(btpNoList){
+	var data = {};
+	data['btpNoList'] = btpNoList;
+	ajaxHandler("POST", JSON.stringify(data), "application/json", getApplicationRootPath()+"build_test_plan/deleteData", 'json', deleteBtpRowsError, deleteBtpRowsSuccess,true);
+}
+
+function deleteBtpRowsError(errorRes){
+	console.log(errorRes);
+	var notifyObj={msg: '<b>Error : </b> Operation Failed Due to Server Issue !!!',type: "error",position: "center" };
+	notif(notifyObj);
+}
+
+function deleteBtpRowsSuccess(serverData,inputData){
+	if('ERROR' != serverData['STATUS']){
+		var notifyObj={msg: "<b>Success:</b> Selected Records Deleted Successfully !!!",type: "success",position: "center",autohide: true};
+		if(null != sessionStorageObj){
+			sessionStorageObj.setItem("NOTIFICATION",notifyObj);
+		}
+		window.location.href=getApplicationRootPath()+"build_test_plan/show";
+	}
 }
 

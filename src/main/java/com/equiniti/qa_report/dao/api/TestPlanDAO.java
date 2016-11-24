@@ -18,4 +18,8 @@ public interface TestPlanDAO {
 
 	public List<String> getUniqueBtpYearList() throws DaoException;
 
+	public void deleteBtpEntityByBTPNo(int btpNo) throws DaoException;
+
+	public void deleteBtpEntityByBTPNoList(List<Integer> btpNoList) throws DaoException;
+
 }

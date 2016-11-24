@@ -27,6 +27,8 @@ $(document).ready(function() {
 		$('#applyFilter :input').each(function(){
 			var value = $(this).val();
 			var type = $(this).prop('type');
+			console.log( $(this));
+			console.log("value :"+value);
 			if(null != value && value.length > 0 && "button" != type){
 				isEmpty=false;
 			}
@@ -46,8 +48,10 @@ $(document).ready(function() {
 				filterObject[name]=$(this).val();
 			}
 		});
+		
+		console.log(filterObject);
 
-		btpReportSearchRef.filterBTPReport(filterObject);
+		//btpReportSearchRef.filterBTPReport(filterObject);
 	});
 
 	$('#clear_filter').on('click',function(){
@@ -81,6 +85,7 @@ $(document).ready(function() {
 		}else{
 			$('#export_file_button').attr('disabled', true);
 			btpReportSearchRef.downloadReport($('#selectExportType option:selected').attr('id'));
+			$('#export_file_button').attr('disabled', false);
 		}
 		
 	});

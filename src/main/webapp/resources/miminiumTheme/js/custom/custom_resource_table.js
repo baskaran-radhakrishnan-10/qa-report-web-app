@@ -53,7 +53,7 @@ function fetchResourceByBtpItemNoSuccess(serverData,inputData){
 			var resourceObj=resourceObjList[index];
 			console.log(resourceObj);
 			var sNo=parseInt(index)+parseInt(1);
-			html += '<tr id="row_'+resourceObj['itemNo']+'" class="'+sNo+'">';
+			html += '<tr id="row_'+resourceObj['gKey']+'" class="'+sNo+'">';
 			html += '<td id="sNo">'+sNo+'</td>';
 			html += '<td id="resourceName"><input type="text" class="input-sm form-control" value="'+resourceObj['resourceName']+'" disabled /></td>';
 			html += '<td id="itemCount"><input type="text" class="input-sm form-control" value="'+resourceObj['itemCount']+'" disabled /></td>';
@@ -69,6 +69,10 @@ function fetchResourceByBtpItemNoSuccess(serverData,inputData){
 			html += '<a  id="resourceRowEditId" href="#" onclick="resourceDeatilsEdit('+sNo+')"> <span	class="glyphicon glyphicon-edit"></span></a>'; 
 			html += '<span>&nbsp;</span>';
 			html += '<a id="resourceRowSaveId" style="display:none;" href="#" onclick="resourceDeatilsSave('+sNo+')"> <span class="glyphicon glyphicon-check"></span></a>';
+			if("ROLE_SUPER_ADMIN" == $('#loggedInRoleId').val()){
+				html += '<span>&nbsp;</span>';
+				html += '<a id="resourceRowDeleteId" href="#" onclick="resourceDeatilsDelete('+resourceObj['gKey']+')"> <span class="glyphicon glyphicon-trash"></span></a>';
+			}
 			html += '</td>';
 			html += '</tr>';
 			htmlArray.push(html);
@@ -76,6 +80,41 @@ function fetchResourceByBtpItemNoSuccess(serverData,inputData){
 		}
 		$('#resourceDeatilsParentDivId').find('tbody').html(htmlArray);
 	}
+}
+
+function resourceDeatilsDelete(gKey){
+	if("ROLE_SUPER_ADMIN" == $('#loggedInRoleId').val()){
+		var data = {};
+		data['gKey'] = gKey;
+		ajaxHandler("POST", JSON.stringify(data), "application/json", getApplicationRootPath()+"resource_details/deleteData", 'json', deleteResourceDetailsError, deleteResourceDetailsSuccess,true);
+	}
+}
+
+function deleteResourceDetailsSuccess(serverData,inputData){
+	if('ERROR' != serverData['STATUS']){
+		var gKey = inputData['gKey'];
+		var rowArray=$('#resourceDeatilsParentDivId').find('table tbody tr');
+		var sNo = 1;
+		var newRowArray = [];
+		$.each(rowArray,function(index,row){
+			var rowId = $(row).attr('id');
+			if("row_"+gKey != rowId){
+				$(row).attr("class",sNo);
+				$(row).find('#sNo').text(sNo);
+				newRowArray.push(row);
+			}
+			sNo++;
+		});
+		$('#resourceDeatilsParentDivId').find('table tbody').html(newRowArray);
+		var notifyObj={msg: "<b>Success:</b> Selected Record Deleted Successfully !!!",type: "success",position: "center",autohide: true};
+		notif(notifyObj);
+	}
+}
+
+function deleteResourceDetailsError(errorData){
+	console.log(errorData);
+	var notifyObj={msg: '<b>Error : </b> Operation Failed Due to Server Issue !!!',type: "error",position: "center" };
+	notif(notifyObj);
 }
 
 function resourceDeatilsEdit(rowId){

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd" >
+	
+	<changeSet author="baskaran radhakrishnan" id="common_changeset_001"	runOnChange="true">
+		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">delete from ISDQAReports..tbl_role_resource where resource_id in (select gkey from ISDQAReports..tbl_resources where resource_url in ('operation/add_user','operation/edit_user'))</sql>
+		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">delete from ISDQAReports..tbl_role_resource where resource_id in (select gkey from ISDQAReports..tbl_resources where resource_url='operation/edit_project')</sql>
+	</changeSet>
+	
+	<changeSet author="baskaran radhakrishnan" id="common_changeset_002"	runOnChange="true">
+		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">update ISDQAReports..tbl_resources set resource_name='Reminder Settings' where resource_module='operations_li' and resource_name='Remainder Settings'</sql>
+		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">delete from ISDQAReports..tbl_resources where resource_url in ('operation/add_user','operation/edit_user')</sql>
+		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">delete from ISDQAReports..tbl_resources where resource_url='operation/edit_project'</sql>
+		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">update ISDQAReports..tbl_resources set resource_name='Manage Projects',resource_url='operation/manage_projects' where resource_url='operation/add_project'</sql>
+	</changeSet>
+	
+	<changeSet author="baskaran radhakrishnan" id="common_changeset_003"	runOnChange="true">
+		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">UPDATE BtpTable SET is_deleted = 0</sql>
+		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">UPDATE DSRTable SET is_deleted = 0</sql>
+		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">UPDATE ItemTable SET is_deleted = 0</sql>
+		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">UPDATE KTTable SET is_deleted = 0</sql>
+		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">UPDATE REMAINDERS SET is_deleted = 0</sql>
+		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">UPDATE ResourceTable SET is_deleted = 0</sql>
+		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">UPDATE tbl_users SET is_deleted = 0</sql>
+	</changeSet>
+	
+</databaseChangeLog>	

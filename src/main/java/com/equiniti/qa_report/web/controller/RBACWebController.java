@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.equiniti.qa_report.controller.RBACController;
 import com.equiniti.qa_report.exception.api.exception.ControllerException;
+import com.equiniti.qa_report.exception.api.exception.UIException;
 
 @Controller
 @RequestMapping(value="/rbac")
@@ -27,20 +28,20 @@ public class RBACWebController {
 	private RBACController rbacController;
 	
 	@RequestMapping(value = "/showUser", method = RequestMethod.GET)
-	public String manageUsersPage(Model model){
+	public String manageUsersPage(Model model) throws UIException{
 		
 		return "manage_users_page";
 	}
 	
 	@RequestMapping(value="/getUserDetails", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> getUserDetails(){
+	public Map<String,Object> getUserDetails() throws UIException{
 		LOG.info("Begin: RBACWebController.getUserDetails");
 		Map<String,Object> returnObjMap=new HashMap<>();
 		try {
 			returnObjMap=rbacController.getUserDetails();			
 		} catch (ControllerException e) {
-			e.printStackTrace();
+			throw new UIException(e.getFaultCode(), e);
 		}
 		LOG.info("End: RBACWebController.getUserDetails");
 		return returnObjMap;
@@ -48,13 +49,13 @@ public class RBACWebController {
 	
 	@RequestMapping(value="/getUniqueUserList", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> getUniqueUserList(){
+	public Map<String,Object> getUniqueUserList() throws UIException{
 		LOG.info("Begin :RBACWebController.getUniqueUserList ");
 		Map<String,Object> returnObj=new HashMap<String, Object>();
 		try {
 			returnObj=rbacController.getUniqueUserList();			
 		} catch (ControllerException e) {
-			e.printStackTrace();
+			throw new UIException(e.getFaultCode(), e);
 		}
 		LOG.info("End :RBACWebController.getUniqueUserList ");
 		return returnObj;
@@ -62,13 +63,13 @@ public class RBACWebController {
 	
 	@RequestMapping(value="/addUserDetails", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> addUserDetails(@RequestBody Map<String,Object> inputParam){
+	public Map<String,Object> addUserDetails(@RequestBody Map<String,Object> inputParam) throws UIException{
 		LOG.info("Begin :RBACWebController.addUserDetails ");
 		Map<String,Object> returnObj=new HashMap<>();
 		try {
 			returnObj=rbacController.addUserDetails(inputParam);
 		} catch (ControllerException e) {
-			e.printStackTrace();
+			throw new UIException(e.getFaultCode(), e);
 		}
 		LOG.info("End :RBACWebController.addUserDetails ");
 		return returnObj;
@@ -76,13 +77,13 @@ public class RBACWebController {
 
 	@RequestMapping(value="/updateUserDetails", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> updateUserDetails(@RequestBody Map<String,Object> inputParam){
+	public Map<String,Object> updateUserDetails(@RequestBody Map<String,Object> inputParam) throws UIException{
 		LOG.info("Begin: RBACWebController.updateUserDetails");
 		Map<String,Object> returnObj=new HashMap<>();
 		try {
 			returnObj=rbacController.updateUserDetails(inputParam);
 		} catch (ControllerException e) {
-			e.printStackTrace();
+			throw new UIException(e.getFaultCode(), e);
 		}
 		LOG.info("End: RBACWebController.updateUserDetails");
 		return returnObj;
@@ -90,13 +91,13 @@ public class RBACWebController {
 	
 	@RequestMapping(value="/resetPassword", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> resetPassword(@RequestBody Map<String,Object> inputParam){
+	public Map<String,Object> resetPassword(@RequestBody Map<String,Object> inputParam) throws UIException{
 		LOG.info("Begin :RBACWebController.resetPassword ");
 		Map<String,Object> returnObj=new HashMap<>();
 		try {
 			returnObj=rbacController.resetPassword(inputParam);
 		} catch (ControllerException e) {
-			e.printStackTrace();
+			throw new UIException(e.getFaultCode(), e);
 		}
 		LOG.info("End :RBACWebController.resetPassword ");
 		return returnObj;
@@ -104,37 +105,37 @@ public class RBACWebController {
 	
 	@RequestMapping(value="/getRolesList", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> getRolesList(Map<String,Object> inputParam){
+	public Map<String,Object> getRolesList(Map<String,Object> inputParam) throws UIException{
 		LOG.info("Begin :RBACWebController.getRolesList ");
 		Map<String,Object> returnObj=new HashMap<String, Object>();
 		try {
 			returnObj=rbacController.getRolesList(inputParam);
 		} catch (ControllerException e) {
-			e.printStackTrace();
+			throw new UIException(e.getFaultCode(), e);
 		}
 		LOG.info("End :RBACWebController.getRolesList ");
 		return returnObj;
 	}
 	
 	@RequestMapping(value = "/showRoles", method = RequestMethod.GET)
-	public String manageRolesPage(Model model){
+	public String manageRolesPage(Model model) throws UIException{
 		return "manage_roles_page";
 	}
 	
 	@RequestMapping(value = "/managePassword", method = RequestMethod.GET)
-	public String managePasswordPage(Model model){
+	public String managePasswordPage(Model model) throws UIException{
 		return "manage_password_page";
 	}
 	
 	@RequestMapping(value="/getRoleResourcesInfo", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> getRoleResourcesInfo(Map<String,Object> inputParam){
+	public Map<String,Object> getRoleResourcesInfo(Map<String,Object> inputParam) throws UIException{
 		LOG.debug("START getRoleResourcesInfo Method ");
 		Map<String,Object> returnObj=new HashMap<String, Object>();
 		try {
 			returnObj=rbacController.getRoleResourcesInfo(inputParam);
 		} catch (ControllerException e) {
-			e.printStackTrace();
+			throw new UIException(e.getFaultCode(), e);
 		}
 		LOG.debug("END getRoleResourcesInfo Method ");
 		return returnObj;

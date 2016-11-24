@@ -1,5 +1,6 @@
 package com.equiniti.qa_report.dao.api.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +30,10 @@ public class KTPlanDAOImpl implements KTPlanDAO {
 		LOG.debug("Begin: KTPlanDAOImpl.getKTPlanDetails");
 		List<KTPlan> returnList=null;
 		try{
+			if(null == restrictionMap){
+				restrictionMap = new HashMap<>();
+			}
+			restrictionMap.put("is_deleted", false);
 			returnList=abstractHibernateDAOAPI.getEntityList(KTPlan.class, restrictionMap);
 		}catch(DaoException e){
 			throw new DaoException(e.getFaultCode(), e);

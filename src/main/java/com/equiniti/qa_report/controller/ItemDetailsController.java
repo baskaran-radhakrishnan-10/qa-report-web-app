@@ -78,5 +78,18 @@ public class ItemDetailsController {
 		}
 		return returnObjMap;
 	}
+	
+	public Map<String,Object> deleteItemDeatils(Map<String,Object> paramMap) throws ControllerException{
+		Map<String,Object> returnObjMap=new HashMap<>();
+		try {
+			itemDetailsService.deleteItemDeatils(paramMap);
+			returnObjMap.put(ApplicationConstants.STATUS, ApplicationConstants.SUCCESS);
+		} catch (APIException e) {
+			throw new ControllerException(e.getFaultCode(), e);
+		} catch(Exception e){
+			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+		return returnObjMap;
+	}
 
 }

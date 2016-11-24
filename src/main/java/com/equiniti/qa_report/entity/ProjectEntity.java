@@ -8,13 +8,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
+import com.equiniti.qa_report.persistance_api.audit.api.IAuditLog;
+
 @Entity
 @Table(name = "projectstable")
-public class ProjectEntity implements Serializable{
+public class ProjectEntity implements Serializable,IAuditLog{
 	
 	private static final long serialVersionUID = 2558606975176786279L;
 
@@ -42,7 +45,18 @@ public class ProjectEntity implements Serializable{
 
 	@Column(name = "modified_by")
 	private String modifiedBy;
+	
+	@Column(name = "is_deleted")
+	private  boolean deleted;
 
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+	
 	public DateTime getCreatedOn() {
 		return createdOn;
 	}
@@ -97,6 +111,25 @@ public class ProjectEntity implements Serializable{
 
 	public void setObsolete(boolean obsolete) {
 		this.obsolete = obsolete;
+	}
+	
+	@Override
+	@Transient
+	public Long getId() {
+		return (long) this.projectId;
+	}
+
+	@Override
+	@Transient
+	public String getLogDeatil() {
+		return this.toString();
+	}
+
+	@Override
+	public String toString(){
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("Project Name : ").append(projectName).append(" -- ").append("Obsolete : ").append(obsolete);
+		return buffer.toString();
 	}
 	
 }

@@ -81,5 +81,18 @@ public class ResourceDeatilsController {
 		}
 		return returnObjMap;
 	}
+	
+	public Map<String,Object> deleteResourceDeatils(Map<String,Object> paramMap) throws ControllerException{
+		Map<String,Object> returnObjMap=new HashMap<>();
+		try {
+			resourceDeatilsService.deleteResourceDeatils(paramMap);
+			returnObjMap.put(ApplicationConstants.STATUS, ApplicationConstants.SUCCESS);
+		} catch (APIException e) {
+			throw new ControllerException(e.getFaultCode(), e);
+		} catch(Exception e){
+			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+		return returnObjMap;
+	}
 
 }

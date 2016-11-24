@@ -86,4 +86,10 @@ public class ApplicationConstants {
 	
 	public static final String DSR_DAILY_REPORT_CONSTRUCTED = "isDsrDailyReportConstructed";
 	
+	public static final String TRANSIENT_ID = "id";
+	
+	public static final String TRANSIENT_LOG_DETAIL="logDeatil";
+	
+	public static final String ROLE_ID = "roleId";
+	
 }

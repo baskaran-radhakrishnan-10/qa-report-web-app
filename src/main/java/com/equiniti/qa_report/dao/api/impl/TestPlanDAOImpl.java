@@ -1,5 +1,7 @@
 package com.equiniti.qa_report.dao.api.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +27,10 @@ public class TestPlanDAOImpl implements TestPlanDAO{
 
 	public List<BtpEntity> getBtpEntityList(Map<String, Object> restrictionMap) throws DaoException{
 		LOG.debug("INSIDE getBtpEntityList(Map<String, Object> restrictionMap) Method");
+		if(null == restrictionMap){
+			restrictionMap = new HashMap<>();
+		}
+		restrictionMap.put("is_deleted", false);
 		return abstractHibernateDAOAPI.getEntityList(BtpEntity.class, restrictionMap);
 	}
 	
@@ -36,6 +42,18 @@ public class TestPlanDAOImpl implements TestPlanDAO{
 	public void updateBtpEntity(BtpEntity entity) throws DaoException{
 		LOG.debug("INSIDE updateBtpEntity(BtpEntity entity) Method");
 		abstractHibernateDAOAPI.updateEntity(entity);
+	}
+	
+	@Override
+	public void deleteBtpEntityByBTPNo(int btpNo) throws DaoException{
+		LOG.debug("INSIDE deleteBtpEntityByKey(int btpNo) Method");
+		abstractHibernateDAOAPI.bulkSQLNativeOperation(buildBTPDeleteQuery(btpNo));
+	}
+	
+	@Override
+	public void deleteBtpEntityByBTPNoList(List<Integer> btpNoList) throws DaoException{
+		LOG.debug("INSIDE deleteBtpEntityByKeyList(List<Integer> btpNoList) Method");
+		abstractHibernateDAOAPI.bulkSQLNativeOperation(buildBTPDeleteQuery(btpNoList));
 	}
 	
 	public BtpEntity getBtpEntity(Map<String, Object> restrictionMap) throws DaoException{
@@ -55,6 +73,30 @@ public class TestPlanDAOImpl implements TestPlanDAO{
 			throw new DaoException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}
 		return returnList;
+	}
+	
+	private List<String> buildBTPDeleteQuery(int btpNo){
+		List<String> queryList = new ArrayList<>();
+		StringBuffer queryBuffer = new StringBuffer();
+		queryBuffer.append("UPDATE ResourceTable SET is_deleted = 1 WHERE btpno = ").append(btpNo);
+		queryList.add(queryBuffer.toString());
+		queryBuffer = new StringBuffer();
+		queryBuffer.append("UPDATE ItemTable SET is_deleted = 1 WHERE btpno = ").append(btpNo);
+		queryList.add(queryBuffer.toString());
+		queryBuffer = new StringBuffer();
+		queryBuffer.append("UPDATE BtpTable SET is_deleted = 1 WHERE btpno = ").append(btpNo);
+		queryList.add(queryBuffer.toString());
+		return queryList;
+	}
+	
+	private List<String> buildBTPDeleteQuery(List<Integer> btpNoList){
+		List<String> queryList = new ArrayList<>();
+		if(null != btpNoList && !btpNoList.isEmpty()){
+			for(int btpNo : btpNoList){
+				queryList.addAll(buildBTPDeleteQuery(btpNo));
+			}
+		}
+		return queryList;
 	}
 
 }

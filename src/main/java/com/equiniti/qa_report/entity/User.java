@@ -5,10 +5,13 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.equiniti.qa_report.persistance_api.audit.api.IAuditLog;
 
 @Entity
 @Table(name = "tbl_users")
-public class User extends GeneralEntity{
+public class User extends GeneralEntity implements IAuditLog{
 
 	private static final long serialVersionUID = -1968065884219305808L;
 	
@@ -34,6 +37,17 @@ public class User extends GeneralEntity{
 
 	@Column(name = "first_login")
 	private  boolean firstLogin;
+	
+	@Column(name = "is_deleted")
+	private  boolean deleted;
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
 
 	public boolean isFirstLogin() {
 		return firstLogin;
@@ -89,5 +103,23 @@ public class User extends GeneralEntity{
 		this.active = active;
 	}
 
-	
+	@Override
+	@Transient
+	public Long getId() {
+		return (long) this.getGkey();
+	}
+
+	@Override
+	@Transient
+	public String getLogDeatil() {
+		return this.toString();
+	}
+
+	@Override
+	public String toString(){
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("User Full Name : ").append(userFullName).append(" -- ").append("User Id : ").append(userId).append(" -- ");
+		buffer.append("Email Id : ").append(emailId).append(" -- ").append("Role Id : ").append(roleId.getRoleName());
+		return buffer.toString();
+	}
 }

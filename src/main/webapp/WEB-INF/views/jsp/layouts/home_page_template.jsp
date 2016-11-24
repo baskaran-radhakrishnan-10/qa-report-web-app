@@ -135,6 +135,7 @@ body.loading .ajaxloader {
 
 <body id="mimin" class="dashboard">
 <input id="loggedInUserId" name="loggedInUser" type="hidden" value="<%=session.getAttribute("USER_ID")%>">
+<input id="loggedInRoleId" name="loggedInUserRoleName" type="hidden" value="<%=session.getAttribute("roleId")%>">
 	<!-- start: Header -->
 	<tiles:insertAttribute name="header_menu" />
 	<!-- end: Header -->

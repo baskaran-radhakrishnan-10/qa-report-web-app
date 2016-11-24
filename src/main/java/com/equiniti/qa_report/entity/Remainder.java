@@ -8,13 +8,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
+import com.equiniti.qa_report.persistance_api.audit.api.IAuditLog;
+
 @Entity
 @Table(name="REMAINDERS")
-public class Remainder implements Serializable{
+public class Remainder implements Serializable,IAuditLog{
 	
 	private static final long serialVersionUID = 5342632135099568516L;
 
@@ -35,7 +38,18 @@ public class Remainder implements Serializable{
 	
 	@Column(name="USER_ID",nullable = true)
 	private String remainderUser;
+	
+	@Column(name = "is_deleted")
+	private  boolean deleted;
 
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+	
 	public String getRemainderUser() {
 		return remainderUser;
 	}
@@ -76,5 +90,24 @@ public class Remainder implements Serializable{
 		this.remainderMessage = remainderMessage;
 	}
 	
+	@Override
+	@Transient
+	public Long getId() {
+		return (long) this.gkey;
+	}
+
+	@Override
+	@Transient
+	public String getLogDeatil() {
+		return this.toString();
+	}
+
+	@Override
+	public String toString(){
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("User Name : ").append(remainderUser).append(" -- ").append("remainderDate : ").append(remainderDate).append(" -- ");
+		buffer.append("remainderTime : ").append(remainderTime).append(" -- ").append("Message : ").append(remainderMessage);
+		return buffer.toString();
+	}
 
 }

@@ -10,10 +10,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.equiniti.qa_report.persistance_api.audit.api.IAuditLog;
 
 @Entity
 @Table(name = "ItemTable")
-public class ItemEntity implements Serializable{
+public class ItemEntity implements Serializable,IAuditLog{
 	
 	private static final long serialVersionUID = 6132396313576051532L;
 	
@@ -46,7 +49,17 @@ public class ItemEntity implements Serializable{
 	
 	@Column(name = "itemremarks" , length = 1000)
 	private String itemRemarks;
+	
+	@Column(name = "is_deleted")
+	private  boolean deleted;
 
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
 
 	public String getItemDescription() {
 		return itemDescription;
@@ -118,6 +131,27 @@ public class ItemEntity implements Serializable{
 
 	public void setgKey(int gKey) {
 		this.gKey = gKey;
+	}
+	
+	@Override
+	@Transient
+	public Long getId() {
+		return (long) this.gKey;
+	}
+
+	@Override
+	@Transient
+	public String getLogDeatil() {
+		return this.toString();
+	}
+
+	@Override
+	public String toString(){
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("Item No : ").append(itemNo).append(" -- ").append("BTP No : ").append(btpNo).append(" -- ");
+		buffer.append("Item Description : ").append(itemDescription).append(" -- ").append("Item Count : ").append(itemCount);
+		buffer.append("Estimated Effort : ").append(estimatedEffort).append(" -- ").append("Actual Effort : ").append(actualEffort);
+		return buffer.toString();
 	}
 	
 }

@@ -314,13 +314,12 @@ function addOrUpdateUser(){
 	userObject['roleId']['modifiedOn']=getDateValue(userObject['roleId']['modifiedOn'],'yyyy-MM-dd',"-");
 
 	if(isAdd && isValid){
-		ajaxHandler("POST", JSON.stringify(userObject), "application/json", getApplicationRootPath()+"rbac/addUserDetails", 'json', null, addUserDetailsSuccess,true);
+		ajaxHandler("POST", JSON.stringify(userObject), "application/json", getApplicationRootPath()+"rbac/addUserDetails", 'json', addUserDetailsError, addUserDetailsSuccess,true);
 
 	}else if(isValid){
-		ajaxHandler("POST", JSON.stringify(userObject), "application/json", getApplicationRootPath()+"rbac/updateUserDetails", 'json', null,updateUserDetailsSuccess,true);
+		ajaxHandler("POST", JSON.stringify(userObject), "application/json", getApplicationRootPath()+"rbac/updateUserDetails", 'json', updateUserDetailsError,updateUserDetailsSuccess,true);
 	}
 }
-
 
 function isEmail(email) {
 	var checkMail = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
@@ -349,8 +348,17 @@ function addUserDetailsSuccess(serverData){
 	else if('ERROR' == serverData['STATUS']){
 		var notifyObj={msg: '<b>Error : </b> User not added Successfully !!!',type: "error",position: "center" };
 		notif(notifyObj);
-	
 	}
+}
+
+function addUserDetailsError(errorRes){
+	var notifyObj={msg: '<b>Error : </b> Operation Failed Due to Server Issue !!!',type: "error",position: "center" };
+	notif(notifyObj);
+}
+
+function updateUserDetailsError(errorRes){
+	var notifyObj={msg: '<b>Error : </b> Operation Failed Due to Server Issue !!!',type: "error",position: "center" };
+	notif(notifyObj);
 }
 
 function updateUserDetailsSuccess(serverData){
