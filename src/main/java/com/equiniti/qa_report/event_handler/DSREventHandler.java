@@ -19,6 +19,7 @@ import com.equiniti.qa_report.cache.CacheInstance;
 import com.equiniti.qa_report.dao.api.DSRDAO;
 import com.equiniti.qa_report.entity.DSREntity;
 import com.equiniti.qa_report.event.dsr.AddDSREvent;
+import com.equiniti.qa_report.event.dsr.DeleteDSREvent;
 import com.equiniti.qa_report.event.dsr.GetDSREvent;
 import com.equiniti.qa_report.event.dsr.UpdateDSREvent;
 import com.equiniti.qa_report.eventapi.eventhandling.generic.IEvent;
@@ -68,9 +69,13 @@ public class DSREventHandler implements IEventHandler<IEvent> {
 			LOG.debug("Event :" + GetDSREvent.class.getName());
 			GetDSREvent eventObj = (GetDSREvent) event;
 			getDSR(eventObj);
-		}else {
-			LOG.debug("Unknow Event");
-		}
+		}else if (event instanceof DeleteDSREvent) {
+            LOG.debug("Event :" + DeleteDSREvent.class.getName());
+            DeleteDSREvent eventObj = (DeleteDSREvent) event;
+            deleteDSR(eventObj);
+        }else {
+            LOG.debug("Unknow Event");
+        }
 		LOG.debug("processEvent END");
 	}
 
@@ -166,6 +171,21 @@ public class DSREventHandler implements IEventHandler<IEvent> {
 			}
 		}
 	}
+	
+	private void deleteDSR(DeleteDSREvent event) throws EventException {
+        try {
+        	if(null != event.getDeleteKeyList()){
+        		dsrDAO.deleteDSREntityList(event.getDeleteKeyList());
+        	}else if(event.getDeleteEntityKey() > 0){
+        		dsrDAO.deleteDSREntity(event.getDeleteEntityKey());
+        	}
+        	CACHE_INS.removeItemFromCache(ApplicationConstants.DSR_CACHE_ITEM,userId);
+        } catch (DaoException e) {
+            throw new EventException(e.getFaultCode(), e);
+        } catch (Exception e) {
+            throw new EventException(CommonFaultCode.UNKNOWN_ERROR, e);
+        }
+    }
 
 	private DSREntity populateEntityFromMap(Map<String,Object> mapObject){
 		DSREntity entity=objMapper.convertValue(CommonUtil.removeTransientObject(mapObject), DSREntity.class);

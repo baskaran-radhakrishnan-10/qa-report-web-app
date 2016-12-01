@@ -45,6 +45,7 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:org/sp
 				<entry key="getDSREvent" value-ref="dsrEventProcessor"/>
 				<entry key="addDSREvent" value-ref="dsrEventProcessor"/>
 				<entry key="updateDSREvent" value-ref="dsrEventProcessor"/>
+				<entry key="deleteDSREvent" value-ref="dsrEventProcessor"/>
 
 				<entry key="getKTPlanDetailsEvent" value-ref="ktPlanEventProcessor"/>
 				<entry key="addKTPlanDetailsEvent" value-ref="ktPlanEventProcessor"/>

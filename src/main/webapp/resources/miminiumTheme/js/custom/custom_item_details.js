@@ -59,7 +59,7 @@ function fetchItemDetailsByBtpNoSuccess(serverData){
 			html += '<a id="itemRowSaveId" style="display:none;" href="#" onclick="itemDeatilsSave('+sNo+')"> <span class="glyphicon glyphicon-check"></span></a>';
 			if("ROLE_SUPER_ADMIN" == $('#loggedInRoleId').val()){
 				html += '<span>&nbsp;</span>';
-				html += '<a id="itemRowRemoveId" href="#" onclick="deleteItemDetails('+itemDetailObj['itemNo']+')"> <span class="glyphicon glyphicon-trash"></span></a>';
+				html += '<a id="itemRowRemoveId" href="#" onclick="deleteItemDetails('+itemDetailObj['itemNo']+','+itemDetailObj['gKey']+')"> <span class="glyphicon glyphicon-trash"></span></a>';
 			}
 			html += '<span>&nbsp;</span>';
 			html += '<a id="itemRowDeleteId" href="#" onclick="showResourceDetails('+sNo+')"> <span class="glyphicon glyphicon-link"></span></a>';
@@ -73,12 +73,13 @@ function fetchItemDetailsByBtpNoSuccess(serverData){
 	}
 }
 
-function deleteItemDetails(itemNo){
+function deleteItemDetails(itemNo,gKey){
 	if("ROLE_SUPER_ADMIN" == $('#loggedInRoleId').val()){
 		var btpNo = $('#selectedRowKeyInput').val();
 		var data = {};
 		data['btpNo'] = btpNo;
 		data['itemNo'] = itemNo;
+		data['gKey'] = gKey;
 		ajaxHandler("POST", JSON.stringify(data), "application/json", getApplicationRootPath()+"item_details/deleteData", 'json', deleteItemDetailsError, deleteItemDetailsSuccess,true);
 	}
 }

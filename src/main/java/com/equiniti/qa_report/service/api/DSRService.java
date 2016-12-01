@@ -20,4 +20,6 @@ public interface DSRService {
 	
 	public List<DSREntity> filterDSREntries(Map<String, Object> restrictionMap) throws APIException;
 
+	public void deleteDSREntry(Map<String, Object> paramMap) throws APIException;
+
 }

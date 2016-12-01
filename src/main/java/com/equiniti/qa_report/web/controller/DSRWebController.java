@@ -86,6 +86,18 @@ private static final Logger LOG= Logger.getLogger(DSRWebController.class);
 		return returnObj;
 	}
 	
+	@RequestMapping(value = "/deleteData", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> deleteData(@RequestBody Map<String,Object> inputData) throws UIException{
+		Map<String,Object> returnObj=new HashMap<>();
+		try {
+			returnObj=dsrController.deleteDSREntry(inputData);
+		} catch (ControllerException e) {
+			throw new UIException(e.getFaultCode(), e);
+		}
+		return returnObj;
+	}
+	
 	@RequestMapping(value = "/filterData", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> filterData(@RequestBody Map<String,Object> inputData) throws UIException{

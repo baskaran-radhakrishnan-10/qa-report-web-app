@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.equiniti.qa_report.cache.CacheInstance;
 import com.equiniti.qa_report.entity.DSREntity;
 import com.equiniti.qa_report.event.dsr.AddDSREvent;
+import com.equiniti.qa_report.event.dsr.DeleteDSREvent;
 import com.equiniti.qa_report.event.dsr.GetDSREvent;
 import com.equiniti.qa_report.event.dsr.UpdateDSREvent;
 import com.equiniti.qa_report.eventapi.eventhandling.generic.BaseAPIImpl;
@@ -80,6 +81,24 @@ public class DSRServiceImpl extends BaseAPIImpl implements DSRService{
 			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}
 		return event.getDSREntityList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void deleteDSREntry(Map<String, Object> paramMap) throws APIException {
+		DeleteDSREvent event=getEvent(DeleteDSREvent.class);
+		try{
+			if(paramMap.containsKey("dsrNo")){
+				event.setDeleteEntityKey(Integer.parseInt(paramMap.get("dsrNo").toString()));
+			}else if(paramMap.containsKey("dsrNoList")){
+				event.setDeleteKeyList((List<Integer>) paramMap.get("dsrNoList"));
+			}
+			processEvent(event);
+		} catch (APIException e) {
+			throw new ControllerException(e.getFaultCode(), e);
+		} catch (Exception e) {
+			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
 	}
 	
 	@Override

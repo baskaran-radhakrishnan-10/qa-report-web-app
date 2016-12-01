@@ -49,6 +49,18 @@ public class DSRDAOImpl implements DSRDAO{
 		return abstractHibernateDAOAPI.getEntity(DSREntity.class, restrictionMap);
 	}
 	
+	@Override
+	public void deleteDSREntity(int dsrNo) throws DaoException{
+		LOG.debug("INSIDE deleteDSREntity(int dsrNo) Method");
+		abstractHibernateDAOAPI.bulkSQLNativeOperation(buildDSRDeleteQuery(dsrNo));
+	}
+	
+	@Override
+	public void deleteDSREntityList(List<Integer> dsrNoList) throws DaoException{
+		LOG.debug("INSIDE deleteDSREntityList(List<Integer> dsrNoList) Method");
+		abstractHibernateDAOAPI.bulkSQLNativeOperation(buildDSRDeleteQuery(dsrNoList));
+	}
+	
 	//btp.startdate between START_DATE and END_DATE
 	
 	@SuppressWarnings("unchecked")
@@ -75,6 +87,24 @@ public class DSRDAOImpl implements DSRDAO{
 			}
 		}
 		return (List<DSREntity>) abstractHibernateDAOAPI.processQuery(null, null, null, QueryOperationType.SELECT, QueryType.HQL, queryBuffer.toString());
+	}
+	
+	private List<String> buildDSRDeleteQuery(int dsrNo){
+		List<String> queryList = new ArrayList<>();
+		StringBuffer queryBuffer = new StringBuffer();
+		queryBuffer.append("UPDATE DSRTable SET is_deleted = 1 WHERE sno = ").append(dsrNo);
+		queryList.add(queryBuffer.toString());
+		return queryList;
+	}
+	
+	private List<String> buildDSRDeleteQuery(List<Integer> dsrNoList){
+		List<String> queryList = new ArrayList<>();
+		if(null != dsrNoList && !dsrNoList.isEmpty()){
+			for(int btpNo : dsrNoList){
+				queryList.addAll(buildDSRDeleteQuery(btpNo));
+			}
+		}
+		return queryList;
 	}
 
 }

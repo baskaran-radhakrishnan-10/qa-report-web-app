@@ -18,4 +18,8 @@ public interface DSRDAO {
 	
 	public List<DSREntity> filterDSREntityList(Map<String, Object> restrictionMap) throws DaoException;
 
+	public void deleteDSREntity(int dsrNo) throws DaoException;
+
+	public void deleteDSREntityList(List<Integer> dsrNoList) throws DaoException;
+
 }

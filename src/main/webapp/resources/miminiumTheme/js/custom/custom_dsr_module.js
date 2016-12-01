@@ -111,17 +111,48 @@ $(document).ready(function() {
 		dsrRef.constructDSRDetailsForm(-1);
 	});
 
-	$('#dsr_table_id tbody').on('click', 'tr', function () {
-		var sNo=$(this).attr('id');
-		$('#dsr_table_id tbody tr').removeClass('selected');
-		$('#dsr_table_id tbody tr').css('background-color','');
-		if (!$(this).hasClass('selected')){
-			dsrRef.dsrTableRef.$('tr.selected').removeClass('selected');
-			$(this).addClass('selected');
-			$(this).css('background-color','#B0BED9 !important');
-			$("#editDSRTrigger").trigger( "click" );
-			dsrRef.constructDSRDetailsForm(sNo);
+	$('#dsr_table_id tbody').on('dblclick', 'tr', function () {
+		if("ROLE_SUPER_ADMIN" == $('#loggedInRoleId').val()){
+			var gKey=$(this).attr('id');
+	        if ($(this).hasClass('selected')){
+	            $(this).removeClass('selected');
+	            $(this).css('background-color','');
+	        }
+	        else {
+	            $(this).addClass('selected');
+	            $(this).css('background-color','#B0BED9 !important');
+	        }
+	        var selectedRowList=$('#dsr_table_id tbody').find('.selected')
+	        if(selectedRowList.length > 0){
+	        	$('#delete_dsr_button').show();
+	        }else{
+	        	$('#delete_dsr_button').hide();
+	        }
 		}
+	});
+	
+	$('#delete_dsr_button').on('click',function(){
+		$("#showDeleteRowModal").trigger( "click" );
+		$('#row_delete_confirm_div').show();
+	});
+	
+	$('#delete_dsr_rows').on("click",function(){
+		var dsrNoArray = [];
+		var selectedRowList=$('#dsr_table_id tbody').find('.selected');
+		if(selectedRowList.length > 0){
+			$.each(selectedRowList,function(index,row){
+				dsrNoArray.push(parseInt($(row).attr('id')));
+			});
+			if(dsrNoArray.length > 0){
+				dsrRef.deleteDSRRows(dsrNoArray);
+			}
+		}
+	});
+	
+	$('#modal_close_button').on("click",function(){
+		$('#delete_btp_button').hide();
+		$('#build_test_plan_table_id tbody tr').removeClass('selected');
+		$('#build_test_plan_table_id tbody tr').css('background-color','');
 	});
 
 	if(null != indexDBObj){
@@ -179,6 +210,15 @@ DSRClass.prototype = {
 				dsrRef.noOfPages = Math.ceil(dsrRef.totalRecordsSize / 1000);
 				dsrRef.communicateDSRWorker(serverData['SERVER_DATA']);
 				dsrRef.constructMainPaginator(dsrRef.totalRecordsSize,1000,10,1,10);
+				
+				if(null != sessionStorageObj){
+					var notifyObj=sessionStorageObj.getItem("NOTIFICATION");
+					if(null != notifyObj){
+						notif(notifyObj);
+						sessionStorageObj.removeItem("NOTIFICATION");
+					}
+				}
+				
 			}
 		},
 		fetchProjectNamesSuccess : function(serverData){
@@ -211,7 +251,6 @@ DSRClass.prototype = {
 			dsrRef.constructDSRTable(dsrEntityList,false);
 		},
 		buildDSRWorkerScript : function(dsrEntityList){
-
 			var blobURL = URL.createObjectURL(new Blob(['(',function(){
 				self.addEventListener('message', function(e) {
 					var data = e.data;
@@ -241,9 +280,7 @@ DSRClass.prototype = {
 						html +=	'<td>'+resource+'</td>' ;
 						html += '<td>'+dsrDate+'</td>' ;
 						html += '<td>'+plannedTask+'</td>' ;
-						/*html +=	'<td>'+accomplishedTask+'</td>' ;*/
 						html += '<td>'+dsrStatus+'</td>' ;
-						/*html +=	'<td>'+remarks+'</td>' ;*/
 						html +=	'<td>'+plannedHours+'</td>' ;
 						html +=	'<td>'+spentHours+'</td>' ;
 						html += '</tr>' ;
@@ -282,18 +319,16 @@ DSRClass.prototype = {
 				var plannedHours=dsrEntity['plannedHours'];
 				var spentHours=dsrEntity['spentHours'];
 
-
 				html += '<tr id="'+gKey+'">' ;
 				html += '<td id="sNo">'+sNo+'</td>' ;
 				html += '<td id="projectName">'+projectName+'</td>' ;
 				html +=	'<td id="resource">'+resource+'</td>' ;
 				html += '<td id="dsrDate">'+dsrDate+'</td>' ;
 				html += '<td id="plannedTask">'+plannedTask+'</td>' ;
-				/*html +=	'<td>'+accomplishedTask+'</td>' ;*/
 				html += '<td id="dsrStatus">'+dsrStatus+'</td>' ;
-				/*html +=	'<td>'+remarks+'</td>' ;*/
 				html +=	'<td id="plannedHours">'+plannedHours+'</td>' ;
 				html +=	'<td id="spentHours">'+spentHours+'</td>' ;
+				html += '<td id="testPlanEditRowId" onclick="DSRClass.prototype.showSelectedDSRDetailsForm('+gKey+')"><span><a href="#" class="glyphicon glyphicon-edit"></a></span><span>&nbsp;</span></td>' ;
 				html += '</tr>' ;
 
 				htmlArray.push(html);
@@ -311,6 +346,18 @@ DSRClass.prototype = {
 				dsrRef.hideLoader();
 			/*}*/
 
+		},
+		showSelectedDSRDetailsForm : function(gKey){
+			var sNo=gKey;
+			var rowItem = $('#dsr_table_id tbody').find('#'+gKey);
+			$('#dsr_table_id tbody tr').removeClass('selected');
+			$('#dsr_table_id tbody tr').css('background-color','');
+			if (!$(rowItem).hasClass('selected')){
+				$(rowItem).addClass('selected');
+				$(rowItem).css('background-color','#B0BED9 !important');
+				$("#editDSRTrigger").trigger( "click" );
+				dsrRef.constructDSRDetailsForm(sNo);
+			}
 		},
 		constructDSRDetailsForm : function(sNo){
 			$('#dsrDiv').html($('#dsrForm'));
@@ -496,6 +543,31 @@ DSRClass.prototype = {
 				dsrRef.dsrTableRef.destroy();
 				dsrRef.constructDSRTable(dsrEntityList,false);
 			}
+		},
+		deleteDSRRows : function(dsrNoArray){
+			var data = {};
+			data['dsrNoList'] = dsrNoArray;
+			ajaxHandler("POST", JSON.stringify(data), "application/json", getApplicationRootPath()+"dsr/deleteData", 'json', DSRClass.prototype.deleteDSRRowsError, DSRClass.prototype.deleteDSRRowsSuccess,true);
+		},
+		deleteDSRRowsError : function(errorRes){
+			console.log(errorRes);
+			var notifyObj={msg: '<b>Error : </b> Operation Failed Due to Server Issue !!!',type: "error",position: "center" };
+			notif(notifyObj);
+		},
+		deleteDSRRowsSuccess : function(serverData,inputData){
+			if('ERROR' != serverData['STATUS']){
+				var objectStore = indexDBObj.db.transaction(["dsr"],"readwrite").objectStore("dsr");
+				$.each(inputData['dsrNoList'],function(index,dsrNo){
+					var request = objectStore.delete(parseInt(dsrNo));
+					request.onsuccess = function(event){
+						console.log("DSR No :"+dsrNo+" Deleted Successfully!!!");
+					};
+				});
+				var notifyObj={msg: "<b>Success:</b> Selected Records Deleted Successfully !!!",type: "success",position: "center",autohide: true};
+				if(null != sessionStorageObj){
+					sessionStorageObj.setItem("NOTIFICATION",notifyObj);
+				}
+				window.location.href=getApplicationRootPath()+"dsr/show";
+			}
 		}
 }
-

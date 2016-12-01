@@ -149,9 +149,12 @@ function validateBeforeSave(){
 		if($('#resourceNameTDId select').hasClass('error')){
 			errorMsgArray.push("Resource Name Already selected");
 		}
+		if($('#resourceNameTDId #resource1Id').hasClass('error')){
+			$("#resource1Id").trigger( "click" );
+		}
 	});
 	if(errorMsgArray.length > 0){
-		var notifyObj={msg: '<b>Please Fix BTP Form Validation Errors</b>',type: "error",position: "center",autohide: true};
+		var notifyObj={msg: '<b>Please fill all mandatory fields in BTP Form</b>',type: "error",position: "center",autohide: true};
 		notif(notifyObj);
 		return false;
 	}
@@ -226,7 +229,7 @@ function constructResourceTable(resourceArray){
 				html += '<td id="resourceNameCaptionId"><label class="control-label">Resource'+(index+1)+':</label></td>';
 				html += '<td id="resourceNameTDId" onclick="clickedResourceName(this)" ><input id="resourceId" name="do_nbr" type="text" class="form-control form-control3" value="'+resourceArray[index]+'"></td>';
 				html += '<td style="text-align: -webkit-center;">';
-				html += '<a onclick="deleteTableRow(this)" href="#"><span class="fa fa-remove" data-toggle="tooltip" data-placement="auto top" title="" data-original-title="Remove Resource"></span></a></td>';
+				html += '<a onclick="deleteTableRow(this)" href="#"><span class="fa fa-remove" data-toggle="tooltip" data-placement="auto left" title="" data-original-title="Remove Resource"></span></a></td>';
 			}
 			html += '</tr>';
 		}
@@ -237,7 +240,7 @@ function constructResourceTable(resourceArray){
 		html += '<td id="resourceNameCaptionId"><label class="control-label">Resource1:*</label></td>';
 		html += '<td id="resourceNameTDId" onclick="clickedResourceName(this)"><input id="resource1Id" name="do_nbr" type="text" class="form-control form-control3 imp" value=""></td>';
 		html += '<td style="text-align: -webkit-center;">';
-		html += '<a onclick="addTableRow(this)" href="#"><span data-href="#" class="fa fa-plus" data-toggle="tooltip" data-placement="auto left" title="" data-original-title="Add Fields"></span></a>';
+		html += '<a onclick="addTableRow(this)" href="#"><span data-href="#" class="fa fa-plus" data-toggle="tooltip" data-placement="auto left" title="" data-original-title="Add Resource"></span></a>';
 		html += '</td>';
 		
 	}
@@ -298,7 +301,7 @@ function addTableRow(thisObject){
 		html += '<td id="resourceNameCaptionId"><label class="control-label">Resource'+(resourceTrArray.length+1)+':*</label></td>';
 		html += '<td id="resourceNameTDId" onclick="clickedResourceName(this)"><input id="resourceId" name="do_nbr" type="text" class="form-control form-control3" value=""></td>';
 		html += '<td style="text-align: -webkit-center;">';
-		html += '<a onclick="deleteTableRow(this)" href="#"><span class="fa fa-remove" data-toggle="tooltip" data-placement="auto right" title="" data-original-title="Remove Resource"></span></a>';
+		html += '<a onclick="deleteTableRow(this)" href="#"><span class="fa fa-remove" data-toggle="tooltip" data-placement="auto left" title="" data-original-title="Remove Resource"></span></a>';
 		html += '</td>';
 		html += '</tr>';
 		$('#resourceMgmtTableId').find('tbody').append(html);

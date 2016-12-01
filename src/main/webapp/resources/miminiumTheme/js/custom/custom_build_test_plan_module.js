@@ -44,6 +44,10 @@ $(document).ready(function() {
 		buildTestPlanModalData(null);
 	});
 	
+	$(document).on("click","#resource1Id",function(event){
+		$('#resourceNameListId').addClass('error');
+	});
+	
 	$(document).on("blur","#resourceMgmtTableId td#resourceNameTDId :input" , function (event) {
 		var currentValue=$(this).val();
 		var rowId=parseInt($(this).parent().parent().attr('id').replace('resourcetr_',''));
@@ -118,27 +122,25 @@ $(document).ready(function() {
 				}
 			}
 		}
-		if(!$(this).hasClass('error')){
+		/*if(!$(this).hasClass('error')){*/
 			if("startDateId" == id){
 				
 				var startDate = new Date(Date.parse(value));
-				var currDate = new Date();
+				var endDate = new Date($('#endDateId').val());
 				var isCurrentDate=false;
 				
-				if(startDate.getDay() == currDate.getDay() && startDate.getMonth() == currDate.getMonth() && startDate.getFullYear() == startDate.getFullYear()){
-					isCurrentDate=true;
+				if(typeof(endDate) != 'undefined' && null != endDate){
+					if(startDate > endDate){
+						var notifyObj={msg: '<b>Start Date should be lesser than End Date</b>',type: "warning",position: "center"};
+						notif(notifyObj);
+						$(this).addClass('error');
+					}
 				}
-				if(startDate > currDate || isCurrentDate){
-					
-				}else{
-					//var notifyObj={msg: '<b>Start Date should be greater or equal to the Current Date</b>',type: "warning",position: "center"};
-					//notif(notifyObj);
-					//$(this).addClass('error');
-				}
+				
 			}else if("endDateId" == id){
 				var startDateStr=$('#startDateId').val();
 				if(null == startDateStr || startDateStr.length == 0){
-					var notifyObj={msg: '<b> StartDate should not be empty </b>',type: "error",position: "center",autohide: true};
+					var notifyObj={msg: '<b> Start Date should not be empty </b>',type: "error",position: "center",autohide: true};
 					notif(notifyObj);
 				}else{
 					var revisedEndDate = null;
@@ -149,13 +151,13 @@ $(document).ready(function() {
 					}
 					if(null != revisedEndDate){
 						if(endDate > revisedEndDate){
-							var notifyObj={msg: '<b> EndDate should be lesser than the RevisedEndDate </b>',type: "error",position: "center",autohide: true};
+							var notifyObj={msg: '<b> End Date should be lesser than the Revised End Date </b>',type: "error",position: "center",autohide: true};
 							notif(notifyObj);
 							$(this).addClass('error');
 						}
 					}
 					if(startDate > endDate ){
-						var notifyObj={msg: '<b> EndDate should be greater than the StartDate </b>',type: "error",position: "center",autohide: true};
+						var notifyObj={msg: '<b> End Date should be greater than the Start Date </b>',type: "error",position: "center",autohide: true};
 						notif(notifyObj);
 						$(this).addClass('error');
 					}
@@ -163,23 +165,23 @@ $(document).ready(function() {
 			}else if("revisedEndDateId" == id){
 				var endDateStr=$('#endDateId').val();
 				if(null == endDateStr || endDateStr.length == 0){
-					var notifyObj={msg: '<b> EndDate should not be empty </b>',type: "error",position: "center",autohide: true};
+					var notifyObj={msg: '<b> End Date should not be empty </b>',type: "error",position: "center",autohide: true};
 					notif(notifyObj);
 				}else{
 					var endate=new Date(Date.parse(endDateStr));
 					var revEndDate = new Date(Date.parse(value));
 					if('Invalid Date' != revEndDate){
 						if(endate < revEndDate){
-							
+							$(this).removeClass('error');
 						}else{
-							var notifyObj={msg: '<b> RevisedEndDate should be greater than the EndDate </b>',type: "error",position: "center",autohide: true};
+							var notifyObj={msg: '<b> Revised End Date should be greater than the End Date </b>',type: "error",position: "center",autohide: true};
 							notif(notifyObj);
 							$(this).addClass('error');
 						}
 					}
 				}
 			}
-		}
+		/*}*/
 	});
 	
 	$('#build_test_plan_table_id tbody').on('dblclick', 'tr', function () {
@@ -207,7 +209,7 @@ $(document).ready(function() {
 		$('#row_delete_confirm_div').show();
 	});
 	
-	$('#row_delete_confirm_div').on("click",function(){
+	$('#delete_btp_rows').on("click",function(){
 		var btpNoArray = [];
 		var selectedRowList=$('#build_test_plan_table_id tbody').find('.selected');
 		if(selectedRowList.length > 0){

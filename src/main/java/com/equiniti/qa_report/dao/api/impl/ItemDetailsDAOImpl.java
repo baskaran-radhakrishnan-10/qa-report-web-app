@@ -77,17 +77,17 @@ public class ItemDetailsDAOImpl implements ItemDetailsDAO{
 	}
 	
 	@Override
-	public void deleteItemDetails(int btpNo,int itemNo) throws DaoException{
-		abstractHibernateDAOAPI.bulkSQLNativeOperation(buildItemDetailsDeleteQuery(btpNo,itemNo));
+	public void deleteItemDetails(int btpNo,int itemNo,int gKey) throws DaoException{
+		abstractHibernateDAOAPI.bulkSQLNativeOperation(buildItemDetailsDeleteQuery(btpNo,itemNo,gKey));
 	}
 	
-	private List<String> buildItemDetailsDeleteQuery(int btpNo,int itemNo){
+	private List<String> buildItemDetailsDeleteQuery(int btpNo,int itemNo,int gKey){
 		List<String> queryList = new ArrayList<>();
 		StringBuffer queryBuffer = new StringBuffer();
 		queryBuffer.append("UPDATE ResourceTable SET is_deleted = 1 WHERE btpno = ").append(btpNo).append(" AND itemno = ").append(itemNo);
 		queryList.add(queryBuffer.toString());
 		queryBuffer = new StringBuffer();
-		queryBuffer.append("UPDATE ItemTable SET is_deleted = 1 WHERE btpno = ").append(btpNo).append(" AND itemno = ").append(itemNo);
+		queryBuffer.append("UPDATE ItemTable SET is_deleted = 1 WHERE gKey = ").append(gKey);
 		queryList.add(queryBuffer.toString());
 		return queryList;
 	}

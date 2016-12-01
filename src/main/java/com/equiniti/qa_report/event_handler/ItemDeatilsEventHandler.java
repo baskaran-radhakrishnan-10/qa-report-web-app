@@ -79,7 +79,7 @@ public class ItemDeatilsEventHandler implements IEventHandler<IEvent> {
 	
 	private void deleteItemDetails(DeleteItemDetailsEvent event) throws EventException {
         try {
-        	itemDetailsDAO.deleteItemDetails(event.getBtpNo(), event.getItemNo());
+        	itemDetailsDAO.deleteItemDetails(event.getBtpNo(), event.getItemNo(),event.getgKey());
         } catch (DaoException e) {
             throw new EventException(e.getFaultCode(), e);
         } catch (Exception e) {

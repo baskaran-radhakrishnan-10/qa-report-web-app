@@ -84,9 +84,10 @@ public class ItemDetailsServiceImpl extends BaseAPIImpl implements ItemDetailsSe
 	public void deleteItemDeatils(Map<String, Object> paramMap) throws APIException {
 		DeleteItemDetailsEvent event=getEvent(DeleteItemDetailsEvent.class);
 		try{
-			if(paramMap.containsKey("btpNo") && paramMap.containsKey("itemNo")){
+			if(paramMap.containsKey("btpNo") && paramMap.containsKey("itemNo") && paramMap.containsKey("gKey")){
 				event.setBtpNo(Integer.parseInt(paramMap.get("btpNo").toString()));
 				event.setItemNo(Integer.parseInt(paramMap.get("itemNo").toString()));
+				event.setgKey(Integer.parseInt(paramMap.get("gKey").toString()));
 				processEvent(event);
 			}else{
 				throw new APIException(EventFaultCodes.UN_KNOWN_ERROR,null);

@@ -16,6 +16,6 @@ public interface ItemDetailsDAO {
 
 	public void updateItemDetails(ItemEntity entity) throws DaoException;
 
-	public void deleteItemDetails(int btpNo, int itemNo) throws DaoException;
+	public void deleteItemDetails(int btpNo, int itemNo,int gKey) throws DaoException;
 
 }

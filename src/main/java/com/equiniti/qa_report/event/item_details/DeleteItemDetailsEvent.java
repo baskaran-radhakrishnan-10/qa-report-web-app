@@ -12,6 +12,8 @@ public class DeleteItemDetailsEvent extends BaseEvent {
 	
 	private int itemNo;
 	
+	private int gKey;
+	
     public DeleteItemDetailsEvent() {
         super(EVENT_NAME);
     }
@@ -30,6 +32,14 @@ public class DeleteItemDetailsEvent extends BaseEvent {
 
 	public void setItemNo(int itemNo) {
 		this.itemNo = itemNo;
+	}
+
+	public int getgKey() {
+		return gKey;
+	}
+
+	public void setgKey(int gKey) {
+		this.gKey = gKey;
 	}
 
 }

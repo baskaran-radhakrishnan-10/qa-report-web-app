@@ -149,6 +149,12 @@ public class RBACServiceImpl extends BaseAPIImpl implements RBACService {
 			returnObj.put(ApplicationConstants.BASE_URL, (String)session.getAttribute(ApplicationConstants.BASE_URL));
 		} catch (CacheException e) {
 			throw new APIException(CommonFaultCode.UNKNOWN_ERROR,e);
+		} catch(Exception e){
+			if(e instanceof IllegalArgumentException){
+				if(e.getMessage().indexOf("groupName must not be null") != -1){
+					throw new APIException(CommonFaultCode.CACHE_FAILED_ERROR,e);
+				}
+			}
 		}
 		return returnObj;
 	}
