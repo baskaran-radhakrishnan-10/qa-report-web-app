@@ -1,3 +1,9 @@
+var reminderFormErrorMessages={};
+reminderFormErrorMessages['remainderDateId']="Please Enter Reminder Date !!!";
+reminderFormErrorMessages['remainderTimeId']="Please Enter Reminder Time !!!";
+reminderFormErrorMessages['remainderAboutId']="Please Enter Reminder About !!!";
+
+
 var userDetailsData={};
 var rowEle="";
 var egKey="";
@@ -143,8 +149,37 @@ function fillSelectDropDown(dropDownId,arrayData,selectedOption){
 	$('#'+dropDownId).val(selectedOption);
 }
 
+function validateBeforeSave(){
+	$('#addReminderDetailsForm :input').removeClass('error');
+	var errorMsgArray=[];
+	$("#addReminderDetailsForm :input").each(function(){
+		if($(this).hasClass('imp')){
+			var input = $(this);
+			var id=$(input).attr('id');
+			var value=$(input).val();
+			if(null == value || value.length == 0 || typeof(value) == 'undefined'){
+				errorMsgArray.push(reminderFormErrorMessages[id]);
+				$(input).addClass('error');
+			}
+		}
+		
+	});
+	if(errorMsgArray.length > 0){
+		var notifyObj={msg: '<b>Please Fix Reminder Form Validation Errors !!! </b>',type: "error",position: "center",autohide: true};
+		notif(notifyObj);
+		return false;
+	}
+	return true;
+}
 
 function addOrUpdateReminder(){
+	
+	$('#addReminderDetailsForm :input').removeClass('error');
+	
+	if(!validateBeforeSave()){
+		return false;
+	}
+	
 	var isAdd=false;
 	var isValid=false;
 	var userObject={};
@@ -154,26 +189,20 @@ function addOrUpdateReminder(){
 	var remainderDate=rowEle.find('#remainderDateId').val();
 	var remainderTime=rowEle.find('#remainderTimeId').val();
 	var remainderAbout=rowEle.find('#remainderAboutId').val().trim();
-	var remainderDateTime=rowEle.find('#remainderDateTimeId').val(); 
-	
+//	console.log(remainderTime);
 	var remainderDateVal=new Date(Date.parse(remainderDate));
 	var currentDateVal=new Date(Date.parse(createdOnDt));
 	
-	if (null ==remainderDate || ""== remainderDate || remainderDate.length == 0 || typeof(remainderDate) == 'undefined'){
-		var notifyObj={msg: '<b>Warning : </b> Please select Reminder Date !!!',type: "warning",position: "center" };
-		notif(notifyObj);
-	}else if (remainderDateVal< currentDateVal){
+	if (remainderDateVal< currentDateVal){
 		var notifyObj={msg: '<b>Warning : </b>Reminder Date must be >= current date !!!',type: "warning",position: "center" };
 		notif(notifyObj);
-	}
-	else if (null ==remainderTime || ""== remainderTime || remainderTime.length == 0 || typeof(remainderTime) == 'undefined'){
-		var notifyObj={msg: '<b>Warning : </b> Please select Reminder time !!!',type: "warning",position: "center" };
+	}else if(isReminderMsgValid(remainderAbout)){
+		var notifyObj={msg: '<b>Warning : </b>Reminder message criteria not matching !!!',type: "warning",position: "center" };
 		notif(notifyObj);
-	}else if (null ==remainderAbout || ""== remainderAbout || remainderAbout.length == 0 || typeof(remainderAbout) == 'undefined'){
-			var notifyObj={msg: '<b>Warning : </b> Please enter Reminder message !!!',type: "warning",position: "center" };
-			notif(notifyObj);
-	}
-	else{
+	}else if(isRemainderTimeValid(remainderTime)){
+		var notifyObj={msg: '<b>Warning : </b>Reminder time criteria not matching !!!',type: "warning",position: "center" };
+		notif(notifyObj);
+	}else{
 		isValid=true;
 	}
 	if(egKey ==null || "" == egKey){
@@ -195,6 +224,18 @@ function addOrUpdateReminder(){
 	}else if(isValid){
 		ajaxHandler("POST", JSON.stringify(userObject), "application/json", getApplicationRootPath()+"operation/updateRemainderDetails", 'json', null,updateUserDetailsSuccess,true);
 	}
+}
+
+
+
+function isReminderMsgValid(title){
+	var regexp= /^[A-Za-z0-9']+( [A-Za-z0-9']+)*$/;
+	return title.search(regexp);
+}
+
+function isRemainderTimeValid(duration){
+	var regexp = /^[0-9\:]+$/;
+	return duration.search(regexp);
 }
 
 function addUserDetailsSuccess(serverData){

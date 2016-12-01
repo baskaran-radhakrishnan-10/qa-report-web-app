@@ -158,7 +158,7 @@
 											<div class="col-md-12">
 												<label class="col-sm-2 control-label">KT Title:<font color="red">*</font></label>
 												<div class="col-sm-3">
-													<input id="ktTitleId" name="kttitle" type="text" class="input-sm form-control imp" value="">
+													<input id="ktTitleId" name="kttitle" type="text" class="input-sm form-control imp" value="" data-toggle="tooltip" data-placement="auto right" data-original-title="Allows only 0-9,a-z,A-Z,( )- and 1 Space">
 												</div>
 												<label class="col-sm-2 control-label">Session:<font color="red">*</font></label>
 												<div class="col-sm-3">

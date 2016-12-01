@@ -151,7 +151,7 @@
 				<div class="panel-heading bg-white border-none"
 					style="padding: 20px;">
 					<div class="col-md-6 col-sm-6 col-sm-12 text-left">
-						<h4>Truck Status</h4>
+						<h4>Status</h4>
 					</div>
 				</div>
 				<div class="panel-body" style="padding-bottom: 50px;">

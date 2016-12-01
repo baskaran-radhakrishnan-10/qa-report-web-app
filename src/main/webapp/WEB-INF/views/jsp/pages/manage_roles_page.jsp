@@ -36,7 +36,8 @@
 				<thead id="thead_id">
 					<tr>
 						<th>S.No</th>
-						<th>Role Name</th>				
+						<th>Role Name</th>
+						<th>Role Description</th>				
 					</tr>
 				</thead>
 				<tbody id="tbody_id"></tbody>

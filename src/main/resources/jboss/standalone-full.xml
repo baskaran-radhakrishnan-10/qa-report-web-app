@@ -33,7 +33,10 @@
 		<extension module="org.wildfly.extension.undertow" />
 		<extension module="org.wildfly.iiop-openjdk" />
 	</extensions>
-
+	
+   <system-properties>
+         <property name="jboss.as.management.blocking.timeout" value="600"/> 
+   </system-properties>
 
 	<management>
 		<security-realms>

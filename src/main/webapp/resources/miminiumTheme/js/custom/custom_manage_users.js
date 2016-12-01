@@ -1,3 +1,13 @@
+var userFormErrorMessages={};
+
+userFormErrorMessages['userNameId']="Please Enter Full Name !!!";
+userFormErrorMessages['userId']="Please Enter User ID !!!";
+userFormErrorMessages['emailId']="Please Enter Email ID !!!";
+userFormErrorMessages['roleId']="Please select role !!!";
+userFormErrorMessages['activeId']="Please select active option !!!";
+userFormErrorMessages['createdOnId']="Please enter Created on !!!";
+
+
 var userDetailsData={};
 var rolesArray=[];
 var rolesSelectHtml="";
@@ -188,7 +198,9 @@ function fetchRolesNamesSuccess(serverData){
 }
 
 function userDetailsModalData(gKey){
-
+	
+	$('#addUserDetailsForm :input').removeClass('error');
+	
 	var currentSelectedObject=null;
 	currentSelectedObject = null != gKey ? userDetailsData[gKey] : null;
 	
@@ -230,8 +242,36 @@ function fillSelectDropDown(dropDownId,arrayData,selectedOption){
 	$('#'+dropDownId).val(selectedOption);
 }
 
+function validateBeforeSave(){
+	$('#addUserDetailsForm :input').removeClass('error');
+	var errorMsgArray=[];
+	$("#addUserDetailsForm :input").each(function(){
+		if($(this).hasClass('imp')){
+			var input = $(this);
+			var id=$(input).attr('id');
+			var value=$(input).val();
+			if(null == value || value.length == 0 || typeof(value) == 'undefined'){
+				errorMsgArray.push(userFormErrorMessages[id]);
+				$(input).addClass('error');
+			}
+		}
+		
+	});
+	if(errorMsgArray.length > 0){
+		var notifyObj={msg: '<b>Please Fix User Form Validation Errors !!! </b>',type: "error",position: "center",autohide: true};
+		notif(notifyObj);
+		return false;
+	}
+	return true;
+}
+
 
 function addOrUpdateUser(){
+	
+	if(!validateBeforeSave()){
+		return false;
+	}
+	
 	var isAdd=false;
 	var isValid=false;
 	var userObject={};
@@ -251,7 +291,39 @@ function addOrUpdateUser(){
 		userObject['active']=false;
 	}
 	var createdOn=rowEle.find('#createdOnId').val();
-	if (null ==uName || ""== uName || uName.length == 0 || typeof(uName) == 'undefined'){
+	
+	if (null !=roleListObject[roleId] || ""!= roleListObject[roleId] || roleListObject[roleId].length != 0 || typeof(roleListObject[roleId]) != 'undefined'){
+		roleName=roleListObject[roleId]['roleName'];
+	}
+	
+	if(isUserFullNameValid(uName.trim())){
+		var notifyObj={msg: '<b>Warning : </b> Please Enter valid Full Name !!!',type: "warning",position: "center" };
+		notif(notifyObj);
+	}else if (uId.length<=5 || uId.length == 0 || typeof(uId) == 'undefined'){
+		var notifyObj={msg: '<b>Warning : </b> User ID should be minimum 5 letters !!!',type: "warning",position: "center" };
+		notif(notifyObj);
+	}else if (isUserIDValid(uId) || uId.length == 0 || typeof(uId) == 'undefined'){
+		var notifyObj={msg: '<b>Warning : </b> User ID criteria not matching !!!',type: "warning",position: "center" };
+		notif(notifyObj);
+	}else if ((null ==egKey || "" == egKey || egKey.length == 0 || typeof(egKey) == 'undefined') && (null!=checkUser && ""!=checkUser && checkUser.length != 0 && typeof(checkUser) != 'undefined')){
+		var notifyObj={msg: '<b>Warning : </b> User ID already available !!!',type: "warning",position: "center" };
+		notif(notifyObj);
+	}else if ((null !=eId || ""!= eId || eId.length != 0 || typeof(eId) != 'undefined') && (!isEmail(eId))){
+		var notifyObj={msg: '<b>Warning : </b> You have entered an invalid email address !!!',type: "warning",position: "center" };
+		notif(notifyObj);
+	}else if ((null ==egKey || "" == egKey || egKey.length == 0 || typeof(egKey) == 'undefined') && (null!=checkEmail && ""!=checkEmail && checkEmail.length != 0 && typeof(checkEmail) != 'undefined')){
+		var notifyObj={msg: '<b>Warning : </b> Email ID already available !!!',type: "warning",position: "center" };
+		notif(notifyObj);
+	}else if ((null ==egKey || "" == egKey || egKey.length == 0 || typeof(egKey) == 'undefined') && ("ROLE_SUPER_ADMIN" == roleName.trim())){
+		var notifyObj={msg: '<b>Warning : </b> Super Admin role already available !!!',type: "warning",position: "center" };
+		notif(notifyObj);
+	}else{
+		isValid=true;
+	}
+	
+	
+	
+/*	if (null ==uName || ""== uName || uName.length == 0 || typeof(uName) == 'undefined'){
 		var notifyObj={msg: '<b>Warning : </b> Please Enter Full Name !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 	}else if(isUserFullNameValid(uName.trim())){
@@ -282,20 +354,19 @@ function addOrUpdateUser(){
 	}else if (null ==roleListObject[roleId] || ""== roleListObject[roleId]){
 		var notifyObj={msg: '<b>Warning : </b> Please select role !!!',type: "warning",position: "center" };
 		notif(notifyObj);
-	}
-	if (null !=roleListObject[roleId] || ""!= roleListObject[roleId] || roleListObject[roleId].length != 0 || typeof(roleListObject[roleId]) != 'undefined'){
+	}else if (null !=roleListObject[roleId] || ""!= roleListObject[roleId] || roleListObject[roleId].length != 0 || typeof(roleListObject[roleId]) != 'undefined'){
 		roleName=roleListObject[roleId]['roleName'];
+		return;
 	}
-	if ("ROLE_SUPER_ADMIN" == roleName.trim()){
+	else if ("ROLE_SUPER_ADMIN" == roleName.trim()){
 		var notifyObj={msg: '<b>Warning : </b> Super Admin role already available !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 	}else if (null ==activeId || ""== activeId || activeId.length == 0 || activeId == 'undefined'){
 		var notifyObj={msg: '<b>Warning : </b> Please select active option !!!',type: "warning",position: "center" };
 		notif(notifyObj);
-	}
-	else{
-		isValid=true;
-	}
+	}*/
+	
+	
 	if(egKey ==null || "" == egKey){
 		isAdd=true;
 	}
