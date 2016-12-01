@@ -11,6 +11,7 @@ $(document).ready(function() {
 	
 	$('#addProjectDetailsForm').hide();
 	$('#addProjectDetailsId').on("click" ,function (event){
+		egKey="";
 		projectDetailsModalData(null);
 	});
 
@@ -223,6 +224,11 @@ function updateProjectDetailsSuccess(serverData){
 	}
 }
 function isProjectNameValid(name){
-	var regexp= /^[A-Za-z\-']+( [A-Za-z']+)*$/;
+	var regexp= /^[A-Za-z\-']+( [A-Za-z\-']+)*$/;
 	return name.search(regexp);
 }
+
+/*function isProjectNameValid(name){
+	var regexp = /^[a-z0-9\ \-]+$/;
+	return name.search(regexp);
+}*/

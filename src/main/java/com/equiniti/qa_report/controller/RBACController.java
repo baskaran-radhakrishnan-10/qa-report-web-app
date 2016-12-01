@@ -86,23 +86,23 @@ public class RBACController {
 		return returnObjMap;
 	}
 	
-	@SuppressWarnings("unchecked")
+//	@SuppressWarnings("unchecked")
 	public Map<String,Object> updateUserDetails(Map<String,Object> inputParam) throws ControllerException{
 		LOG.info("Begin :RBACController.updateUserDetails ");
 		Map<String,Object> returnObjMap=new HashMap<>();
-		String inputRoleName=((Map<String, Object>)inputParam.get("roleId")).get("roleName").toString();
+//		String inputRoleName=((Map<String, Object>)inputParam.get("roleId")).get("roleName").toString();
 		try {
-			if(!"ROLE_SUPER_ADMIN".equalsIgnoreCase(inputRoleName))
-			{
+//			if(!"ROLE_SUPER_ADMIN".equalsIgnoreCase(inputRoleName))
+//			{
 				Object returnObj=rbacService.updateUserDetails(inputParam);
 				returnObjMap.put(ApplicationConstants.STATUS, (Boolean)returnObj ? ApplicationConstants.SUCCESS : ApplicationConstants.ERROR);
-			}
+/*			}
 			else
 			{
 				returnObjMap.put(ApplicationConstants.STATUS, ApplicationConstants.ERROR);
 				returnObjMap.put(ApplicationConstants.SERVER_DATA, "");
 				LOG.info("Not a Super Admin");
-			}
+			}*/
 		} catch (APIException e) {
 			throw new ControllerException(e.getFaultCode(), e);
 		} catch(Exception e){

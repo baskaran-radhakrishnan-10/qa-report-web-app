@@ -1,3 +1,15 @@
+var ktpFormErrorMessages={};
+ktpFormErrorMessages['projectId']="Please Select Project Name !!!";
+ktpFormErrorMessages['ktTypeId']="Please Select KT Type !!!";
+ktpFormErrorMessages['ktTitleId']="Please Enter Title !!!";
+ktpFormErrorMessages['sessionId']="Please Select Session !!!";
+ktpFormErrorMessages['trainerId']="Please Select Trainer Name !!!";
+ktpFormErrorMessages['attendeeId']="Please Select Attendees Name !!!";
+ktpFormErrorMessages['locationId']="Please Select Location !!!";
+ktpFormErrorMessages['startDateId']="Please Select Start Date !!!";
+ktpFormErrorMessages['endDateId']="Please Select End Date !!!";
+ktpFormErrorMessages['durationId']="Please Enter Duration !!!";
+
 var ktDataTableRef = null;
 var ktServerData=null;
 var isFilterConstructed=false;
@@ -29,6 +41,7 @@ $(document).ready(function() {
 	fetchResourceNames();
 
 	$('#addKtDetailsId').on("click" ,function (event){
+		egKey="";
 		ktDetailsModalData(null);
 	});
 	
@@ -255,6 +268,8 @@ function fetchResourceNamesSuccess(serverData){
 	}
 }
 function ktDetailsModalData(gKey){
+	
+	$('#ktDetailsForm :input').removeClass('error');
 
 	currentSelectedObject = null != gKey ? ktDetailsData[gKey] : null;
 	fillSelectDropDown('projectId',projectArray,null != currentSelectedObject ? currentSelectedObject['project'] : "");
@@ -288,8 +303,36 @@ function fillSelectDropDown(dropDownId,arrayData,selectedOption){
 	$('#'+dropDownId).val(selectedOption);
 	
 }
+function validateBeforeSave(){
+	$('#ktDetailsForm :input').removeClass('error');
+	var errorMsgArray=[];
+	$("#ktDetailsForm :input").each(function(){
+		if($(this).hasClass('imp')){
+			var input = $(this);
+			var id=$(input).attr('id');
+			var value=$(input).val();
+			if(null == value || value.length == 0 || typeof(value) == 'undefined'){
+				errorMsgArray.push(ktpFormErrorMessages[id]);
+				$(input).addClass('error');
+			}
+		}
+		
+	});
+	if(errorMsgArray.length > 0){
+		var notifyObj={msg: '<b>Please Fix KT Plan Form Validation Errors !!! </b>',type: "error",position: "center",autohide: true};
+		notif(notifyObj);
+		return false;
+	}
+	return true;
+}
 
 function addOrUpdateKTPlan(){
+	
+	$('#ktDetailsForm :input').removeClass('error');
+	
+	if(!validateBeforeSave()){
+		return false;
+	}
 	
 	var isAdd=false;
 	var isValid=false;
@@ -321,54 +364,22 @@ function addOrUpdateKTPlan(){
 	var duration=rowEle.find('#durationId').val();
 	var remarks=rowEle.find('#remarksId').val();
 	var feedback=rowEle.find('#feedbackId').val();
-	if (null ==projectId || ""== projectId){
-		var notifyObj={msg: '<b>Warning : </b> Please Select Project Name !!!',type: "warning",position: "center" };
+	if(isTitleValid(title.trim())){
+		var notifyObj={msg: '<b>Warning : </b> Please Enter valid Title !!!',type: "warning",position: "center" };
 		notif(notifyObj);
-	}else if (null ==typeId || ""== typeId){
-		var notifyObj={msg: '<b>Warning : </b> Please Select KT Type !!!',type: "warning",position: "center" };
+	}else if(isDurationValid(duration.trim())){
+		var notifyObj={msg: '<b>Warning : </b> Please Enter valid Duration !!!',type: "warning",position: "center" };
 		notif(notifyObj);
-	}else if (null ==title || ""== title){
-		var notifyObj={msg: '<b>Warning : </b> Please Enter Title !!!',type: "warning",position: "center" };
-		notif(notifyObj);
-		
-	}else if (null ==sessionId || ""== sessionId){
-		var notifyObj={msg: '<b>Warning : </b> Please Select Session !!!',type: "warning",position: "center" };
-		notif(notifyObj);
-		
-	}else if (null ==trainersNameListId || ""== trainersNameListId){
-		var notifyObj={msg: '<b>Warning : </b> Please Select Trainer Name !!!',type: "warning",position: "center" };
-		notif(notifyObj);
-		
-	}else if (null ==attendeesNameListId || ""== attendeesNameListId){
-		var notifyObj={msg: '<b>Warning : </b> Please Select Attendees Name !!!',type: "warning",position: "center" };
-		notif(notifyObj);
-		
-	}else if (null ==locationId || ""== locationId){
-		var notifyObj={msg: '<b>Warning : </b> Please Select Location !!!',type: "warning",position: "center" };
-		notif(notifyObj);
-		
-	}else if (null ==startDate || ""== startDate){
-		var notifyObj={msg: '<b>Warning : </b> Please Select Start Date !!!',type: "warning",position: "center" };
-		notif(notifyObj);
-		
-	}else if (null ==endDate || ""== endDate){
-		var notifyObj={msg: '<b>Warning : </b> Please Select End Date !!!',type: "warning",position: "center" };
-		notif(notifyObj);
-		
 	}else if(startDateVal > endDateVal ){
 		var notifyObj={msg: 'EndDate should be Equal or greater than the StartDate !!!',type: "warning",position: "center" };
 		notif(notifyObj);
-	}else if (null ==duration || ""== duration){
-		var notifyObj={msg: '<b>Warning : </b> Please Enter Duration !!!',type: "warning",position: "center" };
-		notif(notifyObj);
-	}
-	else{
+	}else{
 		isValid=true;
 	}
 	ktObject['project']=projectId;
 	ktObject['trainingType']=typeId;
 	ktObject['session']=sessionId;
-	ktObject['title']=title;		
+	ktObject['title']=title.trim();		
 	ktObject['trainers']=trainersNameListId;	
 	ktObject['attendees']=attendeesNameListId;
 //	ktObject['others']="";
@@ -433,8 +444,16 @@ function getDateValue(dateObj,format,delimeter){
 	}
 	return formatedDateStr;
 }
-
-
+function isTitleValid(title){
+	var regexp= /^[0-9A-Za-z\-\()']+( [0-9A-Za-z\-\()']+)*$/;
+	return title.search(regexp);
+}
+function isDurationValid(duration){
+	var regexp = /^[0-9\.]+$/;
+	return duration.search(regexp);
+/*	var regexp= /^[A-Za-z']+( [A-Za-z']+)*$/;
+	return duration.search(regexp);*/
+}
 /*----------------------------------------------------------------------------	KT Plan Filter functionality  ----------------------------------------------------------------------------*/
 
 

@@ -14,10 +14,12 @@ function populateUserDetails(entriesList){
 		var userDetailsModelAttribute=entriesList[i];
 		var gKey=userDetailsModelAttribute['gKey'];
 		var roleName=userDetailsModelAttribute['roleName'];
+		var roleDesc=userDetailsModelAttribute['roleDesc'];
 		userDetailsData[gKey]=userDetailsModelAttribute;
 		html += '<tr id="'+gKey+'">' ;
 		html += '<td>'+sNo+'</td>' ;
 		html += '<td>'+roleName+'</td>' ;
+		html += '<td>'+roleDesc+'</td>' ;
 //		html += '<td id="userDetailsEditRowId" onclick="roleDetailsModalData('+gKey+')"><span><a href="#" class="glyphicon glyphicon-edit"></a></span><span>&nbsp;</span></td>' ;
 		html += '</tr>' ;
 		htmlArray.push(html);

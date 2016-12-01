@@ -90,7 +90,7 @@
 											<div class="col-md-12">
 												<label class="col-sm-2 control-label">Project Name:<font color="red">*</font></label>
 												<div class="col-sm-3">
-													<input id="projectNameId" name="projectName" type="text" class="input-sm form-control imp" value="" maxlength="50" data-toggle="tooltip" data-placement="auto right" data-original-title="Allows maximum 50 characters and - only">
+													<input id="projectNameId" name="projectName" type="text" class="input-sm form-control imp" value="" maxlength="50" data-toggle="tooltip" data-placement="auto right" data-original-title="Allows max 50 characters, single space and - only">
 												</div>
 												<label class="col-sm-2 control-label">Created Date:<font color="red">*</font></label>
 												<div class="col-sm-3">

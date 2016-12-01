@@ -27,7 +27,7 @@
 	</div>
 </div>
 
-<form id="addUserDetailsForm" role="form" autocomplete="off" class="form-horizontal" action="#" method="post">
+<form id="resetUserDetailsForm" role="form" autocomplete="off" class="form-horizontal" action="#" method="post">
 	
 	<div id="alertcustom"></div>
 	

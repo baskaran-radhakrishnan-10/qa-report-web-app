@@ -1,3 +1,11 @@
+var resetPasswordFormErrorMessages={};
+
+resetPasswordFormErrorMessages['userId']="Please Enter User ID !!!";
+resetPasswordFormErrorMessages['newPasswordId']="Please Enter New Password !!!";
+resetPasswordFormErrorMessages['confirmPasswordId']="Please Enter Confirm Password !!!";
+resetPasswordFormErrorMessages['modifiedOnId']="Please Enter Modified on date !!!";
+
+
 var userDetailsData={};
 var rolesArray=[];
 var rolesSelectHtml="";
@@ -7,35 +15,31 @@ var roleListObject={};
 var userIdListObject={};
 var resetPassword=false;
 
+
+
 $(document).ready(function() {
 	getUserDetails();
 	
 	$("#modifiedOnId").val($.datepicker.formatDate('dd-mm-yy', new Date()));
 	$('#reset_password_button').on("click" ,function (event){
 		
+		$('#resetUserDetailsForm :input').removeClass('error');
+		
+		if(!validateBeforeSave()){
+			return false;
+		}
+		
 		var nPwd=$("#newPasswordId").val().trim();
 		var cPwd=$("#confirmPasswordId").val().trim();
 		
-		if(""==$("#userId").val()||null==$("#userId").val() || $("#userId").val().length == 0 || typeof($("#userId").val()) == 'undefined'){
-			var notifyObj={msg: '<b>Warning : </b> Please select the User ID !!!',type: "warning",position: "center" };
-			notif(notifyObj);
-		}
-		else if(""==nPwd||null==nPwd || nPwd.length == 0 || typeof(nPwd) == 'undefined'){
-			var notifyObj={msg: '<b>Warning : </b> Please enter New password !!!',type: "warning",position: "center" };
-			notif(notifyObj);
-		}
-		else if(""==cPwd||null==cPwd || cPwd.length == 0 || typeof(cPwd) == 'undefined'){
-			var notifyObj={msg: '<b>Warning : </b> Please enter Confirm password !!!',type: "warning",position: "center" };
-			notif(notifyObj);
-		}
-		else if((nPwd.length<5) && (cPwd.length<5)){
+		if((nPwd.length<5) && (cPwd.length<5)){
 			var notifyObj={msg: '<b>Warning : </b> Password should be minimum 5 letters !!!',type: "warning",position: "center" };
 			notif(notifyObj);
 		}else if((nPwd != cPwd)){
 			var notifyObj={msg: '<b>Warning : </b> New and Confirm Password not matching !!!',type: "warning",position: "center" };
 			notif(notifyObj);
 		}
-		else if((nPwd==cPwd) && (null!=nPwd && null!=cPwd) && (""!=nPwd && ""!=cPwd ) && ((nPwd.length >=5) && (cPwd.length >=5))){
+		else if((nPwd==cPwd) && (null!=nPwd && null!=cPwd) && (""!=nPwd && ""!=cPwd ) && ((nPwd.length >=5) && (cPwd.length >=5)) && ((nPwd.length !=0) && (cPwd.length !=0))){
 			resetPassword=true;
 		}
 
@@ -63,6 +67,29 @@ $(document).ready(function() {
 	});
 	
 });
+
+function validateBeforeSave(){
+	$('#resetUserDetailsForm :input').removeClass('error');
+	var errorMsgArray=[];
+	$("#resetUserDetailsForm :input").each(function(){
+		if($(this).hasClass('imp')){
+			var input = $(this);
+			var id=$(input).attr('id');
+			var value=$(input).val();
+			if(null == value || value.length == 0 || typeof(value) == 'undefined'){
+				errorMsgArray.push(resetPasswordFormErrorMessages[id]);
+				$(input).addClass('error');
+			}
+		}
+		
+	});
+	if(errorMsgArray.length > 0){
+		var notifyObj={msg: '<b>Please Fix Reset Password Form Validation Errors !!! </b>',type: "error",position: "center",autohide: true};
+		notif(notifyObj);
+		return false;
+	}
+	return true;
+}
 
 function getUserDetails(){
 	var data={};
