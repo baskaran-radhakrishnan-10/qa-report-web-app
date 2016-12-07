@@ -282,6 +282,10 @@ function addOrUpdateUser(){
 	var checkUser=(userDetailsData[uId]);
 	var eId=rowEle.find('#emailId').val();
 	var checkEmail=(userDetailsData[eId]);
+	if(null != checkEmail && "" != checkEmail && checkEmail.length !=0 && checkEmail != 'undefined'){
+
+		var currentUserId=userDetailsData[eId]['userId'];
+	}
 	var roleId=rowEle.find('#roleId').val();
 	var activeId=rowEle.find('#activeId').val();
 	if(activeId=="Yes"){
@@ -312,6 +316,9 @@ function addOrUpdateUser(){
 		var notifyObj={msg: '<b>Warning : </b> You have entered an invalid email address !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 	}else if ((null ==egKey || "" == egKey || egKey.length == 0 || typeof(egKey) == 'undefined') && (null!=checkEmail && ""!=checkEmail && checkEmail.length != 0 && typeof(checkEmail) != 'undefined')){
+		var notifyObj={msg: '<b>Warning : </b> Email ID already available !!!',type: "warning",position: "center" };
+		notif(notifyObj);
+	}else if (null != currentUserId && typeof(currentUserId) != 'undefined' && currentUserId.length !=0 && uId != currentUserId){
 		var notifyObj={msg: '<b>Warning : </b> Email ID already available !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 	}else if ((null ==egKey || "" == egKey || egKey.length == 0 || typeof(egKey) == 'undefined') && ("ROLE_SUPER_ADMIN" == roleName.trim())){
