@@ -20,7 +20,17 @@ public class GetUserDeatilsEvent extends BaseEvent  {
 
 	private User entity;
 	
+	private boolean isDeleted;
 	
+	
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
 	public List<String> getUniqueUserList() {
 		return uniqueUserList;
 	}

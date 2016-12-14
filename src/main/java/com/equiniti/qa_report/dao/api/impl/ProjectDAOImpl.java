@@ -1,5 +1,6 @@
 package com.equiniti.qa_report.dao.api.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +81,27 @@ public class ProjectDAOImpl implements ProjectDAO{
 			throw new DaoException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}
 		LOG.info("End:ProjectDAOImpl.updateProject");
+	}
+	@Override
+	public void deleteData(List<Integer> deleteRecordList) throws DaoException{
+		abstractHibernateDAOAPI.bulkSQLNativeOperation(buildDeleteQuery(deleteRecordList));
+	}
+	
+	private List<String> buildDeleteQuery(List<Integer> deleteRecordList){
+		LOG.info("Begin: ProjectDAOImpl.buildDeleteQuery");
+		StringBuffer queryBuffer = new StringBuffer();
+		List<String> queryList = new ArrayList<>();
+		if(null !=deleteRecordList && !deleteRecordList.isEmpty()){
+			queryBuffer.append("UPDATE projectstable SET is_deleted = 1 WHERE projectid in (");
+			for (Object i:deleteRecordList ){
+				queryBuffer.append(i.toString()+",");
+			}
+			queryBuffer.deleteCharAt(queryBuffer.length() -1);
+		}
+		queryBuffer.append(")");
+		queryList.add(queryBuffer.toString());
+		LOG.info("End: ProjectDAOImpl.buildDeleteQuery");
+		return queryList;
 	}
 
 }

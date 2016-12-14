@@ -9,10 +9,12 @@ import org.springframework.stereotype.Service;
 import com.equiniti.qa_report.controller.OperationController;
 import com.equiniti.qa_report.entity.ProjectEntity;
 import com.equiniti.qa_report.event.project.AddProjectEvent;
+import com.equiniti.qa_report.event.project.DeleteProjectEvent;
 import com.equiniti.qa_report.event.project.GetProjectEvent;
 import com.equiniti.qa_report.event.project.UpdateProjectEvent;
 import com.equiniti.qa_report.eventapi.eventhandling.generic.BaseAPIImpl;
 import com.equiniti.qa_report.exception.api.exception.APIException;
+import com.equiniti.qa_report.exception.api.exception.ControllerException;
 import com.equiniti.qa_report.exception.api.exception.EventException;
 import com.equiniti.qa_report.exception.api.faultcode.CommonFaultCode;
 import com.equiniti.qa_report.service.api.ProjectService;
@@ -86,6 +88,23 @@ public class ProjectServiceImpl extends BaseAPIImpl implements ProjectService{
 		return event.isUpdated();
 	}
 	
-
+	@SuppressWarnings("unchecked")
+	@Override
+	public void deleteData(Map<String, Object> paramMap) throws APIException {
+		LOG.info("Begin: ProjectServiceImpl.deleteData");
+		DeleteProjectEvent event=null;
+		try{
+			if(paramMap.containsKey("deleteRecordList")){
+				event=getEvent(DeleteProjectEvent.class);
+				event.setDeleteKeyList((List<Integer>) paramMap.get("deleteRecordList"));
+			}
+			processEvent(event);
+		} catch (APIException e) {
+			throw new ControllerException(e.getFaultCode(), e);
+		} catch (Exception e) {
+			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+		LOG.info("End: ProjectServiceImpl.deleteData");
+	}
 
 }

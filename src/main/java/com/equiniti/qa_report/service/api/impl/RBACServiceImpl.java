@@ -15,6 +15,7 @@ import com.equiniti.qa_report.cache.CacheInstance;
 import com.equiniti.qa_report.entity.Roles;
 import com.equiniti.qa_report.entity.User;
 import com.equiniti.qa_report.event.rbac.AddUserDeatilsEvent;
+import com.equiniti.qa_report.event.rbac.DeleteUserDetailsEvent;
 import com.equiniti.qa_report.event.rbac.GetUniqueUserListEvent;
 import com.equiniti.qa_report.event.rbac.ResetPasswordEvent;
 import com.equiniti.qa_report.event.rbac.UpdateUserDetailsEvent;
@@ -22,6 +23,7 @@ import com.equiniti.qa_report.event.roles.GetRolesEvent;
 import com.equiniti.qa_report.event.user_details.GetUserDeatilsEvent;
 import com.equiniti.qa_report.eventapi.eventhandling.generic.BaseAPIImpl;
 import com.equiniti.qa_report.exception.api.exception.APIException;
+import com.equiniti.qa_report.exception.api.exception.ControllerException;
 import com.equiniti.qa_report.exception.api.exception.EventException;
 import com.equiniti.qa_report.exception.api.faultcode.CommonFaultCode;
 import com.equiniti.qa_report.service.api.RBACService;
@@ -58,10 +60,12 @@ public class RBACServiceImpl extends BaseAPIImpl implements RBACService {
 	public List<User> getUserDetails() throws APIException {
 		LOG.info("Begin: RBACServiceImpl.getUserDetails");
 		GetUserDeatilsEvent event=null;
+		Map<String,Object> restrictionMap = new HashMap<String, Object>();
 		try{
 			event=getEvent(GetUserDeatilsEvent.class);
 			event.setEntity(populateUserDetailsEntityFromList());
-			LOG.info("event--> "+event);
+			restrictionMap.put("deleted", false);
+			event.setRestrictionMap(restrictionMap);
 			processEvent(event);
 		}catch(EventException e){
 			throw new APIException(e.getFaultCode(),e);
@@ -158,6 +162,26 @@ public class RBACServiceImpl extends BaseAPIImpl implements RBACService {
 		}
 		return returnObj;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void deleteData(Map<String, Object> paramMap) throws APIException {
+		LOG.info("Begin: RBACServiceImpl.deleteData");
+		DeleteUserDetailsEvent event=null;
+		try{
+			if(paramMap.containsKey("deleteRecordList")){
+				event=getEvent(DeleteUserDetailsEvent.class);
+				event.setDeleteKeyList((List<Integer>) paramMap.get("deleteRecordList"));
+			}
+			processEvent(event);
+		} catch (APIException e) {
+			throw new ControllerException(e.getFaultCode(), e);
+		} catch (Exception e) {
+			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+		LOG.info("End: RBACServiceImpl.deleteData");
+	}
+	
 
 	private User populateUserDetailsEntityFromList(){
 

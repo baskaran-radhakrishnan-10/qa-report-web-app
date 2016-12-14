@@ -38,21 +38,63 @@ $(document).ready(function() {
 		
 	});
 
-	$('#show-user-details-id tbody').on('click', 'tr', function () {
-		var gKey=$(this).attr('id');
-		$('#show-user-details-id tbody tr').removeClass('selected');
-		$('#show-user-details-id tr').css('background-color','');
-		if (!$(this).hasClass('selected')){
-			$(this).addClass('selected');
-			$(this).css('background-color','#B0BED9 !important');
-			userDetailsEdit(gKey);
-		}
-	});
 	$(document).on("keydown", "#userId",function (e) {
 	    return e.which !== 32;
 	});
 	$(document).on("keydown", "#emailId",function (e) {
 	    return e.which !== 32;
+	});
+	
+	
+	$('#show-user-details-id tbody').on('dblclick', 'tr', function () {
+		if("ROLE_SUPER_ADMIN" == $('#loggedInRoleId').val()){
+			var gKey=$(this).attr('id');
+			
+			if(userDetailsData[gKey]['roleId']['roleName']=="ROLE_SUPER_ADMIN"){
+				var notifyObj={msg: '<b> Error: </b>Can not delete Super Admin Role User!!! ',type: "error",position: "center",autohide: true};
+				notif(notifyObj);
+			}
+			else{
+			
+	        if ($(this).hasClass('selected')){
+	            $(this).removeClass('selected');
+	            $(this).css('background-color','');
+	        }
+	        else {
+	            $(this).addClass('selected');
+	            $(this).css('background-color','#B0BED9 !important');
+	        }
+	        var selectedRowList=$('#show-user-details-id tbody').find('.selected')
+	        if(selectedRowList.length > 0){
+	        	$('#delete_button').show();
+	        }else{
+	        	$('#delete_button').hide();
+	        }
+		}}
+    });
+	
+	$('#delete_button').on('click',function(){
+		$("#showDeleteRowModal").trigger( "click" );
+		$('#row_delete_confirm_div').show();
+	});
+	
+	$('#delete_rows').on("click",function(){
+		var deleteEntryArray = [];
+		var selectedRowList=$('#show-user-details-id tbody').find('.selected');
+		if(selectedRowList.length > 0){
+			$.each(selectedRowList,function(index,row){
+				deleteEntryArray.push(parseInt($(row).attr('id')));
+			});
+			if(deleteEntryArray.length > 0){
+				deleteUserRows(deleteEntryArray);
+			}
+		}
+	});
+	
+	$('#modal_close_button').on("click",function(){
+		$('#delete_btp_button').hide();
+		$('#show-user-details-id tbody tr').removeClass('selected');
+		$('#show-user-details-id tbody tr').css('background-color','');
 	});
 
 });
@@ -132,7 +174,7 @@ function populateUserDetails(entriesList){
 		html += '<td>'+roleDesc+'</td>' ;
 		html +=	'<td>'+active+'</td>' ;
 		html += '<td>'+createdOn+'</td>' ;
-//		html += '<td id="userDetailsEditRowId" onclick="userDetailsEdit('+gKey+')"><span><a href="#" class="glyphicon glyphicon-edit"></a></span><span>&nbsp;</span><a id="userDetailsSaveRowId" style="display:none;" href="#"> <span class="glyphicon glyphicon-check"></span></a></td>' ;
+		html += '<td id="userDetailsEditRowId" onclick="userDetailsEdit('+gKey+')"><span><a href="#" class="glyphicon glyphicon-edit"></a></span><span>&nbsp;</span><a id="userDetailsSaveRowId" style="display:none;" href="#"> <span class="glyphicon glyphicon-check"></span></a></td>' ;
 		html += '</tr>' ;
 		htmlArray.push(html);
 		sNo++;
@@ -328,52 +370,6 @@ function addOrUpdateUser(){
 		isValid=true;
 	}
 	
-	
-	
-/*	if (null ==uName || ""== uName || uName.length == 0 || typeof(uName) == 'undefined'){
-		var notifyObj={msg: '<b>Warning : </b> Please Enter Full Name !!!',type: "warning",position: "center" };
-		notif(notifyObj);
-	}else if(isUserFullNameValid(uName.trim())){
-		var notifyObj={msg: '<b>Warning : </b> Please Enter valid Full Name !!!',type: "warning",position: "center" };
-		notif(notifyObj);
-	}
-	else if (null ==uId || ""== uId || uId.length == 0 || typeof(uId) == 'undefined'){
-		var notifyObj={msg: '<b>Warning : </b> Please Enter User ID !!!',type: "warning",position: "center" };
-		notif(notifyObj);
-	}else if (uId.length<=5 || uId.length == 0 || typeof(uId) == 'undefined'){
-		var notifyObj={msg: '<b>Warning : </b> User ID should be minimum 5 letters !!!',type: "warning",position: "center" };
-		notif(notifyObj);
-	}else if (isUserIDValid(uId) || uId.length == 0 || typeof(uId) == 'undefined'){
-		var notifyObj={msg: '<b>Warning : </b> User ID criteria not matching !!!',type: "warning",position: "center" };
-		notif(notifyObj);
-	}else if ((null ==egKey || "" == egKey || egKey.length == 0 || typeof(egKey) == 'undefined') && (null!=checkUser && ""!=checkUser && checkUser.length != 0 && typeof(checkUser) != 'undefined')){
-		var notifyObj={msg: '<b>Warning : </b> User ID already available !!!',type: "warning",position: "center" };
-		notif(notifyObj);
-	}else if (null ==eId || ""== eId || eId.length == 0 || typeof(eId) == 'undefined'){
-		var notifyObj={msg: '<b>Warning : </b> Please Enter Email ID !!!',type: "warning",position: "center" };
-		notif(notifyObj);
-	}else if ((null !=eId || ""!= eId || eId.length != 0 || typeof(eId) != 'undefined') && (!isEmail(eId))){
-		var notifyObj={msg: '<b>Warning : </b> You have entered an invalid email address !!!',type: "warning",position: "center" };
-		notif(notifyObj);
-	}else if ((null ==egKey || "" == egKey || egKey.length == 0 || typeof(egKey) == 'undefined') && (null!=checkEmail && ""!=checkEmail && checkEmail.length != 0 && typeof(checkEmail) != 'undefined')){
-		var notifyObj={msg: '<b>Warning : </b> Email ID already available !!!',type: "warning",position: "center" };
-		notif(notifyObj);
-	}else if (null ==roleListObject[roleId] || ""== roleListObject[roleId]){
-		var notifyObj={msg: '<b>Warning : </b> Please select role !!!',type: "warning",position: "center" };
-		notif(notifyObj);
-	}else if (null !=roleListObject[roleId] || ""!= roleListObject[roleId] || roleListObject[roleId].length != 0 || typeof(roleListObject[roleId]) != 'undefined'){
-		roleName=roleListObject[roleId]['roleName'];
-		return;
-	}
-	else if ("ROLE_SUPER_ADMIN" == roleName.trim()){
-		var notifyObj={msg: '<b>Warning : </b> Super Admin role already available !!!',type: "warning",position: "center" };
-		notif(notifyObj);
-	}else if (null ==activeId || ""== activeId || activeId.length == 0 || activeId == 'undefined'){
-		var notifyObj={msg: '<b>Warning : </b> Please select active option !!!',type: "warning",position: "center" };
-		notif(notifyObj);
-	}*/
-	
-	
 	if(egKey ==null || "" == egKey){
 		isAdd=true;
 	}
@@ -455,3 +451,28 @@ function updateUserDetailsSuccess(serverData){
 	
 	}
 }
+
+function deleteUserRows(deleteRecordList){
+	console.log(deleteRecordList)
+	var data = {};
+	data['deleteRecordList'] = deleteRecordList;
+	ajaxHandler("POST", JSON.stringify(data), "application/json", getApplicationRootPath()+"rbac/deleteData", 'json', deleteUserRowsError, deleteUserRowsSuccess,true);
+}
+
+function deleteUserRowsError(errorRes){
+	console.log(errorRes);
+	var notifyObj={msg: '<b>Error : </b> Operation Failed Due to Server Issue !!!',type: "error",position: "center" };
+	notif(notifyObj);
+}
+
+function deleteUserRowsSuccess(serverData,inputData){
+	if('ERROR' != serverData['STATUS']){
+		var notifyObj={msg: "<b>Success:</b> Selected Records Deleted Successfully !!!",type: "success",position: "center",autohide: true};
+		if(null != sessionStorageObj){
+			sessionStorageObj.setItem("NOTIFICATION",notifyObj);
+		}
+		window.location.href=getApplicationRootPath()+"rbac/showUser";
+	}
+}
+
+

@@ -12,4 +12,8 @@
 		<loadData file="/WEB-INF/classes/liquibase/tbl_resources_initial_data.csv" tableName="tbl_resources"/>
 	</changeSet>
 	
+	<changeSet author="Meganathan Sengodan" id="update_tbl_resources_changeset"	runOnChange="true">
+		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">update tbl_resources set resource_url='project/manage_projects' where resource_url='operation/manage_projects'</sql>
+	</changeSet>
+	
 </databaseChangeLog>	

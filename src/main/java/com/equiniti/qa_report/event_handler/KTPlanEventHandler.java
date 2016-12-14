@@ -8,6 +8,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import com.equiniti.qa_report.dao.api.KTPlanDAO;
 import com.equiniti.qa_report.entity.KTPlan;
 import com.equiniti.qa_report.event.kt_plan.AddKTPlanDetailsEvent;
+import com.equiniti.qa_report.event.kt_plan.DeleteKTPlanDetailsEvent;
 import com.equiniti.qa_report.event.kt_plan.GetKTPlanDetailsEvent;
 import com.equiniti.qa_report.event.kt_plan.UpdateKTPlanDetailsEvent;
 import com.equiniti.qa_report.eventapi.eventhandling.generic.IEvent;
@@ -42,7 +43,11 @@ public class KTPlanEventHandler implements IEventHandler<IEvent> {
 			LOG.debug("Event :" + UpdateKTPlanDetailsEvent.class.getName());
 			UpdateKTPlanDetailsEvent eventObj = (UpdateKTPlanDetailsEvent) event;
 			updateKTDetails(eventObj);
-		}
+		}else if (event instanceof DeleteKTPlanDetailsEvent) {
+            LOG.debug("Event :" + DeleteKTPlanDetailsEvent.class.getName());
+            DeleteKTPlanDetailsEvent eventObj = (DeleteKTPlanDetailsEvent) event;
+            deleteData(eventObj);
+        }
 		LOG.debug("processEvent END");
 		}
 	
@@ -85,6 +90,20 @@ public class KTPlanEventHandler implements IEventHandler<IEvent> {
 		LOG.debug("End: KTPlanEventHandler.updateKTDetails");
 	}
 	
+    private void deleteData(DeleteKTPlanDetailsEvent event) throws EventException {
+    	LOG.debug("Begin: KTPlanEventHandler.deleteData");
+        try {
+        	if(null != event.getDeleteKeyList()){
+        		ktPlanDAO.deleteData(event.getDeleteKeyList());
+        	}
+        } catch (DaoException e) {
+            throw new EventException(e.getFaultCode(), e);
+        } catch (Exception e) {
+            throw new EventException(CommonFaultCode.UNKNOWN_ERROR, e);
+        }
+        LOG.debug("End: KTPlanEventHandler.deleteData");
+    }
+    
 	private KTPlan populateEntityFromMapObject(Map<String,Object> mapObject) throws EventException{
 		LOG.debug("Begin: KTPlanEventHandler.populateEntityFromMapObject");
 		KTPlan entity=objMapper.convertValue(CommonUtil.removeTransientObject(mapObject), KTPlan.class);

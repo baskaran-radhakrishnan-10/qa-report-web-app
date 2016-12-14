@@ -24,6 +24,8 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:org/sp
 				<entry key="getProjectEvent" value-ref="projectEventProcessor"/>
 				<entry key="addProjectEvent" value-ref="projectEventProcessor"/>
 				<entry key="updateProjectEvent" value-ref="projectEventProcessor"/>
+				<entry key="deleteProjectEvent" value-ref="projectEventProcessor"/>
+				
 				
 				<entry key="getItemDetailsEvent" value-ref="itemDetailsEventProcessor"/>
 				<entry key="addItemDetailsEvent" value-ref="itemDetailsEventProcessor"/>
@@ -36,6 +38,7 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:org/sp
 				<entry key="updateUserDetailsEvent" value-ref="rbacEventProcessor"/>
 				<entry key="resetPasswordEvent" value-ref="rbacEventProcessor"/>
 				<entry key="getRolesEvent" value-ref="rbacRolesEventProcessor"/>
+				<entry key="deleteUserDetailsEvent" value-ref="rbacEventProcessor"/>
 				
 				<entry key="buildBTPMonthlyReportEvent" value-ref="reportSearchEventProcessor"/>
 				<entry key="buildBTPSummaryReportEvent" value-ref="reportSearchEventProcessor"/>
@@ -50,6 +53,8 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:org/sp
 				<entry key="getKTPlanDetailsEvent" value-ref="ktPlanEventProcessor"/>
 				<entry key="addKTPlanDetailsEvent" value-ref="ktPlanEventProcessor"/>
 				<entry key="updateKTPlanDetailsEvent" value-ref="ktPlanEventProcessor"/>
+				<entry key="deleteKTPlanDetailsEvent" value-ref="ktPlanEventProcessor"/>
+				
 				
 				<entry key="getRemainderDetailsEvent" value-ref="remainderDetailsEventProcessor"/>
 				<entry key="addRemainderDetailsEvent" value-ref="remainderDetailsEventProcessor"/>

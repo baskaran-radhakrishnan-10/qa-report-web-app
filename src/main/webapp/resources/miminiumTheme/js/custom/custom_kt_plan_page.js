@@ -75,7 +75,7 @@ $(document).ready(function() {
 		filterKTData(filterObject);
 	});
 	
-	$('#show-kt-details-id tbody').on('click', 'tr', function () {
+/*	$('#show-kt-details-id tbody').on('click', 'tr', function () {
 		var gKey=$(this).attr('id');
 		$('#show-kt-details-id tbody tr').removeClass('selected');
 		$('#show-kt-details-id tr').css('background-color','');
@@ -84,7 +84,54 @@ $(document).ready(function() {
 			$(this).css('background-color','#B0BED9 !important');
 			editKTPlanDetails(gKey);
 		}
+	});*/
+	
+	$('#show-kt-details-id tbody').on('dblclick', 'tr', function () {
+		if("ROLE_SUPER_ADMIN" == $('#loggedInRoleId').val()){
+			var btpNo=$(this).attr('id');
+	        if ($(this).hasClass('selected')){
+	            $(this).removeClass('selected');
+	            $(this).css('background-color','');
+	        }
+	        else {
+	            $(this).addClass('selected');
+	            $(this).css('background-color','#B0BED9 !important');
+	        }
+	        var selectedRowList=$('#show-kt-details-id tbody').find('.selected')
+	        if(selectedRowList.length > 0){
+	        	$('#delete_button').show();
+	        }else{
+	        	$('#delete_button').hide();
+	        }
+		}
+    });
+	
+	$('#delete_button').on('click',function(){
+		$("#showDeleteRowModal").trigger( "click" );
+		$('#row_delete_confirm_div').show();
 	});
+	
+	$('#delete_rows').on("click",function(){
+		var deleteEntryArray = [];
+		var selectedRowList=$('#show-kt-details-id tbody').find('.selected');
+		if(selectedRowList.length > 0){
+			$.each(selectedRowList,function(index,row){
+				deleteEntryArray.push(parseInt($(row).attr('id')));
+				console.log(deleteEntryArray);
+			});
+			if(deleteEntryArray.length > 0){
+				deleteKTPlanRows(deleteEntryArray);
+			}
+		}
+	});
+	
+	$('#modal_close_button').on("click",function(){
+		$('#delete_button').hide();
+		$('#show-kt-details-id tbody tr').removeClass('selected');
+		$('#show-kt-details-id tbody tr').css('background-color','');
+	});
+
+
 
 	$(document).on("change", "#trainerId", function(event) {
 		trainierSelectedVal=$("#trainerId").val();
@@ -145,7 +192,10 @@ function fetchKTDetailsSuccess(serverData){
 	ktDataTableRef = $('#show-kt-details-id').DataTable({
 		"responsive" : false,
 		"processing": true,
-		"dom": 'Bfrtpl',
+//		"dom": 'Bflrtip',
+//		dom: "<'row'B><'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-4'i>><'row'p>",
+		"dom":"<'row'<'col-sm-12'B>>"+"<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6'l><'col-sm-6'f>>" +"<'row'<'col-sm-12'tr>>" +"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+	
 		"buttons": [{
 					extend: 'excel',
                     title: 'KTPlanDataExport',
@@ -201,7 +251,7 @@ function populateKTDetails(entriesList){
 //		html += '<td  nowrap="nowrap">'+sNo+'</td>' ;
 		html += '<td  nowrap>'+sNo+'</td>' ;
 		html +=	'<td  nowrap>'+project+'</td>' ;
-		html += '<td  nowrap>'+trainingType+'</td>' ;
+		html += '<td  hidden>'+trainingType+'</td>' ;
 		html += '<td  hidden>'+session+'</td>' ;
 		html +=	'<td  nowrap>'+title+'</td>' ;
 		html += '<td  hidden>'+trainers+'</td>' ;
@@ -214,7 +264,7 @@ function populateKTDetails(entriesList){
 		html += '<td  hidden>'+duration+'</td>' ;
 		html += '<td  hidden>'+remarks+'</td>' ;
 		html += '<td  hidden>'+feedback+'</td>' ;
-//		html += '<td id="ktDetailsEditRowId" onclick="editKTPlanDetails('+gKey+')"><span><a href="#" class="glyphicon glyphicon-edit"></a></span><span>&nbsp;</span><a id="ktDetailsSaveRowId" style="display:none;" href="#"> <span class="glyphicon glyphicon-check"></span></a></td>' ;
+		html += '<td id="ktDetailsEditRowId" onclick="editKTPlanDetails('+gKey+')"><span><a href="#" class="glyphicon glyphicon-edit"></a></span><span>&nbsp;</span><a id="ktDetailsSaveRowId" style="display:none;" href="#"> <span class="glyphicon glyphicon-check"></span></a></td>' ;
 		html += '</tr>' ;
 		htmlArray.push(html);
 		sNo++;
@@ -453,6 +503,29 @@ function isDurationValid(duration){
 	return duration.search(regexp);
 /*	var regexp= /^[A-Za-z']+( [A-Za-z']+)*$/;
 	return duration.search(regexp);*/
+}
+
+function deleteKTPlanRows(deleteRecordList){
+	console.log(deleteRecordList)
+	var data = {};
+	data['deleteRecordList'] = deleteRecordList;
+	ajaxHandler("POST", JSON.stringify(data), "application/json", getApplicationRootPath()+"kt_plan/deleteData", 'json', deleteUserRowsError, deleteUserRowsSuccess,true);
+}
+
+function deleteUserRowsError(errorRes){
+	console.log(errorRes);
+	var notifyObj={msg: '<b>Error : </b> Operation Failed Due to Server Issue !!!',type: "error",position: "center" };
+	notif(notifyObj);
+}
+
+function deleteUserRowsSuccess(serverData,inputData){
+	if('ERROR' != serverData['STATUS']){
+		var notifyObj={msg: "<b>Success:</b> Selected Records Deleted Successfully !!!",type: "success",position: "center",autohide: true};
+		if(null != sessionStorageObj){
+			sessionStorageObj.setItem("NOTIFICATION",notifyObj);
+		}
+		window.location.href=getApplicationRootPath()+"kt_plan/ktPlan";
+	}
 }
 /*----------------------------------------------------------------------------	KT Plan Filter functionality  ----------------------------------------------------------------------------*/
 
