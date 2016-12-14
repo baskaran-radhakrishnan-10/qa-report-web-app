@@ -23,17 +23,17 @@ public class RBACDAOImpl implements RBACDAO {
 		this.abstractHibernateDAOAPI = abstractHibernateDAOAPI;
 	}
 
-	@SuppressWarnings("unchecked")
-	
 	@Override
 	public List<User> getUserDetails(Map<String,Object> restrictionMap) throws DaoException {
 		List<User> returnList=null;
 		try{
-			//restrictionMap.put("is_active", true);
+			if(null != restrictionMap && restrictionMap.containsKey("password")){
+				restrictionMap.remove("password");
+			}
+			if(null != restrictionMap && restrictionMap.containsKey("firstLogin")){
+				restrictionMap.remove("firstLogin");
+			}
 			returnList=abstractHibernateDAOAPI.getEntityList(User.class, restrictionMap);
-			
-			//returnList=(List<User>)abstractHibernateDAOAPI.processQuery("QUERY_4", null, null, QueryOperationType.SELECT, QueryType.SQL, null);
-			
 		}catch(DaoException e){
 			throw new DaoException(e.getFaultCode(), e);
 		}catch(Exception e){

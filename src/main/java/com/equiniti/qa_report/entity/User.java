@@ -7,6 +7,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
+
 import com.equiniti.qa_report.persistance_api.audit.api.IAuditLog;
 
 @Entity
@@ -40,6 +43,19 @@ public class User extends GeneralEntity implements IAuditLog{
 	
 	@Column(name = "is_deleted")
 	private  boolean deleted;
+	
+	@Column(name = "deleted_time")
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+	private DateTime deletedTime;
+
+	public DateTime getDeletedTime() {
+		return deletedTime;
+	}
+
+	public void setDeletedTime(DateTime deletedTime) {
+		this.deletedTime = deletedTime;
+	}
+
 
 	public boolean isDeleted() {
 		return deleted;

@@ -33,6 +33,8 @@
 	
 	<input type="hidden" id="selectedRowKeyInput" value="" />
 	
+	<input type="hidden" id="emailIdHidden" value="" />
+	
 	<div class="form-element">
 		<div class="col-md-12" style="padding-right: 2px;padding-left: 1px;width: 103%;margin: 16px -16px;">
 			<div class="col-md-12 panel">

@@ -153,7 +153,7 @@ function validateBeforeSave(){
 			$("#resource1Id").trigger( "click" );
 		}
 	});
-	if(errorMsgArray.length > 0){
+	if(errorMsgArray.length > 0 || $("#buildTestPlanForm :input").hasClass('error')){
 		var notifyObj={msg: '<b>Please fill all mandatory fields in BTP Form</b>',type: "error",position: "center",autohide: true};
 		notif(notifyObj);
 		return false;

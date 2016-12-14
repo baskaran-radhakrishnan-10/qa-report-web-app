@@ -9,6 +9,8 @@ public class ApplicationConstants {
 	public static final String BASE_URL = "baseUrl";
 
 	public static final String LOGIN_PAGE="loginpage";
+	
+	public static final String RESET_PASSWORD_PAGE="reset_passwprd_page";
 
 	public static final String REDIRECT_LOGIN_PAGE="redirect:/login";
 
@@ -19,6 +21,8 @@ public class ApplicationConstants {
 	public static final String USER_OBJ="USER_OBJ";
 	
 	public static final String USER_ID="USER_ID";
+	
+	public static final String USER_NAME="USER_NAME";
 
 	public static final String RESOURCE_MAP="resourceMap";
 
@@ -91,5 +95,29 @@ public class ApplicationConstants {
 	public static final String TRANSIENT_LOG_DETAIL="logDeatil";
 	
 	public static final String ROLE_ID = "roleId";
+	
+	public static final String FIRST_LOGIN = "FIRST_LOGIN";
+	
+	public static final String LOGIN_CREDENTIALS_TEMPLATE_PATH ="/WEB-INF/email_templates/login_credentials_email_template.html";
+	
+	public static final String EMAIL_FROM="EMAIL_FROM";
+
+	public static final String EMAIL_TO="EMAIL_TO";
+
+	public static final String EMAIL_SUBJECT="EMAIL_SUBJECT";
+
+	public static final String EMAIL_BCC="EMAIL_BCC";
+
+	public static final String EMAIL_CC="EMAIL_CC";
+
+	public static final String EMAIL_ATTACHMENT="EMAIL_ATTACHMENT";
+
+	public static final String EMAIL_ATTACHMENT_TYPE="EMAIL_ATTACHMENT_TYPE";
+
+	public static final String EMAIL_ATTACHMENT_FILE_NAME="EMAIL_ATTACHMENT_FILE_NAME";
+
+	public static final String EMAIL_BODY="EMAIL_BODY";
+
+	public static final String EMAIL_DETAILS_MAP="EMAIL_DETAILS_MAP";
 	
 }

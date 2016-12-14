@@ -19,7 +19,9 @@ import com.equiniti.qa_report.service.api.ProjectService;
 
 @Service("projectService")
 public class ProjectServiceImpl extends BaseAPIImpl implements ProjectService{
+	
 	private static final Logger LOG= Logger.getLogger(OperationController.class);
+	
 	@Override
 	public List<String> getUniqueProjectNameList() throws APIException {
 		GetProjectEvent event=null;

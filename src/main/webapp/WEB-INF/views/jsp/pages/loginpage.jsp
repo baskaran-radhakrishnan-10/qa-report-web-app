@@ -102,9 +102,9 @@
 					</label> <input type="submit" id="submitField" value="Log In" class="btn col-md-12" />
 				</div>
 
-				<!-- <div class="text-center" style="padding: 5px;">
-					<a href="#">Forgot Password </a> <a href="#">| Signup</a>
-				</div> -->
+				<div class="text-center" style="padding: 6px;">
+					<a href="#" style="color: #a5a5a5 !important;">Forgot Password ?</a> 
+				</div>
 
 			</div>
 		</form:form>

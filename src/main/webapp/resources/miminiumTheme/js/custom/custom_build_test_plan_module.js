@@ -275,20 +275,6 @@ $(document).ready(function() {
 	
 });
 
-function checkisNumber(charCode){
-	if (charCode != 8 && charCode != 0 && (charCode < 48 || charCode > 57)) {
-		return false;
-	}
-	return true;
-}
-
-function checkIsDecimelNumber(charCode){
-	if (charCode != 8 && charCode != 0 && (charCode < 48 || charCode > 57) && charCode != 46) {
-		return false;
-	}
-	return true;
-}
-
 function fetchProjectNames(){
 	var data={};
 	data=JSON.stringify(data);

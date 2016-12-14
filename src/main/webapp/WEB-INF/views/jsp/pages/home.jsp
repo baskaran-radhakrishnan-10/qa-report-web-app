@@ -34,6 +34,29 @@
 <img src="${gearsImg}" alt="Loading.." id="homeLoader_div" style="width: 150px;height: 150px; left: 54%;position: fixed; z-index: 1000;top: 45%; background: rgba( 255, 255, 255, .8 ) 50% 50% no-repeat;display:none;"/>
 <!-- start: content -->
 
+<div class="modal fade" id="change_password_modal" tabindex="-1" role="dialog" aria-labelledby="changePasswordModal" aria-hidden="true" data-backdrop="static" data-keyboard="false" data-href="">	
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content" style="top: 122px;width: 53%;left: 24%;">
+			<div class="modal-header">
+				<h2 class="modal-title" style="font-size: 22px;color: rgba(0, 0, 0, 0.55);">Change your password</h2>
+			</div>
+			<form role="form" class="form-horizontal" id="change_password_form">
+				<div class="col-sm-8" style="margin: 14px 76px;">
+							<!-- <input id="old_password_id" name="oldPassword" type="password" class="input-sm form-control imp" placeholder="Old Password" style="height: 38px !important;margin-bottom: 10px;"> -->
+							<input id="new_password_id" name="newPassword" type="password" class="input-sm form-control imp" placeholder="New Password" style="height: 38px !important;margin-bottom: 10px;">
+							<input id="confirm_new_password_id" name="confirmNewPassword" type="password" class="input-sm form-control imp" placeholder="Confirm New Password" style="height: 38px !important;margin-bottom: -12px;">
+						</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="chanage_password_button" style="margin: 16px 145px;">Change Password</button>
+					<button type="button" class="btn btn-default" id="modal_close_button" data-dismiss="modal" style="display:none;">Close</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<input type="button" id="changePasswordPageTrigger" data-toggle="modal" data-target="#change_password_modal" style="display:none;" />
+
 <div class="col-md-12" id="homeMainDiv" style="display:none;">
 	<!-- 	<div class="col-md-12 padding-0"> -->
 	<!-- 		<div class="col-md-8 padding-0"> -->

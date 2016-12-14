@@ -154,6 +154,15 @@ $(document).ready(function() {
 		$('#build_test_plan_table_id tbody tr').removeClass('selected');
 		$('#build_test_plan_table_id tbody tr').css('background-color','');
 	});
+	
+	$(document).on("keypress", "#dsrForm :input", function(e) {
+		var id = $(this).attr('id');
+		var charCode = e.which;
+		if(id.indexOf("hrsPlannedId") != -1 || id.indexOf("hrsSpentId") != -1){
+			return checkIsDecimelNumber(charCode);
+		}
+		return true;
+	});
 
 	if(null != indexDBObj){
 		indexDBObj.openDatabase("QA_REPORT_DB","dsr","sNo");

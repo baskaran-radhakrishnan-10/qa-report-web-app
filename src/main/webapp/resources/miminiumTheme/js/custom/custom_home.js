@@ -12,14 +12,100 @@ var currentUser=$('#loggedInUserId').val();
 var date = new Date();
 var currentTime=(date.getHours()<10 ? "0"+date.getHours() : date.getHours())+":"+(date.getMinutes()<10 ? "0"+date.getMinutes() : date.getMinutes());
 currentTime=parseInt(currentTime.replace(":",""));
-$(document).ready(function() {	
+
+$(document).ready(function() {
+	
+	$('#new_password_id').on("blur",function(event){
+		$(this).removeClass('error');
+		var value = $(this).val();
+		if("" == value){
+			$(this).addClass('error');
+			var notifyObj={msg: '<b>Invalid Password</b>',type: "error",position: "center",autohide: true};
+			notif(notifyObj);
+		}
+		else if(value.length < 8 ||  value.length > 20){
+			$(this).addClass('error');
+			var notifyObj={msg: '<b>Password length should be between 8 to 20</b>',type: "error",position: "center",autohide: true};
+			notif(notifyObj);
+		}
+	});
+	
+	$('#confirm_new_password_id').on("blur",function(event){
+		$(this).removeClass('error');
+		var value = $(this).val();
+		if("" == value){
+			$(this).addClass('error');
+			var notifyObj={msg: '<b>Invalid Confirm Password</b>',type: "error",position: "center",autohide: true};
+			notif(notifyObj);
+		}
+		else if(value.length < 8 ||  value.length > 20){
+			$(this).addClass('error');
+			var notifyObj={msg: '<b>Confirm Password length should be between 8 to 20</b>',type: "error",position: "center",autohide: true};
+			notif(notifyObj);
+		}
+	});
+	
+	$('#chanage_password_button').on("click",function(event){
+		var newPassword=$('#new_password_id').val();
+		var confirmPassword=$('#confirm_new_password_id').val();
+		if("" == newPassword || "" == confirmPassword ){
+			var notifyObj={msg: '<b>Invalid Password</b>',type: "error",position: "center",autohide: true};
+			notif(notifyObj);
+			if("" == newPassword){
+				$('#new_password_id').addClass('error');
+			}
+			if("" == confirmPassword){
+				$('#confirm_new_password_id').addClass('error');
+			}
+		}else if(newPassword != confirmPassword){
+			$('#change_password_form .imp').addClass('error');
+			var notifyObj={msg: '<b>Password & Confirm Password values should be equal</b>',type: "error",position: "center",autohide: true};
+			notif(notifyObj);
+		}else{
+			$('#change_password_form .imp').removeClass('error');
+		}
+		
+		if(!$('#change_password_form .imp').hasClass('error')){
+			var data={};
+			data['userId']=currentUser;
+			data['password']=$('#confirm_new_password_id').val();
+			data['firstLogin']=false;
+			data=JSON.stringify(data);
+			ajaxHandler("POST", data, "application/json", getApplicationRootPath()+"rbac/resetPassword", 'json', resetPasswordError, resetPasswordSuccess,true);
+		}
+		
+	});
+	
+	if("true" == $('#isFirstTimeLoggedIn').val()){
+		$('#change_password_form .imp').removeClass('error');
+		$("#changePasswordPageTrigger").trigger( "click" );
+	}else{
+		loadHomePageContent();
+	}
+	
+});
+
+function resetPasswordSuccess(serverData,inputData){
+	if('ERROR' != serverData['STATUS']){
+		var notifyObj={msg: "<b>Success:</b> Password Changed Successfully !!!",type: "success",position: "center",autohide: true};
+		notif(notifyObj);
+		$('#modal_close_button').trigger( "click" );
+		loadHomePageContent();
+	}
+}
+
+function resetPasswordError(errorResponse){
+	var notifyObj={msg: "<b>Failed:</b> Request is not processed successfully !!!",type: "error",position: "center",autohide: true};
+	notif(notifyObj);
+}
+
+function loadHomePageContent(){
 	showLoader();
 	getReminderDetails();
 	getKTDetails();
 	fetchTestPlanEntries();
 	getUserDetails();
-	
-});
+}
 
 function showLoader(){
 	$('#homeMainDiv').hide();

@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context 
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://activemq.apache.org/schema/core 
+       http://activemq.apache.org/schema/core/activemq-core.xsd">
+        
+	<bean id="emailQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<property name="physicalName" value="EmailQueue" />
+	</bean> 
+	
+	<bean id="emailQueueListener" class="com.equiniti.qa_report.queue.listener.EmailQueueListener" />
+
+	<bean id="emailQueueContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="activeMQConnectionFactory" />
+		<property name="destination" ref="emailQueue" />
+		<property name="messageListener" ref="emailQueueListener" />
+		<property name="concurrentConsumers" value="1" />
+	</bean>
+	
+    <!-- SET default mail properties -->
+    <bean id="mailSenderImplObj" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="${mail.host}"/>
+        <property name="port" value="${mail.port}"/>
+        <property name="username" value="${mail.username}"/>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.transport.protocol">${mail.transport.protocol}</prop>
+                <prop key="mail.smtp.auth">${mail.smtp.auth}</prop>
+                <prop key="mail.smtp.starttls.enable">${mail.smtp.starttls.enable}</prop>
+                <prop key="mail.debug">${mail.debug}</prop>
+                <prop key="mail.smtps.ssl.trust">${mail.smtps.ssl.trust}</prop>
+                <prop key="mail.smtps.ssl.checkserveridentity">${mail.smtps.ssl.checkserveridentity}</prop>
+            </props>
+        </property>
+    </bean>
+    
+    <bean id="mailConfigService" class="com.equiniti.qa_report.email.EmailConfigService">
+		<constructor-arg name="cryptoService" ref="cryptoService" />
+		<constructor-arg name="mailSenderImplObj" ref="mailSenderImplObj" />
+		<constructor-arg name="password" value="${mail.password}" />
+	</bean>
+	
+	<bean id="emailHandler" class="com.equiniti.qa_report.email.EmailHandler">
+		<constructor-arg name="mailConfigService" ref="mailConfigService" />
+	</bean>
+	
+	<!-- <context:component-scan base-package="com.equiniti.qa_report.email"/> -->
+    
+</beans>

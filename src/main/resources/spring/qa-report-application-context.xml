@@ -12,12 +12,16 @@
     <context:component-scan base-package="com.equiniti.qa_report.export"/>
     <context:component-scan base-package="com.equiniti.qa_report.queue.connector"/>
     <context:component-scan base-package="com.equiniti.qa_report.queue.listener"/>
+    <context:component-scan base-package="com.equiniti.qa_report.sms"/>
+    
     
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
 				<value>/WEB-INF/classes/properties/database.properties</value>
 				<value>/WEB-INF/classes/properties/security.properties</value>
+				<value>/WEB-INF/classes/properties/email.properties</value>
+				<value>/WEB-INF/classes/properties/sms-config.properties</value>
 			</list>
 		</property>
 	</bean>		

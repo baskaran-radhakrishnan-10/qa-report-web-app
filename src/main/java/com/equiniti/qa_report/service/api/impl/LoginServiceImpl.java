@@ -70,17 +70,25 @@ public class LoginServiceImpl extends BaseAPIImpl implements LoginService{
 				return modelAttribute;
 			}
 			
+			/*if(user.isFirstLogin()){
+				modelAttribute.setSuccess(true);
+				modelAttribute.setResultMapping(ApplicationConstants.RESET_PASSWORD_PAGE);
+				return modelAttribute;
+			}*/
+			
 			List<RolesResources> roleResourceList=roleResourceService.getRolesResourcesByRoleId(role.getGkey());
 
 			session.setAttribute(ApplicationConstants.USER_OBJ, user);
 			
 			session.setAttribute(ApplicationConstants.USER_ID, user.getUserId());
 			
+			session.setAttribute(ApplicationConstants.USER_NAME, user.getUserFullName());
+			
 			session.setAttribute(ApplicationConstants.IS_LOGGED_IN, true);
 			
-			session.setAttribute(ApplicationConstants.USER_ID, user.getUserId());
-			
 			session.setAttribute(ApplicationConstants.ROLE_ID, role.getRoleName());
+			
+			session.setAttribute(ApplicationConstants.FIRST_LOGIN, user.isFirstLogin());
 			
 			CACHE_INS.removeAllItemFromGroup(user.getUserId());
 			

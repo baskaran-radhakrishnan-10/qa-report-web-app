@@ -66,7 +66,7 @@ LeftMenuObject.prototype = {
 			for(var index in leftMenuObject){
 				var mainMenu = index;
 				var subMenu = leftMenuObject[index];
-				if(_.keys(subMenu).length > 1){
+				if(_.keys(subMenu).length > 0){
 					var html = "";
 					for(var resource in subMenu){
 						var url = leftMenuRef.baseUrl + subMenu[resource];

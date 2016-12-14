@@ -32,29 +32,22 @@ $(document).ready(function() {
 		var nPwd=$("#newPasswordId").val().trim();
 		var cPwd=$("#confirmPasswordId").val().trim();
 		
-		if((nPwd.length<5) && (cPwd.length<5)){
-			var notifyObj={msg: '<b>Warning : </b> Password should be minimum 5 letters !!!',type: "warning",position: "center" };
+		if((nPwd != cPwd)){
+			var notifyObj={msg: '<b>Warning : </b> New and Confirm Password not matching !!!',type: "error",position: "center" };
 			notif(notifyObj);
-		}else if((nPwd != cPwd)){
-			var notifyObj={msg: '<b>Warning : </b> New and Confirm Password not matching !!!',type: "warning",position: "center" };
+		}else if((nPwd.length<5) && (cPwd.length<5)){
+			var notifyObj={msg: '<b>Warning : </b> Password should be minimum 5 letters !!!',type: "error",position: "center" };
 			notif(notifyObj);
-		}
-		else if((nPwd==cPwd) && (null!=nPwd && null!=cPwd) && (""!=nPwd && ""!=cPwd ) && ((nPwd.length >=5) && (cPwd.length >=5)) && ((nPwd.length !=0) && (cPwd.length !=0))){
+		}else if((nPwd==cPwd) && (null!=nPwd && null!=cPwd) && (""!=nPwd && ""!=cPwd ) && ((nPwd.length >=5) && (cPwd.length >=5)) && ((nPwd.length !=0) && (cPwd.length !=0))){
 			resetPassword=true;
 		}
 
 		if(resetPassword){
+			var emailId=$('#emailIdHidden').val();
 			var userObject={};
 			userObject['userId']=$("#userId").val();
-			userObject['gkey']=userIdListObject[userObject['userId']]['gkey']
-			userObject['userFullName']=userIdListObject[userObject['userId']]['userFullName']
 			userObject['password']=nPwd;
-			userObject['emailId']= userIdListObject[userObject['userId']]['emailId']
-			userObject['active']= userIdListObject[userObject['userId']]['active']
-			userObject['roleId']= userIdListObject[userObject['userId']]['roleId']
-			userObject['roleId']['createdOn']=getDateValue(['roleId']['createdOn'],'yyyy-MM-dd',"-");
-			userObject['roleId']['modifiedOn']=getDateValue(['roleId']['modifiedOn'],'yyyy-MM-dd',"-");
-			userObject['modifiedOn']=$.datepicker.formatDate('yy-mm-dd', new Date());
+			userObject['emailId']= (emailId.length > 0) ? emailId : userIdListObject[userObject['userId']]['emailId']
 			ajaxHandler("POST", JSON.stringify(userObject), "application/json", getApplicationRootPath()+"rbac/resetPassword", 'json', null, resetPasswordSuccess,true);
 		}
 	});
@@ -92,9 +85,20 @@ function validateBeforeSave(){
 }
 
 function getUserDetails(){
-	var data={};
-	data=JSON.stringify(data);
-	ajaxHandler("POST", data, "application/json", getApplicationRootPath()+"rbac/getUserDetails", 'json', null, fetchUserDetailsSuccess,true);
+	if("ROLE_SUPER_ADMIN" == $('#loggedInRoleId').val()){
+		var data={};
+		data=JSON.stringify(data);
+		ajaxHandler("POST", data, "application/json", getApplicationRootPath()+"rbac/getUserDetails", 'json', null, fetchUserDetailsSuccess,true);
+	}else{
+		var splitedArray = $('#loggedInUser').val().split(" -- ");
+		var userId = splitedArray[1].split(" : ")[1];
+		var emailId = splitedArray[2].split(" : ")[1];
+		var tempUserIdArray=new Array();
+		tempUserIdArray.push(userId);
+		fillSelectDropDown('userId',tempUserIdArray, userId);
+		$('#emailIdHidden').val(emailId);
+	}
+	
 }
 
 function fetchUserDetailsSuccess(serverData){
@@ -112,13 +116,13 @@ function populateUserDetails(entriesList){
 	}
 }
 
-function fillSelectDropDown(dropDownId,arrayData,selectedOption){
+/*function fillSelectDropDown(dropDownId,arrayData,selectedOption){
 	$('#'+dropDownId).html("");
 	$.each(arrayData, function(key, value) {   
 	     $('#'+dropDownId).append($("<option></option>").attr("value",value).text(value)); 
 	});
 	$('#'+dropDownId).val(" ");
-}
+}*/
 
 function getDateValue(dateObj,format,delimeter){
 	var formatedDateStr="";

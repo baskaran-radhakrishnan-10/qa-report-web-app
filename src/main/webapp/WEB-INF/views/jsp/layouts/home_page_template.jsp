@@ -50,7 +50,7 @@
 <spring:url	value="/resources/miminiumTheme/js/common/common.js" var="commonJS" />
 <spring:url	value="/resources/miminiumTheme/js/plugins/notify/notifIt.js"	var="notifyJs" />
 <spring:url	value="/resources/miminiumTheme/js/custom/custom_left_menu.js" var="leftMenuJS" />
-<spring:url	value="/resources/miminiumTheme/js/service-worker/service-worker-impl.js" var="serviceWorkerImplJs" />
+<%-- <spring:url	value="/resources/miminiumTheme/js/service-worker/service-worker-impl.js" var="serviceWorkerImplJs" /> --%>
 
 <!DOCTYPE html>
 <html lang="en" class="no-js">
@@ -134,8 +134,13 @@ body.loading .ajaxloader {
 </head>
 
 <body id="mimin" class="dashboard">
-<input id="loggedInUserId" name="loggedInUser" type="hidden" value="<%=session.getAttribute("USER_ID")%>">
-<input id="loggedInRoleId" name="loggedInUserRoleName" type="hidden" value="<%=session.getAttribute("roleId")%>">
+
+	<input id="loggedInUser" name="loggedInUser" type="hidden" value="<%=session.getAttribute("USER_OBJ")%>">
+	<input id="loggedInUserId" name="loggedInUserId" type="hidden" value="<%=session.getAttribute("USER_ID")%>">
+	<input id="loggedInRoleId" name="loggedInUserRoleName" type="hidden" value="<%=session.getAttribute("roleId")%>">
+	<input id="loggedInUserName" name="loggedInUserName" type="hidden" value="<%=session.getAttribute("USER_NAME")%>">
+	<input id="isFirstTimeLoggedIn" name="isFirstTimeLoggedIn" type="hidden" value="<%=session.getAttribute("FIRST_LOGIN")%>">
+	
 	<!-- start: Header -->
 	<tiles:insertAttribute name="header_menu" />
 	<!-- end: Header -->
@@ -166,7 +171,7 @@ body.loading .ajaxloader {
 	<script src="${niceScrollJs}"></script>
 	<%-- 	<script src="${chartJs}"></script> --%>
 	<script src="${mainJs}"></script>
-	<script src="${serviceWorkerImplJs}"></script>
+	<%-- <script src="${serviceWorkerImplJs}"></script> --%>
 	
 </body>
 

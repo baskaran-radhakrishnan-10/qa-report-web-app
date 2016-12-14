@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.equiniti.qa_report.controller.LoginController;
+import com.equiniti.qa_report.controller.SMSController;
 import com.equiniti.qa_report.form.model.LoginModelAttribute;
 import com.equiniti.qa_report.util.ApplicationConstants;
 
@@ -27,6 +28,9 @@ public class ApplicationMainWebController {
 	
 	@Autowired
 	private HttpSession session;
+	
+	@Autowired
+	private SMSController smsController;
 	
 	@Autowired
 	private HttpServletRequest request;
@@ -63,6 +67,7 @@ public class ApplicationMainWebController {
 		}
 		loginModelAttribute.setModel(model);
 		String resultPage=loginController.doLogin(loginModelAttribute);
+		//smsController.sendOneTimePassword("919962932629", "919962932629", "598745632145656");
 		model=loginModelAttribute.getModel();
 		return resultPage;
 	}

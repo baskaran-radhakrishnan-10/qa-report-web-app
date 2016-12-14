@@ -9,8 +9,6 @@
 
 <script id="dsrWorker" src="${dsrWorkerJS}"></script>
 
-
-
 <div class="modal fade" id="dsr_modal" tabindex="-1" role="dialog" aria-labelledby="dsrModal" aria-hidden="true" data-backdrop="static" data-keyboard="false" data-href="">	
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content" style="width: 124%;margin: 124px -105px;border-radius: 0px;">

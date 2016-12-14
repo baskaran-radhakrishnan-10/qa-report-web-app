@@ -316,7 +316,10 @@ p.quote{
     border: none !important;
     box-shadow: 0 7px 16px #333, 0 4px 5px #333;
 	}
-    .form-signin .panel-body{padding-bottom: 50px;padding-top: 30px;}
+    .form-signin .panel-body{
+    	padding-bottom: 20px;
+    	padding-top: 0px;
+    }
     .form-signin .atomic-number{font-size: 20px;}
     .form-signin .atomic-symbol{font-size: 10em !important;font-weight: 500;padding-bottom: 20spx;}
     .form-signin .element-name,.form-signin .atomic-mass{font-size: 18px;margin-top: -10px;font-weight: 600;line-height: 1.2;}

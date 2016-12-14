@@ -29,6 +29,8 @@
             /WEB-INF/classes/spring/qa-report-event-application-context.xml
             /WEB-INF/classes/spring/activemq-configuration.xml
             /WEB-INF/classes/spring/qa-report-jms-queue-configuration.xml
+            /WEB-INF/classes/spring/email-jms-queue-configuration.xml
+            /WEB-INF/classes/spring/sms-jms-queue-configuration.xml
         </param-value>
 	</context-param>
 	

@@ -2,8 +2,12 @@ package com.equiniti.qa_report.event_handler;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.equiniti.qa_report.dao.api.RBACDAO;
 import com.equiniti.qa_report.dao.api.RBACRolesDAO;
@@ -31,6 +35,9 @@ public class RBACEventHandler implements IEventHandler<IEvent> {
 	private EncryptionDecryption cryptoService;
 	private RBACDAO rbacDAO;
 	private RBACRolesDAO rbacRolesDAO;
+	
+	@Autowired
+	private HttpSession session;
 
 
 	public void setRbacRolesDAO(RBACRolesDAO rbacRolesDAO) {
@@ -123,7 +130,21 @@ public class RBACEventHandler implements IEventHandler<IEvent> {
 	private void resetPassword(ResetPasswordEvent event) throws EventException {
 		LOG.debug("Begin: RBACEventHandler.resetPassword");
 		try {
-			rbacDAO.resetPassword(populateEntityFromMapObjectResetPassword(event.getParamMap()));
+			boolean isFirstLogin = true;
+			if(event.getParamMap().containsKey("firstLogin")){
+				isFirstLogin = Boolean.valueOf(event.getParamMap().get("firstLogin").toString());
+			}
+			String password = event.getParamMap().get("password").toString();
+			User userEntity = rbacDAO.getUserDetails(event.getParamMap()).get(0);
+			userEntity.setPassword(encryptPassword(password));
+			if(!isFirstLogin){
+				userEntity.setFirstLogin(isFirstLogin);
+			}
+			userEntity.setModifiedOn(new DateTime());
+			rbacDAO.resetPassword(userEntity);
+			if(!isFirstLogin){
+				session.setAttribute(ApplicationConstants.FIRST_LOGIN, isFirstLogin);
+			}
 		} catch (DaoException e) {
 			throw new EventException(e.getFaultCode(), e);
 		} catch (Exception e) {
@@ -131,6 +152,7 @@ public class RBACEventHandler implements IEventHandler<IEvent> {
 		}
 		LOG.debug("Begin: RBACEventHandler.resetPassword");
 	}
+	
 	private void updateUserDetails(UpdateUserDetailsEvent event) throws EventException {
 		LOG.debug("Begin: RBACEventHandler.updateUserDetails");
 		try {
@@ -183,24 +205,12 @@ public class RBACEventHandler implements IEventHandler<IEvent> {
 		return entity;
 	}
 	
-	private User populateEntityFromMapObjectResetPassword(Map<String,Object> mapObject) throws EventException{
-		LOG.debug("Begin: RBACEventHandler.populateEntityFromMapObjectResetPassword");
-		String encryptedPassword;
-		User entity=objMapper.convertValue(mapObject, User.class);
-		try{
-			encryptedPassword=cryptoService.encrypt(entity.getPassword());
+	private String encryptPassword(String actualPwd) throws EventException{
+		try {
+			return cryptoService.encrypt(actualPwd);
+		} catch (SecurityException e) {
+			throw new EventException(SecurityFaultCodes.SECURITY_CRYPTO_ENCRIPTION_FAILED_ERROR,e);	
 		}
-		catch(SecurityException se){
-			throw new EventException(SecurityFaultCodes.SECURITY_CRYPTO_ENCRIPTION_FAILED_ERROR,se);			
-		}
-		catch(Exception e){
-			throw new EventException(CommonFaultCode.UNKNOWN_ERROR, e);
-		}
-		entity.setPassword(encryptedPassword);
-		entity.setFirstLogin(true);
-	
-		LOG.debug("End: RBACEventHandler.populateEntityFromMapObjectResetPassword.encryptedPassword");
-		return entity;
 	}
 	
 	private User populateEntityFromMapObject(Map<String,Object> mapObject){

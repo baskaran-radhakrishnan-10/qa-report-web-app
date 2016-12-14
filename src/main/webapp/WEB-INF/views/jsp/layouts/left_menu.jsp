@@ -13,6 +13,8 @@
 				<ul class="nav nav-list tree" style="display:none;"></ul>
 			</li>
 			
+			<%-- <li id="change_password_li" style="display:none;"><a href="${sessionScope.baseUrl}rbac/managePassword"> <span class="fa-key fa"></span> Change Password </a></li> --%>
+			
 			<li id="build_test_plan_li" style="display:none;"><a href="${sessionScope.baseUrl}build_test_plan/show"> <span class="fa-pencil-square-o fa"></span> Build Test Plan </a></li>
 			
 			<li id="daily_status_report_li" style="display:none;"><a href="${sessionScope.baseUrl}dsr/show"> <span class="fa-calendar fa"></span> Daily Status Report </a></li>

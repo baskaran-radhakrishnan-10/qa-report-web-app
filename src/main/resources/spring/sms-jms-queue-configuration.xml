@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+			classpath:org/springframework/beans/factory/xml/spring-beans-3.0.xsd 
+			http://www.springframework.org/schema/context 
+			classpath:org/springframework/beans/factory/xml/spring-context-3.0.xsd">
+
+	<bean id="smsConfig" class="com.equiniti.qa_report.sms.SMSConfig" >
+		<constructor-arg value="${plivo.auth.id}" />
+		<constructor-arg value="${plivo.auth.token}" />
+		<constructor-arg value="${plivo.auth.version}" />
+	</bean>
+
+	<bean id="smsQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<property name="physicalName" value="SMSQueue" />
+	</bean>
+
+	<bean id="smsQueueListener" class="com.equiniti.qa_report.queue.listener.SMSQueueListener" />
+
+	<bean id="smsQueueContainer"
+		class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="activeMQConnectionFactory" />
+		<property name="destination" ref="smsQueue" />
+		<property name="messageListener" ref="smsQueueListener" />
+		<property name="concurrentConsumers" value="1" />
+	</bean>
+
+</beans>
