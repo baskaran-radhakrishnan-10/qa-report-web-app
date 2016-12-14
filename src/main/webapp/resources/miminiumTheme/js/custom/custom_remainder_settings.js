@@ -53,7 +53,7 @@ function getUserDetails(){
 function fetchUserDetailsSuccess(serverData){
 	$('#show-reminder-details-id').find('#tbody_id').html(populateUserDetails(serverData['SERVER_DATA']));
 	$('#show-reminder-details-id').DataTable({
-		info : false,
+		info : true,
 		"responsive" : true
 	});
 	
