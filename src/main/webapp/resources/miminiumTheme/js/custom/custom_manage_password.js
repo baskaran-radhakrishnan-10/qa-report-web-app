@@ -60,6 +60,7 @@ $(document).ready(function() {
 	});
 	
 	$('#cancel_button').on("click" ,function (event){
+		$('#resetUserDetailsForm :input').removeClass('error');
 		$('#userId').val("");
 		$('#newPasswordId').val("");
 		$('#confirmPasswordId').val(""); 

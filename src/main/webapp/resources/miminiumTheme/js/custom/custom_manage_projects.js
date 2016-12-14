@@ -85,7 +85,7 @@ function getProjectDetails(){
 function fetchProjectDetailsSuccess(serverData){
 	$('#show-project-details-id').find('#tbody_id').html(populateProjectDetails(serverData['SERVER_DATA']));
 	$('#show-project-details-id').DataTable({
-		info : false,
+		info : true,
 		"responsive" : true
 	});
 	

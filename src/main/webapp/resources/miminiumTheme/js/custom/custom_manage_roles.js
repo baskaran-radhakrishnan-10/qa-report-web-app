@@ -38,7 +38,7 @@ function fetchRolesNamesListSuccess(serverData){
 	if('ERROR' != serverData['STATUS']){
 		$('#show-role-details-id').find('#tbody_id').html(populateUserDetails(serverData['SERVER_DATA']));
 		$('#show-role-details-id').DataTable({
-			info : false,
+			info : true,
 			"responsive" : true
 		});
 		var rolesNameObjList=serverData['SERVER_DATA'];

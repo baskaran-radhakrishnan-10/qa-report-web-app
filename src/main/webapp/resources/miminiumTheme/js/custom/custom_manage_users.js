@@ -120,7 +120,7 @@ function getUserDetails(){
 function fetchUserDetailsSuccess(serverData){
 	$('#show-user-details-id').find('#tbody_id').html(populateUserDetails(serverData['SERVER_DATA']));
 	$('#show-user-details-id').DataTable({
-		info : false,
+		info : true,
 		"responsive" : true
 	});
 
