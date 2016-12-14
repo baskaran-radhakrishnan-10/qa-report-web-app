@@ -23,7 +23,7 @@
 		<div id="row_delete_confirm_div" class="modal-content" style="top: 122px;width: 53%;left: 24%;display:none;">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">(x)</button>
-					<h2 class="modal-title" style="font-size: 19px;color: rgba(31, 33, 33, 0.52);">Delete BTP Rows</h2>
+					<h2 class="modal-title" style="font-size: 19px;color: rgba(31, 33, 33, 0.52);">Delete Projects</h2>
 				</div>
 				<form role="form" class="form-horizontal" id="btp_report_export_form">
 					<div class="modal-body">
