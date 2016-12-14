@@ -1,5 +1,6 @@
 package com.equiniti.qa_report.dao.api.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +24,6 @@ public class KTPlanDAOImpl implements KTPlanDAO {
 		this.abstractHibernateDAOAPI = abstractHibernateDAOAPI;
 	}
 
-	@SuppressWarnings("unchecked")
-	
 	@Override
 	public List<KTPlan> getKTPlanDetails(Map<String,Object> restrictionMap) throws DaoException {
 		LOG.debug("Begin: KTPlanDAOImpl.getKTPlanDetails");
@@ -72,4 +71,25 @@ public class KTPlanDAOImpl implements KTPlanDAO {
 		LOG.debug("End: KTPlanDAOImpl.updateKTDetails");
 	}
 
+	@Override
+	public void deleteData(List<Integer> deleteRecordList) throws DaoException{
+		abstractHibernateDAOAPI.bulkSQLNativeOperation(buildDeleteQuery(deleteRecordList));
+	}
+	
+	private List<String> buildDeleteQuery(List<Integer> deleteRecordList){
+		LOG.debug("Begin: KTPlanDAOImpl.buildDeleteQuery");
+		StringBuffer queryBuffer = new StringBuffer();
+		List<String> queryList = new ArrayList<>();
+		if(null !=deleteRecordList && !deleteRecordList.isEmpty()){
+			queryBuffer.append("UPDATE KTTable SET is_deleted = 1 WHERE tri_id in (");
+			for (Object i:deleteRecordList ){
+				queryBuffer.append(i.toString()+",");
+			}
+			queryBuffer.deleteCharAt(queryBuffer.length() -1);
+		}
+		queryBuffer.append(")");
+		queryList.add(queryBuffer.toString());
+		LOG.debug("End: KTPlanDAOImpl.buildDeleteQuery");
+		return queryList;
+	}
 }

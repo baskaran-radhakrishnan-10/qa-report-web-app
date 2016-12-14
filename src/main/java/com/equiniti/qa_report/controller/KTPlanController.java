@@ -71,5 +71,18 @@ public class KTPlanController {
 		LOG.info("Begin :KTPlanController.updateKTDetails ");
 		return returnObjMap;
 	}
+	
+	public Map<String,Object> deleteData(Map<String,Object> paramMap) throws ControllerException{
+		Map<String,Object> returnObjMap=new HashMap<>();
+		try {
+			ktPlanService.deleteData(paramMap);
+			returnObjMap.put(ApplicationConstants.STATUS, ApplicationConstants.SUCCESS);
+		} catch (APIException e) {
+			throw new ControllerException(e.getFaultCode(), e);
+		} catch(Exception e){
+			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+		return returnObjMap;
+	}
 
 }

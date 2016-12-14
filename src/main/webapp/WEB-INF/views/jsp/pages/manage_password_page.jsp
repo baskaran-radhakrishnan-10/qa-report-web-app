@@ -36,13 +36,15 @@
 	<input type="hidden" id="emailIdHidden" value="" />
 	
 	<div class="form-element">
-		<div class="col-md-12" style="padding-right: 2px;padding-left: 1px;width: 103%;margin: 16px -16px;">
+		<div class="col-md-12 top-20" id="rolesMainDiv" style="margin-bottom: 10px;">
+		<h5>
+			<a href="#" class="" aria-expanded="true" style="cursor: text;"> <font color="red"> * </font> Indicates Mandatory Field </a>
+		</h5>
 			<div class="col-md-12 panel">
+			
 				<div class="col-md-12" id="accordion" style="margin-top: 10px;">
-					<h5>
-						<a href="#" class="" aria-expanded="true" style="cursor: text;"> <font color="red"> * </font> Indicates Mandatory Field </a>
-					</h5>
-					<div id="collapse1" class="panel-collapse collapse in" style="border-style: ridge; border-width: thin;" aria-expanded="true">
+					
+					<!-- <div id="collapse1" class="panel-collapse collapse in" style="border-style: ridge; border-width: thin;" aria-expanded="true"> -->
 						<div class="panel-body">
 							<div class="col-md-12 padding-0">
 							<!-- 	<div class="col-md-8 padding-0"> -->
@@ -81,22 +83,22 @@
 							
 						</div>
 						
-					</div>
+					<!-- </div> -->
 					
 
 				</div>
 				
 				<div class="form-group" style="margin-bottom: 10px;">
 					<div class="col-md-8" style="float: right; margin-right: 1em;">
+					<input id="cancel_button" type="button" class="btn btn-default" value="Cancel" style="float: right;"  data-dismiss="modal"> <span></span>
 					<input id="reset_password_button" type="button" class="btn btn-primary" value="Reset Password" style="float: right; margin-right: 1em;">
-						<!-- <input data-dismiss="modal" id="cancel_button" type="reset" class="btn btn-default" value="Cancel" style="float: right;"> <span></span> <input id="reset_button" type="submit" class="btn btn-primary" value="Reset" style="float: right; margin-right: 1em;"> -->
+					 
+					<!-- <input id="reset_button" type="submit" class="btn btn-primary" value="Reset" style="float: right; margin-right: 1em;"> -->
 					</div>
 					<div class="clearfix"></div>
 				</div>
 
 			</div>
 		</div>
-
-	</div>
 </form>
 

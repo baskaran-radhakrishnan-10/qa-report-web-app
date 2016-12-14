@@ -13,5 +13,7 @@ public interface KTPlanDAO {
 	public int addKTDetails(KTPlan entity) throws DaoException;
 	
 	public void updateKTDetails(KTPlan entity) throws DaoException;
+	
+	public void deleteData(List<Integer> deleteRecordList) throws DaoException;
 
 }

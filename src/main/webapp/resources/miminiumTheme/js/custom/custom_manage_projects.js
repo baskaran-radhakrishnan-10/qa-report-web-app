@@ -15,16 +15,53 @@ $(document).ready(function() {
 		projectDetailsModalData(null);
 	});
 
-	$('#show-project-details-id tbody').on('click', 'tr', function () {
-		var gKey=$(this).attr('id');
-		$('#show-project-details-id tbody tr').removeClass('selected');
-		$('#show-project-details-id tr').css('background-color','');
-		if (!$(this).hasClass('selected')){
-			$(this).addClass('selected');
-			$(this).css('background-color','#B0BED9 !important');
-			projectDetailsEdit(gKey);
+
+	
+	$('#show-project-details-id tbody').on('dblclick', 'tr', function () {
+		if("ROLE_SUPER_ADMIN" == $('#loggedInRoleId').val()){
+			var btpNo=$(this).attr('id');
+	        if ($(this).hasClass('selected')){
+	            $(this).removeClass('selected');
+	            $(this).css('background-color','');
+	        }
+	        else {
+	            $(this).addClass('selected');
+	            $(this).css('background-color','#B0BED9 !important');
+	        }
+	        var selectedRowList=$('#show-project-details-id tbody').find('.selected')
+	        if(selectedRowList.length > 0){
+	        	$('#delete_button').show();
+	        }else{
+	        	$('#delete_button').hide();
+	        }
+		}
+    });
+	
+	$('#delete_button').on('click',function(){
+		$("#showDeleteRowModal").trigger( "click" );
+		$('#row_delete_confirm_div').show();
+	});
+	
+	$('#delete_rows').on("click",function(){
+		var deleteEntryArray = [];
+		var selectedRowList=$('#show-project-details-id tbody').find('.selected');
+		if(selectedRowList.length > 0){
+			$.each(selectedRowList,function(index,row){
+				deleteEntryArray.push(parseInt($(row).attr('id')));
+				console.log(deleteEntryArray);
+			});
+			if(deleteEntryArray.length > 0){
+				deleteProjectRows(deleteEntryArray);
+			}
 		}
 	});
+	
+	$('#modal_close_button').on("click",function(){
+		$('#delete_button').hide();
+		$('#show-project-details-id tbody tr').removeClass('selected');
+		$('#show-project-details-id tbody tr').css('background-color','');
+	});
+	
 });
 
 function showLoader(){
@@ -42,7 +79,7 @@ function hideLoader(){
 function getProjectDetails(){
 	var data={};
 	data=JSON.stringify(data);
-	ajaxHandler("POST", data, "application/json", getApplicationRootPath()+"operation/getProjectList", 'json', null, fetchProjectDetailsSuccess,true);
+	ajaxHandler("POST", data, "application/json", getApplicationRootPath()+"project/getProjectList", 'json', null, fetchProjectDetailsSuccess,true);
 }
 
 function fetchProjectDetailsSuccess(serverData){
@@ -84,6 +121,7 @@ function populateProjectDetails(entriesList){
 			html += '<td>'+createdBy+'</td>' ;
 			html += '<td>'+modifiedOn+'</td>' ;
 			html += '<td>'+modifiedBy+'</td>' ;
+			html += '<td id="projectDetailsEditRowId" onclick="projectDetailsEdit('+gKey+')"><span><a href="#" class="glyphicon glyphicon-edit"></a></span><span>&nbsp;</span><a id="userDetailsSaveRowId" style="display:none;" href="#"> <span class="glyphicon glyphicon-check"></span></a></td>' ;
 			html += '</tr>' ;
 			sNo++;
 
@@ -192,10 +230,10 @@ function addOrUpdateProject(){
 	projectObject['modifiedBy']=modifiedById;
 	
 	if(isAdd && isValid){
-		ajaxHandler("POST", JSON.stringify(projectObject), "application/json", getApplicationRootPath()+"operation/addProject", 'json', null, addProjectDetailsSuccess,true);
+		ajaxHandler("POST", JSON.stringify(projectObject), "application/json", getApplicationRootPath()+"project/addProject", 'json', null, addProjectDetailsSuccess,true);
 	
 	}else if(isValid){
-		ajaxHandler("POST", JSON.stringify(projectObject), "application/json", getApplicationRootPath()+"operation/updateProject", 'json', null,updateProjectDetailsSuccess,true);
+		ajaxHandler("POST", JSON.stringify(projectObject), "application/json", getApplicationRootPath()+"project/updateProject", 'json', null,updateProjectDetailsSuccess,true);
 	}
 }
 
@@ -208,7 +246,7 @@ function addProjectDetailsSuccess(serverData){
 		if(null != sessionStorageObj){
 			sessionStorageObj.setItem("NOTIFICATION",notifyObj);
 		}
-		window.location.href=getApplicationRootPath()+"operation/manage_projects";
+		window.location.href=getApplicationRootPath()+"project/manage_projects";
 	}
 }
 
@@ -220,7 +258,7 @@ function updateProjectDetailsSuccess(serverData){
 		if(null != sessionStorageObj){
 			sessionStorageObj.setItem("NOTIFICATION",notifyObj);
 		}
-		window.location.href=getApplicationRootPath()+"operation/manage_projects";
+		window.location.href=getApplicationRootPath()+"project/manage_projects";
 	}
 }
 function isProjectNameValid(name){
@@ -232,3 +270,26 @@ function isProjectNameValid(name){
 	var regexp = /^[a-z0-9\ \-]+$/;
 	return name.search(regexp);
 }*/
+
+function deleteProjectRows(deleteRecordList){
+	console.log(deleteRecordList)
+	var data = {};
+	data['deleteRecordList'] = deleteRecordList;
+	ajaxHandler("POST", JSON.stringify(data), "application/json", getApplicationRootPath()+"project/deleteData", 'json', deleteProjectRowsRowsError, deleteProjectRowsRowsSuccess,true);
+}
+
+function deleteProjectRowsRowsError(errorRes){
+	console.log(errorRes);
+	var notifyObj={msg: '<b>Error : </b> Operation Failed Due to Server Issue !!!',type: "error",position: "center" };
+	notif(notifyObj);
+}
+
+function deleteProjectRowsRowsSuccess(serverData,inputData){
+	if('ERROR' != serverData['STATUS']){
+		var notifyObj={msg: "<b>Success:</b> Selected Records Deleted Successfully !!!",type: "success",position: "center",autohide: true};
+		if(null != sessionStorageObj){
+			sessionStorageObj.setItem("NOTIFICATION",notifyObj);
+		}
+		window.location.href=getApplicationRootPath()+"project/manage_projects";
+	}
+}

@@ -1,5 +1,6 @@
 package com.equiniti.qa_report.dao.api.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -56,13 +57,14 @@ public class RBACDAOImpl implements RBACDAO {
 		LOG.debug("End: RBACDAOImpl.addUserDetails");
 		return createdRow;
 	}
+	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<String> getUniqueUserList() throws DaoException {
 		LOG.debug("Begin: RBACDAOImpl.getUniqueUserList");
 		List<String> returnList=null;
 		try{
 			returnList=(List<String>) abstractHibernateDAOAPI.processQuery("QUERY_5", null, null, QueryOperationType.SELECT, QueryType.SQL, null);
-			LOG.debug(": RBACDAOImpl.getUniqueUserList.returnList--> : " + returnList);
 		}catch(DaoException e){
 			throw new DaoException(e.getFaultCode(), e);
 		}catch(Exception e){
@@ -95,5 +97,27 @@ public class RBACDAOImpl implements RBACDAO {
 			throw new DaoException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}
 		LOG.debug("End: RBACDAOImpl.updateUserDetails");
+	}
+	
+	@Override
+	public void deleteData(List<Integer> deleteRecordList) throws DaoException{
+		abstractHibernateDAOAPI.bulkSQLNativeOperation(buildDeleteQuery(deleteRecordList));
+	}
+	
+	private List<String> buildDeleteQuery(List<Integer> deleteRecordList){
+		LOG.debug("Begin: RBACDAOImpl.buildDeleteQuery");
+		StringBuffer queryBuffer = new StringBuffer();
+		List<String> queryList = new ArrayList<>();
+		if(null !=deleteRecordList && !deleteRecordList.isEmpty()){
+			queryBuffer.append("UPDATE tbl_users SET is_deleted = 1 WHERE gkey in (");
+			for (Object i:deleteRecordList ){
+				queryBuffer.append(i.toString()+",");
+			}
+			queryBuffer.deleteCharAt(queryBuffer.length() -1);
+		}
+		queryBuffer.append(")");
+		queryList.add(queryBuffer.toString());
+		LOG.debug("End: RBACDAOImpl.buildDeleteQuery");
+		return queryList;
 	}
 }

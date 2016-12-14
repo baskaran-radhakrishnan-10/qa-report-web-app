@@ -25,55 +25,6 @@ public class OperationController {
 	@Autowired
 	public ProjectService projectService;
 	
-	public Map<String,Object> getProjectList(Map<String,Object> inputParam) throws ControllerException{
-		LOG.info("Begin :OperationController.getProjectList ");
-		Map<String,Object> returnObjMap=new HashMap<>();
-		try {
-			Object returnObj=projectService.getProjectList(inputParam);
-			 if(null != returnObj){
-					returnObjMap.put(ApplicationConstants.STATUS, ApplicationConstants.SUCCESS);
-					returnObjMap.put(ApplicationConstants.SERVER_DATA, returnObj);
-				}
-		} catch (APIException e) {
-			throw new ControllerException(e.getFaultCode(), e);
-		} catch(Exception e){
-			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
-		}
-		LOG.info("End :OperationController.getProjectList ");
-		return returnObjMap;
-	}
-	
-	public Map<String,Object> addProject(Map<String,Object> inputParam) throws ControllerException{
-		LOG.info("Begin :OperationController.addProject ");
-		Map<String,Object> returnObjMap=new HashMap<>();
-		try {
-			Object returnObj=projectService.addProject(inputParam);
-			returnObjMap.put(ApplicationConstants.STATUS, (Integer)returnObj != null ? ApplicationConstants.SUCCESS : ApplicationConstants.ERROR);
-			returnObjMap.put(ApplicationConstants.SERVER_DATA, returnObj);
-		} catch (APIException e) {
-			throw new ControllerException(e.getFaultCode(), e);
-		} catch(Exception e){
-			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
-		}
-		LOG.info("End :OperationController.addProject ");
-		return returnObjMap;
-	}
-	
-	public Map<String,Object> updateProject(Map<String,Object> inputParam) throws ControllerException{
-		LOG.info("Begin :OperationController.updateProject ");
-		Map<String,Object> returnObjMap=new HashMap<>();
-		try {
-			Object returnObj=projectService.updateProject(inputParam);
-			returnObjMap.put(ApplicationConstants.STATUS, (Boolean) returnObj ? ApplicationConstants.SUCCESS : ApplicationConstants.ERROR);
-		} catch (APIException e) {
-			throw new ControllerException(e.getFaultCode(), e);
-		} catch(Exception e){
-			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
-		}
-		LOG.info("End :OperationController.updateProject ");
-		return returnObjMap;
-	}
-	
 	public Map<String,Object> getRemainderDetails(Map<String,Object> inputParam) throws ControllerException{
 		LOG.info("Begin :OperationController.getRemainderDetails ");
 		Map<String,Object> returnObjMap=new HashMap<>();

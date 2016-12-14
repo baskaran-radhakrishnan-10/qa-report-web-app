@@ -8,10 +8,12 @@ import org.springframework.stereotype.Service;
 
 import com.equiniti.qa_report.entity.KTPlan;
 import com.equiniti.qa_report.event.kt_plan.AddKTPlanDetailsEvent;
+import com.equiniti.qa_report.event.kt_plan.DeleteKTPlanDetailsEvent;
 import com.equiniti.qa_report.event.kt_plan.GetKTPlanDetailsEvent;
 import com.equiniti.qa_report.event.kt_plan.UpdateKTPlanDetailsEvent;
 import com.equiniti.qa_report.eventapi.eventhandling.generic.BaseAPIImpl;
 import com.equiniti.qa_report.exception.api.exception.APIException;
+import com.equiniti.qa_report.exception.api.exception.ControllerException;
 import com.equiniti.qa_report.exception.api.exception.EventException;
 import com.equiniti.qa_report.exception.api.faultcode.CommonFaultCode;
 import com.equiniti.qa_report.service.api.KTPlanService;
@@ -27,7 +29,7 @@ public class KTPlanServiceImpl extends BaseAPIImpl implements KTPlanService {
 		GetKTPlanDetailsEvent event=null;
 		try{
 			event=getEvent(GetKTPlanDetailsEvent.class);
-			LOG.info("event--> "+event);
+//			LOG.info("event--> "+event);
 			processEvent(event);
 		}catch(EventException e){
 			throw new APIException(e.getFaultCode(),e);
@@ -70,5 +72,24 @@ public class KTPlanServiceImpl extends BaseAPIImpl implements KTPlanService {
 		}
 		LOG.info("End :KTPlanServiceImpl.updateKTDetails ");
 		return event.isUpdated();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void deleteData(Map<String, Object> paramMap) throws APIException {
+		LOG.info("Begin: RBACServiceImpl.deleteData");
+		DeleteKTPlanDetailsEvent event=null;
+		try{
+			if(paramMap.containsKey("deleteRecordList")){
+				event=getEvent(DeleteKTPlanDetailsEvent.class);
+				event.setDeleteKeyList((List<Integer>) paramMap.get("deleteRecordList"));
+			}
+			processEvent(event);
+		} catch (APIException e) {
+			throw new ControllerException(e.getFaultCode(), e);
+		} catch (Exception e) {
+			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+		LOG.info("End: RBACServiceImpl.deleteData");
 	}
 }

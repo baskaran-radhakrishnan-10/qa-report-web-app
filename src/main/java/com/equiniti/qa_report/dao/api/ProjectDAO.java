@@ -15,5 +15,7 @@ public interface ProjectDAO {
 	public int addProject(ProjectEntity entity) throws DaoException;
 	
 	public void updateProject(ProjectEntity entity) throws DaoException;
+	
+	public void deleteData(List<Integer> deleteRecordList) throws DaoException;
 
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.equiniti.qa_report.controller.KTPlanController;
 import com.equiniti.qa_report.exception.api.exception.ControllerException;
+import com.equiniti.qa_report.exception.api.exception.UIException;
 
 @Controller
 @RequestMapping(value="/kt_plan")
@@ -68,6 +69,18 @@ public class KTPlanWebController {
 			e.printStackTrace();
 		}
 		LOG.info("End: KTPlanWebController.updateKTDetails");
+		return returnObj;
+	}
+	
+	@RequestMapping(value = "/deleteData", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> deleteData(@RequestBody Map<String,Object> inputData) throws UIException{
+		Map<String,Object> returnObj=new HashMap<>();
+		try {
+			returnObj=ktPlanController.deleteData(inputData);
+		} catch (ControllerException e) {
+			throw new UIException(e.getFaultCode(), e);
+		}
 		return returnObj;
 	}
 

@@ -31,6 +31,28 @@
 	</div>
 </div>
 
+
+<div class="modal fade" id="delete_rows_modal" tabindex="-1" role="dialog" aria-labelledby="buildTestPlanModal" aria-hidden="true" data-backdrop="static" data-keyboard="false" data-href="">	
+	<div class="modal-dialog modal-lg">
+		<div id="row_delete_confirm_div" class="modal-content" style="top: 122px;width: 53%;left: 24%;display:none;">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">(x)</button>
+					<h2 class="modal-title" style="font-size: 19px;color: rgba(31, 33, 33, 0.52);">Delete KT Plan</h2>
+				</div>
+				<form role="form" class="form-horizontal" id="btp_report_export_form">
+					<div class="modal-body">
+						<h4 style="color: #2196f3;font-size: 17px;">Do you want to delete selected rows ?</h4>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" id="delete_rows">Yes</button>
+						<button type="button" class="btn btn-danger" id="modal_close_button" data-dismiss="modal">No</button>
+					</div>
+				</form>
+		</div>
+	</div>
+</div>
+
+
 <div class="panel box-shadow-none content-header">
 	<div class="panel-body">
 		<div class="col-md-12">
@@ -93,7 +115,7 @@
 						<th nowrap="nowrap">S.No</th>
 <!-- 						<th nowrap>KT ID</th> -->
 						<th nowrap>Project</th>
-						<th nowrap>KT Type</th>
+						<th hidden="true">KT Type</th>
 						<th hidden="true">Session</th>
 						<th nowrap>KT Title</th>
 						<th hidden="true">Trainer(s)</th>
@@ -104,6 +126,8 @@
 						<th hidden="true">Duration(Hrs)</th>
 						<th hidden="true">Remarks</th>
 						<th hidden="true">Feedback</th>	
+						<th></th>
+						
 					</tr>
 				</thead>
 				<tbody id="tbody_id"></tbody>
@@ -116,11 +140,16 @@
 					</button> -->
 				</div>
 			</div>
-			
 		</div>
+			<c:choose>
+ 			<c:when	test='${sessionScope.roleId.equals("ROLE_SUPER_ADMIN")}'>
+ 				<input id="delete_button" type="button" value="Delete" class="btn btn-danger" style="margin-right: 13px;display:none;">
+ 			</c:when>
+ 	    </c:choose>
 	</div>
 </div>
 <input type="button" id="addKtDetailsTrigger" data-toggle="modal" data-target="#add_kt_details" style="display:none" />
+<input type="button" id="showDeleteRowModal" data-toggle="modal" data-target="#delete_rows_modal" style="display:none" />
 
 <form id="ktDetailsForm" name="ktDetailsForm" role="form" class="form-horizontal" action="#" method="post" style="display:none;">
 	

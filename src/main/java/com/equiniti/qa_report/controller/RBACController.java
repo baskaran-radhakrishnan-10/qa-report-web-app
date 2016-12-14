@@ -86,23 +86,12 @@ public class RBACController {
 		return returnObjMap;
 	}
 	
-//	@SuppressWarnings("unchecked")
 	public Map<String,Object> updateUserDetails(Map<String,Object> inputParam) throws ControllerException{
 		LOG.info("Begin :RBACController.updateUserDetails ");
 		Map<String,Object> returnObjMap=new HashMap<>();
-//		String inputRoleName=((Map<String, Object>)inputParam.get("roleId")).get("roleName").toString();
 		try {
-//			if(!"ROLE_SUPER_ADMIN".equalsIgnoreCase(inputRoleName))
-//			{
 				Object returnObj=rbacService.updateUserDetails(inputParam);
 				returnObjMap.put(ApplicationConstants.STATUS, (Boolean)returnObj ? ApplicationConstants.SUCCESS : ApplicationConstants.ERROR);
-/*			}
-			else
-			{
-				returnObjMap.put(ApplicationConstants.STATUS, ApplicationConstants.ERROR);
-				returnObjMap.put(ApplicationConstants.SERVER_DATA, "");
-				LOG.info("Not a Super Admin");
-			}*/
 		} catch (APIException e) {
 			throw new ControllerException(e.getFaultCode(), e);
 		} catch(Exception e){
@@ -163,5 +152,18 @@ public class RBACController {
 		LOG.info("End :RolesController.getRoleResourcesInfo ");
 		return returnObjMap;
 	}
-
+	public Map<String,Object> deleteData(Map<String,Object> paramMap) throws ControllerException{
+		Map<String,Object> returnObjMap=new HashMap<>();
+		try {
+			LOG.info("deleteRecordList---> "+paramMap.get("deleteRecordList"));
+			LOG.info("containsValue(ROLE_SUPER_ADMIN) : "+ paramMap.containsValue("ROLE_SUPER_ADMIN"));
+			rbacService.deleteData(paramMap);
+			returnObjMap.put(ApplicationConstants.STATUS, ApplicationConstants.SUCCESS);
+		} catch (APIException e) {
+			throw new ControllerException(e.getFaultCode(), e);
+		} catch(Exception e){
+			throw new ControllerException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+		return returnObjMap;
+	}
 }

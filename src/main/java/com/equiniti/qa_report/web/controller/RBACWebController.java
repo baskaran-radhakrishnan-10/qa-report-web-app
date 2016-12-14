@@ -32,6 +32,15 @@ public class RBACWebController {
 		
 		return "manage_users_page";
 	}
+	@RequestMapping(value = "/managePassword", method = RequestMethod.GET)
+	public String managePasswordPage(Model model) throws UIException{
+		return "manage_password_page";
+	}
+	
+	@RequestMapping(value = "/showRoles", method = RequestMethod.GET)
+	public String manageRolesPage(Model model) throws UIException{
+		return "manage_roles_page";
+	}
 	
 	@RequestMapping(value="/getUserDetails", method = RequestMethod.POST)
 	@ResponseBody
@@ -117,16 +126,6 @@ public class RBACWebController {
 		return returnObj;
 	}
 	
-	@RequestMapping(value = "/showRoles", method = RequestMethod.GET)
-	public String manageRolesPage(Model model) throws UIException{
-		return "manage_roles_page";
-	}
-	
-	@RequestMapping(value = "/managePassword", method = RequestMethod.GET)
-	public String managePasswordPage(Model model) throws UIException{
-		return "manage_password_page";
-	}
-	
 	@RequestMapping(value="/getRoleResourcesInfo", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> getRoleResourcesInfo(Map<String,Object> inputParam) throws UIException{
@@ -138,6 +137,18 @@ public class RBACWebController {
 			throw new UIException(e.getFaultCode(), e);
 		}
 		LOG.debug("END getRoleResourcesInfo Method ");
+		return returnObj;
+	}
+	
+	@RequestMapping(value = "/deleteData", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> deleteData(@RequestBody Map<String,Object> inputData) throws UIException{
+		Map<String,Object> returnObj=new HashMap<>();
+		try {
+			returnObj=rbacController.deleteData(inputData);
+		} catch (ControllerException e) {
+			throw new UIException(e.getFaultCode(), e);
+		}
 		return returnObj;
 	}
 

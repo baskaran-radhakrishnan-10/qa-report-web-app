@@ -13,6 +13,7 @@ import com.equiniti.qa_report.dao.api.RBACDAO;
 import com.equiniti.qa_report.dao.api.RBACRolesDAO;
 import com.equiniti.qa_report.entity.User;
 import com.equiniti.qa_report.event.rbac.AddUserDeatilsEvent;
+import com.equiniti.qa_report.event.rbac.DeleteUserDetailsEvent;
 import com.equiniti.qa_report.event.rbac.GetUniqueUserListEvent;
 import com.equiniti.qa_report.event.rbac.ResetPasswordEvent;
 import com.equiniti.qa_report.event.rbac.UpdateUserDetailsEvent;
@@ -83,7 +84,11 @@ public class RBACEventHandler implements IEventHandler<IEvent> {
 			LOG.debug("Event :" + ResetPasswordEvent.class.getName());
 			ResetPasswordEvent eventObj = (ResetPasswordEvent) event;
 			resetPassword(eventObj);
-		}
+		}else if (event instanceof DeleteUserDetailsEvent) {
+            LOG.debug("Event :" + DeleteUserDetailsEvent.class.getName());
+            DeleteUserDetailsEvent eventObj = (DeleteUserDetailsEvent) event;
+            deleteData(eventObj);
+        }
 		LOG.debug("processEvent END");
 		}
 		
@@ -185,6 +190,20 @@ public class RBACEventHandler implements IEventHandler<IEvent> {
 		LOG.debug("End: RBACEventHandler.getRoles");
 	}
 	
+    private void deleteData(DeleteUserDetailsEvent event) throws EventException {
+    	LOG.debug("Begin: RBACEventHandler.deleteData");
+        try {
+        	if(null != event.getDeleteKeyList()){
+        		rbacDAO.deleteData(event.getDeleteKeyList());
+        	}
+        } catch (DaoException e) {
+            throw new EventException(e.getFaultCode(), e);
+        } catch (Exception e) {
+            throw new EventException(CommonFaultCode.UNKNOWN_ERROR, e);
+        }
+        LOG.debug("End: RBACEventHandler.deleteData");
+    }
+    
 	private User populateEntityFromMapObjectForAddUser(Map<String,Object> mapObject) throws EventException{
 		LOG.debug("Begin: RBACEventHandler.populateEntityFromMapObject");
 		String encryptedPassword;

@@ -59,6 +59,12 @@ $(document).ready(function() {
 	    return e.which !== 32;
 	});
 	
+	$('#cancel_button').on("click" ,function (event){
+		$('#userId').val("");
+		$('#newPasswordId').val("");
+		$('#confirmPasswordId').val(""); 
+	});
+	
 });
 
 function validateBeforeSave(){

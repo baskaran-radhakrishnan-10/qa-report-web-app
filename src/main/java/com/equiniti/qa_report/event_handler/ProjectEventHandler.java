@@ -8,6 +8,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import com.equiniti.qa_report.dao.api.ProjectDAO;
 import com.equiniti.qa_report.entity.ProjectEntity;
 import com.equiniti.qa_report.event.project.AddProjectEvent;
+import com.equiniti.qa_report.event.project.DeleteProjectEvent;
 import com.equiniti.qa_report.event.project.GetProjectEvent;
 import com.equiniti.qa_report.event.project.UpdateProjectEvent;
 import com.equiniti.qa_report.eventapi.eventhandling.generic.IEvent;
@@ -41,7 +42,11 @@ public class ProjectEventHandler implements IEventHandler<IEvent> {
 			LOG.debug("Event :" + UpdateProjectEvent.class.getName());
 			UpdateProjectEvent eventObj = (UpdateProjectEvent) event;
 			updateProject(eventObj);
-		}
+		}else if (event instanceof DeleteProjectEvent) {
+            LOG.debug("Event :" + DeleteProjectEvent.class.getName());
+            DeleteProjectEvent eventObj = (DeleteProjectEvent) event;
+            deleteData(eventObj);
+        }
 		LOG.debug("processEvent END");
 	}
 	
@@ -87,6 +92,20 @@ public class ProjectEventHandler implements IEventHandler<IEvent> {
 			throw new EventException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}
 	}
+	
+    private void deleteData(DeleteProjectEvent event) throws EventException {
+    	LOG.debug("Begin: RBACEventHandler.deleteData");
+        try {
+        	if(null != event.getDeleteKeyList()){
+        		projectDAO.deleteData(event.getDeleteKeyList());
+        	}
+        } catch (DaoException e) {
+            throw new EventException(e.getFaultCode(), e);
+        } catch (Exception e) {
+            throw new EventException(CommonFaultCode.UNKNOWN_ERROR, e);
+        }
+        LOG.debug("End: RBACEventHandler.deleteData");
+    }
 	
 	private ProjectEntity populateProjectEntityFromMap(Map<String, Object> mapObject){
 		ProjectEntity entity=objMapper.convertValue(mapObject, ProjectEntity.class);

@@ -13,5 +13,7 @@ public interface KTPlanService {
 	public int addKTDetails(Map<String, Object> inputParam) throws APIException;
 	
 	public boolean updateKTDetails(Map<String, Object> inputParam) throws APIException;
+	
+	public void deleteData(Map<String, Object> paramMap) throws APIException;
 
 }
