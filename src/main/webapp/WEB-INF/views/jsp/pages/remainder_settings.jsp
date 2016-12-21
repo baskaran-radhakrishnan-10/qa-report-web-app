@@ -102,7 +102,7 @@
 											<div class="col-md-12">
 												<label class="col-sm-2 control-label">Reminder About:<font color="red">*</font></label>
 												<div class="col-sm-3">
-													<input id="remainderAboutId" name="remainderAbout" type="text" class="input-sm form-control imp" value="" maxlength="100" data-toggle="tooltip" data-placement="auto right" data-original-title="Allows numbers, characters (max 100) and  single space only">
+													<input id="remainderAboutId" name="remainderAbout" type="text" class="input-sm form-control imp" value="" maxlength="100" data-toggle="tooltip" data-placement="auto right" data-original-title="Allows numbers, characters (max 100) and  single space only" placeholder="Enter your reminder message">
 												</div>
 											</div>
 										</div>

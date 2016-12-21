@@ -240,8 +240,8 @@ function populateKTDetails(entriesList){
 		var trainers=KTDetailsModelAttribute['trainers'];	
 		var attendees=KTDetailsModelAttribute['attendees'];	
 		var location=KTDetailsModelAttribute['location'];
-		var startDate=getDateValue(KTDetailsModelAttribute['startDate'],'dd/MM/yyyy',"-")
-		var endDate=getDateValue(KTDetailsModelAttribute['endDate'],'dd/MM/yyyy',"-")
+		var startDate=getDateValue(KTDetailsModelAttribute['startDate'],'yyyy-MM-dd',"-")
+		var endDate=getDateValue(KTDetailsModelAttribute['endDate'],'yyyy-MM-dd',"-")
 		var duration=KTDetailsModelAttribute['duration'];
 		var remarks=KTDetailsModelAttribute['remarks'];
 		var feedback=KTDetailsModelAttribute['feedback'];

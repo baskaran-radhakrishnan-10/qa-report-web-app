@@ -2,7 +2,6 @@ package com.equiniti.qa_report.event.rbac;
 
 import java.util.Map;
 
-import com.equiniti.qa_report.entity.ItemEntity;
 import com.equiniti.qa_report.entity.User;
 import com.equiniti.qa_report.eventapi.eventhandling.generic.BaseEvent;
 

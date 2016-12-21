@@ -13,7 +13,7 @@
 	</changeSet>
 	
 	<changeSet author="Meganathan Sengodan" id="update_tbl_resources_changeset"	runOnChange="true">
-		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">update tbl_resources set resource_url='project/manage_projects' where resource_url='operation/manage_projects'</sql>
+		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">update ISDQAReports..tbl_resources set resource_url='project/manage_projects' where resource_url='operation/manage_projects'</sql>		
 	</changeSet>
 	
 </databaseChangeLog>	

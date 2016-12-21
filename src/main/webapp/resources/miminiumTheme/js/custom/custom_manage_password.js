@@ -120,6 +120,7 @@ function populateUserDetails(entriesList){
 		userIdListObject[userId]=entriesList[i];
 		rolesArray.push(userDetailsModelAttribute['userId']);
 		fillSelectDropDown('userId',rolesArray, null != userDetailsModelAttribute ? userDetailsModelAttribute['userId'] : "");
+		$('#userId').val('');
 	}
 }
 

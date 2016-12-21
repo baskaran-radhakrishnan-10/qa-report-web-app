@@ -8,7 +8,9 @@ var userDetailsData={};
 var rowEle="";
 var egKey="";
 
-var createdOnDt = $.datepicker.formatDate('yy-mm-dd', new Date());
+var currentDate = $.datepicker.formatDate('yy-mm-dd', new Date());
+var date = new Date();
+var currentTime = (date.getHours()<10 ? "0"+date.getHours():date.getHours()) + ":" + (date.getMinutes()<10? "0"+date.getMinutes() : date.getMinutes());
 var currentUser=$('#loggedInUserId').val();
 $(document).ready(function() {	
 	
@@ -132,8 +134,8 @@ function remainderDetailsModalData(gKey){
 	var currentSelectedObject=null;
 	currentSelectedObject = null != gKey ? userDetailsData[gKey] : null;
 	
-	$('#remainderDateId').val(null != currentSelectedObject ? getDateValue(currentSelectedObject['remainderDate'],'yyyy-MM-dd',"-"):createdOnDt);
-	$('#remainderTimeId').val(null != currentSelectedObject ? currentSelectedObject['remainderTime'] : "");
+	$('#remainderDateId').val(null != currentSelectedObject ? getDateValue(currentSelectedObject['remainderDate'],'yyyy-MM-dd',"-"):currentDate);
+	$('#remainderTimeId').val(null != currentSelectedObject ? currentSelectedObject['remainderTime'] : currentTime);
 	$('#remainderAboutId').val(null != currentSelectedObject ? currentSelectedObject['remainderMessage'] : "");
 
 	$("#addReminderDetailsTrigger").trigger( "click" );
@@ -189,15 +191,17 @@ function addOrUpdateReminder(){
 	var remainderDate=rowEle.find('#remainderDateId').val();
 	var remainderTime=rowEle.find('#remainderTimeId').val();
 	var remainderAbout=rowEle.find('#remainderAboutId').val().trim();
-//	console.log(remainderTime);
 	var remainderDateVal=new Date(Date.parse(remainderDate));
-	var currentDateVal=new Date(Date.parse(createdOnDt));
+	var currentDateVal=new Date(Date.parse(currentDate));
 	
 	if (remainderDateVal< currentDateVal){
 		var notifyObj={msg: '<b>Warning : </b>Reminder Date must be >= current date !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 	}else if(isReminderMsgValid(remainderAbout)){
 		var notifyObj={msg: '<b>Warning : </b>Reminder message criteria not matching !!!',type: "warning",position: "center" };
+		notif(notifyObj);
+	}else if(remainderTimeValid(currentTime,remainderTime)){
+		var notifyObj={msg: '<b>Warning : </b>Reminder time is less than current time !!!',type: "warning",position: "center" };
 		notif(notifyObj);
 	}else if(isRemainderTimeValid(remainderTime)){
 		var notifyObj={msg: '<b>Warning : </b>Reminder time criteria not matching !!!',type: "warning",position: "center" };
@@ -236,6 +240,17 @@ function isReminderMsgValid(title){
 function isRemainderTimeValid(duration){
 	var regexp = /^[0-9\:]+$/;
 	return duration.search(regexp);
+}
+
+function remainderTimeValid(cTime,rTime){
+	var cTime=parseInt(cTime.replace(":",""));
+	var rTime=parseInt(rTime.replace(":",""));
+	if (rTime<cTime){
+		return true;
+	}
+	else{
+		return false;
+	}
 }
 
 function addUserDetailsSuccess(serverData){
