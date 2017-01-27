@@ -8,7 +8,9 @@ import org.apache.log4j.Logger;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.equiniti.qa_report.exception.api.FaultCode;
 import com.equiniti.qa_report.exception.api.exception.UIException;
+import com.equiniti.qa_report.exception.api.faultcode.CommonFaultCode;
 import com.equiniti.qa_report.form.model.LoginModelAttribute;
 import com.equiniti.qa_report.util.ApplicationConstants;
 
@@ -81,6 +83,10 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter{
 		if(null != ex){
 			if(ex instanceof UIException){
 				LOG.debug("Exception Message :"+ex.getMessage());
+				FaultCode faultCode = ((UIException) ex).getFaultCode();
+				if(faultCode.equals(CommonFaultCode.CACHE_FAILED_ERROR)){
+					preHandle(request, response, handler);
+				}
 			}
 		}
 		LOG.debug("After Complettion :");

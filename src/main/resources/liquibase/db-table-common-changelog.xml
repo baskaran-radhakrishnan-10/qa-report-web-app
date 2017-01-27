@@ -26,7 +26,7 @@
 		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">UPDATE projectstable SET is_deleted = 0</sql>
 	</changeSet>
 	
-	<changeSet author="baskaran radhakrishnan" id="common_changeset_004"	runOnChange="true">
+	<!-- <changeSet author="baskaran radhakrishnan" id="common_changeset_004"	runOnChange="true">
 		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">UPDATE BtpTable SET deleted_time = CURRENT_TIMESTAMP</sql>
 		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">UPDATE DSRTable SET deleted_time = CURRENT_TIMESTAMP</sql>
 		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">UPDATE ItemTable SET deleted_time = CURRENT_TIMESTAMP</sql>
@@ -35,6 +35,6 @@
 		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">UPDATE ResourceTable SET deleted_time = CURRENT_TIMESTAMP</sql>
 		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">UPDATE tbl_users SET deleted_time = CURRENT_TIMESTAMP</sql>
 		<sql endDelimiter="\nGO" splitStatements="true" stripComments="true">UPDATE projectstable SET deleted_time = CURRENT_TIMESTAMP</sql>
-	</changeSet>
+	</changeSet> -->
 	
 </databaseChangeLog>	

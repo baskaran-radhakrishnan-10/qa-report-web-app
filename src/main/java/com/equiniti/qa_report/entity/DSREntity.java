@@ -57,7 +57,7 @@ public class DSREntity implements Serializable,IAuditLog{
 	@Column(name = "is_deleted")
 	private  boolean deleted;
 	
-	@Column(name = "deleted_time")
+	/*@Column(name = "deleted_time")
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private DateTime deletedTime;
 
@@ -67,7 +67,7 @@ public class DSREntity implements Serializable,IAuditLog{
 
 	public void setDeletedTime(DateTime deletedTime) {
 		this.deletedTime = deletedTime;
-	}
+	}*/
 
 	public boolean isDeleted() {
 		return deleted;
