@@ -1,5 +1,8 @@
 package com.equiniti.qa_report.web.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,9 +17,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.equiniti.qa_report.controller.LoginController;
 import com.equiniti.qa_report.controller.SMSController;
+import com.equiniti.qa_report.exception.api.exception.ControllerException;
+import com.equiniti.qa_report.exception.api.exception.UIException;
+import com.equiniti.qa_report.exception.api.faultcode.CommonFaultCode;
 import com.equiniti.qa_report.form.model.LoginModelAttribute;
 import com.equiniti.qa_report.util.ApplicationConstants;
 
@@ -76,6 +83,22 @@ public class ApplicationMainWebController {
 	public String doLogout() throws CacheException{
 		loginController.doLogout();
 		return ApplicationConstants.REDIRECT_LOGIN_PAGE;
+	}
+	
+	@RequestMapping(value="/checkSessionAttribute", method = RequestMethod.POST)
+	@ResponseBody
+	public Boolean checkSessionAttribute(Map<String,String> paramMap) throws UIException{
+		LOG.info("Begin: ApplicationMainWebController.checkSessionAttribute");
+		boolean isAvailable = false;
+		try {
+			if(null != session.getAttribute(paramMap.get("ATTRIBUTE_KEY"))){
+				isAvailable = true;
+			}
+		} catch (Exception e) {
+			throw new UIException(CommonFaultCode.UNKNOWN_ERROR, e);
+		}
+		LOG.info("End: ApplicationMainWebController.checkSessionAttribute");
+		return isAvailable;
 	}
 
 }

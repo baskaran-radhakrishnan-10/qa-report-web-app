@@ -1,5 +1,5 @@
 (function ($) {
-
+	
     $.fn.ripple = function () {
         $(this).click(function (e) {
            // e.preventDefault();

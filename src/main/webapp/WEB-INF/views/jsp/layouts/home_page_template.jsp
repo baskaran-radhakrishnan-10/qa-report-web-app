@@ -140,6 +140,7 @@ body.loading .ajaxloader {
 	<input id="loggedInRoleId" name="loggedInUserRoleName" type="hidden" value="<%=session.getAttribute("roleId")%>">
 	<input id="loggedInUserName" name="loggedInUserName" type="hidden" value="<%=session.getAttribute("USER_NAME")%>">
 	<input id="isFirstTimeLoggedIn" name="isFirstTimeLoggedIn" type="hidden" value="<%=session.getAttribute("FIRST_LOGIN")%>">
+	<input id="redirectToLoginPage" name="redirectToLoginPage" type="hidden" value="<%=session.getAttribute("REDIRECT_TO_LOGIN_PAGE")%>">
 	
 	<!-- start: Header -->
 	<tiles:insertAttribute name="header_menu" />

@@ -54,13 +54,15 @@
 																								
 												<label class="col-sm-2 control-label">User ID:<font color="red">*</font></label>
 												<div class="col-sm-3">
-													<select id="userId" name="user" class="input-sm form-control imp"></select>
+													<select id="userId" name="user" class="input-sm form-control imp">
+													</select>
 												</div>
 												
 												<label class="col-sm-2 control-label">New Password:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<input id="newPasswordId" name="newPassword" type="password" autocomplete="off" class="input-sm form-control imp" value="">
 												</div>
+												
 											</div>
 										</div>
 									</div>
@@ -90,7 +92,7 @@
 				
 				<div class="form-group" style="margin-bottom: 10px;">
 					<div class="col-md-8" style="float: right; margin-right: 1em;">
-					<input id="cancel_button" type="button" class="btn btn-default" value="Cancel" style="float: right;"  data-dismiss="modal"> <span></span>
+					<input id="cancel_button" type="button" class="btn btn-default" value="Clear" style="float: right;" > <span></span>
 					<input id="reset_password_button" type="button" class="btn btn-primary" value="Reset Password" style="float: right; margin-right: 1em;">
 					 
 					<!-- <input id="reset_button" type="submit" class="btn btn-primary" value="Reset" style="float: right; margin-right: 1em;"> -->

@@ -49,7 +49,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter{
 			
 			if(ajax){
 				session.setAttribute("REDIRECT_TO_LOGIN_PAGE", true);
-				return true;
+				return false;
 			}
 
 			if(-1 != this.uri.indexOf("/doLogin")){
@@ -85,7 +85,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter{
 				LOG.debug("Exception Message :"+ex.getMessage());
 				FaultCode faultCode = ((UIException) ex).getFaultCode();
 				if(faultCode.equals(CommonFaultCode.CACHE_FAILED_ERROR)){
-					preHandle(request, response, handler);
+					//preHandle(request, response, handler);
 				}
 			}
 		}

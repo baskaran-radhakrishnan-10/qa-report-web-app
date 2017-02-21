@@ -38,6 +38,7 @@ function itemDeatilsRemove(rowId){
 }
 
 function fetchItemDetailsByBtpNoSuccess(serverData){
+	console.log(serverData);
 	if('ERROR' != serverData['STATUS']){
 		var itemDetailsList=serverData['SERVER_DATA'];
 		var itemDetailsHtmlArray=new Array();
@@ -75,6 +76,7 @@ function fetchItemDetailsByBtpNoSuccess(serverData){
 
 function deleteItemDetails(itemNo,gKey){
 	if("ROLE_SUPER_ADMIN" == $('#loggedInRoleId').val()){
+		
 		var btpNo = $('#selectedRowKeyInput').val();
 		var data = {};
 		data['btpNo'] = btpNo;

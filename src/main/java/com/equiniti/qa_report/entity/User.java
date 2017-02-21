@@ -18,7 +18,6 @@ public class User extends GeneralEntity implements IAuditLog{
 
 	private static final long serialVersionUID = -1968065884219305808L;
 	
-	
 	@Column(name = "name", nullable = false)
 	private  String userFullName;
 	

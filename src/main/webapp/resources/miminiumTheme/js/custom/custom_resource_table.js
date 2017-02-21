@@ -58,11 +58,11 @@ function fetchResourceByBtpItemNoSuccess(serverData,inputData){
 			html += '<td id="resourceName"><input type="text" class="input-sm form-control" value="'+resourceObj['resourceName']+'" disabled /></td>';
 			html += '<td id="itemCount"><input type="text" class="input-sm form-control" value="'+resourceObj['itemCount']+'" disabled /></td>';
 			html += '<td id="actualTime"><input type="text" class="input-sm form-control" value="'+resourceObj['actTime']+'" disabled /></td>';
-			html += '<td id="bugsLogged"><input type="text" class="input-sm form-control" value="'+resourceObj['bugsLogged']+'" disabled /></td>';
-			html += '<td id="pass"><input type="text" class="input-sm form-control" value="'+resourceObj['pass']+'" disabled /></td>';
-			html += '<td id="fail"><input type="text" class="input-sm form-control" value="'+resourceObj['fail']+'" disabled /></td>';
+			html += '<td id="bugsLogged" class="neglet"><input type="text" class="input-sm form-control" value="'+resourceObj['bugsLogged']+'" disabled /></td>';
+			html += '<td id="pass" class="neglet"><input type="text" class="input-sm form-control" value="'+resourceObj['pass']+'" disabled /></td>';
+			html += '<td id="fail" class="neglet"><input type="text" class="input-sm form-control" value="'+resourceObj['fail']+'" disabled /></td>';
 			html += '<td id="clarification"><input type="text" class="input-sm form-control" value="'+resourceObj['clarification']+'" disabled /></td>';
-			html += '<td id="unableToSet"><input type="text" class="input-sm form-control" value="'+resourceObj['unableToSet']+'" disabled /></td>';
+			html += '<td id="unableToSet" class="neglet"><input type="text" class="input-sm form-control" value="'+resourceObj['unableToSet']+'" disabled /></td>';
 			html += '<td id="pending"><input type="text" class="input-sm form-control" value="'+resourceObj['pending']+'" disabled /></td>';
 			html += '<td id="blocked"><input type="text" class="input-sm form-control" value="'+resourceObj['blocked']+'" disabled /></td>';
 			html += '<td id="action" style="text-align: -webkit-center;">';
@@ -143,11 +143,11 @@ function addResourceDetRows(){
 	html += '<td id="resourceName">'+resourceArraySelectHtml+'</td>';
 	html += '<td id="itemCount"><input type="text" class="input-sm form-control" value=""  /></td>';
 	html += '<td id="actualTime"><input type="text" class="input-sm form-control" value=""  /></td>';
-	html += '<td id="bugsLogged"><input type="text" class="input-sm form-control" value=""  /></td>';
-	html += '<td id="pass"><input type="text" class="input-sm form-control" value=""  /></td>';
-	html += '<td id="fail"><input type="text" class="input-sm form-control" value=""  /></td>';
+	html += '<td id="bugsLogged" class="neglet"><input type="text" class="input-sm form-control" value=""  /></td>';
+	html += '<td id="pass" class="neglet"><input type="text" class="input-sm form-control" value=""  /></td>';
+	html += '<td id="fail" class="neglet"><input type="text" class="input-sm form-control" value=""  /></td>';
 	html += '<td id="clarification"><input type="text" class="input-sm form-control" value=""  /></td>';
-	html += '<td id="unableToSet"><input type="text" class="input-sm form-control" value=""  /></td>';
+	html += '<td id="unableToSet" class="neglet"><input type="text" class="input-sm form-control" value=""  /></td>';
 	html += '<td id="pending"><input type="text" class="input-sm form-control" value=""  /></td>';
 	html += '<td id="blocked"><input type="text" class="input-sm form-control" value=""  /></td>';
 	html += '<td id="action" style="text-align: -webkit-center;">';
@@ -165,6 +165,7 @@ function resourceDeatilsRemove(rowId){
 	$('#resourceDeatilsParentDivId').find('table tbody').find('.'+rowId).remove();
 }
 
+
 function resourceDeatilsSave(rowId){
 	
 	var btpObject=null;
@@ -179,7 +180,7 @@ function resourceDeatilsSave(rowId){
 		
 		var tdId = $(td).attr('id');
 		
-		if("resourceName" != tdId && $(td).has('input')){
+		if("resourceName" != tdId && $(td).has('input') && !$(td).hasClass('neglet')){
 			
 			var input = $(td).find('input');
 			
@@ -203,8 +204,6 @@ function resourceDeatilsSave(rowId){
 	
 	var currentItemDetailsObj=itemDetailsObject[itemSNo];
 	
-	console.log(currentItemDetailsObj);
-	
 	var itemNo=currentItemDetailsObj['itemNo'];
 	
 	var itemName=currentItemDetailsObj['itemDescription'];
@@ -220,6 +219,11 @@ function resourceDeatilsSave(rowId){
 	
 	currentResourceDetObj['btpNo']=btpObject;
 	
+	var buggesLogged = $(rowEle).find('#bugsLogged').find('input').val();
+	var pass = $(rowEle).find('#pass').find('input').val();
+	var fail = $(rowEle).find('#fail').find('input').val();
+	var unableToSet = $(rowEle).find('#unableToSet').find('input').val();
+	
 	currentResourceDetObj['btpNo']['createdDate']=getDateValue(currentResourceDetObj['btpNo']['createdDate'],'yyyy-MM-dd',"-");
 	currentResourceDetObj['btpNo']['endDate']=getDateValue(currentResourceDetObj['btpNo']['endDate'],'yyyy-MM-dd',"-");
 	currentResourceDetObj['btpNo']['revisedEndDate']=getDateValue(currentResourceDetObj['btpNo']['revisedEndDate'],'yyyy-MM-dd',"-");
@@ -228,10 +232,10 @@ function resourceDeatilsSave(rowId){
 	
 	currentResourceDetObj['actTime']=$(rowEle).find('#actualTime').find('input').val();
 	currentResourceDetObj['blocked']=$(rowEle).find('#blocked').find('input').val();
-	currentResourceDetObj['bugsLogged']=$(rowEle).find('#bugsLogged').find('input').val();
+	currentResourceDetObj['bugsLogged']= (buggesLogged != null && buggesLogged != "") ? buggesLogged : 0;
 	currentResourceDetObj['resourceName']=$(rowEle).find('#resourceName :input').val();
 	currentResourceDetObj['clarification']=$(rowEle).find('#clarification').find('input').val();
-	currentResourceDetObj['fail']=$(rowEle).find('#fail').find('input').val();
+	currentResourceDetObj['fail']=(fail != null && fail != "") ? fail : 0;
 	
 	currentResourceDetObj['itemCount']=$(rowEle).find('#itemCount').find('input').val();
 	
@@ -239,9 +243,9 @@ function resourceDeatilsSave(rowId){
 		currentResourceDetObj['itemName']=itemName;
 		currentResourceDetObj['itemNo']=itemNo;
 	}
-	currentResourceDetObj['pass']=$(rowEle).find('#pass').find('input').val();
+	currentResourceDetObj['pass']=(pass != null && pass != "") ? pass : 0;
 	currentResourceDetObj['pending']=$(rowEle).find('#pending').find('input').val();
-	currentResourceDetObj['unableToSet']=$(rowEle).find('#unableToSet').find('input').val();
+	currentResourceDetObj['unableToSet']=(unableToSet != null && unableToSet != "") ? unableToSet : 0;
 	
 	$(rowEle).find('#action').find('#resourceRowEditId').show();
 	//$(rowEle).find('#action').find('#itemRowDeleteId').show();

@@ -18,7 +18,6 @@ public class SessionListener implements HttpSessionListener {
 	 */
 	public void sessionCreated(HttpSessionEvent sessionEvt) {
 		LOG.debug("entered into sessionCreated()");
-		LOG.debug("entered into sessionCreated()");
 		HttpSession session =  sessionEvt.getSession();
 		try{
 			LOG.debug("Session Id :"+session.getId());
@@ -28,7 +27,6 @@ public class SessionListener implements HttpSessionListener {
 			LOG.warn("SESSION_TIMEOUT_DURATION is not configured properly in core.properties. Please check.");
 		}
 		LOG.debug("end of sessionCreated()");
-		LOG.debug("end of sessionCreated()");
 	}
 
 	/* (non-Javadoc)
@@ -36,14 +34,12 @@ public class SessionListener implements HttpSessionListener {
 	 */
 	public void sessionDestroyed(HttpSessionEvent sessionEvt) {
 		LOG.debug("SESSIONDESTROYED Method called...");
-		LOG.debug("SESSIONDESTROYED Method called...");
 		CacheManager cacheManager=CacheManager.getInstance();
 		HttpSession session =  sessionEvt.getSession();
 		if(null != cacheManager.getCache(session.getId())){
 			cacheManager.getCache(session.getId()).put(new Element("SESSION_ID", null));
 			cacheManager.getCache(session.getId()).put(new Element("SESSION_ALIVE", false));
 		}
-		LOG.debug("Called session destroy for user" );
 		LOG.debug("Called session destroy for user" );
 		LOG.debug("Session is destoryed");
 	}

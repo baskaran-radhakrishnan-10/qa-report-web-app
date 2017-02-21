@@ -91,20 +91,18 @@
 						<form:errors path="userId" />
 						<span class="bar"></span> <label>User ID</label>
 					</div>
-					<div class="form-group form-animate-text"
-						style="margin-top: 40px !important;">
-						<form:input path="password" id="passwordIdField" type="password"
-							class="form-text" required="true" autocomplete="off" />
+					<div class="form-group form-animate-text" style="margin-top: 40px !important;" >
+						<form:input path="password" id="passwordIdField" type="password" class="form-text" required="true" autocomplete="off" />
 						<form:errors path="password" />
-						<span class="bar"></span> <label>Password</label>
+						<span class="bar"></span> <label style="top: -25px;">Password</label>
 					</div>
 					<label class="pull-left" id="errorMessageUl"> <span style="color: #F84E4E;">${error}</span>
 					</label> <input type="submit" id="submitField" value="Log In" class="btn col-md-12" />
 				</div>
 
-				<div class="text-center" style="padding: 6px;">
+				<!-- <div class="text-center" style="padding: 6px;">
 					<a href="#" style="color: #a5a5a5 !important;">Forgot Password ?</a> 
-				</div>
+				</div> -->
 
 			</div>
 		</form:form>

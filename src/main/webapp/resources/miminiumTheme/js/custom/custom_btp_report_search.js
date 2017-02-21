@@ -106,6 +106,7 @@ $(document).ready(function() {
 	
 	$('#selected_new_export_button').on('click',function(){
 		btpReportSearchRef.downloadReport("SINGLE_BTP_ROW");
+		$("#modal_close_button").trigger("click");
 	});
 
 });
@@ -264,5 +265,7 @@ BTPReportSearch.prototype.btpMonthlyReportSuccess=function(serverData){
 }
 
 BTPReportSearch.prototype.exportSelectedBTPSuccess=function(serverData){
-	if('ERROR' != serverData['STATUS']){}
+	if('ERROR' != serverData['STATUS']){
+		 $("#modal_close_button").trigger("click");
+	}
 }

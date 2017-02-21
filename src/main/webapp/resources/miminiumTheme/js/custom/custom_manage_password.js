@@ -21,6 +21,40 @@ $(document).ready(function() {
 	getUserDetails();
 	
 	$("#modifiedOnId").val($.datepicker.formatDate('dd-mm-yy', new Date()));
+	
+	$('#newPasswordId').on("blur" ,function (event){
+		
+		$(this).removeClass("error");
+		
+		var value = $(this).val();
+		
+		if("" != value && value.length <8){
+			$(this).addClass("error");
+			var notifyObj={msg: '<b>Warning : </b> New Password should be minimum 8 letters !!!',type: "error",position: "center" };
+			notif(notifyObj);
+			return false;
+		}
+	});
+	
+	$('#confirmPasswordId').on("blur" ,function (event){
+		
+		$(this).removeClass("error");
+		
+		var value = $(this).val();
+		
+		if("" != value && value.length <8){
+			$(this).addClass("error");
+			var notifyObj={msg: '<b>Warning : </b> Confirm Password should be minimum 8 letters !!!',type: "error",position: "center" };
+			notif(notifyObj);
+			return false;
+		}
+	});
+	
+	$('#cancel_button').on("click",function(event){
+		console.log("clear button");
+		$('#userId').val("Please Select");
+	});
+	
 	$('#reset_password_button').on("click" ,function (event){
 		
 		$('#resetUserDetailsForm :input').removeClass('error');
@@ -35,21 +69,28 @@ $(document).ready(function() {
 		if((nPwd != cPwd)){
 			var notifyObj={msg: '<b>Warning : </b> New and Confirm Password not matching !!!',type: "error",position: "center" };
 			notif(notifyObj);
-		}else if((nPwd.length<5) && (cPwd.length<5)){
-			var notifyObj={msg: '<b>Warning : </b> Password should be minimum 5 letters !!!',type: "error",position: "center" };
+			return false;
+		}else if((nPwd.length<8) && (cPwd.length<8)){
+			var notifyObj={msg: '<b>Warning : </b> Password should be minimum 8 letters !!!',type: "error",position: "center" };
 			notif(notifyObj);
-		}else if((nPwd==cPwd) && (null!=nPwd && null!=cPwd) && (""!=nPwd && ""!=cPwd ) && ((nPwd.length >=5) && (cPwd.length >=5)) && ((nPwd.length !=0) && (cPwd.length !=0))){
-			resetPassword=true;
+			return false;
 		}
+		
+		var emailId=$('#emailIdHidden').val();
+		var userObject={};
+		userObject['userId']=$("#userId").val();
+		userObject['password']=nPwd;
+		userObject['emailId']= (emailId.length > 0) ? emailId : userIdListObject[userObject['userId']]['emailId']
+		ajaxHandler("POST", JSON.stringify(userObject), "application/json", getApplicationRootPath()+"rbac/resetPassword", 'json', null, resetPasswordSuccess,true);
 
-		if(resetPassword){
+		/*if(resetPassword){
 			var emailId=$('#emailIdHidden').val();
 			var userObject={};
 			userObject['userId']=$("#userId").val();
 			userObject['password']=nPwd;
 			userObject['emailId']= (emailId.length > 0) ? emailId : userIdListObject[userObject['userId']]['emailId']
 			ajaxHandler("POST", JSON.stringify(userObject), "application/json", getApplicationRootPath()+"rbac/resetPassword", 'json', null, resetPasswordSuccess,true);
-		}
+		}*/
 	});
 	
 	$("#newPasswordId").on("keydown", function (e) {
@@ -79,9 +120,10 @@ function validateBeforeSave(){
 			if(null == value || value.length == 0 || typeof(value) == 'undefined'){
 				errorMsgArray.push(resetPasswordFormErrorMessages[id]);
 				$(input).addClass('error');
+			}else if("Please Select" == value){
+				$(input).addClass('error');
 			}
 		}
-		
 	});
 	if(errorMsgArray.length > 0){
 		var notifyObj={msg: '<b>Please Fix Reset Password Form Validation Errors !!! </b>',type: "error",position: "center",autohide: true};
@@ -113,14 +155,16 @@ function fetchUserDetailsSuccess(serverData){
 }
 
 function populateUserDetails(entriesList){
+	rolesArray.push("Please Select");
 	for(var i=0;i<entriesList.length;i++){		
 		var userDetailsModelAttribute=entriesList[i];
 		var userId=entriesList[i]['userId'];
 		var emailId=entriesList[i]['emailId'];
 		userIdListObject[userId]=entriesList[i];
 		rolesArray.push(userDetailsModelAttribute['userId']);
+		rolesArray.sort();
 		fillSelectDropDown('userId',rolesArray, null != userDetailsModelAttribute ? userDetailsModelAttribute['userId'] : "");
-		$('#userId').val('');
+		$('#userId').val('Please Select');
 	}
 }
 
@@ -159,10 +203,11 @@ function getDateValue(dateObj,format,delimeter){
 
 function resetPasswordSuccess(serverData){
 	if('ERROR' != serverData['STATUS']){
-		$('#userId').val("");
+		var userIdTemp = $('#userId').val();
+		$('#userId').val("Please Select");
 		$('#newPasswordId').val("");
 		$('#confirmPasswordId').val("");       
-		var notifyObj={msg: '<b>Success : </b> Password Updated Successfully !!!',type: "success",position: "center" };
+		var notifyObj={msg: '<b>Success : </b> Password Updated for userid : '+userIdTemp,type: "success",position: "center" };
 		notif(notifyObj);
 	}
 }

@@ -9,6 +9,19 @@ $(document).ready(function() {
 	if (window.indexedDB) {
 		indexDBObj=new IndexDB();
 	}
+	
+	$(document).on("blur","input",function(event){
+		var type= $(this).prop("type");
+		if(null != type && type != "" && "date" == type){
+			$(this).removeClass('error');
+			var value = $(this).val();
+			var yearStr=value.split("-")[0];
+			if(yearStr.length > 4){
+				$(this).addClass('error');
+			}
+		}
+	});
+	
 });
 
 function IndexDB(){
@@ -81,7 +94,7 @@ function storageAvailable(type) {
 }
 
 function ajaxHandler(requestType,data,contentType,url,dataType,errorCallback,successCallback,async){
-	console.log("url :"+url);
+	//console.log("url :"+url);
 	$.ajax({
 		type : requestType,
 		contentType : contentType,
@@ -90,7 +103,7 @@ function ajaxHandler(requestType,data,contentType,url,dataType,errorCallback,suc
 		dataType : dataType,
 		async : async,
 		success : function(serverData) {
-			console.log("SUCCESS : ", serverData);
+			//console.log("SUCCESS : ", serverData);
 			if(typeof serverData != 'undefined' && null != serverData){
 				if(null != serverData['REDIRECT_TO_LOGIN_PAGE'] && serverData['REDIRECT_TO_LOGIN_PAGE']){
 					logoutMethod();
@@ -102,7 +115,11 @@ function ajaxHandler(requestType,data,contentType,url,dataType,errorCallback,suc
 			}
 		},
 		error : function(e) {
-			console.log("ERROR: ", e);
+			//console.log("ERROR: ", e);
+			var isRedirectToLoginPage=$('#redirectToLoginPage').val();
+			if(null != isRedirectToLoginPage && isRedirectToLoginPage){
+				logoutMethod();
+			}
 			if(typeof e != 'undefined' && null != e){
 				if(null != errorCallback){
 					errorCallback(e);

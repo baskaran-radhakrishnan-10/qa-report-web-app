@@ -48,6 +48,16 @@ $(document).ready(function() {
 		$('#resourceNameListId').addClass('error');
 	});
 	
+	$(document).on("paste","input",function(e) {
+		var id = $(this).parent().attr("id");
+		if("effortCost" == id || "itemCount" == id || "actualTime" == id || "bugsLogged" == id || "pass" == id || "fail" == id || "clarification" == id || "unableToSet" == id || "pending" == id || "blocked" == id){
+			var data = e.originalEvent.clipboardData.getData('Text');
+			if(!$.isNumeric(data)){
+				e.preventDefault();
+			}
+		}
+	});
+	
 	$(document).on("blur","#resourceMgmtTableId td#resourceNameTDId :input" , function (event) {
 		var currentValue=$(this).val();
 		var rowId=parseInt($(this).parent().parent().attr('id').replace('resourcetr_',''));
@@ -110,6 +120,7 @@ $(document).ready(function() {
 	
 	$(document).on("blur", "#buildTestPlanForm :input", function() {
 		var value=$(this).val();
+		console.log("value :"+value);
 		var id=$(this).attr('id');
 		if($(this).hasClass('imp')){
 			if($(this).hasClass('error')){
@@ -163,6 +174,7 @@ $(document).ready(function() {
 					}
 				}
 			}else if("revisedEndDateId" == id){
+				$(this).removeClass('error');
 				var endDateStr=$('#endDateId').val();
 				if(null == endDateStr || endDateStr.length == 0){
 					var notifyObj={msg: '<b> End Date should not be empty </b>',type: "error",position: "center",autohide: true};

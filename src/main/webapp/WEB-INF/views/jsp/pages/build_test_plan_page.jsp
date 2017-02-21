@@ -115,7 +115,7 @@
 						<th>Status</th>
 						<th>Start Date</th>
 						<th>End Date</th>
-						<th>Revised Date</th>
+						<th>Revised End Date</th>
 						<th></th>
 					</tr>
 				</thead>
