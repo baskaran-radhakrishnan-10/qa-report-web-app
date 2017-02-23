@@ -14,10 +14,21 @@ $(document).ready(function() {
 		var type= $(this).prop("type");
 		if(null != type && type != "" && "date" == type){
 			$(this).removeClass('error');
+			var isValid=true;
 			var value = $(this).val();
 			var yearStr=value.split("-")[0];
 			if(yearStr.length > 4){
 				$(this).addClass('error');
+				isValid=false;
+			}else{
+				var year = parseInt(yearStr);
+				if(!(year >= 2000 && year <= 2100)){
+					isValid=false;
+				}
+			}
+			if(!isValid){
+				var notifyObj={msg: '<b>Error :</b> Invalid Year Value Given !!!',type: "error",position: "center"};
+				notif(notifyObj);
 			}
 		}
 	});
@@ -115,16 +126,35 @@ function ajaxHandler(requestType,data,contentType,url,dataType,errorCallback,suc
 			}
 		},
 		error : function(e) {
-			//console.log("ERROR: ", e);
-			var isRedirectToLoginPage=$('#redirectToLoginPage').val();
-			if(null != isRedirectToLoginPage && isRedirectToLoginPage){
-				logoutMethod();
-			}
+			
+			console.log(e);
+			
+			var data = {};
+			data["ATTRIBUTE_KEY"]="IS_LOGGED_IN";
+			
+			$.ajax({
+				type : "POST",
+				contentType : "application/json",
+				url : getApplicationRootPath()+"getSessionAttribute",
+				data : JSON.stringify(data),
+				dataType : "json",
+				async : true,
+				success : function(response) {
+					if(null == response["IS_LOGGED_IN"]){
+						logoutMethod();
+					}
+				},
+				error : function(e) {
+					console.log( e);
+				}
+			});
+			
 			if(typeof e != 'undefined' && null != e){
 				if(null != errorCallback){
 					errorCallback(e);
 				}
 			}
+			
 		}
 	});
 }

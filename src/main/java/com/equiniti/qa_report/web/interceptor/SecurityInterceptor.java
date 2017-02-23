@@ -45,6 +45,10 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter{
 
 		if(null == session.getAttribute(ApplicationConstants.IS_LOGGED_IN)){
 			
+			if(uri.indexOf("getSessionAttribute") != -1){
+				return true;
+			}
+			
 			request.setAttribute("loginModelAttribute", new LoginModelAttribute());
 			
 			if(ajax){
@@ -70,6 +74,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter{
 				return true;
 			}
 		}
+		
 		return true;
 	}
 

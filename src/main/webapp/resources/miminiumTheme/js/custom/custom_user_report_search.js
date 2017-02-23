@@ -11,11 +11,19 @@ $(document).ready(function(){
 				isEmpty=false;
 			}
 		});
+		
 		if(isEmpty){
 			var notifyObj={msg: '<b> Please choose filter you want to apply !!! </b>',type: "warning",position: "center"};
 			notif(notifyObj);
 			return false;
 		}
+		
+		if($('#applyFilter :input').hasClass("error")){
+			var notifyObj={msg: '<b> Please give proper filter input !!! </b>',type: "error",position: "center"};
+			notif(notifyObj);
+			return false;
+		}
+		
 		var filterObject = {};
 		$('#applyFilter :input').each(function(){
 			var name=$(this).prop('name');
@@ -97,7 +105,8 @@ UserReportSearch.prototype = {
 	constructFilterForm : function(){
 		fillSelectDropDown('filter_projectId',userReportSearchRef.projectArray,"");
 		fillSelectDropDown('filter_resourceId',userReportSearchRef.resourceArray,"");
-	},filterUserReport : function(filterObject){
+	},
+	filterUserReport : function(filterObject){
 		userReportSearchRef.showLoader();
 		var data={};
 		data=JSON.stringify(filterObject);

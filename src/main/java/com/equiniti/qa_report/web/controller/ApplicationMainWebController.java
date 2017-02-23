@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -85,20 +86,20 @@ public class ApplicationMainWebController {
 		return ApplicationConstants.REDIRECT_LOGIN_PAGE;
 	}
 	
-	@RequestMapping(value="/checkSessionAttribute", method = RequestMethod.POST)
+	@RequestMapping(value="/getSessionAttribute", method = RequestMethod.POST)
 	@ResponseBody
-	public Boolean checkSessionAttribute(Map<String,String> paramMap) throws UIException{
-		LOG.info("Begin: ApplicationMainWebController.checkSessionAttribute");
-		boolean isAvailable = false;
+	public Map<String,Object> getSessionAttribute(@RequestBody Map<String,String> paramMap) throws UIException{
+		LOG.info("Begin: ApplicationMainWebController.getSessionAttribute");
+		Map<String,Object> resultData = new HashMap<>();
+		Object sessionData = null;
 		try {
-			if(null != session.getAttribute(paramMap.get("ATTRIBUTE_KEY"))){
-				isAvailable = true;
-			}
+			sessionData=session.getAttribute(paramMap.get("ATTRIBUTE_KEY"));
+			resultData.put(paramMap.get("ATTRIBUTE_KEY"), sessionData);
 		} catch (Exception e) {
 			throw new UIException(CommonFaultCode.UNKNOWN_ERROR, e);
 		}
-		LOG.info("End: ApplicationMainWebController.checkSessionAttribute");
-		return isAvailable;
+		LOG.info("End: ApplicationMainWebController.getSessionAttribute");
+		return resultData;
 	}
 
 }
