@@ -11,7 +11,7 @@
 		<div id="multi_dsr_report_modal_content" class="modal-content" style="top: 122px;width: 53%;left: 24%;">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">(x)</button>
-				<h2 class="modal-title" style="font-size: 22px;color: rgba(0, 0, 0, 0.55);">Export BTP Report</h2>
+				<h2 class="modal-title" style="font-size: 22px;color: rgba(0, 0, 0, 0.55);">Export DSR Report</h2>
 			</div>
 			<form role="form" class="form-horizontal" id="dsr_report_export_form">
 				<div class="modal-body">

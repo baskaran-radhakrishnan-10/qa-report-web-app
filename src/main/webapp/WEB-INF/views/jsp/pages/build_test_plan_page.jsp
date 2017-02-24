@@ -161,7 +161,7 @@
 			<div class="col-md-12 panel">
 				<div class="col-md-12" id="accordion" style="margin-top: 10px;">
 					<h5>
-						<a href="#" class="" aria-expanded="true" style="cursor: text;"> Build Test Plan Details </a>
+						<a href="#" class="" aria-expanded="true" style="cursor: text;">Build Test Plan</a>
 					</h5>
 					<div id="collapse1" class="panel-collapse collapse in" style="border-style: ridge; border-width: thin;" aria-expanded="true">
 						<div class="panel-body">

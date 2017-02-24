@@ -16,6 +16,9 @@ $(document).ready(function() {
 			$(this).removeClass('error');
 			var isValid=true;
 			var value = $(this).val();
+			if("" == value || value.length == 0){
+				return false;
+			}
 			var yearStr=value.split("-")[0];
 			if(yearStr.length > 4){
 				$(this).addClass('error');

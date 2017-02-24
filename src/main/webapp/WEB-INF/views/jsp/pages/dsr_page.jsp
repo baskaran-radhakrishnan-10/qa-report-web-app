@@ -140,11 +140,11 @@
 									<div class="form-group" id="important">
 										<div class="row">
 											<div class="col-md-12">
-												<label class="col-sm-2 control-label">Project:*</label>
+												<label class="col-sm-2 control-label">Project:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<select id="projectId" name="projectName" class="input-sm form-control imp"></select>
 												</div>
-												<label class="col-sm-2 control-label">Resource:*</label>
+												<label class="col-sm-2 control-label">Resource:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<select id="resourceId" name="resource" class="input-sm form-control imp"></select>
 												</div>
@@ -156,7 +156,7 @@
 										<div class="row">
 											<div class="col-md-12">
 												
-												<label class="col-sm-2 control-label">Status:*</label>
+												<label class="col-sm-2 control-label">Status:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<select id="statusId" name="dsrStatus" class="input-sm form-control imp"></select>
 												</div>
@@ -169,11 +169,11 @@
 											<div class="col-md-12">
 												<label class="col-sm-2 control-label">Hrs Planned:</label>
 												<div class="col-sm-3">
-													<input id="hrsPlannedId" name="plannedHours" type="text" class="input-sm form-control" value="">
+													<input id="hrsPlannedId" name="plannedHours" type="text" class="input-sm form-control" value="0.0">
 												</div>
 												<label class="col-sm-2 control-label">Hrs Spent:</label>
 												<div class="col-sm-3">
-													<input id="hrsSpentId" name="spentHours" type="text" class="input-sm form-control" value="">
+													<input id="hrsSpentId" name="spentHours" type="text" class="input-sm form-control" value="0.0">
 												</div>
 											</div>
 										</div>
@@ -182,7 +182,7 @@
 									<div class="form-group">
 										<div class="row">
 											<div class="col-md-12">
-												<label class="col-sm-2 control-label">Date:*</label>
+												<label class="col-sm-2 control-label">Date:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<input id="dsrDateId" name="dsrDate" type="date" class="input-sm form-control imp">
 												</div>
@@ -196,7 +196,7 @@
 									<div class="form-group" id="important">
 										<div class="row">
 											<div class="col-md-12">
-												<label class="col-sm-2 control-label" style="width: 29.666667%;text-align: right;margin: 0px -38px;">Planned Task:*</label>
+												<label class="col-sm-2 control-label" style="width: 29.666667%;text-align: right;margin: 0px -38px;">Planned Task:<font color="red">*</font></label>
 												<div class="col-sm-3" style="width: 81%;">
 													<textarea name="plannedTask" id="plannedTaskId" cols="38" rows="2" class="input-sm form-control imp" style="margin: 0px 30px;"></textarea>
 												</div>

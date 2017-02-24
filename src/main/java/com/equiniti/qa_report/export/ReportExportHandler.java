@@ -52,7 +52,7 @@ public class ReportExportHandler {
 	private static final String BTP_MONTHLY_REPORT_OUTPUT="BTPMonthlyReport.xlsx";
 	private static final String BTP_SELECTED_ROW_OUTPUT="BTPSelectedRowReport.xlsx";
 	private static final String DSR_SUMMARY_REPORT_OUTPUT="DSRSummaryReport.xlsx";
-	private static final String DSR_SELECTED_ROW_OUTPUT="DSRSelectedRowReport.xlsx";
+	private static final String DSR_SELECTED_ROW_OUTPUT="DSRDayReport.xlsx";
 	private static final String USER_SUMMARY_REPORT_OUTPUT="UserSummaryReport.xlsx";
 
 	private static final String PROJECT_CODE="PROJECT_CODE";
