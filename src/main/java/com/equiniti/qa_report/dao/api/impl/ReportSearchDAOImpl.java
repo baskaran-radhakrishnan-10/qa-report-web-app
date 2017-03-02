@@ -16,6 +16,7 @@ import com.equiniti.qa_report.exception.api.exception.DaoException;
 import com.equiniti.qa_report.persistance_api.consenum.QueryOperationType;
 import com.equiniti.qa_report.persistance_api.consenum.QueryType;
 import com.equiniti.qa_report.persistance_api.hibernate.api.AbstractHibernateDAOAPI;
+import com.equiniti.qa_report.util.ApplicationConstants;
 
 @Repository(value="reportSearchDAO")
 public class ReportSearchDAOImpl implements ReportSearchDAO{
@@ -50,8 +51,10 @@ public class ReportSearchDAOImpl implements ReportSearchDAO{
 		String dynamicQuery=null;
 		if(null != paramMap && !paramMap.isEmpty()){
 			Map<String,String> queryMap=new LinkedHashMap<>();
-			queryMap.put("SELECTED_BTP_REPORT_QUERY", "SELECTED_BTP_REPORT_QUERY");
+			String queryKey = (String) paramMap.get(ApplicationConstants.QUERY_KEY);
+			queryMap.put(queryKey, queryKey);
 			dynamicQuery=abstractHibernateDAOAPI.constructQuery(queryMap);
+			paramMap.remove(ApplicationConstants.QUERY_KEY);
 			dynamicQuery=dynamicQuery.replace("BTP_NO", paramMap.get("btpNo").toString());
 			returnList=(List<Map<String,Object>>) abstractHibernateDAOAPI.processQuery(null, null, null, QueryOperationType.SELECT, QueryType.SQL, dynamicQuery);
 		}

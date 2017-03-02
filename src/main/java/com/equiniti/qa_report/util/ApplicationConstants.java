@@ -120,4 +120,6 @@ public class ApplicationConstants {
 
 	public static final String EMAIL_DETAILS_MAP="EMAIL_DETAILS_MAP";
 	
+	public static final String QUERY_KEY = "QUERY_KEY" ;
+	
 }

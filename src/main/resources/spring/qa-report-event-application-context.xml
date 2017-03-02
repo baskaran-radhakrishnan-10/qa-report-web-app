@@ -162,6 +162,7 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:org/sp
 
 	<bean class="com.equiniti.qa_report.event_handler.ReportSearchEventHandler" id="reportSearchEventHandler">
 		<property name="reportSearchDAO" ref="reportSearchDAO"/>
+		<property name="btpDAO" ref="testPlanDAO"/>
 	</bean>
 	
 	<bean class="com.equiniti.qa_report.eventapi.eventhandling.processor.BaseEventProcessor" id="dsrEventProcessor">

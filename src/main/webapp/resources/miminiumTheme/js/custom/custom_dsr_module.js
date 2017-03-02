@@ -56,36 +56,36 @@ $(document).ready(function() {
 		})
 		dsrRef.applyDSRFilter(filterObject);
 	});
-
-	$('#dsr_modal').on('mousedown', function() {
-		var inputSet = $(this).find('#dsrForm :input');
-		$(inputSet).each(function(){
-			var input=$(this);
-			var value=$(input).val();
-			var id=$(this).attr('id');
-			if($(this).hasClass('imp')){
-				if($(this).hasClass('error')){
-					if(null != value && value.length > 0 && typeof(value) != 'undefined'){
-						$(this).removeClass('error');
-					}
-				}
-				if(null == value || value.length == 0 || typeof(value) == 'undefined'){
-					$(this).addClass('error');
-				}
-			}
-			if(id.indexOf("hrs") != -1){
-				if(!dsrRef.isNumber(value)){
-					$(this).addClass('error');
-				}else{
-					$(this).removeClass('error');
-				}
-			}
-		});
+	
+	$('#dsrForm :input').on('blur',function(event){
+		$(this).removeClass('error');
+		var value = $(this).val();
+		if(!/^[a-zA-Z0-9-._ ]*$/.test(value)) {
+			$(this).addClass('error');
+			var notifyObj={msg: '<b> Invalid Characters Entered </b>',type: "error",position: "center" };
+			notif(notifyObj);
+		}
 	});
 
 	$('#dsr_modal').on('click',function(event){
 		if('save_button' == event['target']['id']){
 			var inputSet = $(this).find('#dsrForm :input');
+			
+			$(inputSet).each(function(){
+				var input=$(this);
+				if($(input).hasClass('imp')){
+					if("" == $(input).val() || null == $(input).val()){
+						$(input).addClass('error');
+					}
+				}
+			});
+			
+			if($(inputSet).hasClass('error')){
+				var notifyObj={msg: '<b> Please input mandatory fields </b>',type: "error",position: "center" };
+				notif(notifyObj);
+				return false;
+			}
+			
 			if(!$(inputSet).hasClass('error')){
 				$(event['target']).attr('disabled',true);
 				var formObject={};
@@ -154,6 +154,32 @@ $(document).ready(function() {
 		$('#build_test_plan_table_id tbody tr').removeClass('selected');
 		$('#build_test_plan_table_id tbody tr').css('background-color','');
 	});
+	
+	/*$('#dsr_modal').on('mousedown', function() {
+	var inputSet = $(this).find('#dsrForm :input');
+	$(inputSet).each(function(){
+		var input=$(this);
+		var value=$(input).val();
+		var id=$(this).attr('id');
+		if($(this).hasClass('imp')){
+			if($(this).hasClass('error')){
+				if(null != value && value.length > 0 && typeof(value) != 'undefined'){
+					$(this).removeClass('error');
+				}
+			}
+			if(null == value || value.length == 0 || typeof(value) == 'undefined'){
+				$(this).addClass('error');
+			}
+		}
+		if(id.indexOf("hrs") != -1){
+			if(!dsrRef.isNumber(value)){
+				$(this).addClass('error');
+			}else{
+				$(this).removeClass('error');
+			}
+		}
+	});
+});*/
 	
 	$(document).on("keypress", "#dsrForm :input", function(e) {
 		var id = $(this).attr('id');

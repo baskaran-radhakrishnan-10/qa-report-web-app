@@ -634,20 +634,24 @@ public class ReportExportHandler {
 			Set<String> keySet=dataMap.keySet();
 			for(String key : keySet){
 				if(key.indexOf("resource") != -1){
-					btpDetailsMap.put(key, dataMap.get(key));
+					if(null != dataMap.get(key)){
+						btpDetailsMap.put(key, dataMap.get(key));
+					}
 				}
 			}
-
-			List<Map<String,Object>> itemDetailsList=new ArrayList<>();
-			Map<String,Object> itemDetailsMap=new HashMap<>();
-			itemDetailsMap.put(ReportExportHandler.ITEM_DESC, dataMap.get("itemdescription"));
-			itemDetailsMap.put(ReportExportHandler.ITEM_COUNT, dataMap.get("itemcount"));
-			itemDetailsMap.put(ReportExportHandler.EST_HRS, dataMap.get("esteffort"));
-			itemDetailsMap.put(ReportExportHandler.ACT_HRS, dataMap.get("acteffort"));
-			itemDetailsMap.put(ReportExportHandler.STATUS, dataMap.get("itemstatus"));
-			itemDetailsMap.put(ReportExportHandler.REMARKS, dataMap.get("itemremarks"));
-			itemDetailsList.add(itemDetailsMap);
-			btpDetailsMap.put(ReportExportHandler.ITEM_DETAIL, itemDetailsList);
+			
+			if(dataMap.containsKey("itemdescription") && dataMap.containsKey("itemcount") &&  dataMap.containsKey("esteffort")){
+				List<Map<String,Object>> itemDetailsList=new ArrayList<>();
+				Map<String,Object> itemDetailsMap=new HashMap<>();
+				itemDetailsMap.put(ReportExportHandler.ITEM_DESC, dataMap.get("itemdescription"));
+				itemDetailsMap.put(ReportExportHandler.ITEM_COUNT, dataMap.get("itemcount"));
+				itemDetailsMap.put(ReportExportHandler.EST_HRS, dataMap.get("esteffort"));
+				itemDetailsMap.put(ReportExportHandler.ACT_HRS, dataMap.get("acteffort"));
+				itemDetailsMap.put(ReportExportHandler.STATUS, dataMap.get("itemstatus"));
+				itemDetailsMap.put(ReportExportHandler.REMARKS, dataMap.get("itemremarks"));
+				itemDetailsList.add(itemDetailsMap);
+				btpDetailsMap.put(ReportExportHandler.ITEM_DETAIL, itemDetailsList);
+			}
 
 		}else{
 			List<Map<String,Object>> itemDetailsList=(List<Map<String, Object>>) btpDetailsMap.get(ReportExportHandler.ITEM_DETAIL);
@@ -1048,27 +1052,41 @@ public class ReportExportHandler {
 		}
 
 		int itemStartRow = 8 ;
+		
+		if(null == itemDetailsList || itemDetailsList.isEmpty()){
+			
+			itemStartRow = 6;
+					
+		}
+		
+		if(null != itemDetailsList){
+			
+			for(int index=0;index<(itemDetailsList.size());index++){
+				
+				Map<String,Object> itemDetailsMap=itemDetailsList.get(index);
+				
+				sheet.getRow(itemStartRow).getCell(1).setCellValue((String) itemDetailsMap.get(ITEM_DESC));
 
-		for(Map<String,Object> itemDetailsMap : itemDetailsList){
+				sheet.getRow(itemStartRow).getCell(2).setCellValue((Integer)itemDetailsMap.get(ITEM_COUNT));
 
-			sheet.getRow(itemStartRow).getCell(1).setCellValue((String) itemDetailsMap.get(ITEM_DESC));
+				sheet.getRow(itemStartRow).getCell(4).setCellValue((Double)itemDetailsMap.get(EST_HRS));
 
-			sheet.getRow(itemStartRow).getCell(3).setCellValue((Integer)itemDetailsMap.get(ITEM_COUNT));
+				sheet.getRow(itemStartRow).getCell(5).setCellValue((Double)itemDetailsMap.get(ACT_HRS));
 
-			sheet.getRow(itemStartRow).getCell(4).setCellValue((Double)itemDetailsMap.get(EST_HRS));
+				sheet.getRow(itemStartRow).getCell(6).setCellValue((String) itemDetailsMap.get(STATUS));
 
-			sheet.getRow(itemStartRow).getCell(5).setCellValue((Double)itemDetailsMap.get(ACT_HRS));
-
-			sheet.getRow(itemStartRow).getCell(6).setCellValue((String) itemDetailsMap.get(STATUS));
-
-			sheet.getRow(itemStartRow).getCell(7).setCellValue((String) itemDetailsMap.get(REMARKS));
-
-			itemStartRow++;
-
+				sheet.getRow(itemStartRow).getCell(7).setCellValue((String) itemDetailsMap.get(REMARKS));
+				
+				if(index < (itemDetailsList.size() -1)){
+					itemStartRow++;
+				}
+				
+			}
+			
 		}
 
 		while(itemStartRow < 22){
-
+			
 			sheet.removeRow(sheet.getRow(itemStartRow));
 
 			itemStartRow++;

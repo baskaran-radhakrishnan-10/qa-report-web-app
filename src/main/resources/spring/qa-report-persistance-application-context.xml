@@ -8,7 +8,6 @@
 			http://www.springframework.org/schema/context 
 			classpath:org/springframework/beans/factory/xml/spring-context-3.0.xsd">
 
-
 	<bean id="hibernateConfiguration" class="com.equiniti.qa_report.persistance_api.hibernate.HibernateConfiguration">
 		<constructor-arg value="${hibernate.connection.driver_class}" />
 		<constructor-arg value="${hibernate.dialect}" />

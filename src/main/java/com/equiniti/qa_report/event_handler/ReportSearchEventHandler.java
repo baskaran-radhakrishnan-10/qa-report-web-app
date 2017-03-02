@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.equiniti.qa_report.dao.api.ReportSearchDAO;
+import com.equiniti.qa_report.dao.api.TestPlanDAO;
 import com.equiniti.qa_report.event.btp_report.BuildBTPMonthlyReportEvent;
 import com.equiniti.qa_report.event.btp_report.BuildBTPSummaryReportEvent;
 import com.equiniti.qa_report.event.btp_report.BuildUserReportEvent;
@@ -36,9 +37,15 @@ public class ReportSearchEventHandler implements IEventHandler<IEvent> {
 	private ReportQueueConnector reportQueueConnector;
 	
 	private ReportSearchDAO reportSearchDAO;
+	
+	private TestPlanDAO btpDAO;
 
 	public void setReportSearchDAO(ReportSearchDAO reportSearchDAO) {
 		this.reportSearchDAO = reportSearchDAO;
+	}
+	
+	public void setBtpDAO(TestPlanDAO btpDAO) {
+		this.btpDAO = btpDAO;
 	}
 
 	@Override
@@ -87,7 +94,12 @@ public class ReportSearchEventHandler implements IEventHandler<IEvent> {
 	private void buildSelectedBTPReport(SelectedBTPReportEvent event) throws EventException{
 		try {
 			Map<String,Object> exportObject=new HashMap<>();
+			event.getParamMap().put(ApplicationConstants.QUERY_KEY, "SELECTED_BTP_REPORT_QUERY");
 			exportObject.put(ApplicationConstants.REPORT_DATA, reportSearchDAO.getSelectedBtpReportData(event.getParamMap()));
+			if(((List<?>)exportObject.get(ApplicationConstants.REPORT_DATA)).isEmpty()){
+				event.getParamMap().put(ApplicationConstants.QUERY_KEY, "SELECTED_BTP_REPORT_QUERY_1");
+				exportObject.put(ApplicationConstants.REPORT_DATA, reportSearchDAO.getSelectedBtpReportData(event.getParamMap()));
+			}
 			exportObject.put(ApplicationConstants.REPORT_TYPE, ApplicationConstants.SELECTED_BTP_REPORT);
 			exportObject.put("USER_ID", session.getAttribute(ApplicationConstants.USER_ID).toString());
 			reportQueueConnector.produce(exportObject);
