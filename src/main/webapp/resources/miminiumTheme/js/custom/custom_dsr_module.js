@@ -60,7 +60,7 @@ $(document).ready(function() {
 	$('#dsrForm :input').on('blur',function(event){
 		$(this).removeClass('error');
 		var value = $(this).val();
-		if(!/^[a-zA-Z0-9-._ ]*$/.test(value)) {
+		if(!/^[a-zA-Z0-9-._, ]*$/.test(value)) {
 			$(this).addClass('error');
 			var notifyObj={msg: '<b> Invalid Characters Entered </b>',type: "error",position: "center" };
 			notif(notifyObj);

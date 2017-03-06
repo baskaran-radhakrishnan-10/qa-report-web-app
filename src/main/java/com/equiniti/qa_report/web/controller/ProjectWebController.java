@@ -22,11 +22,6 @@ public class ProjectWebController {
 	
 	private static final Logger LOG= Logger.getLogger(ProjectWebController.class); 
 	
-	@RequestMapping(value = "/manage_projects" , method = RequestMethod.GET)
-	public String showManageProjectsPage(Model model) throws UIException{
-		return "manage_projects_page";
-	}
-	
 	@Autowired
 	private ProjectController projectController;
 

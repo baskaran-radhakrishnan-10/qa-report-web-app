@@ -220,7 +220,7 @@ function constructResourceTable(resourceArray){
 		for(var index=0 ; index<resourceArray.length;index++ ){
 			html += '<tr id="resourcetr_'+(index+1)+'">';
 			if(index == 0){
-				html += '<td id="resourceNameCaptionId"><label class="control-label">Resource'+(index+1)+':*</label></td>';
+				html += '<td id="resourceNameCaptionId"><label class="control-label">Resource'+(index+1)+':<font color="red">*</font></label></td>';
 				html += '<td id="resourceNameTDId" onclick="clickedResourceName(this)" ><input id="resource1Id" name="do_nbr" type="text" class="form-control form-control3 imp" value="'+resourceArray[index]+'"></td>';
 				html += '<td style="text-align: -webkit-center;">';
 				html += '<a onclick="addTableRow(this)" href="#"><span data-href="#" class="fa fa-plus" data-toggle="tooltip" data-placement="auto left" title="" data-original-title="Add Resource"></span></a>';
@@ -237,7 +237,7 @@ function constructResourceTable(resourceArray){
 	else{
 		
 		html += '<tr id="resourcetr_1">';
-		html += '<td id="resourceNameCaptionId"><label class="control-label">Resource1:*</label></td>';
+		html += '<td id="resourceNameCaptionId"><label class="control-label">Resource1:<font color="red">*</font></label></td>';
 		html += '<td id="resourceNameTDId" onclick="clickedResourceName(this)"><input id="resource1Id" name="do_nbr" type="text" class="form-control form-control3 imp" value=""></td>';
 		html += '<td style="text-align: -webkit-center;">';
 		html += '<a onclick="addTableRow(this)" href="#"><span data-href="#" class="fa fa-plus" data-toggle="tooltip" data-placement="auto left" title="" data-original-title="Add Resource"></span></a>';

@@ -170,11 +170,11 @@
 									<div class="form-group" id="important">
 										<div class="row">
 											<div class="col-md-12">
-												<label class="col-sm-2 control-label">Project:*</label>
+												<label class="col-sm-2 control-label">Project:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<select id="projectId" name="project" class="input-sm form-control imp"></select>
 												</div>
-												<label class="col-sm-2 control-label">Phase:*</label>
+												<label class="col-sm-2 control-label">Phase:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<select id="phaseId" name="phase" class="input-sm form-control imp"></select>
 												</div>
@@ -184,11 +184,11 @@
 									<div class="form-group" id="important">
 										<div class="row">
 											<div class="col-md-12">
-												<label class="col-sm-2 control-label">Plan:*</label>
+												<label class="col-sm-2 control-label">Plan:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<select id="planId" name="plan" class="input-sm form-control imp"></select>
 												</div>
-												<label class="col-sm-2 control-label">Status:*</label>
+												<label class="col-sm-2 control-label">Status:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<select id="statusId" name="status" class="input-sm form-control imp"></select>
 												</div>
@@ -198,11 +198,11 @@
 									<div class="form-group" id="important">
 										<div class="row">
 											<div class="col-md-12">
-												<label class="col-sm-2 control-label">Cycle:*</label>
+												<label class="col-sm-2 control-label">Cycle:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<input id="cycleId" name="cycle" type="text" class="input-sm form-control imp" value="">
 												</div>
-												<label class="col-sm-2 control-label">Sprint/Iteration:*</label>
+												<label class="col-sm-2 control-label">Sprint/Iteration:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<input id="iteration_id" name="iteration" type="text" class="input-sm form-control imp" value="">
 												</div>
@@ -212,7 +212,7 @@
 									<div class="form-group" id="important">
 										<div class="row">
 											<div class="col-md-12">
-												<label class="col-sm-2 control-label">Build No:*</label>
+												<label class="col-sm-2 control-label">Build No:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<input id="buildNoId" name="buildNo" type="text" class="input-sm form-control imp" value="">
 												</div>
@@ -226,11 +226,11 @@
 									<div class="form-group" id="important">
 										<div class="row">
 											<div class="col-md-12">
-												<label class="col-sm-2 control-label">Start Date:*</label>
+												<label class="col-sm-2 control-label">Start Date:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<input id="startDateId" name="startDate" type="date" class="input-sm form-control imp">
 												</div>
-												<label class="col-sm-2 control-label">End Date:*</label>
+												<label class="col-sm-2 control-label">End Date:<font color="red">*</font></label>
 												<div class="col-sm-3">
 													<input id="endDateId" name="endDate" type="date" class="input-sm form-control imp">
 												</div>
@@ -255,7 +255,7 @@
 										<table id="resourceMgmtTableId" class="table table-condensed" cellspacing="0" width="100%">
 											<tbody>
 												<tr id="resourcetr_1">
-													<td><label class="control-label">Resource1:*</label></td>
+													<td><label class="control-label">Resource1:<font color="red">*</font></label></td>
 													<td id="resourceNameTD"><input id="resource1Id" name="do_nbr" type="text" class="form-control form-control3 imp" value="DO001"></td>
 													<td style="text-align: -webkit-center;"><a href="#"><span data-href="#" class="fa fa-plus" data-toggle="tooltip" data-placement="auto left" title="" data-original-title="Add Fields"></span></a> <span>&nbsp;</span><a href="#"><span class="fa fa-remove" data-toggle="tooltip" data-placement="auto top" title="" data-original-title="Remove Field"></span></a></td>
 												</tr>

@@ -78,6 +78,11 @@ public class OperationWebController {
 		return "remainder_settings_page";
 	}
 	
+	@RequestMapping(value = "/manage_projects" , method = RequestMethod.GET)
+	public String showManageProjectsPage(Model model) throws UIException{
+		return "manage_projects_page";
+	}
+	
 	@RequestMapping(value="/getRemainderDetails", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> getRemainderDetails(@RequestBody Map<String,Object> inputParam){
